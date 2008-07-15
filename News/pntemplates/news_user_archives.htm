@@ -1,0 +1,32 @@
+<!--[*  $Id: news_user_archives.htm 23954 2008-03-13 11:55:37Z rgasch $  *]-->
+<!--[include file="news_user_menu.htm"]-->
+<div class="pn-frontendcontainer">
+<!--[if $archiveitems eq '']-->
+	<h2><!--[pnml name="_NEWS_ARCHIVES"]--></h2>
+	<ul>
+	<!--[section name=months loop=$archivemonths]-->
+	<li><a href="<!--[$archivemonths[months].url|pnvarprepfordisplay]-->"><!--[$archivemonths[months].title|pnvarprepfordisplay]--></a></li>
+	<!--[/section]-->
+	</ul>
+<!--[else]-->
+	<h2><!--[pnml name="_NEWS_ARCHIVESFORDATE" month=$month year=$year]--></h2>
+	<table class="pn-datatable" style="width:100%;">
+	  <thead>
+	  <tr>
+		  <th><!--[pnml name="_TITLE"]--></th>
+		  <th><!--[pnml name="_NEWS_VIEWS"]--></th>
+		  <th><!--[pnml name="_NEWS_POSTED"]--></th>
+	  </tr>
+	  </thead>
+	  <tbody>
+	  <!--[section name=items loop=$archiveitems]-->
+		<tr>
+		  <td><a href="<!--[pnmodurl modname="News" type="user" func="display" sid=$archiveitems[items].sid|pnvarprepfordisplay]-->"><!--[$archiveitems[items].title|pnvarprepfordisplay]--></a></td>
+		  <td><!--[$archiveitems[items].counter|pnvarprepfordisplay]--></td>
+		  <td><!--[$archiveitems[items].time|pndate_format|pnvarprepfordisplay]--></td>
+		</tr>
+	  <!--[/section]-->
+	  </tbody>
+	</table>
+<!--[/if]-->
+</div>

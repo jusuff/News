@@ -1,0 +1,133 @@
+<!--[pnajaxheader modname=News filename=news_contenttype_edit.js nobehaviour=true noscriptaculous=true]-->
+
+<fieldset>
+<legend><!--[pnml name="_NEWS_CONTENTTYPE_BASICINFO"]--></legend>
+<div class="crow">
+  <!--[pnformlabel for=title text=_NEWS_CONTENTTYPE_NEWSARTICLESWIDGETTITLE]-->
+  <!--[pnformtextinput id=title group=data maxLength=100]-->
+</div>
+
+<!--[pnmodgetvar module="News" name="enablecategorization" assign="enablecategorization"]-->
+<!--[if $enablecategorization]-->
+<div class="crow">
+	<!--[pnformlabel for=category text=_CATEGORY]-->
+	<!--[nocache]-->
+	<!--[pnformcategoryselector category=$mainCategory id=category group=data all=true]-->
+	<!--[/nocache]-->
+</div>
+<!--[/if]-->
+
+<div class="crow">
+	<!--[pnformlabel for=show text=_NEWS_CONTENTTYPE_NEWSARTICLESSHOW]-->
+	<!--[pnformdropdownlist id="show" group="data" items=$showoptions selectedValue=$data.type]-->
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=limit text=_NEWS_CONTENTTYPE_NEWSARTICLESLIMIT]-->
+  <!--[pnformintinput id=limit group=data]-->
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=dayslimit text=_NEWS_CONTENTTYPE_NEWSARTICLESMAXDAYS]-->
+  <!--[pnformintinput id=dayslimit group=data]-->
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=maxtitlelength text=_NEWS_CONTENTTYPE_NEWSARTICLESMAXTITLELENGTH]-->
+  <!--[pnformintinput id=maxtitlelength group=data size=4]-->
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=titlewraptext text=_NEWS_CONTENTTYPE_NEWSARTICLESTITLEWRAPTEXT]-->
+  <!--[pnformtextinput id=titlewraptext group=data size=20 maxLength=20]-->
+</div>
+</fieldset>
+
+
+<fieldset>
+<legend><!--[pnml name="_NEWS_CONTENTTYPE_EXTRAINFO"]--></legend>
+<div class="crow">
+  <!--[pnformlabel for=dispuname text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPUNAME]-->
+  <!--[pnformcheckbox id=dispuname group=data]-->
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=dispdate text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPDATE]-->
+  <!--[pnformcheckbox id=dispdate group=data]-->
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=dateformat text=_NEWS_CONTENTTYPE_NEWSARTICLESDATEFORMAT]-->
+  <!--[pnformtextinput id=dateformat group=data size=6 maxLength=20]-->
+  (<a href="http://www.php.net/manual/function.strftime.php" target="_new"><!--[pnml name=_NEWS_CONTENTTYPE_NEWSARTICLESDATEFORMATLINK]--></a>)
+</div>
+
+<div class="crow">
+  <!--[pnformlabel for=dispreads text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPREADS]-->
+  <!--[pnformcheckbox id=dispreads group=data]-->
+</div>
+
+<!--[pnmodavailable modname=EZComments assign=EZComments]-->
+<!--[if $EZComments]-->
+  <div class="crow">
+    <!--[pnformlabel for=dispcomments text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPCOMMENTS]-->
+    <!--[pnformcheckbox id=dispcomments group=data]-->
+  </div>
+<!--[/if]-->
+
+<div class="crow">
+  <!--[pnformlabel for=dispsplitchar text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPSPLITCHAR]-->
+  <!--[pnformtextinput id=dispsplitchar group=data size=5 maxLength=5]-->
+</div>
+</fieldset>
+
+
+<fieldset>
+<legend><!--[pnml name="_NEWS_CONTENTTYPE_NEWIMAGE"]--></legend>
+<div class="crow">
+  <!--[pnformlabel for=dispnewimage text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPNEWIMAGE]-->
+  <!--[pnformcheckbox id=dispnewimage group=data]-->
+</div>
+
+<div id="news_contenttype_dispnewimage_container">
+  <div class="crow">
+    <!--[pnformlabel for=newimagelimit text=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGELIMIT]-->
+    <!--[pnformintinput id=newimagelimit group=data size=4]-->
+  </div>
+
+  <div class="crow">
+    <!--[pnformlabel for=newimageset text=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGESET]-->
+    <!--[pnformtextinput id=newimageset group=data size=30 maxLength=60]-->
+  </div>
+
+  <div class="crow">
+    <!--[pnformlabel for=newimagesrc text=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGESRC]-->
+    <!--[pnformtextinput id=newimagesrc group=data size=30 maxLength=60]-->
+  </div>
+</div>
+</fieldset>
+
+
+<fieldset>
+<legend><!--[pnml name="_NEWS_CONTENTTYPE_HOMETEXT"]--></legend>
+<div class="crow">
+  <!--[pnformlabel for=disphometext text=_NEWS_CONTENTTYPE_NEWSARTICLESDISPHOMETEXT]-->
+  <!--[pnformcheckbox id=disphometext group=data]-->
+</div>
+
+<div class="crow">
+  <!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESHOMETEXTWARNING"]-->
+</div>
+
+<div id="news_contenttype_disphometext_container">
+  <div class="crow">
+    <!--[pnformlabel for=maxhometextlength text=_NEWS_CONTENTTYPE_NEWSARTICLESMAXHOMETEXTLENGTH]-->
+    <!--[pnformintinput id=maxhometextlength group=data size=4]-->
+  </div>
+
+  <div class="crow">
+    <!--[pnformlabel for=hometextwraptext text=_NEWS_CONTENTTYPE_NEWSARTICLESHOMETEXTWRAPTEXT]-->
+    <!--[pnformtextinput id=hometextwraptext group=data size=20 maxLength=40]-->
+  </div>
+</div>
+</fieldset>

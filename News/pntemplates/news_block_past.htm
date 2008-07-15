@@ -1,0 +1,9 @@
+<!--[*  $Id: news_block_past.htm 24083 2008-03-29 17:37:23Z markwest $  *]-->
+<!--[foreach from=$news item=news key=date]-->
+<h5><!--[$date]--></h5>
+<ul>
+	<!--[foreach from=$news item=article]-->
+		<li><!--[$article.preformat.title]-->&nbsp;(<!--[$article.info.comments]-->)</li>
+	<!--[/foreach]-->
+</ul>
+<!--[/foreach]-->

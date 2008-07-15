@@ -1,0 +1,37 @@
+p.news_meta {
+   font-size: smaller;
+}
+
+p#news_topic img{
+    float: right;
+}
+
+div.news_body {
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+div#news_editlinks {
+    float:right;
+}
+
+div#news_editlinks_ajax {
+    float:right;
+}
+
+.hidelink {
+    display: none;
+}
+
+.showlink {
+    display: inline;
+}
+
+/* Admin panel styles */
+div#news_category_selectors {
+	display: inline;
+}
+
+a#news_notes_collapse {
+    padding-bottom:1em;
+}
