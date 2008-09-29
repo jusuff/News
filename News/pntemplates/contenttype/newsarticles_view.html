@@ -1,24 +1,29 @@
+<!--[*  $Id:  $  *]-->
 <h4><!--[$title]--></h4>
 <!--[if $stories]-->
-    <ul class="content_stories">
-        <!--[foreach from=$stories item=story]-->
-		<li>
-		    <a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->">
-		    <!--[if $story.dispnewimage]--><!--[pnimg modname=core set=$newimageset src=$newimagesrc alt=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGE altml=true]--><!--[/if]-->
-		    <!--[$story.title|pnvarprephtmldisplay]--></a>
-            <!--[* Additional info on the story *]-->
-			<!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESBY"]-->
-			    <a href="<!--[pnmodurl modname=Profile func=view uname=$story.aid_uname]-->" title="<!--[$story.aid_name|pnvarprephtmldisplay]-->"><!--[$story.aid_uname|pnvarprephtmldisplay]--></a>
-			    <!--[if $dispdate]--> <!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESON"]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-			    <!--[if $dispdate]--><!--[$story.time|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-			    <!--[if $dispreads]--><!--[$story.counter]--> <!--[if $story.counter eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREAD"]--><!--[else]--><!--[ pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREADS" ]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-			    <!--[if $dispcomments]--><!--[$story.comments]--> <!--[if $story.comments eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENT"]--><!--[else]--><!--[ pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENTS" ]--><!--[/if]--><!--[/if]-->)
-            <!--[/if]--><br />
-			<!--[if $disphometext]--><div class="content_stories_hometext"><!--[$story.hometext|pnvarprephtmldisplay]--></div><!--[/if]-->
-		</li>
-		<!--[/foreach]-->
-	</ul>
+<ul class="content_stories">
+  <!--[foreach from=$stories item=story]-->
+  <li>
+    <a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->">
+    <!--[if $story.dispnewimage]--><!--[pnimg modname=core set=$newimageset src=$newimagesrc alt=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGE altml=true]--><!--[/if]-->
+    <!--[$story.title|pnvarprephtmldisplay]--></a>
+    <!--[* Optional additional info on the story *]-->
+    <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESBY"]-->
+      <a href="<!--[pnmodurl modname=Profile func=view uname=$story.aid_uname]-->" title="<!--[$story.aid_name|pnvarprephtmldisplay]-->"><!--[$story.aid_uname|pnvarprephtmldisplay]--></a>
+      <!--[if $dispdate]--> <!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESON"]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+      <!--[if $dispdate]--><!--[$story.time|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+      <!--[if $dispreads]--><!--[if $story.counter eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREAD"]--><!--[else]--><!--[ pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREADS" count=$story.counter ]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+      <!--[if $dispcomments]--><!--[if $story.comments eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENT"]--><!--[else]--><!--[ pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENTS" count=$story.comments ]--><!--[/if]--><!--[/if]-->)
+    <!--[/if]--><br />
+    <!--[* Optional hometext display *]-->
+    <!--[if $disphometext]--><div class="content_newsarticles_hometext"><!--[$story.hometext|pnvarprephtmldisplay]--></div><!--[/if]-->
+  </li>
+  <!--[/foreach]-->
+</ul>
 <!--[else]-->
-	<p><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESEMPTYMSG"]--></p>
+  <p><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESEMPTYMSG"]--></p>
 <!--[/if]-->
-<!--[* link to add news articles *]-->
+<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level=ACCESS_COMMENT assign="submitauth"]-->
+<!--[if $linktosubmit && $submitauth]-->
+<a href="<!--[pnmodurl modname="News" type="user" func="new"]-->"><!--[pnimg modname="core" set="icons/extrasmall" src="edit_add.gif" alt=_NEWS_SUBMIT altml="true"]--><!--[ pnml name="_NEWS_SUBMIT" ]--></a>
+<!--[/if]-->
