@@ -1,9 +1,9 @@
 <!--[*  $Id: news_user_menu.htm 24025 2008-03-25 22:14:48Z markwest $  *]-->
-<!--[insert name="getstatusmsg"]-->
-<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level=ACCESS_COMMENT assign="commauth"]-->
+<!--[insert name='getstatusmsg']-->
+<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level=ACCESS_COMMENT assign='commauth']-->
 <div class="pn-frontendbox">
-<h1><!--[pnml name="_NEWS"]--></h1>
+<h1><!--[pnml name='_NEWS']--></h1>
 <div class="pn-menu">
-[&nbsp;<a href="<!--[pnmodurl modname="News" type="user" func="view"]-->"><!--[pnml name="_NEWS_FRONTPAGE"]--></a>&nbsp;|&nbsp;<a href="<!--[pnmodurl modname="News" type="user" func="archives"]-->"><!--[pnml name="_NEWS_ARCHIVES"]--></a>&nbsp;<!--[if $commauth]-->|&nbsp;<a href="<!--[pnmodurl modname="News" type="user" func="new"]-->"><!--[pnml name="_NEWS_SUBMIT"]--></a>&nbsp;<!--[/if]-->]
+[&nbsp;<a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[pnml name='_NEWS_FRONTPAGE']--></a>&nbsp;|&nbsp;<a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[pnml name='_NEWS_ARCHIVES']--></a>&nbsp;<!--[if $commauth]-->|&nbsp;<a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnml name='_NEWS_SUBMIT']--></a>&nbsp;<!--[/if]-->]
 </div>
 </div>
