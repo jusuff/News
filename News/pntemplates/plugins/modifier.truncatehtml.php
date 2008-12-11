@@ -19,115 +19,104 @@
 *   Modification to add a string: Sebastian Kuhlmann <sebastiankuhlmann@web.de>
 
 * The plugin truncates a string preserving any html tag nesting and matching. The 
-* string is truncated on whole words as well. An optional suffix is added when given
-* as parameter.
+* string can be truncated on whole words or character. An optional suffix is added 
+* when the string has been truncated.
 *
 * Example
 *   <!--[$myvar|truncatehtml:100:'...']-->
 * 
 * @author       Erik Spaan [espaan]
-* @since        30/09/2008
-* @param        array    $string     The contents to transform
-* @param        int      $length     The truncated string length
-* @param        string   $suffix     Optional suffix that will only be added if the string is truncated
+* @since        11/12/2008
+* @param        array    $string       The contents to transform
+* @param        int      $length       The truncated string length in characters
+* @param        string   $etc          Optional suffix that will only be added if the string is truncated (default empty)
+* @param        bool     $break_words  Optional (default false)
 * @return       string   the modified output
 */
-function smarty_modifier_truncatehtml($string, $length, $suffix="")
+function smarty_modifier_truncatehtml($string, $length, $etc='...', $break_words=false)
 {
-    if (strlen($string) > $length) {
-        if (!empty($string) && $length>0) {
-            $isText = true;
-            $ret = "";
-            $i = 0;
+    if ($length == 0 && empty($string))
+        return '';
 
-            $currentChar = "";
-            $lastSpacePosition = -1;
-            $lastChar = "";
+    // String length without html tags
+    $noTagLength = strlen(strip_tags($string));
+    if ($noTagLength > $length) {
+        $isText = true;
+        $ret = "";
+        $i = 0;
+        $currentChar = "";
+        $lastSpacePosition = -1;
+        $lastChar = "";
+        $tagsArray = array();
+        $currentTag = "";
 
-            $tagsArray = array();
-            $currentTag = "";
+        // Parser loop
+        for ($j=0; $j<strlen($string); $j++) {
+            $currentChar = substr($string, $j, 1);
+            $ret .= $currentChar;
 
-            // String length without html tags
-            $noTagLength = strlen(strip_tags($string));
+            // Lesser than event
+            if ($currentChar == "<")
+                $isText = false;
 
-            // Parser loop
-            for ($j=0; $j<strlen($string); $j++) {
-
-                $currentChar = substr($string, $j, 1);
-                $ret .= $currentChar;
-
-                // Lesser than event
-                if ($currentChar == "<") {
-                    $isText = false;
+            // Character handler
+            if ($isText) {
+                // Memorize last space position for wordwrap
+                if ($currentChar == " ") {
+                    $lastSpacePosition = $j;
+                } else {
+                    $lastChar = $currentChar;
                 }
+                $i++;
+            } else {
+                $currentTag .= $currentChar;
+            }
 
-                // Character handler
-                if ($isText) {
-                    // Memorize last space position
-                    if ($currentChar == " ") {
-                        $lastSpacePosition = $j;
+            // Greater than event
+            if ($currentChar == ">") {
+                $isText = true;
+                // Opening tag handler
+                if ((strpos($currentTag, "<") !== FALSE) &&
+                        (strpos($currentTag, "/>") === FALSE) &&
+                        (strpos($currentTag, "</") === FALSE)) {
+
+                    // Tag has attribute(s)
+                    if (strpos($currentTag, " ") !== FALSE) {
+                        $currentTag = substr($currentTag, 1, strpos($currentTag, " ") - 1);
                     } else {
-                        $lastChar = $currentChar;
+                        // Tag doesn't have attribute(s)
+                        $currentTag = substr($currentTag, 1, -1);
                     }
-                    $i++;
-                } else {
-                    $currentTag .= $currentChar;
+                    // Put the tag in the array for restoring
+                    array_push ($tagsArray, $currentTag);
+                } elseif (strpos($currentTag, "</") !== FALSE) {
+                    array_pop($tagsArray);
                 }
-
-                // Greater than event
-                if ($currentChar == ">") {
-                    $isText = true;
-
-                    // Opening tag handler
-                    if ((strpos($currentTag, "<") !== FALSE) &&
-                            (strpos($currentTag, "/>") === FALSE) &&
-                            (strpos($currentTag, "</") === FALSE)) {
-
-                        // Tag has attribute(s)
-                        if (strpos($currentTag, " ") !== FALSE) {
-                            $currentTag = substr($currentTag, 1, strpos($currentTag, " ") - 1);
-                        } else {
-                            // Tag doesn't have attribute(s)
-                            $currentTag = substr($currentTag, 1, -1);
-                        }
-                        array_push ($tagsArray, $currentTag);
-                    } elseif (strpos($currentTag, "</") !== FALSE) {
-                        array_pop($tagsArray);
-                    }
-                    $currentTag = "";
-                }
-                if ($i >= $length) {
-                    break;
-                }
+                $currentTag = "";
             }
+            if ($i >= $length)
+                break;
+        }
 
-            // Cut HTML string at last space position
-            if ($length < $noTagLength) {
-                if ($lastSpacePosition != -1) {
-                    $ret = substr($string, 0, $lastSpacePosition);
-                } else {
-                    $ret = substr($string, $j);
-                }
-            }
-
-            // Close broken XHTML elements
-            while (sizeof($tagsArray) != 0) {
-                $aTag = array_pop($tagsArray);
-                $ret .= "</" . $aTag . ">\n";
-            }
-
+        // Cut HTML string at last space position
+        if ($lastSpacePosition != -1 && !$break_words) {
+            $ret = substr($string, 0, $lastSpacePosition);
         } else {
-            $ret = "";
+            $ret = substr($string, $j);
         }
 
-        // Only add suffix if string was truncated
-        if (strlen($string) > $length) {
-            return ($ret . " " . $suffix);
+        // Close broken XHTML elements
+        while (sizeof($tagsArray) != 0) {
+            $aTag = array_pop($tagsArray);
+            $ret .= "</" . $aTag . ">\n";
         }
-        else {
-            return ($ret);
+        // Add optional suffix
+        if (!empty($etc)) {
+            $ret .= " " . $etc;
         }
-    } else { // String not truncated
-        return ($string);
+        return $ret;
+    } else {
+        // String not truncated
+        return $string;
     }
 }
