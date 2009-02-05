@@ -13,7 +13,7 @@
   <!--[nocache]-->
   <ul class="selector_category">
   <!--[foreach from=$catregistry key=prop item=cat]-->
-  <li><!--[pnformcategoryselector category=$cat id=category__$prop group=data selectedValue=$data.category__$prop includeEmptyElement=1]--></li>
+  <li><!--[pnformcategoryselector category=$cat id=category__$prop group=data selectedValue=$data.category__$prop selectionMode=multiple size=5]--></li>
   <!--[/foreach]-->
   </ul>
   <!--[/nocache]-->
@@ -34,6 +34,10 @@
 <div class="crow">
   <!--[pnformlabel for=dayslimit text=_NEWS_CONTENTTYPE_NEWSARTICLESMAXDAYS]-->
   <!--[pnformintinput id=dayslimit group=data]-->
+</div>
+<div class="crow">
+  <!--[pnformlabel for=show text=_NEWS_CONTENTTYPE_NEWSARTICLESORDER]-->
+  <!--[pnformdropdownlist id="status" group="data" items=$orderoptions selectedValue=$data.order]-->
 </div>
 <div class="crow">
   <!--[pnformlabel for=maxtitlelength text=_NEWS_CONTENTTYPE_NEWSARTICLESMAXTITLELENGTH]-->
