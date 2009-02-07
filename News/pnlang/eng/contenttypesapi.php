@@ -6,7 +6,8 @@
  * @link http://www.zikula.org
  * @version $Id:  $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @author Mateo Tibaquira [mateo], Erik Spaan [espaan]
+ * @author Mateo Tibaquira [mateo]
+ * @author Erik Spaan [espaan]
  * @package Zikula_Value_Addons
  * @subpackage News
 */
