@@ -141,6 +141,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         $apiargs['from'] = DateUtil::getDatetime_NextDay(-$this->dayslimit);
         $apiargs['to'] = DateUtil::getDatetime();
     }
+    
+    // Apply datefiltering
+    $apiargs['filterbydate'] = true;    
 
     // call the News api and get the requested articles with the above arguments
     $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
