@@ -260,12 +260,12 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     // Construct the selected categories array
     $catnames = array();
     foreach ($properties as $prop) {
-		foreach ($this->categories[$prop] as $catid) {
-			$cat = CategoryUtil::getCategoryByID($catid);
-			$catnames[] = isset($cat['display_name'][$lang]) ? $cat['display_name'][$lang] : $cat['name'];
-		}
+        foreach ($this->categories[$prop] as $catid) {
+            $cat = CategoryUtil::getCategoryByID($catid);
+            $catnames[] = isset($cat['display_name'][$lang]) ? $cat['display_name'][$lang] : $cat['name'];
+        }
     }
-	$catname = implode(' | ',$catnames);
+    $catname = implode(' | ',$catnames);
     $output = '<h4>' .  DataUtil::formatForDisplayHTML($this->title) . '</h4>';
     $output .= '<p>' . DataUtil::formatForDisplayHTML(pnML('_NEWS_CONTENTTYPE_NEWSARTICLESOFTHECAT', array('category'=>$catname))) . '</p>';
     return $output;
