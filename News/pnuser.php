@@ -301,7 +301,7 @@ function News_user_view($args = array())
 
             // $info is array holding raw information.
             // Used below and also passed to the theme - jgm
-            $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $row = $item);
+            $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $item);
 
             // $links is an array holding pure URLs to
             // specific functions for this article.
