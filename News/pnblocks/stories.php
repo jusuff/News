@@ -83,6 +83,8 @@ function News_storiesblock_display($blockinfo)
     if ($vars['category']) {
         $apiargs['category'] = array('Main' => $vars['category']);
     }
+    // Show only articles already published
+    $apiargs['filterbydate'] = true;
 
     // call the api
     $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
