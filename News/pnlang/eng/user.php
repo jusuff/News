@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: user.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: user.php 25007 2008-12-07 21:36:21Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
@@ -12,7 +12,7 @@
 
 // user navigation
 define('_NEWS_ARCHIVES', 'Archive');
-define('_NEWS_FRONTPAGE', 'Front Page');
+define('_NEWS_FRONTPAGE', 'Lead Page');
 
 // archives
 define('_NEWS_ARCHIVESFORDATE', 'Archive for %month%, %year%');

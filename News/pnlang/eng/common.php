@@ -32,7 +32,7 @@ define('_NEWS_NEWSARTICLEPREVIEW', 'Article Preview');
 define('_NEWS_FORMATTEDTEXT', 'Formatted Text');
 define('_NEWS_FROM', 'Start date');
 define('_NEWS_HOMETEXT', 'Front page teaser');
-define('_NEWS_INHOME', 'Publish on news front page');
+define('_NEWS_INHOME', 'Publish on news lead page');
 define('_NEWS_MAXCHARS', '(Limit: 65536 characters)');
 define('_NEWS_NOTES', 'Foot notes');
 define('_NEWS_OVERVIEW', 'Heading Info');

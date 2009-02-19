@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: pnadmin.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: pnadmin.php 25003 2008-12-07 19:23:55Z Landseer $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
@@ -58,7 +58,7 @@ function News_admin_new()
  */
 function News_admin_modify($args)
 {
-    $sid = FormUtil::getPassedValue('sid', isset($args['sid']) ? $args['sid'] : null, 'GET');
+    $sid = FormUtil::getPassedValue('sid', isset($args['sid']) ? $args['sid'] : null, 'GETPOST');
     $objectid = FormUtil::getPassedValue('objectid', isset($args['objectid']) ? $args['objectid'] : null, 'GET');
     // At this stage we check to see if we have been passed $objectid
     if (!empty($objectid)) {
@@ -301,10 +301,23 @@ function News_admin_view($args)
     $property = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'POST');
     $category = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'POST');
     $clear    = FormUtil::getPassedValue('clear', false, 'POST');
+    $purge    = FormUtil::getPassedValue('purge', false, 'GET');
+
+    if ($purge) {
+        if (pnModAPIFunc('News', 'admin', 'purgepermalinks')) {
+            LogUtil::registerStatus(_PURGEPERMALINKSSUCCESFUL);
+        } else {
+            LogUtil::registerError(_PURGEPERMALINKSFAILED);
+        }
+        return pnRedirect(strpos(pnServerGetVar('HTTP_REFERER'), 'purge') ? pnModURL('News', 'admin', 'view') : pnServerGetVar('HTTP_REFERER'));
+    }
     if ($clear) {
         $property = null;
         $category = null;
     }
+
+    // clean the session preview data
+    SessionUtil::delVar('newsitem');
 
     // get module vars for later use
     $modvars = pnModGetVar('News');
@@ -384,6 +397,13 @@ function News_admin_view($args)
         } else {
             $item['ihome'] = _NO;
         }
+
+        if (DateUtil::getDatetimeDiff_AsField($item['time'], DateUtil::getDatetime(), 6) < 0) {
+            $item['infuture'] = _YES . " (" . DateUtil::formatDatetime($item['time'],"%x") . ")";
+        } else {
+            $item['infuture'] = _NO;
+        }
+
         $newsitems[] = $item;
     }
 

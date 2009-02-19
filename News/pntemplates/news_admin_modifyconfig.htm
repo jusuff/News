@@ -1,4 +1,4 @@
-<!--[*  $Id: news_admin_modifyconfig.htm 24254 2008-05-08 06:49:38Z jornlind $  *]-->
+<!--[*  $Id: news_admin_modifyconfig.htm 25026 2008-12-09 13:52:49Z mateo $  *]-->
 <!--[include file="news_admin_menu.htm"]-->
 <div class="pn-admincontainer">
 <div class="pn-adminpageicon"><!--[pnimg modname=core src=configure.gif set=icons/large alt='_MODIFYNEWSCONFIG' altml=true]--></div>
@@ -45,19 +45,19 @@
 		<div class="pn-adminformrow">
 			<label><!--[pnml name=_NEWS_URLSDATENAME]--></label>
 			<input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
-			<span><!--[pngetbaseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/your-story-title/</span>
+			<span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/your-story-title/</span>
 		</div>
 		<div class="pn-adminformrow">
 			<label><!--[pnml name=_NEWS_URLSNUMERIC]--></label>
             <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%"<!--[if $permalinkformat eq '%storyid%']--> checked="checked"<!--[/if]--> />
-            <span><!--[pngetbaseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/123</span>
+            <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/123</span>
 		</div>
 		<div class="pn-adminformrow">
             <label><!--[pnml name=_NEWS_URLSCUSTOM]--></label>
             <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" <!--[if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
 		</div>
 		<div class="pn-adminformrow">
-			<label>Custom structure</label>
+			<label><!--[pnml name='_NEWS_URLSCUSTOMSTRUCTURE']--></label>
             <input id="news_permalink_format" onclick="news_permalink_onclick()" name="permalinkstructure" type="text"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
             <div><!--[pnml name=_NEWS_URLSCUSTOMREQUIRED]--></div>
 		</div>

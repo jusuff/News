@@ -10,6 +10,5 @@
  * @subpackage News
  */
 
-define('_NEWS_NAME',        'News');
 define('_NEWS_DISPLAYNAME', 'News');
 define('_NEWS_DESCRIPTION', 'Provides the ability to add, remove and administer news articles published on the News Front Page.');

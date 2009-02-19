@@ -1,4 +1,4 @@
-<!--[*  $Id: news_admin_view.htm 24178 2008-04-08 12:18:43Z markwest $  *]-->
+<!--[*  $Id: news_admin_view.htm 25003 2008-12-07 19:23:55Z Landseer $  *]-->
 <!--[ pnajaxheader modname=News filename=news.js nobehaviour=true noscriptaculous=true ]-->
 <!--[include file="news_admin_menu.htm"]-->
 <!--[pnml name="_NEWS_VIEW" assign=templatetitle]-->
@@ -36,6 +36,14 @@
     </div>
 </form>
 <!--[/if]-->
+<form action="<!--[ pnmodurl modname="News" type="admin" func="modify" ]-->" method="post">
+    <div>
+        <label for="directsid"><!--[ pnml name="_NEWS_DIRECTACCESS" ]--></label>
+        <input type="text" id="directsid" name="sid" value="" size="5" maxlength="8" />
+        <input name="submit" type="submit" value="<!--[pnml name="_SUBMIT"]-->" />
+        <input name="reset" type="reset" value="<!--[pnml name="_RESET"]-->" /> 
+    </div>
+</form>
 <table class="pn-admintable">
     <thead>
     <tr>
@@ -44,6 +52,7 @@
         <!--[if $enablecategorization]-->
         <th><!--[pnml name="_CATEGORY"]--></th>
         <!--[/if]-->
+        <th><!--[pnml name="_NEWS_INFUTURE"]--></th>
         <th><!--[pnml name="_NEWS_PUBLISHEDSTATUS"]--></th>
         <th><!--[pnml name="_NEWS_INHOMEQUESTION"]--></th>
         <th><!--[pnml name="_ACTIONS"]--></th>
@@ -55,16 +64,11 @@
             <td><!--[$newsitem.title|strip_tags|pnvarprepfordisplay]--></td>
             <td><!--[$newsitem.sid|pnvarprepfordisplay]--></td>
             <!--[if $enablecategorization]-->
-            <td>
-                <ul>
-                <!--[ foreach from=$newsitem.__CATEGORIES__ item=cat ]-->
-                    <!--[array_field_isset assign="catname" array=$cat.display_name field=$lang returnValue=1]-->
-                    <!--[if $catname eq '']--><!--[assign var="catname" value=$cat.name]--><!--[/if]-->
-                    <li><!--[$catname]--></li>
-                <!--[ /foreach ]-->
-                </ul>
-            </td>
+			<td>
+				<!--[assignedcategorieslist item=$newsitem]-->
+			</td>
             <!--[/if]-->
+            <td><!--[$newsitem.infuture|pnvarprepfordisplay]--></td>
             <td><!--[$newsitem.status|pnvarprepfordisplay]--></td>
             <td><!--[$newsitem.ihome|pnvarprepfordisplay]--></td>
             <td>

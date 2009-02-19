@@ -1,2 +1,6 @@
-<!--[*  $Id: news_block_stories_row.htm 24083 2008-03-29 17:37:23Z markwest $  *]-->
+<!--[*  $Id: news_block_stories_row.htm 25018 2008-12-08 22:09:37Z mateo $  *]-->
+<!--[if $readperm]-->
 <a href="<!--[pnmodurl modname=News func=display sid=$sid]-->"><!--[$title|pnvarprephtmldisplay]--></a> (<!--[$time|pndate_format:"%x"]-->)
+<!--[else]-->
+<!--[$title|pnvarprephtmldisplay]--> (<!--[$time|pndate_format:"%x"]-->)
+<!--[/if]-->

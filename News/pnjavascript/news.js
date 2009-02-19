@@ -1,5 +1,5 @@
 /*
- *  $Id: news.js 23975 2008-03-15 08:07:32Z rgasch $ 
+ *  $Id: news.js 25013 2008-12-08 03:14:47Z mateo $ 
  */
  
 var editing = false;
@@ -149,6 +149,9 @@ function editnews_saveresponse(req)
         pnshowajaxerror(req.responseText);
         return;
     }
+    // temporary fix for #401
+    location.reload(true);
+
     var json = pndejsonize(req.responseText);
     Element.update('news_modify', '&nbsp;');
     Element.update('news_articlecontent', json.result);

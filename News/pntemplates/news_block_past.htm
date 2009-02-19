@@ -1,9 +1,13 @@
-<!--[*  $Id: news_block_past.htm 24083 2008-03-29 17:37:23Z markwest $  *]-->
-<!--[foreach from=$news item=news key=date]-->
-<h5><!--[$date]--></h5>
+<!--[*  $Id: news_block_past.htm 25080 2008-12-17 09:15:43Z mateo $  *]-->
+
+<!--[foreach from=$news item='news' key='date']-->
+<h5><!--[$date|pndate_format:'%A, %B %d']--></h5>
 <ul>
-	<!--[foreach from=$news item=article]-->
-		<li><!--[$article.preformat.title]-->&nbsp;(<!--[$article.info.comments]-->)</li>
+	<!--[foreach from=$news item='article']-->
+		<li>
+			<!--[$article.preformat.title]-->
+			<!--[if isset($article.info.commentcount)]-->&nbsp;(<!--[$article.info.commentcount]-->)<!--[/if]-->
+		</li>
 	<!--[/foreach]-->
 </ul>
 <!--[/foreach]-->

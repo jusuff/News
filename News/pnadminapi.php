@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: pnadminapi.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: pnadminapi.php 24963 2008-12-06 09:59:31Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
@@ -139,6 +139,55 @@ function News_adminapi_update($args)
 }
 
 /**
+ * Purge the permalink fields in the News table
+ * @author Mateo Tibaquira
+ * @return bool true on success, false on failure
+ */
+function News_adminapi_purgepermalinks($args)
+{
+    // Security check
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+        return LogUtil::registerError(_MODULENOAUTH);
+    }
+
+    // disable categorization to do this (if enabled)
+    $catenabled = pnModGetVar('News', 'enablecategorization');
+    if ($catenabled) {
+        pnModSetVar('News', 'enablecategorization', false);
+        pnModDBInfoLoad('News', 'News', true);
+    }
+
+    // get all the ID and permalink of the table
+    $data = DBUtil::selectObjectArray('stories', '', '', -1, -1, 'sid', null, null, array('sid', 'urltitle'));
+
+    // loop the data searching for non equal permalinks
+    $perma = '';
+    foreach (array_keys($data) as $sid) {
+        $perma = strtolower(DataUtil::formatPermalink($data[$sid]['urltitle']));
+        if ($data[$sid]['urltitle'] != $perma) {
+            $data[$sid]['urltitle'] = $perma;
+        } else {
+            unset($data[$sid]);
+        }
+    }
+
+    // restore the categorization if was enabled
+    if ($catenabled) {
+        pnModSetVar('News', 'enablecategorization', true);
+    }
+
+    if (empty($data)) {
+        return true;
+    // store the modified permalinks
+    } elseif (DBUtil::updateObjectArray($data, 'stories', 'sid')) {
+        // Let the calling process know that we have finished successfully
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * get available admin panel links
  *
  * @author Mark West
@@ -157,6 +206,7 @@ function news_adminapi_getlinks()
         $links[] = array('url' => pnModURL('News', 'admin', 'new'), 'text' =>  _NEWS_CREATE);
     }
     if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+        $links[] = array('url' => pnModURL('News', 'admin', 'view', array('purge' => 1)), 'text' => _PURGEPERMALINKS);
         $links[] = array('url' => pnModURL('News', 'admin', 'modifyconfig'), 'text' => _MODIFYNEWSCONFIG);
     }
 

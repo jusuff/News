@@ -4,13 +4,13 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: pnversion.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: pnversion.php 24821 2008-11-05 16:01:47Z Guite $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
 */
 
-$modversion['name'] = _NEWS_NAME;
+$modversion['name'] = 'News';
 $modversion['displayname'] = _NEWS_DISPLAYNAME;
 $modversion['description'] = _NEWS_DESCRIPTION;
 $modversion['version'] = '2.2';

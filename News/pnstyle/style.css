@@ -12,11 +12,11 @@ div.news_body {
 }
 
 div#news_editlinks {
-    float:right;
+    float: right;
 }
 
 div#news_editlinks_ajax {
-    float:right;
+    float: right;
 }
 
 .hidelink {
@@ -33,5 +33,5 @@ div#news_category_selectors {
 }
 
 a#news_notes_collapse {
-    padding-bottom:1em;
+    padding-bottom: .7em;
 }

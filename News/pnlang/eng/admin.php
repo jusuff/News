@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: admin.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: admin.php 25005 2008-12-07 20:38:08Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
@@ -12,7 +12,9 @@
 
 // view template
 define('_NEWS_ARCHIVED', 'Archived');
-define('_NEWS_INHOMEQUESTION', 'Front Page');
+define('_NEWS_DIRECTACCESS', 'Access an older article by its id:');
+define('_NEWS_INFUTURE', 'Queued');
+define('_NEWS_INHOMEQUESTION', 'Lead Page');
 define('_NEWS_NEWSPUBLISHER', 'News Publisher');
 define('_NEWS_PENDING', 'Pending');
 define('_NEWS_PUBLISHEDSTATUS', 'Status');

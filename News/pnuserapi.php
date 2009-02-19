@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: pnuserapi.php 24425 2008-07-02 12:13:57Z markwest $
+ * @version $Id: pnuserapi.php 25404 2009-02-09 09:31:11Z rgasch $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
@@ -56,6 +56,9 @@ function News_userapi_getall($args)
     if (!isset($args['ignoreml']) || !is_bool($args['ignoreml'])) {
         $args['ignoreml'] = false;
     }
+    if (!isset($args['language']))
+        $args['language'] = pnUserGetLang();
+    }
 
     if (!is_numeric($args['startnum']) ||
         !is_numeric($args['numitems'])) {
@@ -66,7 +69,7 @@ function News_userapi_getall($args)
     $items = array();
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_OVERVIEW)) {
         return $items;
     }
 
@@ -78,6 +81,7 @@ function News_userapi_getall($args)
             $property = $args['property'];
             $args['catFilter'][$property] = $args['category'];
         }
+        $args['catFilter']['__META__'] = array('module' => 'News');
     }
 
     // populate an array with each part of the where clause and then implode the array if there is a need.
@@ -86,7 +90,7 @@ function News_userapi_getall($args)
     $storiescolumn = $pntable['stories_column'];
     $queryargs = array();
     if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml']) {
-        $queryargs[] = "($storiescolumn[alanguage]='" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[alanguage]='')";
+        $queryargs[] = "($storiescolumn[alanguage]='" . DataUtil::formatForStore($args['language']) . "' OR $storiescolumn[alanguage]='')";
     }
 
     if (isset($args['status'])) {
@@ -150,12 +154,12 @@ function News_userapi_getall($args)
     }
 
     $permChecker = new news_result_checker();
-    $objArray = DBUtil::selectObjectArrayFilter('stories', $where, $orderby, $args['startnum']-1, $args['numitems'], null, $permChecker, $args['catFilter']);
+    $objArray = DBUtil::selectObjectArrayFilter('stories', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $args['catFilter']);
 
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
     if ($objArray === false) {
-        return LogUtil::registerError (_GETFAILED);
+        return LogUtil::registerError(_GETFAILED);
     }
 
     // If 'from' (date) is set, change the publication time
@@ -256,6 +260,46 @@ function News_userapi_get($args)
 }
 
 /**
+ * Get all months and years with news. Used by archive overview
+ * @author Philipp Niethammer
+ * @return array Array of dates (one per month)
+ */
+function News_userapi_getMonthsWithNews($args) 
+{
+    // Security check
+    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_OVERVIEW)) {
+        return false;
+    }
+    $pntable =& pnDBGetTables();
+    $storiestable = $pntable['stories'];
+    $storiescolumn = $pntable['stories_column'];
+    
+    $date = DateUtil::getDatetime();
+
+    // Use "raw" sql since DBUtil can't handle these type of columns
+    $sql = "SELECT DISTINCT
+    				EXTRACT(YEAR FROM $storiescolumn[cr_date]) 	AS year,
+    				EXTRACT(MONTH FROM $storiescolumn[cr_date]) AS month
+    		FROM	$storiestable
+    		WHERE	(	($storiescolumn[cr_date] < '$date'
+    						AND $storiescolumn[from] IS NULL)
+    					OR ($storiescolumn[from] IS NOT NULL
+    						AND $storiescolumn[from] < '$date'))
+    		ORDER BY year DESC, month DESC";
+    
+    $res = DBUtil::executeSQL($sql);
+    
+    $dates = array();
+    $haveCExt    = extension_loaded('adodb');
+    for ( ; !$res->EOF; ($haveCExt ? adodb_movenext($res) : $res->MoveNext())) {
+        $act = array();
+        list($act['year'], $act['month']) = $res->fields;
+        $dates[] = $act;
+    }
+    return $dates;
+}
+
+/**
  * utility function to count the number of items held by this module
  * @author Mark West
  * @return int number of items held by this module
@@ -270,6 +314,7 @@ function News_userapi_countitems($args)
             $property = $args['property'];
             $args['catFilter'][$property] = $args['category'];
         }
+        $args['catFilter']['__META__'] = array('module' => 'News');
     }
 
     // Get optional arguments a build the where conditional
@@ -383,6 +428,12 @@ function News_userapi_getArticleLinks($info)
         }
     }
 
+    $author = $info['informant'];
+    $profileModule = pnConfigGetVar('profilemodule', '');
+    if (!empty($profileModule) && pnModAvailable($profileModule)) {
+        $author = pnModURL($profileModule, 'user', 'view', array('uname' => $author));
+    }
+
     // Set up the array itself
     $links = array ('category'        => DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
                     'categories'      => $categories,
@@ -394,7 +445,7 @@ function News_userapi_getArticleLinks($info)
                     'print'           => DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
                     'commentrssfeed'  => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
                     'commentatomfeed' => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'author'          => DataUtil::formatForDisplay(pnModURL('Profile', 'user', 'view', array('uname' => $info['informant']))),
+                    'author'          => DataUtil::formatForDisplay($author),
                     'version'         => 1);
 
     return $links;
@@ -505,12 +556,10 @@ function News_userapi_getArticleInfo($info)
     $info['cattitle'] = DataUtil::formatForDisplayHTML($info['cattitle']);
 
     // Hooks filtering should be after formatForDisplay to allow Hook transforms
-    list($info['title'],
-         $info['hometext'],
+    list($info['hometext'],
          $info['bodytext'],
          $info['notes']) = pnModCallHooks('item', 'transform', '',
-                                          array($info['title'],
-                                                $info['hometext'],
+                                          array($info['hometext'],
                                                 $info['bodytext'],
                                                 $info['notes']));
 
@@ -693,7 +742,7 @@ function News_userapi_create($args)
     } else if ( SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_ADD)) {
         $args['published_status'] = 0;
     } else {
-        $args['published_status'] = 1;
+        $args['published_status'] = 2;
     }
 
     // calculate the format type
@@ -941,7 +990,7 @@ function News_userapi_isformatted($args)
 
     if (pnModAvailable('scribite')) {
         $modconfig = pnModAPIFunc('scribite', 'user', 'getModuleConfig', 'News');
-        if (in_array($args['func'], $modconfig['modfuncs']) && $modconfig['modeditor']!='-') {
+        if (in_array($args['func'], (array)$modconfig['modfuncs']) && $modconfig['modeditor'] != '-') {
             return true;
         }
     }

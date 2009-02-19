@@ -4,7 +4,7 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: past.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: past.php 25080 2008-12-17 09:15:43Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @package Zikula_Value_Addons
  * @subpackage News
@@ -18,7 +18,7 @@
 function News_pastblock_init()
 {
     // Security
-    pnSecAddSchema('Pastblock::', 'Block title::');
+    SecurityUtil::registerPermissionSchema('Pastblock::', 'Block title::');
 }
 
 /**
@@ -48,69 +48,76 @@ function News_pastblock_info()
 function News_pastblock_display($blockinfo)
 {
     // security check
-    if (!SecurityUtil::checkPermission( 'Pastblock::', "$blockinfo[title]::", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('Pastblock::', "$blockinfo[title]::", ACCESS_READ)) {
         return;
     }
 
     // get the number of stories shown on the frontpage
-    $storyhome = pnModGetVar('News', 'itemsperpage');
+    $storyhome = pnModGetVar('News', 'storyhome', 10);
 
     // Break out options from our content field
     $vars = pnBlockVarsFromContent($blockinfo['content']);
 
     // Defaults
-    if (empty($storynum)) $storynum = 10;
     if (empty($vars['limit'])) {
         $vars['limit'] = 10;
     }
-    $storynum = $vars['limit'];
 
     // call the API
     $articles = pnModAPIFunc('News', 'user', 'getall',
-                             array('ihome' => 0, 'order' => 'time', 'startnum' => $storyhome+1, 'numitems' => $storynum));
+                             array('ihome'    => 0,
+                                   'order'    => 'time',
+                                   'status'   => 0,
+                                   'startnum' => $storyhome,
+                                   'numitems' => $vars['limit']));
 
-    if (count($articles) == 0) {
+    if ($articles === false) {
         return;
     }
 
     // loop round the return articles grouping by date
-    $count = 0;
-    $news = array();
-    $todaysnews = array();
+    $count        = 0;
+    $news         = array();
+    $newscumul    = array();
     $limitreached = false;
     foreach ($articles as $article) {
-        $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $article);
+        $info  = pnModAPIFunc('News', 'user', 'getArticleInfo', $article);
         $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
-        $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat', array('info' => $info, 'links' => $links));
-
-        ereg ("([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})", $info['time'], $datetime2);
-        $datetime2 = ml_ftime("" . _DATESTRING2 . "", mktime($datetime2[4], $datetime2[5], $datetime2[6], $datetime2[2], $datetime2[3], $datetime2[1]));
-        $datetime2 = ucfirst($datetime2);
-        if (!isset($time2)) {
-            $time2 = $datetime2;
-        }
-        if ($time2 == $datetime2) {
-            $todaysnews[] = array('info' => $info, 'links' => $links, 'preformat' => $preformat);
+        if (SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+            $preformat['title'] = "<a href=\"$links[fullarticle]\">$info[title]</a>";
         } else {
-            $news[$time2] = $todaysnews;
-            $todaysnews = array();
-            $time2 = $datetime2;
+            $preformat['title'] = $info['title'];
         }
-        $count++;
-        if ($count == $vars['limit']) {
-            $limitreached = true;
+
+        $daydate = DateUtil::formatDatetime(strtotime($info['time']), '%Y-%m-%d');
+
+        // Reset the time
+        if (!isset($currentday)) {
+            $currentday = $daydate;
         }
+
+        // If it's a different date, save the cumul and continue
+        if ($currentday != $daydate) {
+            $news[$currentday] = $newscumul;
+            $newscumul = array();
+            $currentday = $daydate;
+        }
+        $newscumul[] = array('info'      => $info,
+                             'links'     => $links,
+                             'preformat' => $preformat);
     }
-    $news[$time2] = $todaysnews;
+    if (!isset($news[$currentday])) {
+        $news[$currentday] = $newscumul;
+    }
 
     $pnRender = pnRender::getInstance('News');
     $pnRender->assign('news', $news);
-    $pnRender->assign('limitreached', $limitreached);
 
     if (empty($blockinfo['title'])) {
         $blockinfo['title'] = _PASTARTICLES;
     }
     $blockinfo['content'] = $pnRender->fetch('news_block_past.htm');
+
     return pnBlockThemeBlock($blockinfo);
 }
 
