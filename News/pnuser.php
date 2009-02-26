@@ -162,7 +162,7 @@ function News_user_create($args)
                   'bodytext' => $story['bodytext'],
                   'bodytextcontenttype' => $story['bodytextcontenttype'],
                   'notes' => $story['notes'],
-                  'ihome' => $story['ihome'],
+                  'ihome' => isset($story['ihome']) ? $story['ihome'] : 0,
                   'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                   'tonolimit' => $story['tonolimit'],
                   'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
