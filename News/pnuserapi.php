@@ -911,7 +911,7 @@ function News_userapi_decodeurl($args)
     }
 
     // define the available user functions
-    $funcs = array('main', 'new', 'create', 'view', 'archives', 'display');
+    $funcs = array('main', 'new', 'create', 'view', 'archives', 'display', 'categorylist');
     // set the correct function name based on our input
     if (empty($args['vars'][2])) {
         pnQueryStringSetVar('func', 'main');

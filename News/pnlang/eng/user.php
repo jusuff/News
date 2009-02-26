@@ -12,6 +12,7 @@
 
 // user navigation
 define('_NEWS_ARCHIVES', 'Archive');
+define('_NEWS_CATEGORYLIST', 'Categories');
 define('_NEWS_FRONTPAGE', 'Lead Page');
 
 // archives
@@ -19,3 +20,8 @@ define('_NEWS_ARCHIVESFORDATE', 'Archive for %month%, %year%');
 define('_NEWS_POSTED', 'Date Posted');
 define('_NEWS_STORIESSSORTEDBYMONTH', 'All news articles, sorted by month');
 define('_NEWS_VIEWS', 'Views');
+
+// categorylist
+define('_NEWS_AVAILABLECATEGORIES', 'Available Categories');
+define('_NEWS_ARTICLES', '%count% articles');
+define('_NEWS_ARTICLE', '1 article');
