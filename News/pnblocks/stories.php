@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: stories.php 25018 2008-12-08 22:09:37Z mateo $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: stories.php 77 2009-02-25 17:33:19Z espaan $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * initialise block
@@ -18,7 +20,7 @@
 function News_storiesblock_init()
 {
     // Security
-    pnSecAddSchema('Storiesblock::', 'Block title::');
+    SecurityUtil::registerPermissionSchema('Storiesblock::', 'Block title::');
 }
 
 /**
@@ -80,10 +82,18 @@ function News_storiesblock_display($blockinfo)
     $apiargs['numitems'] = $vars['limit'];
     $apiargs['status'] = 0;
     $apiargs['ignorecats'] = true;
-    if ($vars['category']) {
-        $apiargs['category'] = array('Main' => $vars['category']);
+    if (isset($vars['category']) && !empty($vars['category'])) {
+        if (!($class = Loader::loadClass('CategoryUtil')) || !($class = Loader::loadClass('CategoryRegistryUtil'))) {
+            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryUtil | CategoryRegistryUtil')));
+        }
+        $cat = CategoryUtil::getCategoryByID($vars['category']);
+        $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
+        $catstofilter = array();
+        foreach ($categories as $category) {
+            $catstofilter[] = $category['id'];
+        }
+        $apiargs['category'] = array('Main' => $catstofilter);
     }
-    // Show only articles already published
     $apiargs['filterbydate'] = true;
 
     // call the api

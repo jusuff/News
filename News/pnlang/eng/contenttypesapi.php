@@ -29,7 +29,7 @@ define('_NEWS_CONTENTTYPE_NEWSARTICLESDISPSPLITCHAR', 'Split character for story
 define('_NEWS_CONTENTTYPE_NEWSARTICLESDISPUNAME','Show the user name');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESEMPTYMSG', 'No recent news articles found.');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESEXTRAINFO', 'Extra information');
-define('_NEWS_CONTENTTYPE_NEWSARTICLESFRONTPAGE', 'Front page');
+define('_NEWS_CONTENTTYPE_NEWSARTICLESFRONTPAGE', 'Lead page');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESHOMETEXTWARNING','When wrapping the hometext, incomplete HTML markups elements will be made complete again by the truncatehtml plugin.');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESHOMETEXTWRAPTEXT','Suffix text for home text wrapping'); 
 define('_NEWS_CONTENTTYPE_NEWSARTICLESLIMIT', 'Number of articles');
@@ -40,7 +40,7 @@ define('_NEWS_CONTENTTYPE_NEWSARTICLESMAXTITLELENGTH', 'Max. lenght of each titl
 define('_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGELIMIT', 'How many days is a story recent');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGESET', 'The image set for the new image (pnimg plugin)');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGESRC', 'The new image name from the set (pnimg plugin)');
-define('_NEWS_CONTENTTYPE_NEWSARTICLESNONFRONTPAGE', 'Non front page');
+define('_NEWS_CONTENTTYPE_NEWSARTICLESNONFRONTPAGE', 'Non lead page');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESOFTHECAT', 'News articles list of the "%category%" category');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESON', 'on');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESORDER', 'Articles sorted by');

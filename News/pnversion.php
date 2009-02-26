@@ -2,23 +2,27 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnversion.php 24821 2008-11-05 16:01:47Z Guite $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnversion.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
-$modversion['name'] = 'News';
+$modversion['name']        = 'News';
 $modversion['displayname'] = _NEWS_DISPLAYNAME;
 $modversion['description'] = _NEWS_DESCRIPTION;
-$modversion['version'] = '2.3';
-$modversion['credits'] = 'pndocs/credits.txt';
-$modversion['help'] = 'pndocs/install.txt';
-$modversion['changelog'] = 'pndocs/changelog.txt';
-$modversion['license'] = 'pndocs/license.txt';
-$modversion['official'] = 1;
-$modversion['author'] = 'Mateo Tibaquira & Erik Spaan';
-$modversion['contact'] = 'http://code.zikula.org/news';
+$modversion['version']     = '2.3';
+
+$modversion['credits']     = 'pndocs/credits.txt';
+$modversion['help']        = 'pndocs/install.txt';
+$modversion['changelog']   = 'pndocs/changelog.txt';
+$modversion['license']     = 'pndocs/license.txt';
+$modversion['official']    = 1;
+$modversion['author']      = 'Mark West';
+$modversion['contact']     = 'http://www.markwest.me.uk/';
+
 $modversion['securityschema'] = array('Stories::Story' => 'Author ID::Story ID');

@@ -1,5 +1,5 @@
 /*
- *  $Id: sizecheck.js 22690 2007-09-17 16:23:09Z landseer $ 
+ *  $Id: sizecheck.js 34 2008-12-24 00:07:35Z Guite $ 
  */
 
 /**

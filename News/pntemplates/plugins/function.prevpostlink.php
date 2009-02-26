@@ -4,9 +4,9 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: function.prevpostlink.php 22238 2007-06-18 16:43:33Z markwest $
+ * @version $Id: function.prevpostlink.php 75 2009-02-24 04:51:52Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
 */
 
@@ -15,9 +15,9 @@
  *
  * This file is a plugin for pnRender, the Zikula implementation of Smarty
  *
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
- * @version $Id: function.prevpostlink.php 22238 2007-06-18 16:43:33Z markwest $
+ * @version $Id: function.prevpostlink.php 75 2009-02-24 04:51:52Z mateo $
  * @author The Zikula development team
  * @link http://www.zikula.org The Zikula Home Page
  * @copyright Copyright (C) 2002 by the Zikula Development Team
@@ -28,7 +28,7 @@
  * Smarty function to display a link to the previous post
  *
  * Example
- * <!--[prevpostlink sid=$info.sid layout='<span class="meta-nav">&laquo;</span> %link%']-->
+ * <!--[prevpostlink sid=$info.sid layout='<span class="news_metanav">&laquo;</span> %link%']-->
  *
  * @author Mark West
  * @since 3/7/2007
@@ -47,10 +47,14 @@ function smarty_function_prevpostlink($params, &$smarty)
         $params['sid'] = $info['sid'];
     }
     if (!isset($params['layout'])) {
-        $params['layout'] = '';
+        $params['layout'] = '<span class="news_metanav">&laquo;</span> %link%';
     }
 
-    $article = pnModAPIFunc('News', 'user', 'getall', array('query' => "pn_sid < $params[sid]", 'order' => 'DESC'));
+    $article = pnModAPIFunc('News', 'user', 'getall',
+                            array('query' => array(array('sid', '<', $params['sid'])),
+                                  'orderdir' => 'ASC',
+                                  'numitems' => 1));
+
     if (!$article) {
         return;
     }

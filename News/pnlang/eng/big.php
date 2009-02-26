@@ -4,9 +4,9 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: big.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: big.php 75 2009-02-24 04:51:52Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
 */
 

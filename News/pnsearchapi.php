@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnsearchapi.php 24342 2008-06-06 12:03:14Z markwest $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnsearchapi.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * Search plugin info
@@ -24,7 +26,7 @@ function news_searchapi_info()
  **/
 function news_searchapi_options($args)
 {
-    if (SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         // Create output object - this object will store all of our output so that
         // we can return it easily when required
         $pnRender = pnRender::getInstance('News');
@@ -40,16 +42,16 @@ function news_searchapi_options($args)
  **/
 function news_searchapi_search($args)
 {
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         return true;
     }
 
     pnModDBInfoLoad('Search');
     $pntable = pnDBGetTables();
-    $storiestable = $pntable['stories'];
+    $storiestable  = $pntable['stories'];
     $storiescolumn = $pntable['stories_column'];
-    $searchTable = $pntable['search_result'];
-    $searchColumn = $pntable['search_result_column'];
+    $searchTable   = $pntable['search_result'];
+    $searchColumn  = $pntable['search_result_column'];
 
     $where = search_construct_where($args, 
                                     array($storiescolumn['title'], 
@@ -103,7 +105,7 @@ function news_searchapi_search_check(&$args)
 {
     $datarow = &$args['datarow'];
     $storyId = $datarow['extra'];
-    
+
     $datarow['url'] = pnModUrl('News', 'user', 'display', array('sid' => $storyId));
 
     return true;

@@ -2,19 +2,20 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnuserapi.php 25404 2009-02-09 09:31:11Z rgasch $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnuserapi.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * Internal callback class used to check permissions to each News item
- * @package Zikula_Value_Addons
- * @subpackage News
-*/
+ * @author Jorn Wildt
+ */
 class news_result_checker
 {
     var $enablecategorization;
@@ -28,7 +29,7 @@ class news_result_checker
     // A return value of true means "keep result" - false means "discard".
     function checkResult(&$item)
     {
-        $ok = SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW);
+        $ok = SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW);
         if ($this->enablecategorization)
         {
             ObjectUtil::expandObjectWithCategories($item, 'stories', 'sid');
@@ -47,6 +48,9 @@ class news_result_checker
 function News_userapi_getall($args)
 {
     // Optional arguments.
+    if (!isset($args['status']) || (empty($args['status']) && $args['status'] !== 0)) {
+        $args['status'] = null;
+    }
     if (!isset($args['startnum']) || empty($args['startnum'])) {
         $args['startnum'] = 1;
     }
@@ -56,11 +60,12 @@ function News_userapi_getall($args)
     if (!isset($args['ignoreml']) || !is_bool($args['ignoreml'])) {
         $args['ignoreml'] = false;
     }
-    if (!isset($args['language']))
-        $args['language'] = pnUserGetLang();
+    if (!isset($args['language'])) {
+        $args['language'] = '';
     }
 
-    if (!is_numeric($args['startnum']) ||
+    if ((!empty($args['status']) && !is_numeric($args['status'])) ||
+        !is_numeric($args['startnum']) ||
         !is_numeric($args['numitems'])) {
         return LogUtil::registerError (_MODARGSERROR);
     }
@@ -69,7 +74,7 @@ function News_userapi_getall($args)
     $items = array();
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
         return $items;
     }
 
@@ -89,11 +94,11 @@ function News_userapi_getall($args)
     $pntable = pnDBGetTables();
     $storiescolumn = $pntable['stories_column'];
     $queryargs = array();
-    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml']) {
-        $queryargs[] = "($storiescolumn[alanguage]='" . DataUtil::formatForStore($args['language']) . "' OR $storiescolumn[alanguage]='')";
+    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && !empty($args['language'])) {
+        $queryargs[] = "$storiescolumn[language]='" . DataUtil::formatForStore($args['language']) . "'";
     }
 
-    if (isset($args['status'])) {
+    if (isset($args['status']) && !is_null($args['status'])) {
         $queryargs[] = "$storiescolumn[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
     }
 
@@ -128,9 +133,23 @@ function News_userapi_getall($args)
         $queryargs[] = "$storiescolumn[time] LIKE '%{$args['tdate']}%'";
     }
 
+    if (isset($args['query']) && is_array($args['query'])) {
+        // query array with rows like {'field', 'op', 'value'}
+        $allowedoperators = array('>', '>=', '=', '<', '<=', 'LIKE', '!=', '<>');
+        foreach ($args['query'] as $row) {
+            if (is_array($row) && count($row) == 3) {
+                // validate fields and operators
+                list($field, $op, $value) = $row;
+                if (isset($storiescolumn[$field]) && in_array($op, $allowedoperators)) {
+                    $queryargs[] = "$storiescolumn[$field] $op '".DataUtil::formatForStore($value)."'";
+                }
+            }
+        }
+    }
+
     $where = '';
     if (count($queryargs) > 0) {
-        $where = ' WHERE ' . implode(' AND ', $queryargs);
+        $where = implode(' AND ', $queryargs);
     }
 	
     $orderby = '';
@@ -146,11 +165,16 @@ function News_userapi_getall($args)
             default:
                 $order = 'time';
         }
-    } else {
+    } elseif (isset($storiescolumn[$args['order']])) {
         $order = $args['order'];
     }
+
     if (!empty($order)) {
-        $orderby = $storiescolumn[$order].' DESC';
+        if (isset($args['orderdir']) && in_array(strtoupper($args['orderdir'], array('ASC', 'DESC')))) {
+            $orderby = $storiescolumn[$order].' '.strtoupper($args['orderdir']);
+        } else {
+            $orderby = $storiescolumn[$order].' DESC';
+        }
     }
 
     $permChecker = new news_result_checker();
@@ -267,35 +291,20 @@ function News_userapi_get($args)
 function News_userapi_getMonthsWithNews($args) 
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
         return false;
     }
     $pntable =& pnDBGetTables();
-    $storiestable = $pntable['stories'];
     $storiescolumn = $pntable['stories_column'];
     
+    // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
+    $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[cr_date]) ORDER BY $storiescolumn[cr_date] DESC";
+    
     $date = DateUtil::getDatetime();
-
-    // Use "raw" sql since DBUtil can't handle these type of columns
-    $sql = "SELECT DISTINCT
-    				EXTRACT(YEAR FROM $storiescolumn[cr_date]) 	AS year,
-    				EXTRACT(MONTH FROM $storiescolumn[cr_date]) AS month
-    		FROM	$storiestable
-    		WHERE	(	($storiescolumn[cr_date] < '$date'
-    						AND $storiescolumn[from] IS NULL)
-    					OR ($storiescolumn[from] IS NOT NULL
-    						AND $storiescolumn[from] < '$date'))
-    		ORDER BY year DESC, month DESC";
+    $where = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
     
-    $res = DBUtil::executeSQL($sql);
+    $dates = DBUtil::selectFieldArray('stories', 'cr_date', $where, $order);
     
-    $dates = array();
-    $haveCExt    = extension_loaded('adodb');
-    for ( ; !$res->EOF; ($haveCExt ? adodb_movenext($res) : $res->MoveNext())) {
-        $act = array();
-        list($act['year'], $act['month']) = $res->fields;
-        $dates[] = $act;
-    }
     return $dates;
 }
 
@@ -385,16 +394,18 @@ function News_userapi_getArticleLinks($info)
     $commentextra = pnUserGetCommentOptions();
 
     // Allowed to comment?
-    if (SecurityUtil::checkPermission( $component, $instance, ACCESS_COMMENT) && pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News')) {
-        $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
-        $comment     = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News')) {
+        $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+        if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
+            $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
+        }
     } else {
-        $postcomment = '';
         $comment     = '';
+        $postcomment = '';
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission( $component, $instance, ACCESS_READ)) {
+    if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
         $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
     } else {
         $fullarticle = '';
@@ -481,6 +492,12 @@ function News_userapi_getArticleInfo($info)
     if (isset($info['__CATEGORIES__'])) {
         $info['categories'] = $info['__CATEGORIES__'];
         unset($info['__CATEGORIES__']);
+    }
+
+    // also the __ATTRIBUTES__ field
+    if (isset($info['__ATTRIBUTES__'])) {
+        $info['attributes'] = $info['__ATTRIBUTES__'];
+        unset($info['__ATTRIBUTES__']);
     }
 
     // For legacy reasons we add some hardwired category and topic variables
@@ -614,7 +631,7 @@ function News_userapi_getArticlePreformat($args)
     $readmore = '';
     $bytesmorelink = '';
     if ($bytesmore > 0) {
-        if (SecurityUtil::checkPermission( $component, $instance, ACCESS_READ)) {
+        if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
             $title =  pnML('_NEWS_FULLTEXTOFARTICLE', array('title' => $info['title']));
             $readmore = '<a title="' . $title . "\" href=\"$links[fullarticle]\">".$title.'</a>';
         }
@@ -622,9 +639,9 @@ function News_userapi_getArticlePreformat($args)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission( $component, $instance, ACCESS_READ)) {
+    if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
         $title = "<a href=\"$links[fullarticle]\">$info[title]</a>";
-        $print = "[<a href=\"$links[print]\"><img src=\"images/global/print.gif\" alt=\""._NEWS_PRINTER.'" /></a>]';
+        $print = "<a class=\"news_printlink\" href=\"$links[print]\"><img src=\"images/global/print.gif\" alt=\""._NEWS_PRINTER.'" /></a>';
     } else {
         $title = $info['title'];
         $print = '';
@@ -644,10 +661,10 @@ function News_userapi_getArticlePreformat($args)
         }
 
         // Allowed to comment?
-        if (SecurityUtil::checkPermission( $component, $instance, ACCESS_COMMENT)) {
+        if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
 			$postcomment = "<a href=\"$links[postcomment]\">"._NEWS_COMMENTSQ.'</a>';
             $commentlink = '<a title="' . pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title']))."\" href=\"$links[comment]\">$comment</a>";
-        } else if (SecurityUtil::checkPermission( $component, $instance, ACCESS_READ)) {
+        } else if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
             $commentlink = "$comment";
         }
     }
@@ -727,20 +744,22 @@ function News_userapi_getArticlePreformat($args)
 function News_userapi_create($args)
 {
     // Argument check
-    if (!isset($args['title']) ||
-        !isset($args['hometext']) ||
+    if (!isset($args['title']) || empty($args['title']) ||
+        !isset($args['hometext']) || empty($args['hometext']) ||
         !isset($args['hometextcontenttype']) ||
-        !isset($args['bodytext']) ||
+        !isset($args['bodytext']) || empty($args['bodytext']) ||
         !isset($args['bodytextcontenttype']) ||
         !isset($args['notes'])) {
         return LogUtil::registerError (_MODARGSERROR);
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_COMMENT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT)) {
         return LogUtil::registerError (_MODULENOAUTH);
-    } else if ( SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_ADD)) {
-        $args['published_status'] = 0;
+    } elseif (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+        if (!isset($args['published_status'])) {
+            $args['published_status'] = 0;
+        }
     } else {
         $args['published_status'] = 2;
     }
@@ -989,7 +1008,14 @@ function News_userapi_isformatted($args)
     }
 
     if (pnModAvailable('scribite')) {
-        $modconfig = pnModAPIFunc('scribite', 'user', 'getModuleConfig', 'News');
+        $modinfo = pnModGetInfo(pnModGetIDFromName('scribite'));
+        if (version_compare($modinfo['version'], '2.2', '>=')) {
+            $apiargs = array('modulename' => 'News'); // parameter handling corrected in 2.2
+        } else {
+            $apiargs = 'News'; // old direct parameter
+        }
+        
+        $modconfig = pnModAPIFunc('scribite', 'user', 'getModuleConfig', $apiargs);
         if (in_array($args['func'], (array)$modconfig['modfuncs']) && $modconfig['modeditor'] != '-') {
             return true;
         }

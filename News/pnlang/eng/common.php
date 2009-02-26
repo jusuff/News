@@ -4,9 +4,9 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: userapi.php 21401 2007-02-16 11:52:12Z landseer $
+ * @version $Id: common.php 75 2009-02-24 04:51:52Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
 */
 
@@ -17,6 +17,12 @@ define('_NEWS', 'News');
 define('_NEWS_STORY', 'News Article');
 define('_NEWS_STORY_LC', 'news article');
 define('_NEWS_STORIES', 'News Articles');
+
+// status
+define('_NEWS_ARCHIVED', 'Archived');
+define('_NEWS_PENDING', 'Pending');
+define('_NEWS_PUBLISHED', 'Published');
+define('_NEWS_REJECTED', 'Rejected');
 
 // new/modify templates
 // these are located in the common file to support user submission
@@ -29,9 +35,10 @@ define('_NEWS_EXTENDEDTEXT', 'Article body');
 define('_ARTICLETITLE_FLC', 'Article Title');
 define('_NEWS_NEWSARTICLEPREVIEW', 'Article Preview');
 
+define('_NEWS_ATTRIBUTES', 'Article attributes');
 define('_NEWS_FORMATTEDTEXT', 'Formatted Text');
 define('_NEWS_FROM', 'Start date');
-define('_NEWS_HOMETEXT', 'Front page teaser');
+define('_NEWS_HOMETEXT', 'Lead page teaser');
 define('_NEWS_INHOME', 'Publish on news lead page');
 define('_NEWS_MAXCHARS', '(Limit: 65536 characters)');
 define('_NEWS_NOTES', 'Foot notes');
@@ -40,6 +47,7 @@ define('_NEWS_ARTICLECONTENT', 'Article Content');
 define('_NEWS_PLAINTEXT', 'Plain Text');
 define('_NEWS_POSTORPREVIEW', 'Action');
 define('_NEWS_POSTSTORY', 'Publish');
+define('_NEWS_PUBLISHEDSTATUS', 'Status');
 define('_NEWS_SUBMIT', 'Submit Article');
 define('_NEWS_PREVIEW', 'Preview');
 define('_NEWS_PREVIEWSTORY', 'Preview');

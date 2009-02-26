@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnajax.php 24342 2008-06-06 12:03:14Z markwest $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnajax.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * modify a news entry (incl. delete) via ajax
@@ -30,7 +32,7 @@ function News_ajax_modify()
     }
     
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$sid", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$sid", ACCESS_EDIT)) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
     }
 
@@ -127,7 +129,7 @@ function News_ajax_update()
     switch($story['action']) {
         case 'update':
             // Security check
-            if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
+            if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             // Update the story
@@ -219,7 +221,7 @@ function News_ajax_update()
 
         case 'pending':
             // Security check
-            if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
+            if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             // set published_status to 1 to make the story a pending story
@@ -234,7 +236,7 @@ function News_ajax_update()
 
         case 'delete':
             // Security check
-            if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$story[sid]", ACCESS_DELETE)) {
+            if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_DELETE)) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             if (pnModAPIFunc('News', 'admin', 'delete', array('sid' => $story['sid']))) {

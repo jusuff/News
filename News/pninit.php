@@ -2,20 +2,21 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pninit.php 24342 2008-06-06 12:03:14Z markwest $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pninit.php 81 2009-02-25 17:57:20Z espaan $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * initialise the News module
  *
  * This function is only ever called once during the lifetime of a particular
  * module instance.
- * This function MUST exist in the pninit file for a module
  *
  * @author       Xiaoyu Huang
  * @return       bool       true on success, false otherwise
@@ -32,13 +33,14 @@ function News_init()
         return LogUtil::registerError (_CREATEFAILED);
     }
 
-
     // Set up config variables
     pnModSetVar('News', 'storyhome', 10);
     pnModSetVar('News', 'storyorder', 0);
     pnModSetVar('News', 'itemsperpage', '25');
     pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
     pnModSetVar('News', 'enablecategorization', true);
+    pnModSetVar('News', 'refereronprint', 0);
+    pnModSetVar('News', 'enableattribution', false);
 
     // Initialisation successful
     return true;
@@ -48,7 +50,6 @@ function News_init()
  * upgrade the News module from an old version
  *
  * This function can be called multiple times
- * This function MUST exist in the pninit file for a module
  *
  * @author       Xiaoyu Huang
  * @return       bool       true on success, false otherwise
@@ -69,7 +70,7 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'storyorder', pnConfigGetVar('storyorder'));
             pnConfigDelVar('storyorder');
             pnModSetVar('News', 'itemsperpage', 25);
-            return News_upgrade(1.5);
+            //return News_upgrade(1.5);
         case 1.5:
             $tables = pnDBGetTables();
             $shorturlsep = pnConfigGetVar('shorturlsseparator');			
@@ -126,6 +127,21 @@ function News_upgrade($oldversion)
                 return LogUtil::registerError (_UPDATEFAILED);
             }
             return News_upgrade(2.2);
+        case 2.2:
+            pnModSetVar('News', 'refereronprint', pnConfigGetVar('refereronprint', 0));
+            //return News_upgrade(2.3);
+        /*case 2.3:
+            // convert the from fields to the new way
+            $tables = pnDBGetTables();
+            // move the data from the author uid to creator and updator uid
+            $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
+            foreach ($sqls as $sql) {
+                if (!DBUtil::executeSQL($sql)) {
+                    return LogUtil::registerError (_UPDATETABLEFAILED);
+                }
+            }
+            pnModSetVar('News', 'enableattribution', false);
+            return News_upgrade(2.4);*/
     }
 
     // Update successful
@@ -137,7 +153,6 @@ function News_upgrade($oldversion)
  *
  * This function is only ever called once during the lifetime of a particular
  * module instance
- * This function MUST exist in the pninit file for a module
  *
  * @author       Xiaoyu Huang
  * @return       bool       true on success, false otherwise

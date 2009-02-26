@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnadminapi.php 24963 2008-12-06 09:59:31Z mateo $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnadminapi.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * delete a News item
@@ -31,7 +33,7 @@ function News_adminapi_delete($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
         return LogUtil::registerError (_MODULENOAUTH);
     }
 
@@ -91,7 +93,7 @@ function News_adminapi_update($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT)) {
         return LogUtil::registerError (_MODULENOAUTH);
     }
 

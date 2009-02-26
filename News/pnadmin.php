@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnadmin.php 25003 2008-12-07 19:23:55Z Landseer $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnadmin.php 82 2009-02-25 23:09:21Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * the main administration function
@@ -18,13 +20,14 @@
  * shows the module menu and returns or calls whatever the module
  * designer feels should be the default function (often this is the
  * view() function)
+ * 
  * @author Mark West
- * @return string HTML string
+ * @return string HTML output
  */
 function News_admin_main()
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -65,63 +68,92 @@ function News_admin_modify($args)
         $sid = $objectid;
     }
 
+    // Check if we're redirected to preview
+    $inpreview = false;
+    $item = SessionUtil::getVar('newsitem');
+    if (!empty($item) && isset($item['sid'])) {
+        $inpreview = true;
+        $sid = $item['sid'];
+    }
+
     // Validate the essential parameters
     if (empty($sid)) {
         return LogUtil::registerError(_MODARGSERROR);
     }
 
-    // Get the news article
-    $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
+    // Get the news article in the db
+    $dbitem = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
 
-    if ($item === false) {
+    if ($dbitem === false) {
         return LogUtil::registerError(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY)), 404);
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$sid", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', "$dbitem[aid]::$sid", ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
+    // merge the data of the db and the preview if exist
+    $item = $inpreview ? array_merge($dbitem, $item) : $dbitem;
+    unset($dbitem);
+
     // Get the format types. 'home' string is bits 0-1, 'body' is bits 2-3.
-    $item['hometextcontenttype'] = ($item['format_type']%4);
-    $item['bodytextcontenttype'] = (($item['format_type']/4)%4);
+    $item['hometextcontenttype'] = isset($item['hometextcontenttype']) ? $item['hometextcontenttype'] : ($item['format_type']%4);
+    $item['bodytextcontenttype'] = isset($item['bodytextcontenttype']) ? $item['bodytextcontenttype'] : (($item['format_type']/4)%4);
 
     // Set the publishing date options.
-    if (is_null($item['from']) && is_null($item['to'])) {
-        $item['unlimited'] = 1;
-        $item['tonolimit'] = 0;
-    } elseif (!is_null($item['from']) && is_null($item['to'])) {
-        $item['unlimited'] = 0;
-        $item['tonolimit'] = 1;
-    } else  {
-        $item['unlimited'] = 0;
-        $item['tonolimit'] = 0;
+    if (!$inpreview) {
+        if (is_null($item['from']) && is_null($item['to'])) {
+            $item['unlimited'] = 1;
+            $item['tonolimit'] = 0;
+        } elseif (!is_null($item['from']) && is_null($item['to'])) {
+            $item['unlimited'] = 0;
+            $item['tonolimit'] = 1;
+        } else  {
+            $item['unlimited'] = 0;
+            $item['tonolimit'] = 0;
+        }
+    } else {
+        $item['unlimited'] = isset($item['unlimited']) ? 1 : 0;
+        $item['tonolimit'] = isset($item['tonolimit']) ? 1 : 0;
+    }
+
+    // Check if we need a preview
+    $preview = '';
+    if (isset($item['preview']) && $item['preview'] == 0) {
+        $preview = pnModFunc('News', 'user', 'preview',
+                             array('title' => $item['title'],
+                                   'hometext' => $item['hometext'],
+                                   'hometextcontenttype' => $item['hometextcontenttype'],
+                                   'bodytext' => $item['bodytext'],
+                                   'bodytextcontenttype' => $item['bodytextcontenttype'],
+                                   'notes' => $item['notes']));
     }
 
     // Get the module configuration vars
     $modvars = pnModGetVar('News');
-
-    // Create output object
-    $pnRender = pnRender::getInstance('News', false);
-
-    // Get the preview of the item
-    $pnRender->assign('preview', pnModFunc('News', 'user', 'preview',
-                                 array('title' => $item['title'],
-                                       'language' => $item['language'],
-                                       'hometext' => $item['hometext'],
-                                       'hometextcontenttype' => $item['hometextcontenttype'],
-                                       'bodytext' => $item['bodytext'],
-                                       'bodytextcontenttype' => $item['bodytextcontenttype'],
-                                       'notes' => $item['notes'],
-                                       'ihome' => $item['ihome'])));
 
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
-        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
-        
+        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+
+        // check if the __CATEGORIES__ info needs a fix (when preview)
+        if (isset($item['__CATEGORIES__'])) {
+            foreach ($item['__CATEGORIES__'] as $prop => $catid) {
+                if (is_numeric($catid)) {
+                    $item['__CATEGORIES__'][$prop] = array('id' => $catid);
+                }
+            }
+        }
+    }
+
+    // Create output object
+    $pnRender = pnRender::getInstance('News', false);
+
+    if ($modvars['enablecategorization']) {
         $pnRender->assign('catregistry', $catregistry);
     }
 
@@ -130,6 +162,9 @@ function News_admin_modify($args)
 
     // Assign the item to the template
     $pnRender->assign($item);
+
+    // Get the preview of the item
+    $pnRender->assign('preview', $preview);
 
     // Assign the content format
     $formattedcontent = pnModAPIFunc('News', 'user', 'isformatted', array('func' => 'new'));
@@ -171,7 +206,7 @@ function News_admin_update($args)
 
     // Confirm authorisation code
     if (!SecurityUtil::confirmAuthKey()) {
-        return LogUtil::registerAuthidError (pnModURL('News', 'admin', 'view'));
+        return LogUtil::registerAuthidError(pnModURL('News', 'admin', 'view'));
     }
 
     // Get the unedited news article for the permissions check
@@ -181,18 +216,58 @@ function News_admin_update($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
-    // Notable by its absence there is no security check here
+    // Validate the input
+    $validationerror = false;
+    if ($story['preview'] != 0 && empty($story['title'])) {
+        $validationerror = _TITLE;
+    }
+    if ($story['preview'] != 0 && empty($story['hometext'])) {
+        $validationerror = _NEWS_ARTICLECONTENT;
+    }
+    if ($story['preview'] != 0 && empty($story['bodytext'])) {
+        $validationerror = _NEWS_EXTENDEDTEXT;
+    }
+
+    // Reformat the attributes array
+    // from {0 => {name => '...', value => '...'}} to {name => value}
+    if (isset($story['attributes'])) {
+        $attributes = array();
+        foreach ($story['attributes'] as $attr) {
+            if (!empty($attr['name']) && !empty($attr['value'])) {
+                $attributes[$attr['name']] = $attr['value'];
+            }
+        }
+        unset($story['attributes']);
+        $story['__ATTRIBUTES__'] = $attributes;
+    }
+
+    // if the user has selected to preview the article we then route them back
+    // to the new function with the arguments passed here
+    if ($story['preview'] == 0 || $validationerror !== false) {
+        // log the error found if any
+        if ($validationerror !== false) {
+            LogUtil::registerError(pnML('_NOFOUND', array('i' => $validationerror)));
+        }
+        // back to the referer form
+        SessionUtil::setVar('newsitem', $story);
+        return pnRedirect(pnModURL('News', 'admin', 'modify'));
+
+    } else {
+        // As we're not previewing the item let's remove it from the session
+        SessionUtil::delVar('newsitem');
+    }
 
     // Update the story
     if (pnModAPIFunc('News', 'admin', 'update',
                     array('sid' => $story['sid'],
                           'title' => $story['title'],
                           'urltitle' => $story['urltitle'],
-                          '__CATEGORIES__' => $story['__CATEGORIES__'],
+                          '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
+                          '__ATTRIBUTES__' => isset($story['__ATTRIBUTES__']) ? $story['__ATTRIBUTES__'] : null,
                           'language' => isset($story['language']) ? $story['language'] : '',
                           'hometext' => $story['hometext'],
                           'hometextcontenttype' => $story['hometextcontenttype'],
@@ -206,7 +281,7 @@ function News_admin_update($args)
                           'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
                           'published_status' => $story['published_status']))) {
         // Success
-        LogUtil::registerStatus (pnML('_UPDATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
+        LogUtil::registerStatus(pnML('_UPDATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
     }
 
     return pnRedirect(pnModURL('News', 'admin', 'view'));
@@ -251,7 +326,7 @@ function News_admin_delete($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -272,13 +347,13 @@ function News_admin_delete($args)
 
     // Confirm authorisation code
     if (!SecurityUtil::confirmAuthKey()) {
-        return LogUtil::registerAuthidError (pnModURL('News', 'admin', 'view'));
+        return LogUtil::registerAuthidError(pnModURL('News', 'admin', 'view'));
     }
 
-    // Delee
+    // Delete
     if (pnModAPIFunc('News', 'admin', 'delete', array('sid' => $sid))) {
         // Success
-        LogUtil::registerStatus (pnML('_DELETEITEMSUCCEDED', array('i' => _NEWS_STORY)));
+        LogUtil::registerStatus(pnML('_DELETEITEMSUCCEDED', array('i' => _NEWS_STORY)));
     }
 
     return pnRedirect(pnModURL('News', 'admin', 'view'));
@@ -293,11 +368,13 @@ function News_admin_delete($args)
 function News_admin_view($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_EDIT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
     $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GET');
+    $status   = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
+    $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
     $property = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'POST');
     $category = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'POST');
     $clear    = FormUtil::getPassedValue('clear', false, 'POST');
@@ -347,14 +424,27 @@ function News_admin_view($args)
         }
     }
 
+    $multilingual = pnConfigGetVar ('multilingual', false);
+
     // Get all news story
     $items = pnModAPIFunc('News', 'user', 'getall',
                           array('startnum' => $startnum,
+                                'status'   => $status,
                                 'numitems' => $modvars['itemsperpage'],
-                                'ignoreml' => true,
+                                'ignoreml' => ($multilingual ? false : true),
+                                'language' => $language,
                                 'order'    => 'sid',
                                 'category' => isset($catFilter) ? $catFilter : null,
                                 'catregistry' => isset($catregistry) ? $catregistry : null));
+
+    // Set the possible status for later use
+    $itemstatus = array (
+        '' => _CHOOSEONE, 
+        0  => _NEWS_PUBLISHED,
+        1  => _NEWS_REJECTED,
+        2  => _NEWS_PENDING,
+        3  => _NEWS_ARCHIVED
+    );
 
     $newsitems = array();
     foreach ($items as $item) {
@@ -362,11 +452,13 @@ function News_admin_view($args)
         $options[] = array('url'   => pnModURL('News', 'user', 'display', array('sid' => $item['sid'])),
                            'image' => 'demo.gif',
                            'title' => _VIEW);
-        if (SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
+
+        if (SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
             $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
                                'image' => 'xedit.gif',
                                'title' => _EDIT);
-            if (SecurityUtil::checkPermission( 'Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+
+            if (SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'delete', array('sid' => $item['sid'])),
                                    'image' => '14_layer_deletelayer.gif',
                                    'title' => _DELETE);
@@ -374,22 +466,10 @@ function News_admin_view($args)
         }
         $item['options'] = $options;
 
-        switch ($item['published_status']) {
-            case 0:
-                $item['status'] = _NEWS_PUBLISHED;
-                break;
-            case 1:
-                $item['status'] = _NEWS_REJECTED;
-                break;
-            case 2:
-                $item['status'] = _NEWS_PENDING;
-                break;
-            case 3:
-                $item['status'] = _NEWS_ARCHIVED;
-                break;
-            default:
-                $item['status'] = _NEWS_UNKNOWN;
-                break;
+        if (in_array($item['published_status'], array_keys($itemstatus))) {
+            $item['status'] = $itemstatus[$item['published_status']];
+        } else {
+            $item['status'] = _NEWS_UNKNOWN;
         }
 
         if ($item['ihome'] == 0) {
@@ -399,7 +479,7 @@ function News_admin_view($args)
         }
 
         if (DateUtil::getDatetimeDiff_AsField($item['time'], DateUtil::getDatetime(), 6) < 0) {
-            $item['infuture'] = _YES . " (" . DateUtil::formatDatetime($item['time'],"%x") . ")";
+            $item['infuture'] = _YES . ' (' . DateUtil::formatDatetime($item['time'], '%x') . ')';
         } else {
             $item['infuture'] = _NO;
         }
@@ -414,8 +494,13 @@ function News_admin_view($args)
     $pnRender->assign('newsitems', $newsitems);
     $pnRender->assign($modvars);
 
-    // Assign the default language
+    // Assign the default and selected language
     $pnRender->assign('lang', pnUserGetLang());
+    $pnRender->assign('language', $language);
+
+    // Assign the current status filter and the possible ones
+    $pnRender->assign('status', $status);
+    $pnRender->assign('itemstatus', $itemstatus);
 
     // Assign the categories information if enabled
     if ($modvars['enablecategorization']) {
@@ -443,16 +528,16 @@ function News_admin_view($args)
 function News_admin_modifyconfig()
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_ADMIN)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
         return LogUtil::registerPermissionError();
     }
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
     }
-    $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
-    $properties = array_keys($catregistry);
-    $propertyName = pnModGetVar('News', 'topicproperty');
+    $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+    $properties    = array_keys($catregistry);
+    $propertyName  = pnModGetVar('News', 'topicproperty');
     $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
 
     // Create output object
@@ -478,44 +563,58 @@ function News_admin_modifyconfig()
 function News_admin_updateconfig()
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_ADMIN)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
         return LogUtil::registerPermissionError();
     }
 
     // Confirm authorisation code
     if (!SecurityUtil::confirmAuthKey()) {
-        return LogUtil::registerAuthidError (pnModURL('News', 'admin', 'view'));
+        return LogUtil::registerAuthidError(pnModURL('News', 'admin', 'view'));
     }
 
     // Update module variables
+    $modvars = array();
+
+    $refereronprint = (int)FormUtil::getPassedValue('refereronprint', 0, 'POST');
+    if ($refereronprint != 0 && $refereronprint != 1) $refereronprint = 0;
+    $modvars['refereronprint'] = $refereronprint;
+
     $itemsperpage = (int)FormUtil::getPassedValue('itemsperpage', 10, 'POST');
-    pnModSetVar('News', 'itemsperpage', $itemsperpage);
+    $modvars['itemsperpage'] = $itemsperpage;
+
     $storyhome = (int)FormUtil::getPassedValue('storyhome', 10, 'POST');
-    pnModSetVar('News', 'storyhome', $storyhome);
+    $modvars['storyhome'] = $storyhome;
+
     $storyorder = (int)FormUtil::getPassedValue('storyorder', 10, 'POST');
-    pnModSetVar('News', 'storyorder', $storyorder);
+    $modvars['storyorder'] = $storyorder;
+
     $enablecategorization = (bool)FormUtil::getPassedValue('enablecategorization', false, 'POST');
-    pnModSetVar('News', 'enablecategorization', $enablecategorization);
-    
+    $modvars['enablecategorization'] = $enablecategorization;
+
+    $enableattribution = (bool)FormUtil::getPassedValue('enableattribution', false, 'POST');
+    $modvars['enableattribution'] = $enableattribution;
+
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
     }
-    $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
-    $properties = array_keys($catregistry);
+    $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+    $properties    = array_keys($catregistry);
     $topicproperty = FormUtil::getPassedValue('topicproperty', null, 'POST');
-    pnModSetVar('News', 'topicproperty', $properties[$topicproperty]);
+    $modvars['topicproperty'] = $properties[$topicproperty];
 
     $permalinkformat = FormUtil::getPassedValue('permalinkformat', null, 'POST');
     if ($permalinkformat == 'custom') {
         $permalinkformat = FormUtil::getPassedValue('permalinkstructure', null, 'POST');
     }
-    pnModSetVar('News', 'permalinkformat', $permalinkformat);
+    $modvars['permalinkformat'] = $permalinkformat;
+
+    pnModSetVars('News', $modvars);
 
     // Let any other modules know that the modules configuration has been updated
     pnModCallHooks('module','updateconfig','News', array('module' => 'News'));
 
     // the module configuration has been updated successfuly
-    LogUtil::registerStatus (_CONFIGUPDATED);
+    LogUtil::registerStatus(_CONFIGUPDATED);
 
     return pnRedirect(pnModURL('News', 'admin', 'main'));
 }

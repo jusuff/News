@@ -1,155 +1,152 @@
-<!--[*  $Id: news_ajax_modify.htm 24042 2008-03-26 20:56:36Z markwest $  *]-->
-<!--[pnml name="_NEWS_MODIFY" assign=templatetitle]-->
-<form id="news_ajax_modifyform" class="pn-form" action="<!--[pnmodurl modname="News" type="admin" func="update"]-->" method="post" enctype="application/x-www-form-urlencoded">
+<!--[*  $Id: news_ajax_modify.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+<!--[pnml name='_NEWS_MODIFY' assign='templatetitle']-->
+
+<form id="news_ajax_modifyform" class="pn-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" method="post" enctype="application/x-www-form-urlencoded">
 <div >
     <h2><!--[$templatetitle]-->: <!--[$title|pnvarprepfordisplay]--></h2>
-    <input type="hidden" name="authid" value="<!--[insert name="generateauthkey" module="News"]-->" />
+    <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
     <input type="hidden" name="page" value="<!--[$page|pnvarprepfordisplay]-->" />
     <input type="hidden" name="story[sid]" value="<!--[$sid|pnvarprepfordisplay]-->" />
     <input type="hidden" name="story[published_status]" value="<!--[$published_status|pnvarprepfordisplay]-->" />
+    <!--[if $formattedcontent eq 1]-->
+    <input type="hidden" name="story[hometextcontenttype]" value="1" />
+    <input type="hidden" name="story[bodytextcontenttype]" value="1" />
+    <!--[/if]-->
+
     <fieldset class="pn-form-fieldset">
-        <legend><!--[pnml name=_NEWS_OVERVIEW]--></legend>
+        <legend><!--[pnml name='_NEWS_OVERVIEW']--></legend>
+
         <div class="pn-formrow">
-            <label for="news_title"><!--[pnml name="_TITLE"]--></label>
+            <label for="news_title"><!--[pnml name='_TITLE']--></label>
             <input id="news_title" class="pn-form-text" name="story[title]" type="text" size="32" maxlength="255" value="<!--[$title|pnvarprepfordisplay]-->" />
         </div>
+
         <div class="pn-formrow">
-            <label for="news_urltitle"><!--[pnml name="_PERMALINKTITLE"]--></label>
+            <label for="news_urltitle"><!--[pnml name='_PERMALINKTITLE']--></label>
             <input id="news_urltitle" class="pn-form-text" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
-            <span class="pn-sub"><!--[pnml name=_PERMALINKTITLEBLANK]--></span>
+            <span class="pn-sub"><!--[pnml name='_PERMALINKTITLEBLANK']--></span>
         </div>
-		<!--[if $enablecategorization]-->
-    	<div class="pn-formrow">
-			<label for="story___CATEGORIES____Main_"><!--[pnml name="_CATEGORY"]--></label>
-			<!--[pnml assign="lblDef" name="_CHOOSECATEGORY"]-->
-			<!--[nocache]-->
-			<ul class="selector_category">
-			<!--[foreach from=$categories key=property item=category]-->
-                <!--[array_field_isset array=$__CATEGORIES__ field=$property assign="catExists"]-->
+
+        <!--[if $enablecategorization]-->
+        <div class="pn-formrow">
+            <label for="story___CATEGORIES____Main_"><!--[pnml name='_CATEGORY']--></label>
+            <!--[pnml assign='lblDef' name='_CHOOSECATEGORY']-->
+            <!--[nocache]-->
+            <ul class="selector_category">
+            <!--[foreach from=$categories key='property' item='category']-->
+                <!--[array_field_isset array=$__CATEGORIES__ field=$property assign='catExists']-->
                 <!--[if $catExists]-->
-                    <!--[array_field_isset array=$__CATEGORIES__.$property field="id" returnValue=1 assign="selectedValue"]-->
+                    <!--[array_field_isset array=$__CATEGORIES__.$property field='id' returnValue=1 assign='selectedValue']-->
                 <!--[else]-->
-                    <!--[assign var="selectedValue" value="0"]-->
+                    <!--[assign var='selectedValue' value='0']-->
                 <!--[/if]-->
-				<li><!--[selector_category category=$category name="story[__CATEGORIES__][$property]" field="id" selectedValue=$selectedValue defaultValue="0" defaultText=$lblDef]--></li>
-			<!--[/foreach]-->
-			</ul>
-			<!--[/nocache]-->
-    	</div>
-		<!--[/if]-->
-		<!--[pnconfiggetvar name=multilingual assign=multilingual]-->
-		<!--[if $multilingual]-->
-        <div class="pn-formrow">
-            <label for="news_language"><!--[pnml name="_LANGUAGE"]--></label>
-            <!--[languagelist id=news_langauge name=story[language] all=true selected=$language installed=true]-->
+                <li><!--[selector_category category=$category name="story[__CATEGORIES__][$property]" field='id' selectedValue=$selectedValue defaultValue='0' defaultText=$lblDef]--></li>
+            <!--[/foreach]-->
+            </ul>
+            <!--[/nocache]-->
         </div>
-		<!--[/if]-->
-	</fieldset>
-    <fieldset class="pn-form-fieldset">
-        <legend><!--[pnml name=_NEWS_ARTICLECONTENT]--></legend>
-        <!--[if $formattedcontent eq 0]--><div class="pn-warningmsg"><!--[pnml name="_PERMITTEDHTMLTAGSREMINDER"]--><!--[pnml name="_PUNC_COLON"]--> <!--[allowedhtml]--></div><!--[/if]-->
+        <!--[/if]-->
+
+        <!--[pnconfiggetvar name='multilingual' assign='multilingual']-->
+        <!--[if $multilingual]-->
         <div class="pn-formrow">
-            <label for="news_hometext"><!--[pnml name="_NEWS_HOMETEXT"]--></label>
+            <label for="news_language"><!--[pnml name='_LANGUAGE']--></label>
+            <!--[languagelist id='news_language' name='story[language]' all=true selected=$language installed=true]-->
+        </div>
+        <!--[/if]-->
+    </fieldset>
+
+    <fieldset class="pn-form-fieldset">
+        <legend><!--[pnml name='_NEWS_ARTICLECONTENT']--></legend>
+
+        <!--[if $formattedcontent eq 0]-->
+        <div class="pn-warningmsg"><!--[pnml name='_PERMITTEDHTMLTAGSREMINDER']--><!--[pnml name='_PUNC_COLON']--> <!--[allowedhtml]--></div>
+        <!--[/if]-->
+        <div class="pn-formrow">
+            <label for="news_hometext"><!--[pnml name='_NEWS_HOMETEXT']--></label>
             <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="50" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-			<span id="news_hometext_remaining" class="pn-sub"><!--[ pnml name="_NEWS_MAXCHARS" ]--></span>
-			<!--[if $formattedcontent eq 1]--><input type="hidden" name="story[hometextcontenttype]" value="1" /><!--[/if]-->
+            <span id="news_hometext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
         </div>
-		<!--[if $formattedcontent eq 0]-->
+
+        <!--[if $formattedcontent eq 0]-->
         <div class="pn-formrow">
-            <label for="news_hometextcontenttype"><!--[pnml name="_NEWS_CONTENTTYPE"]--></label>
+            <label for="news_hometextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
             <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
-            <!--[if $bodytextcontenttype eq 1]-->
-                <option value="0"><!--[pnml name="_NEWS_PLAINTEXT"]--></option>
-                <option value="1" selected="selected"><!--[pnml name="_NEWS_FORMATTEDTEXT"]--></option>
-            <!--[else]-->
-                <option value="0" selected="selected"><!--[pnml name="_NEWS_PLAINTEXT"]--></option>
-                <option value="1"><!--[pnml name="_NEWS_FORMATTEDTEXT"]--></option>
-            <!--[/if]-->
+                <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
+                <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
             </select>
         </div>
-		<!--[/if]-->
+        <!--[/if]-->
+
         <div class="pn-formrow">
-            <label for="news_bodytext"><!--[pnml name="_NEWS_EXTENDEDTEXT"]--></label>
+            <label for="news_bodytext"><!--[pnml name='_NEWS_EXTENDEDTEXT']--></label>
             <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="50" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-			<span id="news_bodytext_remaining" class="pn-sub"><!--[ pnml name="_NEWS_MAXCHARS" ]--></span>
-			<!--[if $formattedcontent eq 1]--><input type="hidden" name="story[bodytextcontenttype]" value="1" /><!--[/if]-->
+            <span id="news_bodytext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
         </div>
-		<!--[if $formattedcontent eq 0]-->
+
+        <!--[if $formattedcontent eq 0]-->
         <div class="pn-formrow">
-            <label for="news_bodytextcontenttype"><!--[pnml name="_NEWS_CONTENTTYPE"]--></label>
+            <label for="news_bodytextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
             <select id="news_bodytextcontenttype" name="story[bodytextcontenttype]">
-            <!--[if $bodytextcontenttype eq 1]-->
-                <option value="0"><!--[pnml name="_NEWS_PLAINTEXT"]--></option>
-                <option value="1" selected="selected"><!--[pnml name="_NEWS_FORMATTEDTEXT"]--></option>
-            <!--[else]-->
-                <option value="0" selected="selected"><!--[pnml name="_NEWS_PLAINTEXT"]--></option>
-                <option value="1"><!--[pnml name="_NEWS_FORMATTEDTEXT"]--></option>
-            <!--[/if]-->
+                <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
+                <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
             </select>
         </div>
-		<!--[/if]-->
+        <!--[/if]-->
+
         <div class="pn-formrow">
-			<label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name="_NEWS_NOTES"]--></a></label>
-			<div id="news_notes_details">
+            <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_NOTES']--></a></label>
+            <div id="news_notes_details">
             <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="50" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-			<span id="news_notes_remaining" class="pn-sub"><!--[ pnml name="_NEWS_MAXCHARS" ]--></span>
-			</div>
+            <span id="news_notes_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            </div>
         </div>
-	</fieldset>
+    </fieldset>
     <fieldset class="pn-form-fieldset">
-		<legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name=_NEWS_PUBLICATION]--></a></legend>
-		<div id="news_publication_details">
+        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATION']--></a></legend>
+        <div id="news_publication_details">
         <div class="pn-formrow">
-            <label for="news_ihome"><!--[pnml name="_NEWS_INHOME"]--></label>
-            <!--[if $ihome eq 0]-->
-                <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" checked="checked" />
-            <!--[else]-->
-                <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" />
-            <!--[/if]-->
+            <label for="news_ihome"><!--[pnml name='_NEWS_INHOME']--></label>
+            <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" <!--[if $ihome eq 0]-->checked="checked" <!--[/if]-->/>
         </div>
         <div class="pn-formrow">
-			<label for="news_unlimited"><!--[pnml name="_NEWS_UNLIMITED"]--></label>
-            <!--[if $unlimited eq 1]-->
-                <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" checked="checked" />
-            <!--[else]-->
-                <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" />
-            <!--[/if]-->
+            <label for="news_unlimited"><!--[pnml name='_NEWS_UNLIMITED']--></label>
+            <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" <!--[if $unlimited eq 1]-->checked="checked" <!--[/if]-->/>
         </div>
         <div id="news_expiration_details">
         <div class="pn-formrow">
-            <label><!--[pnml name="_NEWS_FROM"]--></label>
-            <!--[html_select_date prefix="from" end_year="+4" time=$from field_array=story]--> <!--[html_select_time prefix="from" use_24_hours=true display_seconds=no time=$from field_array=story]-->
+            <label><!--[pnml name='_NEWS_FROM']--></label>
+            <!--[html_select_date prefix='from' end_year='+4' time=$from field_array='story']--> <!--[html_select_time prefix='from' use_24_hours=true display_seconds='no' time=$from field_array='story']-->
         </div>
-		<div class="pn-formrow">
-			<label for="news_tonolimit"><!--[pnml name="_NEWS_NOLIMIT"]--></label>
-            <!--[if $tonolimit eq 1]-->
-                <input id="news_tonolimit" name="story[tonolimit]" type="checkbox" value="1" checked="checked" />
-            <!--[else]-->
-                <input id="news_tonolimit" name="story[tonolimit]" type="checkbox" value="1" />
-            <!--[/if]-->
-		</div>
+        <div class="pn-formrow">
+            <label for="news_tonolimit"><!--[pnml name='_NEWS_NOLIMIT']--></label>
+            <input id="news_tonolimit" name="story[tonolimit]" type="checkbox" value="1" <!--[if $tonolimit eq 1]-->checked="checked" <!--[/if]-->/>
+        </div>
         <div id="news_expiration_date">
         <div class="pn-formrow">
-            <label><!--[pnml name="_NEWS_TO"]--></label>
-            <!--[html_select_date prefix="to" end_year="+4" time=$to field_array=story]-->&nbsp;&nbsp;<!--[html_select_time prefix="to" use_24_hours=true display_seconds=no time=$to field_array=story]--> <br />
+            <label><!--[pnml name='_NEWS_TO']--></label>
+            <!--[html_select_date prefix='to' end_year='+4' time=$to field_array='story']-->&nbsp;&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds='no' time=$to field_array='story']--> <br />
         </div>
         </div>
         </div>
         </div>
-	</fieldset>
-	<div class="pn-formrow">
-		<label for="news_action"><!--[pnml name="_ACTION"]--></label>
-		<select id="news_action" name="story[action]">
-			<option value="update"><!--[pnml name="_UPDATE"]--></option>
-			<option value="pending"><!--[pnml name="_NEWS_MAKEPENDING"]--></option>
-			<option value="delete"><!--[pnml name="_DELETE"]--></option>
-		</select>
-	</div>
-    <!--[pnmodcallhooks hookobject=item hookaction=modify hookid=$sid module=News]-->
+    </fieldset>
+
+    <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
+
+    <div class="pn-formrow">
+        <label for="news_action"><!--[pnml name='_ACTION']--></label>
+        <select id="news_action" name="story[action]">
+            <option value="update"><!--[pnml name='_UPDATE']--></option>
+            <option value="pending"><!--[pnml name='_NEWS_MAKEPENDING']--></option>
+            <option value="delete"><!--[pnml name='_DELETE']--></option>
+        </select>
+    </div>
+
     <div class="pn-formrow pn-formbuttons">
-    <a href="javascript:void(0);" onclick="editnews_save();"><!--[pnimg modname=core src=button_ok.gif set=icons/small altml=true titleml=true alt="_OK" title="_OK"]--></a>
-    <a href="javascript:void(0);" onclick="editnews_cancel();"><!--[pnimg modname=core src=button_cancel.gif set=icons/small altml=true titleml=true alt="_CANCEL" title="_CANCEL"]--></a>
-    &nbsp;<img id="news_savenews" src="<!--[$baseurl]-->images/ajax/circle-ball-dark-antialiased.gif" alt="" />
+        <a href="javascript:void(0);" onclick="editnews_save();"><!--[pnimg modname='core' src='button_ok.gif' set='icons/small' alt='_OK' altml=true title='_OK' titleml=true]--></a>
+        <a href="javascript:void(0);" onclick="editnews_cancel();"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' alt='_CANCEL' altml=true title='_CANCEL' titleml=true]--></a>
+        &nbsp;<img id="news_savenews" src="<!--[$baseurl]-->images/ajax/circle-ball-dark-antialiased.gif" alt="" />
     </div>
 </div>
 </form>

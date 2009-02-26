@@ -1,5 +1,5 @@
 /*
- *  $Id: news.js 25013 2008-12-08 03:14:47Z mateo $ 
+ *  $Id: news.js 75 2009-02-24 04:51:52Z mateo $ 
  */
  
 var editing = false;
@@ -35,6 +35,9 @@ function news_init_check()
     }
     if ($('news_publication_collapse')) {
         news_publication_init();
+    }
+    if ($('news_attributes_collapse')) {
+        news_attributes_init();
     }
     if($('news_multicategory_filter')) {
         news_filter_init(); 
@@ -235,6 +238,26 @@ function news_publication_click()
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
     }
     switchdisplaystate('news_publication_details');
+}
+
+
+function news_attributes_init()
+{
+    Event.observe('news_attributes_collapse', 'click', news_attributes_click);
+    $('news_attributes_collapse').addClassName('pn-toggle-link');
+    $('news_attributes_collapse').addClassName('pn-toggle-link-open');
+}
+
+function news_attributes_click()
+{
+    if ($('news_attributes_details').style.display != "none") {
+        Element.addClassName.delay(0.9, $('news_attributes_details').parentNode, 'pn-collapsed');
+        Element.removeClassName.delay(0.9, $('news_attributes_collapse'), 'pn-toggle-link-open');
+    } else {
+        Element.removeClassName($('news_attributes_details').parentNode, 'pn-collapsed');
+        $('news_attributes_collapse').addClassName('pn-toggle-link-open');
+    }
+    switchdisplaystate('news_attributes_details');
 }
 
 

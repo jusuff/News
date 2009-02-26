@@ -4,9 +4,9 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: function.articleadminlinks.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version $Id: function.articleadminlinks.php 75 2009-02-24 04:51:52Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
 */
 
@@ -15,9 +15,9 @@
  *
  * This file is a plugin for pnRender, the Zikula implementation of Smarty
  *
- * @package      Zikula_Value_Addons
+ * @package      Zikula_3rdParty_Modules
  * @subpackage   News
- * @version      $Id: function.articleadminlinks.php 24342 2008-06-06 12:03:14Z markwest $
+ * @version      $Id: function.articleadminlinks.php 75 2009-02-24 04:51:52Z mateo $
  * @author       The Zikula development team
  * @link         http://www.zikula.org  The Zikula Home Page
  * @copyright    Copyright (C) 2002 by the Zikula Development Team
@@ -29,7 +29,7 @@
  * Smarty function to display edit and delete links for a news article
  *
  * Example
- * <!--[articleadminlinks sid="1" start="[" end="]" seperator="|" class="pn-sub"]-->
+ * <!--[articleadminlinks sid='1' start='[' and=']' seperator='|' class='pn-sub']-->
  *
  * @author       Mark West
  * @since        20/10/03

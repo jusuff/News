@@ -1,5 +1,5 @@
 /*
- *  $Id: news_admin_modifyconfig.js 23915 2008-03-09 10:40:46Z rgasch $ 
+ *  $Id: news_admin_modifyconfig.js 34 2008-12-24 00:07:35Z Guite $ 
  */
 
 function news_permalink_onclick()

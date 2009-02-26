@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: big.php 24342 2008-06-06 12:03:14Z markwest $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: big.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * initialise block
@@ -18,7 +20,7 @@
 function News_bigblock_init()
 {
     // Security
-    pnSecAddSchema('Bigblock::', 'Block title::');
+    SecurityUtil::registerPermissionSchema('Bigblock::', 'Block title::');
 }
 
 /**
@@ -48,7 +50,7 @@ function News_bigblock_info()
 function News_bigblock_display($blockinfo)
 {
     // security check
-    if (!SecurityUtil::checkPermission( 'Bigblock::', "$blockinfo[title]::", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('Bigblock::', "$blockinfo[title]::", ACCESS_READ)) {
         return;
     }
 
@@ -73,7 +75,7 @@ function News_bigblock_display($blockinfo)
         return;
     } else {
         $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $row = $articles[0]);
-        if (SecurityUtil::checkPermission( 'Stories::Story', "$info[aid]::$info[sid]", ACCESS_OVERVIEW)) {
+        if (SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_OVERVIEW)) {
             $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
             $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat', array('info' => $info, 'links' => $links));
         } else {

@@ -1,6 +1,7 @@
-<!--[*  $Id: news_block_stories.htm 24083 2008-03-29 17:37:23Z markwest $  *]-->
+<!--[*  $Id: news_block_stories.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
 <ul>
-<!--[foreach from=$stories item=story]-->
-<li><!--[$story]--></li>
-<!--[/foreach]-->
+<!--[section name='storiesblock' loop=$stories]-->
+<li><!--[$stories[storiesblock]]--></li>
+<!--[/section]-->
 </ul>

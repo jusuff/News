@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pnuser.php 25196 2008-12-28 14:47:47Z philipp $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pnuser.php 79 2009-02-25 17:41:17Z espaan $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * the main user function
@@ -18,7 +20,10 @@
  */
 function News_user_main()
 {
-    $args = array('ihome' => 0);
+    $args = array(
+        'ihome' => 0,
+        'itemsperpage' => pnModGetVar('News', 'storyhome', 10)
+    );
     return News_user_view($args);
 }
 
@@ -32,7 +37,7 @@ function News_user_main()
 function News_user_new($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_COMMENT)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -51,6 +56,7 @@ function News_user_new($args)
     if (empty($item)) {
         $item = array();
         $item['__CATEGORIES__'] = array();
+        $item['__ATTRIBUTES__'] = array();
         $item['title'] = '';
         $item['urltitle'] = '';
         $item['hometext'] = '';
@@ -64,19 +70,17 @@ function News_user_new($args)
         $item['to'] = time();
         $item['tonolimit'] = 1;
         $item['unlimited'] = 1;
+        $item['published_status'] = 0;
     }
 
     $preview = '';
-    if (isset($item['preview'])) {
-        $preview = News_user_preview(array('preview' => $item['preview'],
-                                           'title' => $item['title'],
-                                           'language' => isset($item['language']) ? $item['language'] : '',
+    if (isset($item['preview']) && $item['preview']) {
+        $preview = News_user_preview(array('title' => $item['title'],
                                            'hometext' => $item['hometext'],
                                            'hometextcontenttype' => $item['hometextcontenttype'],
                                            'bodytext' => $item['bodytext'],
                                            'bodytextcontenttype' => $item['bodytextcontenttype'],
-                                           'notes' => $item['notes'],
-                                           'ihome' => $item['ihome']));
+                                           'notes' => $item['notes']));
     }
 
     // Create output object
@@ -112,7 +116,7 @@ function News_user_new($args)
     $pnRender->assign('formattedcontent', $formattedcontent);
 
     $pnRender->assign('accessadd', 0);
-    if (SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_ADD)) {
+    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         $pnRender->assign('accessadd', 1);
     }
 
@@ -146,16 +150,12 @@ function News_user_create($args)
     // Get parameters from whatever input we need
     $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
 
-    // Confirm authorisation code.
-    if (!SecurityUtil::confirmAuthKey()) {
-        return LogUtil::registerAuthidError (pnModURL('News', 'user', 'view'));
-    }
-
     // Create the item array for processing
     $item = array('preview' => $story['preview'],
                   'title' => $story['title'],
                   'urltitle' => isset($story['urltitle']) ? $story['urltitle'] : '',
                   '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
+                  '__ATTRIBUTES__' => isset($story['attributes']) ? $story['attributes'] : null,
                   'language' => isset($story['language']) ? $story['language'] : '',
                   'hometext' => $story['hometext'],
                   'hometextcontenttype' => $story['hometextcontenttype'],
@@ -166,21 +166,57 @@ function News_user_create($args)
                   'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                   'tonolimit' => $story['tonolimit'],
                   'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
-                  'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false);
+                  'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
+                  'published_status' => isset($story['published_status']) ? $story['published_status'] : null);
 
-    // get the referer for later use
-    $referer = pnServerGetVar('HTTP_REFERER');
+    // Get the referer type for later use
+    if (stristr(pnServerGetVar('HTTP_REFERER'), 'type=admin')) {
+        $referertype = 'admin';
+    } else {
+        $referertype = 'user';
+    }
+
+    // Reformat the attributes array
+    // from {0 => {name => '...', value => '...'}} to {name => value}
+    if (isset($item['__ATTRIBUTES__'])) {
+        $attributes = array();
+        foreach ($item['__ATTRIBUTES__'] as $attr) {
+            if (!empty($attr['name']) && !empty($attr['value'])) {
+                $attributes[$attr['name']] = $attr['value'];
+            }
+        }
+        $item['__ATTRIBUTES__'] = $attributes;
+    }
+
+    // Validate the input
+    $validationerror = false;
+    if ($story['preview'] != 0 && empty($item['title'])) {
+        $validationerror = _TITLE;
+    }
+    if ($story['preview'] != 0 && empty($item['hometext'])) {
+        $validationerror = _NEWS_ARTICLECONTENT;
+    }
+    if ($story['preview'] != 0 && empty($item['bodytext'])) {
+        $validationerror = _NEWS_EXTENDEDTEXT;
+    }
 
     // if the user has selected to preview the article we then route them back
     // to the new function with the arguments passed here
-    if ($story['preview'] == 0) {
-        SessionUtil::setVar('newsitem', $item);
-        if (stristr($referer, 'type=admin')) {
-            return pnRedirect(pnModURL('News', 'admin', 'new'));
-        } else {
-            return pnRedirect(pnModURL('News', 'user', 'new'));
+    if ($story['preview'] == 0 || $validationerror !== false) {
+        // log the error found if any
+        if ($validationerror !== false) {
+            LogUtil::registerError(pnML('_NOFOUND', array('i' => $validationerror)));
         }
+        // back to the referer form
+        SessionUtil::setVar('newsitem', $item);
+        return pnRedirect(pnModURL('News', $referertype, 'new'));
+
     } else {
+        // Confirm authorisation code.
+        if (!SecurityUtil::confirmAuthKey()) {
+            return LogUtil::registerAuthidError(pnModURL('News', $referertype, 'view'));
+        }
+
         // As we're not previewing the item let's remove it from the session
         SessionUtil::delVar('newsitem');
     }
@@ -192,14 +228,10 @@ function News_user_create($args)
 
     if ($sid != false) {
         // Success
-        LogUtil::registerStatus (pnML('_CREATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
+        LogUtil::registerStatus(pnML('_CREATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
     }
 
-    if (stristr($referer, 'type=admin')) {
-        return pnRedirect(pnModURL('News', 'admin', 'view'));
-    } else {
-        return pnRedirect(pnModURL('News', 'user', 'view'));
-    }
+    return pnRedirect(pnModURL('News', $referertype, 'view'));
 }
 
 /**
@@ -213,18 +245,21 @@ function News_user_create($args)
 function News_user_view($args = array())
 {
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
         return LogUtil::registerPermissionError();
     }
+
+    // clean the session preview data
+    SessionUtil::delVar('newsitem');
 
     // get all module vars for later use
     $modvars = pnModGetVar('News');
 
     // Get parameters from whatever input we need
-    $page         = (int)FormUtil::getPassedValue('page', isset($args['page']) ? $args['page'] : 1, 'GET');
-    $prop         = (string)FormUtil::getPassedValue('prop', isset($args['prop']) ? $args['prop'] : null, 'GET');
-    $cat          = (string)FormUtil::getPassedValue('cat', isset($args['cat']) ? $args['cat'] : null, 'GET');
-    $itemsperpage = (int)FormUtil::getPassedValue('itemsperpage', isset($args['itemsperpage']) ? $args['itemsperpage'] : $modvars['storyhome'], 'GET');
+    $page         = isset($args['page']) ? $args['page'] : (int)FormUtil::getPassedValue('page', 1, 'GET');
+    $prop         = isset($args['prop']) ? $args['prop'] : (string)FormUtil::getPassedValue('prop', null, 'GET');
+    $cat          = isset($args['cat']) ? $args['cat'] : (string)FormUtil::getPassedValue('cat', null, 'GET');
+    $itemsperpage = isset($args['itemsperpage']) ? $args['itemsperpage'] : (int)FormUtil::getPassedValue('itemsperpage', $modvars['itemsperpage'], 'GET');
 
     // work out page size from page number
     $startnum = (($page - 1) * $itemsperpage) + 1;
@@ -269,13 +304,13 @@ function News_user_view($args = array())
                           array('startnum' => $startnum,
                                 'numitems' => $itemsperpage,
                                 'status' => 0,
-                                'ihome' => isset($args['ihome']) ? $args['ihome'] : null,
+                                'ihome' => $args['ihome'],
                                 'filterbydate' => true,
                                 'category' => isset($catFilter) ? $catFilter : null,
                                 'catregistry' => isset($catregistry) ? $catregistry : null));
 
     if ($items == false) {
-        LogUtil::registerStatus (pnML('_NOFOUND', array('i' => _NEWS_STORIES)));
+        LogUtil::registerStatus(pnML('_NOFOUND', array('i' => _NEWS_STORIES)));
     }
 
     // Create output object
@@ -490,7 +525,7 @@ function News_user_archives($args)
     $day = '31';
 
     // Security check
-    if (!SecurityUtil::checkPermission( 'Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -527,12 +562,12 @@ function News_user_archives($args)
         $items = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
 
         foreach ($items as $item) {
-            $month = $item['month'];
-            $year = $item['year'];
+            $month = DateUtil::getDatetime_Field($item, 2);
+            $year = DateUtil::getDatetime_Field($item, 1);
             $linktext = $months[$month-1];
             $linktext .= " $year";
             $archivemonths[] = array('url' => pnModURL('News', 'user', 'archives', array( 'month' => $month, 'year' => $year)),
-                                         'title' => $linktext);
+                                     'title' => $linktext);
         }
         $items = false;
     }
@@ -557,17 +592,25 @@ function News_user_preview($args)
     $hometextcontenttype = FormUtil::getPassedValue('hometextcontenttype', null, 'REQUEST');
     $bodytext            = FormUtil::getPassedValue('bodytext', null, 'REQUEST');
     $bodytextcontenttype = FormUtil::getPassedValue('bodytextcontenttype', null, 'REQUEST');
-    $ihome               = FormUtil::getPassedValue('ihome', null, 'REQUEST');
+    $notes               = FormUtil::getPassedValue('notes', null, 'REQUEST');
 
     // User functions of this type can be called by other modules
     extract($args);
 
+    // format the contents if needed
+    if ($hometextcontenttype == 0) {
+        $hometext = nl2br($hometext);
+    }
+    if ($bodytextcontenttype == 0) {
+        $bodytext = nl2br($bodytext);
+    }
+
     $pnRender = pnRender::getInstance('News', false);
 
-    $pnRender->assign('preview', array('title' => $title,
+    $pnRender->assign('preview', array('title'    => $title,
                                        'hometext' => $hometext,
                                        'bodytext' => $bodytext,
-                                       'notes' => $notes));
+                                       'notes'    => $notes));
 
     return $pnRender->fetch('news_user_preview.htm');
 }

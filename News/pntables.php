@@ -2,13 +2,15 @@
 /**
  * Zikula Application Framework
  *
- * @copyright (c) 2001, Zikula Development Team
- * @link http://www.zikula.org
- * @version $Id: pntables.php 24342 2008-06-06 12:03:14Z markwest $
- * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @copyright  (c) Zikula Development Team
+ * @link       http://www.zikula.org
+ * @version    $Id: pntables.php 75 2009-02-24 04:51:52Z mateo $
+ * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @author     Mark West <mark@zikula.org>
+ * @category   Zikula_3rdParty_Modules
+ * @package    Content_Management
  * @subpackage News
-*/
+ */
 
 /**
  * Populate pntables array for News module
@@ -68,6 +70,9 @@ function News_pntables()
     // Enable categorization services
     $pntable['stories_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');
     $pntable['stories_primary_key_column'] = 'sid';
+
+    // Enable attribution services
+    $pntable['stories_db_extra_enable_attribution'] = pnModGetVar('News', 'enableattribution');
 
     // add standard data fields
     ObjectUtil::addStandardFieldsToTableDefinition ($pntable['stories_column'], 'pn_');

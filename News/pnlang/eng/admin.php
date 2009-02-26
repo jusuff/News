@@ -4,22 +4,17 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: admin.php 25005 2008-12-07 20:38:08Z mateo $
+ * @version $Id: admin.php 75 2009-02-24 04:51:52Z mateo $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
 */
 
 // view template
-define('_NEWS_ARCHIVED', 'Archived');
-define('_NEWS_DIRECTACCESS', 'Access an older article by its id:');
+define('_NEWS_DIRECTACCESS', 'Access an older article by its ID:');
 define('_NEWS_INFUTURE', 'Queued');
 define('_NEWS_INHOMEQUESTION', 'Lead Page');
 define('_NEWS_NEWSPUBLISHER', 'News Publisher');
-define('_NEWS_PENDING', 'Pending');
-define('_NEWS_PUBLISHEDSTATUS', 'Status');
-define('_NEWS_PUBLISHED', 'Published');
-define('_NEWS_REJECTED', 'Rejected');
 define('_NEWS_UNKNOWN', 'Unknown');
 
 // menu
@@ -35,8 +30,9 @@ define('_NEWS_MAKEPENDING', 'Set Pending Status');
 // modify config
 define('_MODIFYNEWSCONFIG', 'News Publisher Settings');
 define('_NEWS_DISPLAY', 'Display Settings');
-define('_NEWS_STORIESHOME','Number of articles on news front page');
+define('_NEWS_STORIESHOME','Number of articles on News lead page');
 define('_NEWS_ITEMSONINDEXPAGE', 'Number of articles in news index');
+define('_NEWS_REFERERONPRINT','Check referer on printer-friendly pages');
 define('_NEWS_STORIESORDER','Order news articles by');
 define('_NEWS_STORIESORDER0','News ID');
 define('_NEWS_STORIESORDER1','News Date/Time');
@@ -47,7 +43,8 @@ define('_NEWS_URLSCUSTOMREQUIRED', 'Reminder: A custom structure must contain ei
 define('_NEWS_URLSCUSTOMSTRUCTURE', 'Custom structure');
 define('_NEWS_URLSDATENAME', 'Date- and name-based');
 define('_NEWS_URLSHELP', 'Select a predefined PermaLink format, or choose your own');
-define('_NEWS_URLSNUMERIC' , 'Numeric');
+define('_NEWS_URLSNUMERIC', 'Numeric');
+define('_NEWS_URLTITLE', 'your-story-title');
 define('_NEWS_URLVARS', 'Possible values for custom structure');
 define('_NEWS_URLVARSDAY', 'Day');
 define('_NEWS_URLVARSMONTHNUM', 'Month number (1-12)');

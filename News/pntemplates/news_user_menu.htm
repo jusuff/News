@@ -1,9 +1,22 @@
-<!--[*  $Id: news_user_menu.htm 25007 2008-12-07 21:36:21Z mateo $  *]-->
-<!--[insert name="getstatusmsg"]-->
-<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level=ACCESS_COMMENT assign="commauth"]-->
+<!--[*  $Id: news_user_menu.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+<!--[insert name='getstatusmsg']-->
+
+<!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
+<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level='ACCESS_COMMENT' assign='authcomm']-->
 <div class="pn-frontendbox">
-<h1><!--[pnml name="_NEWS"]--></h1>
-<div class="pn-menu">
-[&nbsp;<a href="<!--[pnmodurl modname="News" type="user" func="main"]-->"><!--[pnml name="_NEWS_FRONTPAGE"]--></a>&nbsp;|&nbsp;<a href="<!--[pnmodurl modname="News" type="user" func="archives"]-->"><!--[pnml name="_NEWS_ARCHIVES"]--></a>&nbsp;<!--[if $commauth]-->|&nbsp;<a href="<!--[pnmodurl modname="News" type="user" func="new"]-->"><!--[pnml name="_NEWS_SUBMIT"]--></a>&nbsp;<!--[/if]-->]
-</div>
+    <h1><!--[pnml name='_NEWS']--></h1>
+    <div class="pn-menu">
+        [&nbsp;
+         <!--[if $func neq 'main']-->
+         <a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[pnml name='_NEWS_FRONTPAGE']--></a>
+         &nbsp;|&nbsp;
+         <!--[/if]-->
+         <a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[pnml name='_NEWS_ARCHIVES']--></a>
+         <!--[if $authcomm]-->
+         &nbsp;|&nbsp;
+         <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnml name='_NEWS_SUBMIT']--></a>
+         <!--[/if]-->
+        &nbsp;]
+    </div>
 </div>
