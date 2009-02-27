@@ -251,7 +251,7 @@ height:50px;
     // check for an empty return
     if (empty($items)) {
         if ($vars['showemptyresult']) {
-            // Show empty result message instead of empty block if varialble is set
+            // Show empty result message instead of empty block if variable is set
             $blockinfo['content'] = DataUtil::formatForDisplayHTML(_STORIES_EMPTYRESULT);
              return pnBlockThemeBlock($blockinfo);
         } else {
@@ -306,8 +306,8 @@ height:50px;
             $item['topicpath']  = '';
             $item['topicsearchurl'] = '';
         }
-        // Optional new image if the difference in days from creation date and now < the limit 
-        $item['itemnewimage'] = ($vars['dispnewimage'] && DateUtil::getDatetimeDiff_AsField($item['cr_date'], DateUtil::getDatetime(), 3) < (int)$vars['newimagelimit']);
+        // Optional new image if the difference in days from article date and now < the limit 
+        $item['itemnewimage'] = ($vars['dispnewimage'] && DateUtil::getDatetimeDiff_AsField($item['time'], DateUtil::getDatetime(), 3) < (int)$vars['newimagelimit']);
         // Wrap the title if needed
         if ($vars['maxtitlelength']>0 && strlen($item['title']) > (int)$vars['maxtitlelength'])  {
             // wrap the title with wordwrap (instead of substr)
