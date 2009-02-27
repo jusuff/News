@@ -1,0 +1,28 @@
+<!--[*  $Id:  $  *]-->
+<!--[if $readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$sid]-->"><!--[/if]-->
+<!--[if $itemnewimage]--><!--[pnimg modname=core set=$newimageset src=$newimagesrc alt=_STORIES_NEWIMAGE altml=true]--><!--[/if]-->
+<!--[$title|pnvarprephtmldisplay]--><!--[if $titlewrapped]--><!--[$titlewraptxt|pnvarprephtmldisplay]--><!--[/if]-->
+<!--[if $readperm]--></a><!--[/if]-->
+
+<!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name=_STORIES_BY]--> <a href="<!--[pnmodurl modname=Profile func=view uname=$aid_uname]-->" title="<!--[$aid_name|pnvarprephtmldisplay]-->"><!--[$aid_uname|pnvarprephtmldisplay]--></a><!--[if $dispdate]--> <!--[pnml name=_STORIES_ON]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+<!--[if $dispdate]--><!--[$time|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+<!--[if $dispreads]--><!--[if $counter eq 1]--><!--[pnml name=_STORIES_READ]--><!--[else]--><!--[ pnml name=_STORIES_READS count=$counter ]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+<!--[if $dispcomments]--><!--[if $comments eq 1]--><!--[pnml name=_STORIES_COMMENT]--><!--[else]--><!--[ pnml name=_STORIES_COMMENTS count=$comments ]--><!--[/if]--><!--[/if]-->)
+<!--[/if]-->
+<!--[if $disphometext]-->
+<div class="storiesext_hometext">
+<!--[if $hometextwrapped]-->
+ <!--[$hometext|truncatehtml:$maxhometextlength:''|pnvarprephtmldisplay]-->
+ <!--[if $readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$sid]-->"><!--[/if]-->
+ <!--[$hometextwraptxt|pnvarprephtmldisplay]-->
+ <!--[if $readperm]--></a><!--[/if]-->
+<!--[else]-->
+ <!--[$hometext|pnvarprephtmldisplay]-->
+<!--[/if]-->
+</div>
+<!--[/if]-->
+<!--[* Remove this line to use the topic link and topicimage per News item -->
+<!--[if $topicsearchurl neq '']-->
+<div class="storiesext_news_meta"><a href="<!--[$topicsearchurl]-->"><!--[if $topicimage neq '']--><img src="images/topics/<!--[$topicimage]-->" alt="<!--[$topicname|pnvarprephtmldisplay]-->" title="<!--[$topicname|pnvarprephtmldisplay]-->" /><!--[else]--><!--[$topicname|pnvarprephtmldisplay]--><!--[/if]--></a></div>
+<!--[/if]-->
+<!-- Remove this line to use the topic link and topicimage per News item *]-->
