@@ -114,7 +114,7 @@ function News_adminapi_update($args)
 
     // check the publishing date options
     if (!empty($args['unlimited'])) {
-        $args['from'] = null;
+        $args['from'] = $item['time'];
         $args['to'] = null;
     } elseif (!empty($args['tonolimit'])) {
         $args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);

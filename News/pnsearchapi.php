@@ -57,7 +57,7 @@ function news_searchapi_search($args)
                                     array($storiescolumn['title'], 
                                           $storiescolumn['hometext'], 
                                           $storiescolumn['bodytext']), 
-                                    $storiescolumn['language']);
+                                          $storiescolumn['language']);
 
     $sessionId = session_id();
 
@@ -83,7 +83,7 @@ VALUES ";
                  . '\'' . DataUtil::formatForStore($story['hometext']) . '\', '
                  . '\'' . DataUtil::formatForStore($story['sid']) . '\', '
                  . '\'' . 'News' . '\', '
-                 . '\'' . DataUtil::formatForStore($story['cr_date']) . '\', '
+                 . '\'' . DataUtil::formatForStore($story['from']) . '\', '
                  . '\'' . DataUtil::formatForStore($sessionId) . '\')';
           $insertResult = DBUtil::executeSQL($sql);
           if (!$insertResult) {

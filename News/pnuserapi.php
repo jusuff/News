@@ -107,30 +107,34 @@ function News_userapi_getall($args)
     }
 
     // Check for specific date interval
-    // Note: If 'from' is null, to also is. 
     if (isset($args['from']) || isset($args['to'])) {
         // Both defined
         if (isset($args['from']) && isset($args['to'])) {
             $from = DataUtil::formatForStore($args['from']);
             $to   = DataUtil::formatForStore($args['to']);
-            $queryargs[] = "(($storiescolumn[cr_date] >= '$from' AND $storiescolumn[cr_date] < '$to' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to'))";
+            //$queryargs[] = "(($storiescolumn[cr_date] >= '$from' AND $storiescolumn[cr_date] < '$to' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to'))";
+            $queryargs[] = "($storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to')";
         // Only 'from' is defined
         } elseif (isset($args['from'])) {
             $date = DataUtil::formatForStore($args['from']);
-            $queryargs[] = "(($storiescolumn[cr_date] >= '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date')))";
+            //queryargs[] = "(($storiescolumn[cr_date] >= '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date')))";
+            $queryargs[] = "($storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date'))";
         // Only 'to' is defined
         } elseif (isset($args['to'])) {
             $date = DataUtil::formatForStore($args['to']);
-            $queryargs[] = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
+            //$queryargs[] = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
+            $queryargs[] = "($storiescolumn[from] < '$date')";
         }
     // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
         $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
-        $queryargs[] = "(($storiescolumn[from] IS NULL AND $storiescolumn[to] IS NULL) OR ('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to])))";
+        //$queryargs[] = "(($storiescolumn[from] IS NULL AND $storiescolumn[to] IS NULL) OR ('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to])))";
+        $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
 
     if (isset($args['tdate'])) {
-        $queryargs[] = "$storiescolumn[time] LIKE '%{$args['tdate']}%'";
+        //$queryargs[] = "$storiescolumn[time] LIKE '%{$args['tdate']}%'";
+        $queryargs[] = "$storiescolumn[from] LIKE '%{$args['tdate']}%'";
     }
 
     if (isset($args['query']) && is_array($args['query'])) {
@@ -151,7 +155,7 @@ function News_userapi_getall($args)
     if (count($queryargs) > 0) {
         $where = implode(' AND ', $queryargs);
     }
-	
+    
     $orderby = '';
     // Handle the sort order
     if (!isset($args['order'])) {
@@ -163,7 +167,7 @@ function News_userapi_getall($args)
                 break;
             case 1:
             default:
-                $order = 'time';
+                $order = 'from';
         }
     } elseif (isset($storiescolumn[$args['order']])) {
         $order = $args['order'];
@@ -187,13 +191,13 @@ function News_userapi_getall($args)
     }
 
     // If 'from' (date) is set, change the publication time
-    $ak = array_keys($objArray);
+/*    $ak = array_keys($objArray);
     foreach ($ak as $key) {
-        if (isset($objArray[$key]['from'])) {
+        if (DateUtil::getDatetimeDiff_AsField($objArray[$key]['from'], $objArray[$key]['time'], 6) < 0) {
             $objArray[$key]['time'] = $objArray[$key]['from'];
         }
     }
-
+*/
     // need to do this here as the category expansion code can't know the
     // root category which we need to build the relative path component
     if (pnModGetVar('News', 'enablecategorization') && $objArray && isset($args['catregistry']) && $args['catregistry']) {
@@ -251,7 +255,8 @@ function News_userapi_get($args)
     if (isset($args['sid']) && is_numeric($args['sid'])) {
         $item = DBUtil::selectObjectByID('stories', $args['sid'], 'sid', null, $permFilter);
     } elseif (isset($timestring)) {
-        $where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_cr_date LIKE '{$timestring}%'";
+        //$where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_cr_date LIKE '{$timestring}%'";
+        $where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_from LIKE '{$timestring}%'";
         $item = DBUtil::selectObject('stories', $where, null, $permFilter);
     } else {
         $item = DBUtil::selectObjectByID('stories', $args['title'], 'urltitle', null, $permFilter);
@@ -261,10 +266,10 @@ function News_userapi_get($args)
         return false;
 
     // If 'from' (date) is set, change the publication time
-    if (isset($item['from'])) {
+ /*   if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0) {
         $item['time'] = $item['from'];
     }
-
+*/
     // process the relative paths of the categories
     if (pnModGetVar('News', 'enablecategorization') && !empty($item['__CATEGORIES__'])) {
         static $registeredCats;
@@ -274,7 +279,7 @@ function News_userapi_get($args)
             }
             $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
         }
-    	ObjectUtil::postProcessExpandedObjectCategories($item['__CATEGORIES__'], $registeredCats);
+        ObjectUtil::postProcessExpandedObjectCategories($item['__CATEGORIES__'], $registeredCats);
 
         if (!CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News'))
             return false;
@@ -298,12 +303,14 @@ function News_userapi_getMonthsWithNews($args)
     $storiescolumn = $pntable['stories_column'];
     
     // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
-    $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[cr_date]) ORDER BY $storiescolumn[cr_date] DESC";
+    //$order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[cr_date]) ORDER BY $storiescolumn[cr_date] DESC";
+    $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[from]) ORDER BY $storiescolumn[from] DESC";
     
     $date = DateUtil::getDatetime();
-    $where = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
+    //$where = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
+    $where = "($storiescolumn[from] < '$date')";
     
-    $dates = DBUtil::selectFieldArray('stories', 'cr_date', $where, $order);
+    $dates = DBUtil::selectFieldArray('stories', 'from', $where, $order);
     
     return $dates;
 }
@@ -319,7 +326,7 @@ function News_userapi_countitems($args)
     if (isset($args['category']) && !empty($args['category'])){
         if (is_array($args['category'])) { 
             $args['catFilter'] = $args['category'];
-	    } elseif (isset($args['property'])) {
+        } elseif (isset($args['property'])) {
             $property = $args['property'];
             $args['catFilter'][$property] = $args['category'];
         }
@@ -344,11 +351,14 @@ function News_userapi_countitems($args)
     }
 
     if (isset($args['from']) && isset($args['to'])) {
-        $queryargs[] = "$storiescolumn[cr_date] >= '" . DataUtil::formatForStore($args['from']) . "'";
-        $queryargs[] = "$storiescolumn[cr_date] < '" . DataUtil::formatForStore($args['to']) . "'";
+        //$queryargs[] = "$storiescolumn[cr_date] >= '" . DataUtil::formatForStore($args['from']) . "'";
+        $queryargs[] = "$storiescolumn[from] >= '" . DataUtil::formatForStore($args['from']) . "'";
+        //$queryargs[] = "$storiescolumn[cr_date] < '" . DataUtil::formatForStore($args['to']) . "'";
+        $queryargs[] = "$storiescolumn[from] < '" . DataUtil::formatForStore($args['to']) . "'";
     } elseif (isset($args['filterbydate'])) {
         $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
-        $queryargs[] = "(($storiescolumn[from] IS NULL AND $storiescolumn[to] IS NULL) OR ('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to])))";
+        //$queryargs[] = "(($storiescolumn[from] IS NULL AND $storiescolumn[to] IS NULL) OR ('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to])))";
+        $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
 
     $where = '';
@@ -472,7 +482,7 @@ function News_userapi_getArticleLinks($info)
 function News_userapi_getArticleInfo($info)
 {
     // Dates
-    $info['unixtime']      = strtotime($info['time']);
+    $info['unixtime']      = strtotime($info['from']);
     $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], _DATETIMELONG);
     $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], _DATETIMEBRIEF);
     $info['longdate']      = DateUtil::getDatetime($info['unixtime'], _DATELONG);
@@ -662,7 +672,7 @@ function News_userapi_getArticlePreformat($args)
 
         // Allowed to comment?
         if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
-			$postcomment = "<a href=\"$links[postcomment]\">"._NEWS_COMMENTSQ.'</a>';
+            $postcomment = "<a href=\"$links[postcomment]\">"._NEWS_COMMENTSQ.'</a>';
             $commentlink = '<a title="' . pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title']))."\" href=\"$links[comment]\">$comment</a>";
         } else if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
             $commentlink = "$comment";
@@ -781,13 +791,13 @@ function News_userapi_create($args)
 
     // check the publishing date options
     if ((!isset($args['from']) && !isset($args['to'])) || !empty($args['unlimited'])) {
-        $args['from'] = null;
+        $args['from'] = DateUtil::getDatetime();
         $args['to'] = null;
     } elseif (isset($args['from']) && !empty($args['tonolimit'])) {
         $args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
         $args['to'] = null;
     } else {
-    	$args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
+        $args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
         $args['to'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['to']);
     }
 
@@ -850,7 +860,7 @@ function News_userapi_encodeurl($args)
         // get the item (will be cached by DBUtil)
         $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
         // replace the vars to form the permalink
-        $date = getdate(strtotime($item['cr_date']));
+        $date = getdate(strtotime($item['from']));
         $in = array('%category%', '%storyid%', '%storytitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
         $out = array(@$item['__CATEGORIES__']['Main']['path_relative'], $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
         $vars = str_replace($in, $out, $permalinkformat);
@@ -872,7 +882,7 @@ function News_userapi_encodeurl($args)
 
     // view, main or now function pager
     if (isset($args['args']['page']) && is_numeric($args['args']['page']) &&
-	    ($args['func'] == '' || $args['func'] == 'main' || $args['func'] == 'view')) {
+        ($args['func'] == '' || $args['func'] == 'main' || $args['func'] == 'view')) {
         if (!empty($vars)) {
             $vars .= "/page/{$args['args']['page']}";
         } else {
@@ -939,17 +949,17 @@ function News_userapi_decodeurl($args)
         if ($args['vars'][$nextvar] == 'page') {
             pnQueryStringSetVar('page', (int)$args['vars'][$nextvar+1]);
         } else {
-        	pnQueryStringSetVar('prop', $args['vars'][$nextvar]);
-        	if (isset($args['vars'][$nextvar+1])) {
-        		$numargs = count($args['vars']);
-        		if ($args['vars'][$numargs-2] == 'page' && is_numeric($args['vars'][$numargs-1])) {
-        		    pnQueryStringSetVar('cat', (string)implode('/', array_slice($args['vars'], $nextvar+1, -2)));
-        		    pnQueryStringSetVar('page', (int)$args['vars'][$numargs-1]);
-        		} else {
-        	        pnQueryStringSetVar('cat', (string)implode('/', array_slice($args['vars'], $nextvar+1)));
-        	        pnQueryStringSetVar('page', 1);
-        		}
-        	}
+            pnQueryStringSetVar('prop', $args['vars'][$nextvar]);
+            if (isset($args['vars'][$nextvar+1])) {
+                $numargs = count($args['vars']);
+                if ($args['vars'][$numargs-2] == 'page' && is_numeric($args['vars'][$numargs-1])) {
+                    pnQueryStringSetVar('cat', (string)implode('/', array_slice($args['vars'], $nextvar+1, -2)));
+                    pnQueryStringSetVar('page', (int)$args['vars'][$numargs-1]);
+                } else {
+                    pnQueryStringSetVar('cat', (string)implode('/', array_slice($args['vars'], $nextvar+1)));
+                    pnQueryStringSetVar('page', 1);
+                }
+            }
         }
     }
 
@@ -963,8 +973,8 @@ function News_userapi_decodeurl($args)
         // remove any category path down to the leaf category
         $permalinkkeycount = count($permalinkkeys);
         $varscount = count($args['vars']);
-      	($args['vars'][$varscount-2] == 'page') ? $pagersize = 2 : $pagersize = 0 ;
-      	if (($permalinkkeycount + $pagersize) != $varscount) {
+          ($args['vars'][$varscount-2] == 'page') ? $pagersize = 2 : $pagersize = 0 ;
+          if (($permalinkkeycount + $pagersize) != $varscount) {
             array_splice($args['vars'], $permalinkkeys['%category%'],  $varscount - $permalinkkeycount);
         }
         

@@ -103,10 +103,10 @@ function News_admin_modify($args)
 
     // Set the publishing date options.
     if (!$inpreview) {
-        if (is_null($item['from']) && is_null($item['to'])) {
+        if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0 && is_null($item['to'])) {
             $item['unlimited'] = 1;
             $item['tonolimit'] = 0;
-        } elseif (!is_null($item['from']) && is_null($item['to'])) {
+        } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0 && is_null($item['to'])) {
             $item['unlimited'] = 0;
             $item['tonolimit'] = 1;
         } else  {
@@ -228,7 +228,7 @@ function News_admin_update($args)
     if ($story['preview'] != 0 && empty($story['hometext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
-	// See ticket #44, incorrect obligatory bodytext 
+    // See ticket #44, incorrect obligatory bodytext 
     //if ($story['preview'] != 0 && empty($story['bodytext'])) {
     //    $validationerror = _NEWS_EXTENDEDTEXT;
     //}
@@ -479,8 +479,8 @@ function News_admin_view($args)
             $item['ihome'] = _NO;
         }
 
-        if (DateUtil::getDatetimeDiff_AsField($item['time'], DateUtil::getDatetime(), 6) < 0) {
-            $item['infuture'] = _YES . ' (' . DateUtil::formatDatetime($item['time'], '%x') . ')';
+        if (DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0) {
+            $item['infuture'] = _YES . ' (' . DateUtil::formatDatetime($item['from'], '%x') . ')';
         } else {
             $item['infuture'] = _NO;
         }
@@ -577,23 +577,15 @@ function News_admin_updateconfig()
     $modvars = array();
 
     $refereronprint = (int)FormUtil::getPassedValue('refereronprint', 0, 'POST');
-    if ($refereronprint != 0 && $refereronprint != 1) $refereronprint = 0;
+    if ($refereronprint != 0 && $refereronprint != 1) {
+        $refereronprint = 0;
+    }
     $modvars['refereronprint'] = $refereronprint;
-
-    $itemsperpage = (int)FormUtil::getPassedValue('itemsperpage', 10, 'POST');
-    $modvars['itemsperpage'] = $itemsperpage;
-
-    $storyhome = (int)FormUtil::getPassedValue('storyhome', 10, 'POST');
-    $modvars['storyhome'] = $storyhome;
-
-    $storyorder = (int)FormUtil::getPassedValue('storyorder', 10, 'POST');
-    $modvars['storyorder'] = $storyorder;
-
-    $enablecategorization = (bool)FormUtil::getPassedValue('enablecategorization', false, 'POST');
-    $modvars['enablecategorization'] = $enablecategorization;
-
-    $enableattribution = (bool)FormUtil::getPassedValue('enableattribution', false, 'POST');
-    $modvars['enableattribution'] = $enableattribution;
+    $modvars['itemsperpage'] = (int)FormUtil::getPassedValue('itemsperpage', 25, 'POST');
+    $modvars['storyhome'] = (int)FormUtil::getPassedValue('storyhome', 10, 'POST');
+    $modvars['storyorder'] = (int)FormUtil::getPassedValue('storyorder', 0, 'POST');
+    $modvars['enablecategorization'] = (bool)FormUtil::getPassedValue('enablecategorization', false, 'POST');
+    $modvars['enableattribution'] = (bool)FormUtil::getPassedValue('enableattribution', false, 'POST');
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));

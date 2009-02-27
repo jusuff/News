@@ -36,7 +36,7 @@ function News_init()
     // Set up config variables
     pnModSetVar('News', 'storyhome', 10);
     pnModSetVar('News', 'storyorder', 0);
-    pnModSetVar('News', 'itemsperpage', '25');
+    pnModSetVar('News', 'itemsperpage', 25);
     pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
     pnModSetVar('News', 'enablecategorization', true);
     pnModSetVar('News', 'refereronprint', 0);
@@ -109,6 +109,7 @@ function News_upgrade($oldversion)
                 }
             }
             // drop table
+			// TODO incorporate the autonews and queue articles into News !! Ticket #7
             if (!DBUtil::dropTable('autonews')) {
                 return LogUtil::registerError (_DELETETABLEFAILED);
             }
@@ -129,11 +130,11 @@ function News_upgrade($oldversion)
             return News_upgrade(2.2);
         case 2.2:
             pnModSetVar('News', 'refereronprint', pnConfigGetVar('refereronprint', 0));
-            //return News_upgrade(2.3);
-        /*case 2.3:
+            return News_upgrade(2.3);
+        case 2.3:
             // convert the from fields to the new way
             $tables = pnDBGetTables();
-            // move the data from the author uid to creator and updator uid
+            // When from is not set, put it to the creation date
             $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
@@ -141,7 +142,7 @@ function News_upgrade($oldversion)
                 }
             }
             pnModSetVar('News', 'enableattribution', false);
-            return News_upgrade(2.4);*/
+            //return News_upgrade(2.4);
     }
 
     // Update successful

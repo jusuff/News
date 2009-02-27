@@ -306,8 +306,8 @@ height:50px;
             $item['topicpath']  = '';
             $item['topicsearchurl'] = '';
         }
-        // Optional new image if the difference in days from article date and now < the limit 
-        $item['itemnewimage'] = ($vars['dispnewimage'] && DateUtil::getDatetimeDiff_AsField($item['time'], DateUtil::getDatetime(), 3) < (int)$vars['newimagelimit']);
+        // Optional new image if the difference in days from the publishing date and now < the limit 
+        $item['itemnewimage'] = ($vars['dispnewimage'] && DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 3) < (int)$vars['newimagelimit']);
         // Wrap the title if needed
         if ($vars['maxtitlelength']>0 && strlen($item['title']) > (int)$vars['maxtitlelength'])  {
             // wrap the title with wordwrap (instead of substr)

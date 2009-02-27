@@ -196,9 +196,10 @@ function News_user_create($args)
     if ($story['preview'] != 0 && empty($item['hometext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
-    if ($story['preview'] != 0 && empty($item['bodytext'])) {
-        $validationerror = _NEWS_EXTENDEDTEXT;
-    }
+	// See ticket #44, incorrect obligatory bodytext 
+    //if ($story['preview'] != 0 && empty($item['bodytext'])) {
+    //    $validationerror = _NEWS_EXTENDEDTEXT;
+    //}
 
     // if the user has selected to preview the article we then route them back
     // to the new function with the arguments passed here
@@ -552,7 +553,7 @@ function News_user_archives($args)
 
     if (!empty($year) && !empty($month)) {
         $items = pnModAPIFunc('News', 'user', 'getall',
-                              array('order' => 'time',
+                              array('order' => 'from',
                                     'from' => "$year-$month-01 00:00:00",
                                     'to' => "$year-$month-$day 23:59:59"));
         $pnRender->assign('year', $year);

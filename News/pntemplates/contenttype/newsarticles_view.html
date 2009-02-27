@@ -12,7 +12,7 @@
   <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESBY"]-->
    <a href="<!--[pnmodurl modname=Profile func=view uname=$story.aid_uname]-->" title="<!--[$story.aid_name|pnvarprephtmldisplay]-->"><!--[$story.aid_uname|pnvarprephtmldisplay]--></a>
    <!--[if $dispdate]--> <!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESON"]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-   <!--[if $dispdate]--><!--[$story.time|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+   <!--[if $dispdate]--><!--[$story.from|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
    <!--[if $dispreads]--><!--[if $story.counter eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREAD"]--><!--[else]--><!--[ pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREADS" count=$story.counter ]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
    <!--[if $dispcomments]--><!--[if $story.comments eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENT"]--><!--[else]--><!--[ pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENTS" count=$story.comments ]--><!--[/if]--><!--[/if]-->)
   <!--[/if]--><br />

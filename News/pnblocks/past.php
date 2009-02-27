@@ -68,7 +68,7 @@ function News_pastblock_display($blockinfo)
     // call the API
     $articles = pnModAPIFunc('News', 'user', 'getall',
                              array('ihome'    => 0,
-                                   'order'    => 'time',
+                                   'order'    => 'from',
                                    'status'   => 0,
                                    'startnum' => $storyhome,
                                    'numitems' => $vars['limit']));
@@ -91,7 +91,7 @@ function News_pastblock_display($blockinfo)
             $preformat['title'] = $info['title'];
         }
 
-        $daydate = DateUtil::formatDatetime(strtotime($info['time']), '%Y-%m-%d');
+        $daydate = DateUtil::formatDatetime(strtotime($info['from']), '%Y-%m-%d');
 
         // Reset the time
         if (!isset($currentday)) {

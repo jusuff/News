@@ -189,8 +189,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                 $items[$k]['topicpath']  = '';
                 $items[$k]['topicsearchurl'] = '';
             }
-            // Optional new image if the difference in days from creation date and now < the specified limit
-            $items[$k]['dispnewimage'] = ($this->dispnewimage && DateUtil::getDatetimeDiff_AsField($items[$k]['cr_date'], DateUtil::getDatetime(), 3) < (int)$this->newimagelimit);
+            // Optional new image if the difference in days from the publishing date and now < the specified limit
+            $items[$k]['dispnewimage'] = ($this->dispnewimage && DateUtil::getDatetimeDiff_AsField($items[$k]['from'], DateUtil::getDatetime(), 3) < (int)$this->newimagelimit);
             // Wrap the title if needed
             if ((int)$this->maxtitlelength > 0 && strlen($items[$k]['title']) > (int)$this->maxtitlelength)  {
                 // wrap the title

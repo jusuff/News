@@ -152,10 +152,12 @@ function editnews_saveresponse(req)
         pnshowajaxerror(req.responseText);
         return;
     }
-    // temporary fix for #401
-    location.reload(true);
-
     var json = pndejsonize(req.responseText);
+    // Temporary fix for Core #401, only reload on an update
+    if (json.action == 'update') {
+        location.reload(true);
+    }
+
     Element.update('news_modify', '&nbsp;');
     Element.update('news_articlecontent', json.result);
     if($('news_editlinks_ajax')) {

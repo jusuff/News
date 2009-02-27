@@ -5,7 +5,7 @@
 <!--[if $readperm]--></a><!--[/if]-->
 
 <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name=_STORIES_BY]--> <a href="<!--[pnmodurl modname=Profile func=view uname=$aid_uname]-->" title="<!--[$aid_name|pnvarprephtmldisplay]-->"><!--[$aid_uname|pnvarprephtmldisplay]--></a><!--[if $dispdate]--> <!--[pnml name=_STORIES_ON]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-<!--[if $dispdate]--><!--[$time|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+<!--[if $dispdate]--><!--[$from|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
 <!--[if $dispreads]--><!--[if $counter eq 1]--><!--[pnml name=_STORIES_READ]--><!--[else]--><!--[ pnml name=_STORIES_READS count=$counter ]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
 <!--[if $dispcomments]--><!--[if $comments eq 1]--><!--[pnml name=_STORIES_COMMENT]--><!--[else]--><!--[ pnml name=_STORIES_COMMENTS count=$comments ]--><!--[/if]--><!--[/if]-->)
 <!--[/if]-->
