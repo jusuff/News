@@ -228,9 +228,10 @@ function News_admin_update($args)
     if ($story['preview'] != 0 && empty($story['hometext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
-    if ($story['preview'] != 0 && empty($story['bodytext'])) {
-        $validationerror = _NEWS_EXTENDEDTEXT;
-    }
+	// See ticket #44, incorrect obligatory bodytext 
+    //if ($story['preview'] != 0 && empty($story['bodytext'])) {
+    //    $validationerror = _NEWS_EXTENDEDTEXT;
+    //}
 
     // Reformat the attributes array
     // from {0 => {name => '...', value => '...'}} to {name => value}
