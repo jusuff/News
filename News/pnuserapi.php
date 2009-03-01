@@ -757,7 +757,7 @@ function News_userapi_create($args)
     if (!isset($args['title']) || empty($args['title']) ||
         !isset($args['hometext']) || empty($args['hometext']) ||
         !isset($args['hometextcontenttype']) ||
-        !isset($args['bodytext']) || empty($args['bodytext']) ||
+        !isset($args['bodytext']) /*|| empty($args['bodytext'])*/ ||
         !isset($args['bodytextcontenttype']) ||
         !isset($args['notes'])) {
         return LogUtil::registerError (_MODARGSERROR);
