@@ -6,9 +6,10 @@
  * @link http://www.zikula.org
  * @version $Id:  $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
- * @package Zikula_Value_Addons
+ * @package Zikula_3rdParty_Modules
  * @subpackage News
 */
+
 define('_STORIES_ADDITIONALINFO', 'Additional block information');
 define('_STORIES_ARCHIVED', 'Archived');
 
