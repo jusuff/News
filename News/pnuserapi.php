@@ -339,7 +339,7 @@ function News_userapi_countitems($args)
     $storiescolumn = $pntable['stories_column'];
     $queryargs = array();
     if (pnConfigGetVar('multilingual') == 1 && isset($args['ignoreml']) && !$args['ignoreml']) {
-        $queryargs[] = "($storiescolumn[alanguage]='" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[alanguage]='')";
+        $queryargs[] = "($storiescolumn[language]='" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[language]='')";
     }
 
     if (isset($args['status'])) {

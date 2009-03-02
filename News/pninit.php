@@ -70,7 +70,7 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'storyorder', pnConfigGetVar('storyorder'));
             pnConfigDelVar('storyorder');
             pnModSetVar('News', 'itemsperpage', 25);
-            //return News_upgrade(1.5);
+            return News_upgrade(1.5);
         case 1.5:
             $tables = pnDBGetTables();
             $shorturlsep = pnConfigGetVar('shorturlsseparator');			
@@ -92,6 +92,10 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
             return News_upgrade(2.0);
         case 2.0:
+            // import autonews and queue articles
+            if (!_news_import_autonews_queue()) {
+                return LogUtil::registerError (_UPDATEFAILED);
+            }
             // migrate the comments to ezcomments
             if (pnModAvailable('Comments')) {
                 // check for the ezcomments module
@@ -108,8 +112,7 @@ function News_upgrade($oldversion)
                     pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('Comments')));
                 }
             }
-            // drop table
-			// TODO incorporate the autonews and queue articles into News !! Ticket #7
+            // drop the autonews and queue tables, articles are already imported
             if (!DBUtil::dropTable('autonews')) {
                 return LogUtil::registerError (_DELETETABLEFAILED);
             }
@@ -132,7 +135,6 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'refereronprint', pnConfigGetVar('refereronprint', 0));
             return News_upgrade(2.3);
         case 2.3:
-            // convert the from fields to the new way
             $tables = pnDBGetTables();
             // When from is not set, put it to the creation date
             $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
@@ -142,7 +144,9 @@ function News_upgrade($oldversion)
                 }
             }
             pnModSetVar('News', 'enableattribution', false);
-            //return News_upgrade(2.4);
+            // Drop old legacy columns
+            DBUtil::dropColumn('stories', array('pn_comments', 'pn_themeoverride', 'pn_withcomm'));
+            return News_upgrade(2.4);
     }
 
     // Update successful
@@ -285,6 +289,9 @@ function _news_migratecategories()
     return true;
 }
 
+/**
+ * create the default category tree
+ */
 function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
 {
     // load necessary classes
@@ -330,6 +337,9 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
     return true;
 }
 
+/**
+ * create the Topics category tree
+ */
 function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
 {
     // get the language file
@@ -372,5 +382,104 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
         return false;
     }
 
+    return true;
+}
+
+/**
+ * Import autonews and queue into stories
+ */
+function _news_import_autonews_queue()
+{
+    // pull all data from the autonews table and import into stories
+    $prefix = pnConfigGetVar('prefix');
+    $sql = "SELECT * FROM {$prefix}_autonews";
+    $result = DBUtil::executeSQL($sql);
+    $i = 0;
+    for(; !$result->EOF; $result->MoveNext()) {
+        list ( $obj['anid'],
+               $obj['catid'],
+               $obj['aid'],
+               $obj['title'],
+               $obj['time'],
+               $obj['hometext'],
+               $obj['bodytext'],
+               $obj['topic'],
+               $obj['informant'],
+               $obj['notes'],
+               $obj['ihome'],
+               $obj['alanguage'],
+               $obj['language'],
+               $obj['withcomm']) = $result->fields;
+    
+        // set creation date and from to the time set in autonews
+        $objj = array('cid'           => $obj['catid'],
+                      'catid'         => $obj['catid'],
+                      'aid'           => $obj['aid'],
+                      'title'         => $obj['title'],
+                      'time'          => $obj['time'],
+                      'hometext'      => $obj['hometext'],
+                      'bodytext'      => $obj['bodytext'],
+                      'comments'      => 0,
+                      'counter'       => 0,
+                      'topic'         => $obj['topic'],
+                      'informant'     => $obj['informant'],
+                      'notes'         => $obj['notes'],
+                      'ihome'         => $obj['ihome'],
+                      'themeoverride' => '',
+                      'alanguage'     => $obj['alanguage'],
+                      'language'      => $obj['language'],
+                      'withcomm'      => $obj['withcomm'],
+                      'format_type'   => 0,
+                      'from'          => $obj['time']);
+
+        $ende = DBUtil::insertObject($objj, 'stories');
+        $i++;
+    }
+    $result->Close();
+
+    // pull all data from the queue table and import into stories
+    $sql = "SELECT * FROM {$prefix}_queue";
+    $result = DBUtil::executeSQL($sql);
+    $i = 0;
+    for(; !$result->EOF; $result->MoveNext()) {
+
+        list ( $obj['qid'],
+               $obj['uid'],
+               $obj['arcd'],
+               $obj['uname'],
+               $obj['subject'],
+               $obj['story'],
+               $obj['timestamp'],
+               $obj['topic'],
+               $obj['alanguage'],
+               $obj['language'],
+               $obj['bodytext']) = $result->fields;
+    
+        // set published status to pending besides the regular fields
+        $objj = array('cid'           => 0,
+                      'catid'         => 0,
+                      'aid'           => $obj['uid'],
+                      'title'         => $obj['subject'],
+                      'time'          => $obj['timestamp'],
+                      'hometext'      => $obj['story'],
+                      'bodytext'      => $obj['bodytext'],
+                      'comments'      => 0,
+                      'counter'       => 0,
+                      'topic'         => $obj['topic'],
+                      'informant'     => $obj['uname'],
+                      'notes'         => '',
+                      'ihome'         => 0,
+                      'themeoverride' => '',
+                      'alanguage'     => $obj['alanguage'],
+                      'language'      => $obj['language'],
+                      'withcomm'      => 0,
+                      'format_type'   => 0,
+                      'published_status' => 2);
+
+        $ende = DBUtil::insertObject($objj, 'stories');
+        $i++;
+    }
+    $result->Close();
+    
     return true;
 }
