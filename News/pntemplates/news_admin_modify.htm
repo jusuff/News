@@ -160,16 +160,6 @@
         </div>
         </div>
         </div>
-
-        <div class="pn-formrow">
-            <label for="news_published_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
-            <select id="news_published_status" name="story[published_status]">
-                <option value="0"<!--[if $published_status eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PUBLISHED']--></option>
-                <option value="1"<!--[if $published_status eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_REJECTED']--></option>
-                <option value="2"<!--[if $published_status eq 2]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PENDING']--></option>
-                <option value="3"<!--[if $published_status eq 3]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_ARCHIVED']--></option>
-            </select>
-        </div>
         </div>
     </fieldset>
 
@@ -235,6 +225,16 @@
     </fieldset>
 
     <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
+
+    <div class="pn-formrow">
+        <label for="news_published_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
+        <select id="news_published_status" name="story[published_status]">
+            <option value="0"<!--[if $published_status eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PUBLISHED']--></option>
+            <option value="1"<!--[if $published_status eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_REJECTED']--></option>
+            <option value="2"<!--[if $published_status eq 2]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PENDING']--></option>
+            <option value="3"<!--[if $published_status eq 3]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_ARCHIVED']--></option>
+        </select>
+    </div>
 
     <div class="pn-formrow">
         <label for="news_preview"><!--[pnml name='_NEWS_POSTORPREVIEW']--></label>

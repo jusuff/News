@@ -4,6 +4,7 @@
 
 <!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
 <!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level='ACCESS_COMMENT' assign='authcomm']-->
+<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level='ACCESS_EDIT' assign='authedit']-->
 <div class="pn-frontendbox">
     <h1><!--[pnml name='_NEWS']--></h1>
     <div class="pn-menu">
@@ -20,6 +21,10 @@
          <!--[if $authcomm]-->
          &nbsp;|&nbsp;
          <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnml name='_NEWS_SUBMIT']--></a>
+         <!--[/if]-->
+         <!--[if $authedit and $pendingcount gt 0]-->
+         &nbsp;|&nbsp;
+         <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount eq 1]--><!--[pnml name='_NEWS_PENDINGARTICLE']--><!--[else]--><!--[pnml name='_NEWS_PENDINGARTICLES' count=$pendingcount]--><!--[/if]--></a>
          <!--[/if]-->
         &nbsp;]
     </div>

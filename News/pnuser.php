@@ -196,7 +196,7 @@ function News_user_create($args)
     if ($story['preview'] != 0 && empty($item['hometext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
-	// See ticket #44, incorrect obligatory bodytext 
+    // See ticket #44, incorrect obligatory bodytext 
     //if ($story['preview'] != 0 && empty($item['bodytext'])) {
     //    $validationerror = _NEWS_EXTENDEDTEXT;
     //}
@@ -366,6 +366,10 @@ function News_user_view($args = array())
 
     // Display the entries
     $pnRender->assign('newsitems', $newsitems);
+
+    // Count the number of Pending news items
+    $pnRender->assign('pendingcount', pnModAPIFunc('News', 'user', 'countitems', 
+                                                   array('status' => 2)));
 
     // Assign the values for the smarty plugin to produce a pager
     $pnRender->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', 
@@ -645,10 +649,10 @@ function News_user_categorylist($args)
             $rootcat = CategoryUtil::getCategoryByID($catregistry[$property]);
             if (!empty($rootcat)) {
                 $rootcat['path'] .= '/';
-				// Get all categories in this category property
+                // Get all categories in this category property
                 $subcategories    = CategoryUtil::getCategoriesByParentID($rootcat['id']);
                 foreach ($subcategories as $category) {
-					// Get the number of articles in this category within this category property
+                    // Get the number of articles in this category within this category property
                     $nrofarticles[$category['id']] = pnModAPIFunc('News', 'user', 'countitems',
                                                                   array('status' => 0,
                                                                         'ihome' => null,
@@ -656,7 +660,7 @@ function News_user_categorylist($args)
                                                                         'category' => array($property => $category['id']),
                                                                         'catregistry' => $catregistry));
                 }
-				// Store data per property for listing in the overview
+                // Store data per property for listing in the overview
                 $propertiesdata[] = array('name' => $property,
                                           'rootcat' => $rootcat,
                                           'subcategories' => $subcategories,
