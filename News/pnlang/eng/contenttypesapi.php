@@ -6,11 +6,12 @@
  * @link http://www.zikula.org
  * @version $Id:  $
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html
+ * @package Zikula_3rdParty_Modules
+ * @subpackage News
  * @author Mateo Tibaquira [mateo]
  * @author Erik Spaan [espaan]
- * @package Zikula_Value_Addons
- * @subpackage News
 */
+
 define('_NEWS_CONTENTTYPE_ARCHIVED', 'Archived');
 
 define('_NEWS_CONTENTTYPE_NEWSARTICLESBASICINFO', 'Basic information');
