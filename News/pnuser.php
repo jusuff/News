@@ -74,7 +74,7 @@ function News_user_new($args)
     }
 
     $preview = '';
-    if (isset($item['preview']) && $item['preview']) {
+    if (isset($item['preview']) && $item['preview'] == 0) {
         $preview = News_user_preview(array('title' => $item['title'],
                                            'hometext' => $item['hometext'],
                                            'hometextcontenttype' => $item['hometextcontenttype'],
@@ -190,10 +190,10 @@ function News_user_create($args)
 
     // Validate the input
     $validationerror = false;
-    if ($story['preview'] != 0 && empty($item['title'])) {
+    if ($item['preview'] != 0 && empty($item['title'])) {
         $validationerror = _TITLE;
     }
-    if ($story['preview'] != 0 && empty($item['hometext'])) {
+    if ($item['preview'] != 0 && empty($item['hometext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
     // See ticket #44, incorrect obligatory bodytext 
@@ -203,7 +203,7 @@ function News_user_create($args)
 
     // if the user has selected to preview the article we then route them back
     // to the new function with the arguments passed here
-    if ($story['preview'] == 0 || $validationerror !== false) {
+    if ($item['preview'] == 0 || $validationerror !== false) {
         // log the error found if any
         if ($validationerror !== false) {
             LogUtil::registerError(pnML('_NOFOUND', array('i' => $validationerror)));
