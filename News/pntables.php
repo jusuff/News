@@ -29,36 +29,42 @@ function News_pntables()
 
     // Full table definition
     $pntable['stories'] = DBUtil::getLimitedTablename('stories');
-    $pntable['stories_column'] = array ('sid'              => 'pn_sid',
-                                        'aid'              => 'pn_cr_uid',   // for back compat
-                                        'title'            => 'pn_title',
-                                        'urltitle'         => 'pn_urltitle',
-                                        'time'             => 'pn_cr_date',  // for back compat
-                                        'hometext'         => 'pn_hometext',
-                                        'bodytext'         => 'pn_bodytext',
-                                        'counter'          => 'pn_counter',
-                                        'informant'        => 'pn_informant',
-                                        'notes'            => 'pn_notes',
-                                        'ihome'            => 'pn_ihome',
-                                        'language'         => 'pn_language',
-                                        'format_type'      => 'pn_format_type',
-                                        'published_status' => 'pn_published_status',
-                                        'from'             => 'pn_from',
-                                        'to'               => 'pn_to');
-    $pntable['stories_column_def'] = array('sid'              => 'I NOTNULL AUTO PRIMARY',
-                                           'title'            => 'C(255) DEFAULT NULL',
-                                           'urltitle'         => 'C(255) DEFAULT NULL',
-                                           'hometext'         => 'X',
-                                           'bodytext'         => 'X NOTNULL',
-                                           'counter'          => 'I DEFAULT NULL',
-                                           'informant'        => "C(20) NOTNULL DEFAULT ''",
-                                           'notes'            => "X NOTNULL",
-                                           'ihome'            => "I1 NOTNULL DEFAULT '0'",
-                                           'language'         => "C(30) NOTNULL DEFAULT ''",
-                                           'format_type'      => "I1 NOTNULL DEFAULT '0'",
-                                           'published_status' => "I1 DEFAULT '0'",
-                                           'from'             => 'T DEFAULT NULL',
-                                           'to'               => 'T DEFAULT NULL');
+    $pntable['stories_column'] = array(
+        'sid'              => 'pn_sid',
+        'aid'              => 'pn_cr_uid',   // for back compat
+        'title'            => 'pn_title',
+        'urltitle'         => 'pn_urltitle',
+        'time'             => 'pn_cr_date',  // for back compat
+        'hometext'         => 'pn_hometext',
+        'bodytext'         => 'pn_bodytext',
+        'counter'          => 'pn_counter',
+        'informant'        => 'pn_informant',
+        'notes'            => 'pn_notes',
+        'ihome'            => 'pn_ihome',
+        'language'         => 'pn_language',
+        'withcomm'         => 'pn_withcomm',
+        'format_type'      => 'pn_format_type',
+        'published_status' => 'pn_published_status',
+        'from'             => 'pn_from',
+        'to'               => 'pn_to'
+    );
+    $pntable['stories_column_def'] = array(
+        'sid'              => 'I NOTNULL AUTO PRIMARY',
+        'title'            => 'C(255) DEFAULT NULL',
+        'urltitle'         => 'C(255) DEFAULT NULL',
+        'hometext'         => 'X',
+        'bodytext'         => 'X NOTNULL',
+        'counter'          => 'I DEFAULT NULL',
+        'informant'        => "C(20) NOTNULL DEFAULT ''",
+        'notes'            => "X NOTNULL",
+        'ihome'            => "I1 NOTNULL DEFAULT '0'",
+        'language'         => "C(30) NOTNULL DEFAULT ''",
+        'withcomm'         => "I1 NOTNULL DEFAULT '0'",
+        'format_type'      => "I1 NOTNULL DEFAULT '0'",
+        'published_status' => "I1 DEFAULT '0'",
+        'from'             => 'T DEFAULT NULL',
+        'to'               => 'T DEFAULT NULL'
+    );
 
     // Enable categorization services
     $pntable['stories_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');

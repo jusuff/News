@@ -136,7 +136,7 @@ function News_upgrade($oldversion)
             return News_upgrade(2.3);
         case 2.3:
             $tables = pnDBGetTables();
-            // When from is not set, put it to the creation date
+            // when from is not set, put it to the creation date
             $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
@@ -144,8 +144,8 @@ function News_upgrade($oldversion)
                 }
             }
             pnModSetVar('News', 'enableattribution', false);
-            // Drop old legacy columns
-            DBUtil::dropColumn('stories', array('pn_comments', 'pn_themeoverride', 'pn_withcomm'));
+            // drop old legacy columns
+            DBUtil::dropColumn('stories', array('pn_comments', 'pn_themeoverride'));
             return News_upgrade(2.4);
     }
 

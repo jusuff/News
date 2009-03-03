@@ -355,6 +355,7 @@ function News_user_view($args = array())
             $pnRender->assign(array('info' => $info,
                                     'links' => $links,
                                     'preformat' => $preformat));
+
             $newsitems[] = $pnRender->fetch('news_user_index.htm', $item['sid']);
         }
     }
@@ -366,10 +367,6 @@ function News_user_view($args = array())
 
     // Display the entries
     $pnRender->assign('newsitems', $newsitems);
-
-    // Count the number of Pending news items
-    $pnRender->assign('pendingcount', pnModAPIFunc('News', 'user', 'countitems', 
-                                                   array('status' => 2)));
 
     // Assign the values for the smarty plugin to produce a pager
     $pnRender->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', 
@@ -507,6 +504,7 @@ function News_user_display($args)
                             'links'     => $links,
                             'preformat' => $preformat,
                             'page'      => $page));
+
     $pnRender->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
 
     // Now lets assign the informatation to create a pager for the review
@@ -528,7 +526,7 @@ function News_user_archives($args)
     // Get parameters from whatever input we need
     $year  = (int)FormUtil::getPassedValue('year', null, 'REQUEST');
     $month = (int)FormUtil::getPassedValue('month', null, 'REQUEST');
-    $day = '31';
+    $day   = '31';
 
     // Security check
     if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
@@ -563,20 +561,22 @@ function News_user_archives($args)
                                     'to' => "$year-$month-$day 23:59:59"));
         $pnRender->assign('year', $year);
         $pnRender->assign('month', $months[$month-1]);
+
     } else {
         // get all matching news stories
         $items = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
 
         foreach ($items as $item) {
             $month = DateUtil::getDatetime_Field($item, 2);
-            $year = DateUtil::getDatetime_Field($item, 1);
-            $linktext = $months[$month-1];
-            $linktext .= " $year";
-            $archivemonths[] = array('url' => pnModURL('News', 'user', 'archives', array( 'month' => $month, 'year' => $year)),
+            $year  = DateUtil::getDatetime_Field($item, 1);
+
+            $linktext = $months[$month-1]." $year";
+            $archivemonths[] = array('url'   => pnModURL('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
                                      'title' => $linktext);
         }
         $items = false;
     }
+
     $pnRender->assign('archivemonths', $archivemonths);
     $pnRender->assign('archiveitems', $items);
     $pnRender->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));

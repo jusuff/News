@@ -10,9 +10,8 @@
  * @subpackage News
 */
 
-define('_STORIESCATEGORY','Category');
-define('_STORIESDISPLAYALL','Show all news articles');
-define('_STORIESDISPLAYFRONTPAGE','Show only lead page articles');
-define('_STORIESDISPLAYNONFRONTPAGE','Show only articles not published on the lead page');
-define('_STORIESMAXNUM','Maximum number of news articles to display');
+define('_STORIESDISPLAYALL', 'Show all news articles');
+define('_STORIESDISPLAYFRONTPAGE', 'Show only lead page articles');
+define('_STORIESDISPLAYNONFRONTPAGE', 'Show only articles not published on the lead page');
+define('_STORIESMAXNUM', 'Maximum number of news articles to display');
 define('_STORIESWHICHSTORIES', 'News articles to display');

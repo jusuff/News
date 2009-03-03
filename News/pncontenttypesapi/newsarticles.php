@@ -320,20 +320,23 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     }
     $render->assign('enablecategorization', $enablecategorization);
 
-    $showoptions = array();
-    $showoptions[] = array('value' => 1, 'text' => _ALL);
-    $showoptions[] = array('value' => 2, 'text' => _NEWS_CONTENTTYPE_NEWSARTICLESFRONTPAGE);
-    $showoptions[] = array('value' => 3, 'text' => _NEWS_CONTENTTYPE_NEWSARTICLESNONFRONTPAGE);
+    $showoptions = array(
+        array('value' => 1, 'text' => _ALL),
+        array('value' => 2, 'text' => _NEWS_CONTENTTYPE_NEWSARTICLESFRONTPAGE),
+        array('value' => 3, 'text' => _NEWS_CONTENTTYPE_NEWSARTICLESNONFRONTPAGE)
+    );
 
-    $statusoptions = array();
-    $statusoptions[] = array('value' => 0, 'text' => _NEWS_CONTENTTYPE_PUBLISHED);
-    $statusoptions[] = array('value' => 1, 'text' => _NEWS_CONTENTTYPE_REJECTED);
-    $statusoptions[] = array('value' => 2, 'text' => _NEWS_CONTENTTYPE_PENDING);
-    $statusoptions[] = array('value' => 3, 'text' => _NEWS_CONTENTTYPE_ARCHIVED);
+    $statusoptions = array(
+        array('value' => 0, 'text' => _NEWS_PUBLISHED),
+        array('value' => 1, 'text' => _NEWS_REJECTED),
+        array('value' => 2, 'text' => _NEWS_PENDING),
+        array('value' => 3, 'text' => _NEWS_ARCHIVED)
+    );
 
-    $orderoptions = array();
-    $orderoptions[] = array('value' => 0, 'text' => _NEWS_CONTENTTYPE_ORDERBYNEWSSETTING);
-    $orderoptions[] = array('value' => 1, 'text' => _NEWS_CONTENTTYPE_ORDERBYCOUNTER);
+    $orderoptions = array(
+        array('value' => 0, 'text' => _NEWS_CONTENTTYPE_ORDERBYNEWSSETTING),
+        array('value' => 1, 'text' => _NEWS_CONTENTTYPE_ORDERBYCOUNTER)
+    );
 
     $render->assign('showoptions', $showoptions);
     $render->assign('statusoptions', $statusoptions);

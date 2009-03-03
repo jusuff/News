@@ -24,6 +24,14 @@ define('_NEWS_PENDING', 'Pending');
 define('_NEWS_PUBLISHED', 'Published');
 define('_NEWS_REJECTED', 'Rejected');
 
+// common defines
+define('_NEWS_COMMENT', '1 comment');
+define('_NEWS_COMMENTS', '%count% comments');
+define('_NEWS_COMMENTSQ', 'Comments?');
+define('_NEWS_POSTEDBYANDON', 'Posted by %username% on %date%');
+define('_NEWS_READ', '1 read');
+define('_NEWS_READS', '%count% reads');
+
 // new/modify templates
 // these are located in the common file to support user submission
 // the following string is used in javascript, #{chars} is like %chars% in pnML

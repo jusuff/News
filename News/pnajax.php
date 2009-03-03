@@ -44,12 +44,14 @@ function News_ajax_modify()
     $item['bodytextcontenttype'] = (($item['format_type']/4)%4);
 	
     // Set the publishing date options.
-	if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0 && !isset($item['to'])) {
-        $item['unlimited'] = 1;
-        $item['tonolimit'] = 0;
-    } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0 && !isset($item['to'])) {
-        $item['unlimited'] = 0;
-        $item['tonolimit'] = 1;
+    if (!isset($item['to'])) {
+    	if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0) {
+    		$item['unlimited'] = 1;
+            $item['tonolimit'] = 0;
+        } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0) {
+            $item['unlimited'] = 0;
+            $item['tonolimit'] = 1;
+        }
     } else {
         $item['unlimited'] = 0;
         $item['tonolimit'] = 0;

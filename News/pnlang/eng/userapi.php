@@ -11,13 +11,9 @@
 */
 
 define('_NEWS_BYTESMORE', '%bytes% bytes more');
-define('_NEWS_COMMENT', '1 comment');
-define('_NEWS_COMMENTS', '%count% comments');
 define('_NEWS_COMMENTSFORARTICLE', '%comments% about %title%');
-define('_NEWS_COMMENTSQ', 'Comments?');
 define('_NEWS_FILEDUNDER', 'Filed under');
 define('_NEWS_FRIEND', 'Tell a friend');
 define('_NEWS_FULLTEXTOFARTICLE', 'Read more about %title%');
 define('_NEWS_PRINTER', 'Printer-friendly page');
-define('_NEWS_POSTEDBYANDON', 'Posted by %username% on %date%');
 define('_NEWS_FOOTNOTES', 'Foot notes: %notes%');

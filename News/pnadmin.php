@@ -225,13 +225,10 @@ function News_admin_update($args)
     if ($story['preview'] != 0 && empty($story['title'])) {
         $validationerror = _TITLE;
     }
-    if ($story['preview'] != 0 && empty($story['hometext'])) {
+    // both text fields can't be empty
+    if ($story['preview'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
-    // See ticket #44, incorrect obligatory bodytext 
-    //if ($story['preview'] != 0 && empty($story['bodytext'])) {
-    //    $validationerror = _NEWS_EXTENDEDTEXT;
-    //}
 
     // Reformat the attributes array
     // from {0 => {name => '...', value => '...'}} to {name => value}
@@ -509,7 +506,7 @@ function News_admin_view($args)
         $pnRender->assign('numproperties', count($propArray));
         $pnRender->assign('properties', $propArray);
         $pnRender->assign('property', $property);
-        $pnRender->assign("category", $category);
+        $pnRender->assign('category', $category);
     }
 
     // Assign the values for the smarty plugin to produce a pager
