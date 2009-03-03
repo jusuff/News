@@ -44,6 +44,8 @@ define('_ARTICLETITLE_FLC', 'Article Title');
 define('_NEWS_NEWSARTICLEPREVIEW', 'Article Preview');
 
 define('_NEWS_ATTRIBUTES', 'Article attributes');
+define('_NEWS_ATTRIBUTE_NEW', 'New article attribute');
+define('_NEWS_ENABLEATTRIBUTION', 'Enable attribution');
 define('_NEWS_FORMATTEDTEXT', 'Formatted Text');
 define('_NEWS_FROM', 'Start date');
 define('_NEWS_HOMETEXT', 'Lead page teaser');
