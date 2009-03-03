@@ -87,12 +87,12 @@ function News_bigblock_display($blockinfo)
         $blockinfo['title'] = _TODAYBIG;
     }
 
-    $pnRender = pnRender::getInstance('News');
+    $renderer = pnRender::getInstance('News');
 
-    $pnRender->assign(array('info' => $info,
+    $renderer->assign(array('info' => $info,
                             'links' => $links,
                             'preformat' => $preformat));
 
-    $blockinfo['content'] = $pnRender->fetch('news_block_big.htm');
+    $blockinfo['content'] = $renderer->fetch('news_block_big.htm');
     return pnBlockThemeBlock($blockinfo);
 }

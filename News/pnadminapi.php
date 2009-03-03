@@ -132,9 +132,9 @@ function News_adminapi_update($args)
     pnModCallHooks('item', 'update', $args['sid'], array('module' => 'News'));
 
     // The item has been modified, so we clear all cached pages of this item.
-    $pnRender = pnRender::getInstance('News');
-    $pnRender->clear_cache(null, $args['sid']);
-    $pnRender->clear_cache('news_user_view.htm');
+    $renderer = pnRender::getInstance('News');
+    $renderer->clear_cache(null, $args['sid']);
+    $renderer->clear_cache('news_user_view.htm');
 
     // Let the calling process know that we have finished successfully
     return true;

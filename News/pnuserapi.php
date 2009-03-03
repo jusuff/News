@@ -822,8 +822,8 @@ function News_userapi_create($args)
     pnModCallHooks('item', 'create', $args['sid'], array('module' => 'News'));
 
     // An item was created, so we clear all cached pages of the items list.
-    $pnRender = pnRender::getInstance('News');
-    $pnRender->clear_cache('news_user_view.htm');
+    $renderer = pnRender::getInstance('News');
+    $renderer->clear_cache('news_user_view.htm');
 
     // Return the id of the newly created item to the calling process
     return $args['sid'];

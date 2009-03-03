@@ -29,9 +29,9 @@ function news_searchapi_options($args)
     if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         // Create output object - this object will store all of our output so that
         // we can return it easily when required
-        $pnRender = pnRender::getInstance('News');
-        $pnRender->assign('active',(isset($args['active'])&&isset($args['active']['News']))||(!isset($args['active'])));
-        return $pnRender->fetch('news_search_options.htm');
+        $renderer = pnRender::getInstance('News');
+        $renderer->assign('active',(isset($args['active'])&&isset($args['active']['News']))||(!isset($args['active'])));
+        return $renderer->fetch('news_search_options.htm');
     }
 
     return '';
