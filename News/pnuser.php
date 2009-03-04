@@ -193,13 +193,10 @@ function News_user_create($args)
     if ($item['preview'] != 0 && empty($item['title'])) {
         $validationerror = _TITLE;
     }
-    if ($item['preview'] != 0 && empty($item['hometext'])) {
+    // both text fields can't be empty
+    if ($item['preview'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
         $validationerror = _NEWS_ARTICLECONTENT;
     }
-    // See ticket #44, incorrect obligatory bodytext 
-    //if ($story['preview'] != 0 && empty($item['bodytext'])) {
-    //    $validationerror = _NEWS_EXTENDEDTEXT;
-    //}
 
     // if the user has selected to preview the article we then route them back
     // to the new function with the arguments passed here
