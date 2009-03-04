@@ -35,7 +35,7 @@ function News_init()
 
     // Set up config variables
     pnModSetVar('News', 'storyhome', 10);
-    pnModSetVar('News', 'storyorder', 0);
+    pnModSetVar('News', 'storyorder', 1);
     pnModSetVar('News', 'itemsperpage', 25);
     pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
     pnModSetVar('News', 'enablecategorization', true);

@@ -580,7 +580,7 @@ function News_admin_updateconfig()
     $modvars['refereronprint'] = $refereronprint;
     $modvars['itemsperpage'] = (int)FormUtil::getPassedValue('itemsperpage', 25, 'POST');
     $modvars['storyhome'] = (int)FormUtil::getPassedValue('storyhome', 10, 'POST');
-    $modvars['storyorder'] = (int)FormUtil::getPassedValue('storyorder', 0, 'POST');
+    $modvars['storyorder'] = (int)FormUtil::getPassedValue('storyorder', 1, 'POST');
     $modvars['enablecategorization'] = (bool)FormUtil::getPassedValue('enablecategorization', false, 'POST');
     $modvars['enableattribution'] = (bool)FormUtil::getPassedValue('enableattribution', false, 'POST');
 
