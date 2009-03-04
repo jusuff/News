@@ -138,6 +138,8 @@ function News_upgrade($oldversion)
             $tables = pnDBGetTables();
             // when from is not set, put it to the creation date
             $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
+            // make sure we dont have an NULL hometext, since the tables permitted this before 2.4
+            $sqls[] = "UPDATE $tables[stories] SET pn_hometext = '' WHERE pn_hometext IS NULL";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
                     return LogUtil::registerError (_UPDATETABLEFAILED);

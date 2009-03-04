@@ -52,7 +52,7 @@ function News_pntables()
         'sid'              => 'I NOTNULL AUTO PRIMARY',
         'title'            => 'C(255) DEFAULT NULL',
         'urltitle'         => 'C(255) DEFAULT NULL',
-        'hometext'         => 'X',
+        'hometext'         => 'X NOTNULL',
         'bodytext'         => 'X NOTNULL',
         'counter'          => 'I DEFAULT NULL',
         'informant'        => "C(20) NOTNULL DEFAULT ''",
