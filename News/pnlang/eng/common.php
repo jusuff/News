@@ -12,6 +12,8 @@
 
 // general
 define('_NEWS', 'News');
+define('_NEWS_AUTHOR', 'Author');
+
 
 // singular/plural
 define('_NEWS_STORY', 'News Article');
@@ -20,9 +22,11 @@ define('_NEWS_STORIES', 'News Articles');
 
 // status
 define('_NEWS_ARCHIVED', 'Archived');
-define('_NEWS_PENDING', 'Pending');
+define('_NEWS_DRAFT', 'Draft');
+define('_NEWS_PENDING', 'Pending Review');
 define('_NEWS_PUBLISHED', 'Published');
 define('_NEWS_REJECTED', 'Rejected');
+define('_NEWS_SCHEDULED', 'Scheduled');
 
 // common defines
 define('_NEWS_COMMENT', '1 comment');

@@ -14,6 +14,7 @@
 define('_NEWS_DIRECTACCESS', 'Access an older article by its ID:');
 define('_NEWS_INFUTURE', 'Queued');
 define('_NEWS_INHOMEQUESTION', 'Lead Page');
+define('_NEWS_LASTUPDATED', 'Last Modified');
 define('_NEWS_NEWSPUBLISHER', 'News Publisher');
 define('_NEWS_UNKNOWN', 'Unknown');
 

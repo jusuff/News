@@ -5,7 +5,6 @@
 <!--[include file='news_admin_menu.htm']-->
 
 <!--[dateformat assign='now']-->
-<!--[* pnmodapifunc modname='News' type='user' func='countitems' assign='allcount' *]-->
 <!--[pnmodapifunc modname='News' type='user' func='countitems' status='0' to=$now assign='publishedcount']-->
 <!--[pnmodapifunc modname='News' type='user' func='countitems' status='1' assign='rejectedcount']-->
 <!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
@@ -14,13 +13,12 @@
 <!--[pnmodapifunc modname='News' type='user' func='countitems' from=$now status='0' assign='scheduledcount']-->
 <!--[math assign="allcount" equation="pub + rej + pen + arc + dra + sch" pub=$publishedcount rej=$rejectedcount pen=$pendingcount arc=$archivedcount dra=$draftcount sch=$scheduledcount]-->
 
-
 <div class="pn-admincontainer">
 <div class="pn-adminpageicon"><!--[pnimg modname='core' src='windowlist.gif' set='icons/large' alt=$templatetitle]--></div>
 <h2><!--[$templatetitle]--></h2>
 
 <p>
-<a href="<!--[ pnmodurl modname='News' type='admin' func='view']-->"><!--[pnml name='_NEWS_ALL']--> (<!--[$allcount]-->)</a>
+<a href="<!--[ pnmodurl modname='News' type='admin' func='view']-->"><!--[pnml name='_ALL']--> (<!--[$allcount]-->)</a>
 <!--[if $publishedcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='0']-->"><!--[pnml name='_NEWS_PUBLISHED']--> (<!--[$publishedcount]-->)</a><!--[/if]-->
 <!--[if $scheduledcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='5']-->"><!--[pnml name='_NEWS_SCHEDULED']--> (<!--[$scheduledcount]-->)</a><!--[/if]-->
 <!--[if $pendingcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[pnml name='_NEWS_PENDING']--> (<!--[$pendingcount]-->)</a><!--[/if]-->
