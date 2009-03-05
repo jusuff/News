@@ -449,7 +449,7 @@ function News_admin_view($args)
                                 'numitems' => $modvars['itemsperpage'],
                                 'ignoreml' => ($multilingual ? false : true),
                                 'language' => $language,
-                                'order'    => $order,
+                                'order'    => iiset($order) ? $order : 'from',
                                 'from'     => isset($from) ? $from : null,
                                 'to'       => isset($to) ? $to : null,
                                 'category' => isset($catFilter) ? $catFilter : null,
