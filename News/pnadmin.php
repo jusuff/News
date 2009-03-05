@@ -378,6 +378,7 @@ function News_admin_view($args)
     $clear       = FormUtil::getPassedValue('clear', false, 'POST');
     $purge       = FormUtil::getPassedValue('purge', false, 'GET');
     $order       = FormUtil::getPassedValue('order', isset($args['order']) ? $args['order'] : 'from', 'GETPOST');
+//    $monthyear   = FormUtil::getPassedValue('monthyear', isset($args['monthyear']) ? $args['monthyear'] : null, 'POST');
 
     if ($purge) {
         if (pnModAPIFunc('News', 'admin', 'purgepermalinks')) {
@@ -392,6 +393,7 @@ function News_admin_view($args)
         $property = null;
         $category = null;
         $news_status = null;
+        $order = 'from';
     }
 
     // clean the session preview data
@@ -427,20 +429,23 @@ function News_admin_view($args)
 
     $multilingual = pnConfigGetVar ('multilingual', false);
 
-    if (isset($news_status) && $news_status == 0) {
-        $status = 0;
-        $to = DateUtil::getDatetime();
-    } elseif ($news_status == 5) {
-        $status = 0; // scheduled is actually published in the future
-        $from = DateUtil::getDatetime(); //getDatetime_NextDay
-    } else {
-        $status = $news_status;
+    $status = null;
+    if (isset($news_status)) {
+        if ($news_status == 0) {
+            $status = 0;
+            $to = DateUtil::getDatetime();
+        } elseif ($news_status == 5) {
+            $status = 0; // scheduled is actually published in the future
+            $from = DateUtil::getDatetime(); //getDatetime_NextDay
+        } else {
+            $status = $news_status;
+        }
     }
 
     // Get all news story
     $items = pnModAPIFunc('News', 'user', 'getall',
                           array('startnum' => $startnum,
-                                'status'   => isset($status) ? $status : null,
+                                'status'   => $status,
                                 'numitems' => $modvars['itemsperpage'],
                                 'ignoreml' => ($multilingual ? false : true),
                                 'language' => $language,
@@ -460,6 +465,19 @@ function News_admin_view($args)
         4  => _NEWS_DRAFT,
         5  => _NEWS_SCHEDULED
     );
+
+/*    // Load localized month names
+    $months = explode(' ', _MONTH_LONG);
+    $newsmonths = array();
+    // get all matching news stories
+    $monthsyears = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
+    foreach ($monthsyears as $monthyear) {
+        $month = DateUtil::getDatetime_Field($monthyear, 2);
+        $year  = DateUtil::getDatetime_Field($monthyear, 1);
+        $linktext = $months[$month-1]." $year";
+        $newsmonths[$monthyear] = $linktext;
+    }
+*/
 
     $newsitems = array();
     foreach ($items as $item) {
@@ -493,13 +511,6 @@ function News_admin_view($args)
             $item['ihome'] = _NO;
         }
 
-        // TODO #56 admin view 
-/*        if (DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0) {
-            $item['infuture'] = _YES . ' (' . DateUtil::formatDatetime($item['from'], '%x') . ')';
-        } else {
-            $item['infuture'] = _NO;
-        }
-*/
         $item['infuture'] = DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0;
         $newsitems[] = $item;
     }
@@ -518,6 +529,12 @@ function News_admin_view($args)
     // Assign the current status filter and the possible ones
     $renderer->assign('news_status', $news_status);
     $renderer->assign('itemstatus', $itemstatus);
+    $renderer->assign('order', $order);
+    $renderer->assign('orderoptions', array(
+                                        'from' => _NEWS_STORIESORDER1, 
+                                        'sid' => _NEWS_STORIESORDER0));
+//    $renderer->assign('monthyear', $monthyear);
+//    $renderer->assign('newsmonths', $newsmonths);
 
     // Assign the categories information if enabled
     if ($modvars['enablecategorization']) {

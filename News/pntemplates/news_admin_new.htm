@@ -14,7 +14,9 @@
 
 <script type="text/javascript">
 /* <![CDATA[ */
-     var bytesused = '<!--[ pnml name="_NEWS_CHARSUSED" ]-->';
+    var bytesused = '<!--[ pnml name="_NEWS_CHARSUSED" ]-->';
+    var showpublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONSHOW" ]-->';
+    var hidepublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONHIDE" ]-->';
 <!--[if $enableattribution]-->
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
@@ -133,7 +135,7 @@
 
     <!--[if $accessadd eq 1]-->
     <fieldset class="pn-form-fieldset">
-        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATION']--></a></legend>
+        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATIONSHOW']--></a></legend>
 
         <div id="news_publication_details">
         <div class="pn-formrow">
