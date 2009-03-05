@@ -183,6 +183,9 @@ function editnews_saveresponse(req)
 
 /**
  * Admin panel functions
+ * Functions to enable watching for changes in  the optional divs and show and hide these divs 
+ * with the switchdisplaystate funtion of javascript/ajax/pnajax.js. This function uses BlindDown and BlindUp
+ * when scriptaculous Effects is loaded and otherwise show and hide of prototype.
  */
 
 function news_filter_init()
@@ -227,6 +230,10 @@ function news_publication_init()
 {
     Event.observe('news_publication_collapse', 'click', news_publication_click);
     $('news_publication_collapse').addClassName('pn-toggle-link');
+    // hide the details when unlimited is not set, the details will unfold nicely with the click afterwards.
+    if ($('news_unlimited').checked == false) {
+        $('news_publication_details').hide();
+    }
     news_publication_click();
 }
 
@@ -235,9 +242,11 @@ function news_publication_click()
     if ($('news_publication_details').style.display != "none") {
         Element.addClassName.delay(0.9, $('news_publication_details').parentNode, 'pn-collapsed');
         Element.removeClassName.delay(0.9, $('news_publication_collapse'), 'pn-toggle-link-open');
+        $('news_publication_collapse').update(showpublicationoptions);
     } else {
         Element.removeClassName($('news_publication_details').parentNode, 'pn-collapsed');
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
+        $('news_publication_collapse').update(hidepublicationoptions);
     }
     switchdisplaystate('news_publication_details');
 }

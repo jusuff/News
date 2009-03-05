@@ -112,28 +112,23 @@ function News_userapi_getall($args)
         if (isset($args['from']) && isset($args['to'])) {
             $from = DataUtil::formatForStore($args['from']);
             $to   = DataUtil::formatForStore($args['to']);
-            //$queryargs[] = "(($storiescolumn[cr_date] >= '$from' AND $storiescolumn[cr_date] < '$to' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to'))";
             $queryargs[] = "($storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to')";
         // Only 'from' is defined
         } elseif (isset($args['from'])) {
             $date = DataUtil::formatForStore($args['from']);
-            //queryargs[] = "(($storiescolumn[cr_date] >= '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date')))";
             $queryargs[] = "($storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date'))";
         // Only 'to' is defined
         } elseif (isset($args['to'])) {
             $date = DataUtil::formatForStore($args['to']);
-            //$queryargs[] = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
             $queryargs[] = "($storiescolumn[from] < '$date')";
         }
     // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
         $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
-        //$queryargs[] = "(($storiescolumn[from] IS NULL AND $storiescolumn[to] IS NULL) OR ('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to])))";
         $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
 
     if (isset($args['tdate'])) {
-        //$queryargs[] = "$storiescolumn[time] LIKE '%{$args['tdate']}%'";
         $queryargs[] = "$storiescolumn[from] LIKE '%{$args['tdate']}%'";
     }
 
@@ -190,14 +185,6 @@ function News_userapi_getall($args)
         return LogUtil::registerError(_GETFAILED);
     }
 
-    // If 'from' (date) is set, change the publication time
-/*    $ak = array_keys($objArray);
-    foreach ($ak as $key) {
-        if (DateUtil::getDatetimeDiff_AsField($objArray[$key]['from'], $objArray[$key]['time'], 6) < 0) {
-            $objArray[$key]['time'] = $objArray[$key]['from'];
-        }
-    }
-*/
     // need to do this here as the category expansion code can't know the
     // root category which we need to build the relative path component
     if (pnModGetVar('News', 'enablecategorization') && $objArray && isset($args['catregistry']) && $args['catregistry']) {
@@ -255,7 +242,6 @@ function News_userapi_get($args)
     if (isset($args['sid']) && is_numeric($args['sid'])) {
         $item = DBUtil::selectObjectByID('stories', $args['sid'], 'sid', null, $permFilter);
     } elseif (isset($timestring)) {
-        //$where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_cr_date LIKE '{$timestring}%'";
         $where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_from LIKE '{$timestring}%'";
         $item = DBUtil::selectObject('stories', $where, null, $permFilter);
     } else {
@@ -265,11 +251,6 @@ function News_userapi_get($args)
     if (empty($item))
         return false;
 
-    // If 'from' (date) is set, change the publication time
- /*   if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0) {
-        $item['time'] = $item['from'];
-    }
-*/
     // process the relative paths of the categories
     if (pnModGetVar('News', 'enablecategorization') && !empty($item['__CATEGORIES__'])) {
         static $registeredCats;
@@ -303,11 +284,9 @@ function News_userapi_getMonthsWithNews($args)
     $storiescolumn = $pntable['stories_column'];
     
     // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
-    //$order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[cr_date]) ORDER BY $storiescolumn[cr_date] DESC";
     $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[from]) ORDER BY $storiescolumn[from] DESC";
     
     $date = DateUtil::getDatetime();
-    //$where = "(($storiescolumn[cr_date] < '$date' AND $storiescolumn[from] IS NULL) OR ($storiescolumn[from] IS NOT NULL AND $storiescolumn[from] < '$date'))";
     $where = "($storiescolumn[from] < '$date')";
     
     $dates = DBUtil::selectFieldArray('stories', 'from', $where, $order);
@@ -351,13 +330,14 @@ function News_userapi_countitems($args)
     }
 
     if (isset($args['from']) && isset($args['to'])) {
-        //$queryargs[] = "$storiescolumn[cr_date] >= '" . DataUtil::formatForStore($args['from']) . "'";
         $queryargs[] = "$storiescolumn[from] >= '" . DataUtil::formatForStore($args['from']) . "'";
-        //$queryargs[] = "$storiescolumn[cr_date] < '" . DataUtil::formatForStore($args['to']) . "'";
         $queryargs[] = "$storiescolumn[from] < '" . DataUtil::formatForStore($args['to']) . "'";
+    } elseif (isset($args['from'])) {
+        $queryargs[] = "$storiescolumn[from] >= '" . DataUtil::formatForStore($args['from']) . "'";    
+    } elseif (isset($args['to'])) {
+        $queryargs[] = "$storiescolumn[from] < '" . DataUtil::formatForStore($args['to']) . "'";    
     } elseif (isset($args['filterbydate'])) {
         $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
-        //$queryargs[] = "(($storiescolumn[from] IS NULL AND $storiescolumn[to] IS NULL) OR ('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to])))";
         $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
 
@@ -883,5 +863,3 @@ function _News_getTopicField()
   $prop = pnModGetVar('News', 'topicproperty');
   return empty($prop) ? 'Main' : $prop;
 }
-
-

@@ -370,13 +370,14 @@ function News_admin_view($args)
         return LogUtil::registerPermissionError();
     }
 
-    $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GET');
-    $status   = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
-    $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
-    $property = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'POST');
-    $category = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'POST');
-    $clear    = FormUtil::getPassedValue('clear', false, 'POST');
-    $purge    = FormUtil::getPassedValue('purge', false, 'GET');
+    $startnum    = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GET');
+    $news_status = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
+    $language    = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
+    $property    = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'POST');
+    $category    = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'POST');
+    $clear       = FormUtil::getPassedValue('clear', false, 'POST');
+    $purge       = FormUtil::getPassedValue('purge', false, 'GET');
+    $order       = FormUtil::getPassedValue('order', isset($args['order']) ? $args['order'] : 'from', 'GETPOST');
 
     if ($purge) {
         if (pnModAPIFunc('News', 'admin', 'purgepermalinks')) {
@@ -387,8 +388,10 @@ function News_admin_view($args)
         return pnRedirect(strpos(pnServerGetVar('HTTP_REFERER'), 'purge') ? pnModURL('News', 'admin', 'view') : pnServerGetVar('HTTP_REFERER'));
     }
     if ($clear) {
+        // reset the filter
         $property = null;
         $category = null;
+        $news_status = null;
     }
 
     // clean the session preview data
@@ -424,24 +427,38 @@ function News_admin_view($args)
 
     $multilingual = pnConfigGetVar ('multilingual', false);
 
+    if (isset($news_status) && $news_status == 0) {
+        $status = 0;
+        $to = DateUtil::getDatetime();
+    } elseif ($news_status == 5) {
+        $status = 0; // scheduled is actually published in the future
+        $from = DateUtil::getDatetime(); //getDatetime_NextDay
+    } else {
+        $status = $news_status;
+    }
+
     // Get all news story
     $items = pnModAPIFunc('News', 'user', 'getall',
                           array('startnum' => $startnum,
-                                'status'   => $status,
+                                'status'   => isset($status) ? $status : null,
                                 'numitems' => $modvars['itemsperpage'],
                                 'ignoreml' => ($multilingual ? false : true),
                                 'language' => $language,
-                                'order'    => 'sid',
+                                'order'    => $order,
+                                'from'     => isset($from) ? $from : null,
+                                'to'       => isset($to) ? $to : null,
                                 'category' => isset($catFilter) ? $catFilter : null,
                                 'catregistry' => isset($catregistry) ? $catregistry : null));
 
     // Set the possible status for later use
     $itemstatus = array (
-        '' => _CHOOSEONE, 
+        '' => _ALL, 
         0  => _NEWS_PUBLISHED,
         1  => _NEWS_REJECTED,
         2  => _NEWS_PENDING,
-        3  => _NEWS_ARCHIVED
+        3  => _NEWS_ARCHIVED,
+        4  => _NEWS_DRAFT,
+        5  => _NEWS_SCHEDULED
     );
 
     $newsitems = array();
@@ -476,12 +493,14 @@ function News_admin_view($args)
             $item['ihome'] = _NO;
         }
 
-        if (DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0) {
+        // TODO #56 admin view 
+/*        if (DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0) {
             $item['infuture'] = _YES . ' (' . DateUtil::formatDatetime($item['from'], '%x') . ')';
         } else {
             $item['infuture'] = _NO;
         }
-
+*/
+        $item['infuture'] = DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0;
         $newsitems[] = $item;
     }
 
@@ -497,7 +516,7 @@ function News_admin_view($args)
     $renderer->assign('language', $language);
 
     // Assign the current status filter and the possible ones
-    $renderer->assign('status', $status);
+    $renderer->assign('news_status', $news_status);
     $renderer->assign('itemstatus', $itemstatus);
 
     // Assign the categories information if enabled
