@@ -14,7 +14,6 @@
 define('_NEWS', 'News');
 define('_NEWS_AUTHOR', 'Author');
 
-
 // singular/plural
 define('_NEWS_STORY', 'News Article');
 define('_NEWS_STORY_LC', 'news article');
