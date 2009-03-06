@@ -120,7 +120,7 @@
                 <!--[else]-->
                 <!--[if $newsitem.infuture]--><!--[pnml name='_NEWS_SCHEDULED']--><!--[else]--><!--[pnml name='_NEWS_PUBLISHED']--><!--[/if]-->
                 <br />
-                <!--[getDatetimeDiffNice date2=$newsitem.from]-->
+                <!--[getDatetimeDiffNice date=$newsitem.from dateformat='%x' datenice='2']-->
                 <!--[/if]-->
             </td>
             <td>

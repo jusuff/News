@@ -35,6 +35,16 @@ define('_NEWS_POSTEDBYANDON', 'Posted by %username% on %date%');
 define('_NEWS_READ', '1 read');
 define('_NEWS_READS', '%count% reads');
 
+// date format nice defines
+define('_NEWS_DAYSAGO', '%days% days ago');
+define('_NEWS_DAYSFROMNOW', '%days% days from now');
+define('_NEWS_HOURSAGO', '%hours%  hours ago');
+define('_NEWS_HOURSFROMNOW', '%hours% hours from now');
+define('_NEWS_MINSAGO', '%mins% mins ago');
+define('_NEWS_MINSFROMNOW', '%mins% mins from now');
+define('_NEWS_SECSAGO', '%secs% secs ago');
+define('_NEWS_SECSFROMNOW', '%secs% secs from now');
+
 // new/modify templates
 // these are located in the common file to support user submission
 // the following string is used in javascript, #{chars} is like %chars% in pnML
