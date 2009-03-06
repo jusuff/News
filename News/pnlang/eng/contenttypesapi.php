@@ -13,8 +13,6 @@
  */
 
 define('_NEWS_CONTENTTYPE_NEWSARTICLESBASICINFO', 'Basic information');
-define('_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENT', '1 Comment');
-define('_NEWS_CONTENTTYPE_NEWSARTICLESCOMMENTS', '%count% Comments');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESDATEFORMAT', 'Formatting of the date');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESDATEFORMATLINK', '<a href="http://www.php.net/manual/function.strftime.php" target="_new">Description for strftime</a>');
 define('_NEWS_CONTENTTYPE_NEWSARTICLESDESCR', 'Shows a specific number of news articles from one or all the categories available');

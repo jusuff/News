@@ -12,4 +12,4 @@
 
 define('_OLDERARTICLES', 'Older News');
 define('_PASTARTICLES', 'Past News');
-define('_MAXNUMSTORIES', 'Maximum number of news items to list');
+define('_MAXNUMSTORIES', 'Maximum number of articles to list');

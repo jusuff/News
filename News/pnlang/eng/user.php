@@ -14,6 +14,8 @@
 define('_NEWS_ARCHIVES', 'Archive');
 define('_NEWS_CATEGORYLIST', 'Categories');
 define('_NEWS_FRONTPAGE', 'Lead Page');
+define('_NEWS_PENDINGARTICLE', '1 pending');
+define('_NEWS_PENDINGARTICLES', '%count% pending');
 
 // archives
 define('_NEWS_ARCHIVESFORDATE', 'Archive for %month%, %year%');
