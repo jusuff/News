@@ -18,11 +18,11 @@
 
 <p>
 <a href="<!--[ pnmodurl modname='News' type='admin' func='view']-->"><!--[pnml name='_ALL']--> (<!--[$publishedcount+$rejectedcount+$pendingcount+$archivedcount+$draftcount+$scheduledcount]-->)</a>
-<!--[if $publishedcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='0']-->"><!--[pnml name='_NEWS_PUBLISHED']--> (<!--[$publishedcount]-->)</a><!--[/if]-->
-<!--[if $scheduledcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='5']-->"><!--[pnml name='_NEWS_SCHEDULED']--> (<!--[$scheduledcount]-->)</a><!--[/if]-->
-<!--[if $pendingcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[pnml name='_NEWS_PENDING']--> (<!--[$pendingcount]-->)</a><!--[/if]-->
-<!--[if $draftcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='4']-->"><!--[pnml name='_NEWS_DRAFT']--> (<!--[$draftcount]-->)</a><!--[/if]-->
-<!--[if $rejectedcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='1']-->"><!--[pnml name='_NEWS_REJECTED']--> (<!--[$rejectedcount]-->)</a><!--[/if]-->
+<!--[if $publishedcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='0' news_property=$property news_category=$category]-->"><!--[pnml name='_NEWS_PUBLISHED']--> (<!--[$publishedcount]-->)</a><!--[/if]-->
+<!--[if $scheduledcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='5' news_property=$property news_category=$category]-->"><!--[pnml name='_NEWS_SCHEDULED']--> (<!--[$scheduledcount]-->)</a><!--[/if]-->
+<!--[if $pendingcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='2' news_property=$property news_category=$category]-->"><!--[pnml name='_NEWS_PENDING']--> (<!--[$pendingcount]-->)</a><!--[/if]-->
+<!--[if $draftcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='4' news_property=$property news_category=$category]-->"><!--[pnml name='_NEWS_DRAFT']--> (<!--[$draftcount]-->)</a><!--[/if]-->
+<!--[if $rejectedcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[ pnmodurl modname='News' type='admin' func='view' news_status='1' news_property=$property news_category=$category]-->"><!--[pnml name='_NEWS_REJECTED']--> (<!--[$rejectedcount]-->)</a><!--[/if]-->
 </p>
 
 <!--[pnconfiggetvar name='multilingual' assign='multilingual']-->
@@ -116,11 +116,10 @@
             <td>
                 <!--[if $newsitem.published_status eq '2']-->
                 <!--[pnml name='_NEWS_LASTUPDATED']--><br />
-                <!--[dateformat datetime=$newsitem.lu_date format='%x']-->
+                <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->
                 <!--[else]-->
-                <!--[if $newsitem.infuture]--><!--[pnml name='_NEWS_SCHEDULED']--><!--[else]--><!--[pnml name='_NEWS_PUBLISHED']--><!--[/if]-->
-                <br />
-                <!--[getDatetimeDiffNice date=$newsitem.from dateformat='%x' datenice='2']-->
+                <!--[if $newsitem.infuture]--><!--[pnml name='_NEWS_SCHEDULED']--><!--[else]--><!--[pnml name='_NEWS_PUBLISHED']--><!--[/if]--><br />
+                <!--[$newsitem.from|dateformatHuman:'%x':'2']-->
                 <!--[/if]-->
             </td>
             <td>

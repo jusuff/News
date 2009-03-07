@@ -44,6 +44,8 @@ define('_NEWS_MINSAGO', '%mins% mins ago');
 define('_NEWS_MINSFROMNOW', '%mins% mins from now');
 define('_NEWS_SECSAGO', '%secs% secs ago');
 define('_NEWS_SECSFROMNOW', '%secs% secs from now');
+define('_NEWS_YESTERDAY', 'Yesterday');
+define('_NEWS_TOMORROW', 'Tomorrow');
 
 // new/modify templates
 // these are located in the common file to support user submission

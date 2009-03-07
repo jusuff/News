@@ -430,7 +430,7 @@ function News_admin_view($args)
     $multilingual = pnConfigGetVar ('multilingual', false);
 
     $status = null;
-    if (isset($news_status)) {
+    if (isset($news_status) && !empty($news_status)) {
         if ($news_status == 0) {
             $status = 0;
             $to = DateUtil::getDatetime();
@@ -449,7 +449,7 @@ function News_admin_view($args)
                                 'numitems' => $modvars['itemsperpage'],
                                 'ignoreml' => ($multilingual ? false : true),
                                 'language' => $language,
-                                'order'    => iiset($order) ? $order : 'from',
+                                'order'    => isset($order) ? $order : 'from',
                                 'from'     => isset($from) ? $from : null,
                                 'to'       => isset($to) ? $to : null,
                                 'category' => isset($catFilter) ? $catFilter : null,
