@@ -145,6 +145,11 @@ function News_userapi_getall($args)
             }
         }
     }
+    
+    // check for a specific author
+    if (isset($args['uid']) && is_int($args['uid'])) {
+        $queryargs[] = "$storiescolumn[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+    }
 
     $where = '';
     if (count($queryargs) > 0) {
@@ -339,6 +344,11 @@ function News_userapi_countitems($args)
     } elseif (isset($args['filterbydate'])) {
         $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
         $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
+    }
+    
+    // check for a specific author
+    if (isset($args['uid']) && is_int($args['uid'])) {
+        $queryargs[] = "$storiescolumn[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
     }
 
     $where = '';
