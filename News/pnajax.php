@@ -227,7 +227,7 @@ function News_ajax_update()
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             // set published_status to 1 to make the story a pending story
-            $object = array('published_status' => 1,
+            $object = array('published_status' => 2,
                             'sid'              => $story['sid']);
             if (DBUtil::updateObject($object, 'stories', '', 'sid') == false) {
                 $output = DataUtil::formatForDisplayHTML(_UPDATEFAILED);
