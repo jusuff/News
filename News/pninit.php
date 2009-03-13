@@ -13,12 +13,8 @@
  */
 
 /**
- * initialise the News module
+ * initialise the News module once
  *
- * This function is only ever called once during the lifetime of a particular
- * module instance.
- *
- * @author       Xiaoyu Huang
  * @return       bool       true on success, false otherwise
  */
 function News_init()
@@ -49,9 +45,6 @@ function News_init()
 /**
  * upgrade the News module from an old version
  *
- * This function can be called multiple times
- *
- * @author       Xiaoyu Huang
  * @return       bool       true on success, false otherwise
  */
 function News_upgrade($oldversion)
@@ -73,7 +66,7 @@ function News_upgrade($oldversion)
             return News_upgrade(1.5);
         case 1.5:
             $tables = pnDBGetTables();
-            $shorturlsep = pnConfigGetVar('shorturlsseparator');			
+            $shorturlsep = pnConfigGetVar('shorturlsseparator');
             // move the data from the author uid to creator and updator uid
             $sqls[] = "UPDATE $tables[stories] SET pn_cr_uid = pn_aid";
             $sqls[] = "UPDATE $tables[stories] SET pn_lu_uid = pn_aid";
@@ -156,12 +149,8 @@ function News_upgrade($oldversion)
 }
 
 /**
- * delete the News module
+ * delete the News module once
  *
- * This function is only ever called once during the lifetime of a particular
- * module instance
- *
- * @author       Xiaoyu Huang
  * @return       bool       true on success, false otherwise
  */
 function News_delete()
@@ -174,7 +163,7 @@ function News_delete()
     // Delete module variables
     pnModDelVar('News');
 
-    // Delete entries from category registry 
+    // Delete entries from category registry
     pnModDBInfoLoad ('Categories');
     Loader::loadArrayClassFromModule('Categories', 'CategoryRegistry');
     $registry = new PNCategoryRegistryArray();
@@ -191,14 +180,14 @@ function _news_migratecategories()
 {
     // load the admin language file
     // pull all data from the old tables
-    $prefix = pnConfigGetVar('prefix');
-    $sql = "SELECT pn_catid, pn_title FROM {$prefix}_stories_cat";
+    $tables = pnDBGetTables();
+    $sql = "SELECT pn_catid, pn_title FROM {$tables[stories_cat]}";
     $result = DBUtil::executeSQL($sql);
     $categories = array(array(0, 'Articles'));
     for (; !$result->EOF; $result->MoveNext()) {
         $categories[] = $result->fields;
     }
-    $sql = "SELECT pn_topicid, pn_topicname, pn_topicimage, pn_topictext FROM {$prefix}_topics";
+    $sql = "SELECT pn_topicid, pn_topicname, pn_topicimage, pn_topictext FROM {$tables[topics]}";
     $result = DBUtil::executeSQL($sql);
     $topics = array();
     for (; !$result->EOF; $result->MoveNext()) {
@@ -265,7 +254,7 @@ function _news_migratecategories()
     pnModSetVar('News', 'topicproperty', 'Topic');
 
     // migrate page category assignments
-    $sql = "SELECT pn_sid, pn_catid, pn_topic FROM {$prefix}_stories";
+    $sql = "SELECT pn_sid, pn_catid, pn_topic FROM {$tables[stories]}";
     $result = DBUtil::executeSQL($sql);
     $pages = array();
     for (; !$result->EOF; $result->MoveNext()) {
@@ -359,7 +348,7 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
         $cat->setDataField('parent_id', $rootcat['id']);
         $cat->setDataField('name', 'Topics');
         // pnModLangLoad doesn't handle type 1 modules
-        //pnModLangLoad('Topics', 'version'); 
+        //pnModLangLoad('Topics', 'version');
         Loader::includeOnce("modules/Topics/lang/{$lang}/version.php");
         $cat->setDataField('display_name', array($lang => _TOPICS_DISPLAYNAME));
         $cat->setDataField('display_desc', array($lang => _TOPICS_DESCRIPTION));
@@ -392,9 +381,11 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
  */
 function _news_import_autonews_queue()
 {
+    $tables = pnDBGetTables();
+    $shorturlsep = pnConfigGetVar('shorturlsseparator');
+
     // pull all data from the autonews table and import into stories
-    $prefix = pnConfigGetVar('prefix');
-    $sql = "SELECT * FROM {$prefix}_autonews";
+    $sql = "SELECT * FROM {$tables[autonews]}";
     $result = DBUtil::executeSQL($sql);
     $i = 0;
     for(; !$result->EOF; $result->MoveNext()) {
@@ -412,35 +403,39 @@ function _news_import_autonews_queue()
                $obj['alanguage'],
                $obj['language'],
                $obj['withcomm']) = $result->fields;
-    
+
         // set creation date and from to the time set in autonews
-        $objj = array('cid'           => $obj['catid'],
-                      'catid'         => $obj['catid'],
-                      'aid'           => $obj['aid'],
-                      'title'         => $obj['title'],
-                      'time'          => $obj['time'],
+        $objj = array('title'         => $obj['title'],
+                      'urltitle'      => str_replace(' ', $shorturlsep, $obj['title']),
                       'hometext'      => $obj['hometext'],
                       'bodytext'      => $obj['bodytext'],
-                      'comments'      => 0,
                       'counter'       => 0,
-                      'topic'         => $obj['topic'],
                       'informant'     => $obj['informant'],
                       'notes'         => $obj['notes'],
                       'ihome'         => $obj['ihome'],
                       'themeoverride' => '',
-                      'alanguage'     => $obj['alanguage'],
                       'language'      => $obj['language'],
                       'withcomm'      => $obj['withcomm'],
-                      'format_type'   => 0,
-                      'from'          => $obj['time']);
+                      'from'          => $obj['time'],
+                      'cr_date'       => $obj['time'],
+                      'cr_uid'        => $obj['aid'],
+                      'lu_date'       => DateUtil::getDatetime(),
+                      'lu_uid'        => pnUserGetVar('uid'));
 
-        $ende = DBUtil::insertObject($objj, 'stories');
+        // Insert the imoprted object in stories and preserve the creation/lastupdated values set above.
+        $res = DBUtil::insertObject($objj, 'stories', 'sid', true);
+
+        // Manually update the topic and catid, since those are not in pntables and still needed for category migration
+        $sql = "UPDATE $tables[stories] SET pn_catid = '".$obj['catid']."', pn_topic = '".$obj['topic']."' WHERE pn_sid = ".$objj['sid'];
+        if (!DBUtil::executeSQL($sql)) {
+            return LogUtil::registerError (_UPDATETABLEFAILED);
+        }
         $i++;
     }
     $result->Close();
 
     // pull all data from the queue table and import into stories
-    $sql = "SELECT * FROM {$prefix}_queue";
+    $sql = "SELECT * FROM {$tables[queue]}";
     $result = DBUtil::executeSQL($sql);
     $i = 0;
     for(; !$result->EOF; $result->MoveNext()) {
@@ -453,35 +448,40 @@ function _news_import_autonews_queue()
                $obj['story'],
                $obj['timestamp'],
                $obj['topic'],
-               $obj['alanguage'],
                $obj['language'],
                $obj['bodytext']) = $result->fields;
-    
-        // set published status to pending besides the regular fields
-        $objj = array('cid'           => 0,
-                      'catid'         => 0,
-                      'aid'           => $obj['uid'],
-                      'title'         => $obj['subject'],
-                      'time'          => $obj['timestamp'],
+
+        // Make the article and set published status to pending
+        $objj = array('title'         => $obj['subject'],
+                      'urltitle'      => str_replace(' ', $shorturlsep, $obj['subject']),
                       'hometext'      => $obj['story'],
                       'bodytext'      => $obj['bodytext'],
-                      'comments'      => 0,
                       'counter'       => 0,
                       'topic'         => $obj['topic'],
                       'informant'     => $obj['uname'],
                       'notes'         => '',
                       'ihome'         => 0,
                       'themeoverride' => '',
-                      'alanguage'     => $obj['alanguage'],
                       'language'      => $obj['language'],
                       'withcomm'      => 0,
                       'format_type'   => 0,
-                      'published_status' => 2);
+                      'published_status' => 2,
+                      'cr_date'       => $obj['timestamp'],
+                      'cr_uid'        => $obj['uid'],
+                      'lu_date'       => DateUtil::getDatetime(),
+                      'lu_uid'        => pnUserGetVar('uid'));
 
-        $ende = DBUtil::insertObject($objj, 'stories');
+        // Insert the imoprted object in stories and preserve the creation/lastupdated values set above.
+        $res = DBUtil::insertObject($objj, 'stories', 'sid', true);
+
+        // Manually update the topic and catid, since those are not in pntables and still needed for category migration
+        $sql = "UPDATE $tables[stories] SET pn_catid = '0', pn_topic = '".$obj['topic']."' WHERE pn_sid = ".$objj['sid'];
+        if (!DBUtil::executeSQL($sql)) {
+            return LogUtil::registerError (_UPDATETABLEFAILED);
+        }
         $i++;
     }
     $result->Close();
-    
+
     return true;
 }
