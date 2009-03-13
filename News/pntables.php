@@ -13,7 +13,7 @@
  */
 
 /**
- * Populate pntables array for News module
+ * Populate tables array for News module
  * 
  * This function is called internally by the core whenever the module is
  * loaded. It delivers the table information to the core.
@@ -25,11 +25,11 @@
 function News_pntables()
 {
     // Initialise table array
-    $pntable = array();
+    $tables = array();
 
     // Full table definition
-    $pntable['stories'] = DBUtil::getLimitedTablename('stories');
-    $pntable['stories_column'] = array(
+    $tables['stories'] = DBUtil::getLimitedTablename('stories');
+    $tables['stories_column'] = array(
         'sid'              => 'pn_sid',
         'aid'              => 'pn_cr_uid',   // for back compat
         'title'            => 'pn_title',
@@ -48,7 +48,7 @@ function News_pntables()
         'from'             => 'pn_from',
         'to'               => 'pn_to'
     );
-    $pntable['stories_column_def'] = array(
+    $tables['stories_column_def'] = array(
         'sid'              => 'I NOTNULL AUTO PRIMARY',
         'title'            => 'C(255) DEFAULT NULL',
         'urltitle'         => 'C(255) DEFAULT NULL',
@@ -67,22 +67,22 @@ function News_pntables()
     );
 
     // Enable categorization services
-    $pntable['stories_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');
-    $pntable['stories_primary_key_column'] = 'sid';
+    $tables['stories_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');
+    $tables['stories_primary_key_column'] = 'sid';
 
     // Enable attribution services
-    $pntable['stories_db_extra_enable_attribution'] = pnModGetVar('News', 'enableattribution');
+    $tables['stories_db_extra_enable_attribution'] = pnModGetVar('News', 'enableattribution');
 
     // add standard data fields
-    ObjectUtil::addStandardFieldsToTableDefinition ($pntable['stories_column'], 'pn_');
-    ObjectUtil::addStandardFieldsToTableDataDefinition($pntable['stories_column_def']);
+    ObjectUtil::addStandardFieldsToTableDefinition ($tables['stories_column'], 'pn_');
+    ObjectUtil::addStandardFieldsToTableDataDefinition($tables['stories_column_def']);
 
     // old comments table for upgrade
-    $pntable['comments'] = DBUtil::getLimitedTablename('comments');
-    $pntable['autonews'] = DBUtil::getLimitedTablename('autonews');
-    $pntable['queue'] = DBUtil::getLimitedTablename('queue');
-    $pntable['stories_cat'] = DBUtil::getLimitedTablename('stories_cat');
-    $pntable['topics'] = DBUtil::getLimitedTablename('topics');
+    $tables['comments'] = DBUtil::getLimitedTablename('comments');
+    $tables['autonews'] = DBUtil::getLimitedTablename('autonews');
+    $tables['queue'] = DBUtil::getLimitedTablename('queue');
+    $tables['stories_cat'] = DBUtil::getLimitedTablename('stories_cat');
+    $tables['topics'] = DBUtil::getLimitedTablename('topics');
 
-    return $pntable;
+    return $tables;
 }
