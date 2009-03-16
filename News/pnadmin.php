@@ -430,7 +430,7 @@ function News_admin_view($args)
     $multilingual = pnConfigGetVar ('multilingual', false);
 
     $status = null;
-    if (isset($news_status) && !empty($news_status)) {
+    if (isset($news_status) && $news_status != '') {
         if ($news_status == 0) {
             $status = 0;
             $to = DateUtil::getDatetime();
