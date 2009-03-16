@@ -780,15 +780,15 @@ function News_userapi_create($args)
     }
 
     // check the publishing date options
-    if ((!isset($args['from']) && !isset($args['to'])) || !empty($args['unlimited'])) {
-        $args['from'] = DateUtil::getDatetime();
+    if ((!isset($args['from']) && !isset($args['to'])) || (isset($args['unlimited']) && !empty($args['unlimited']))) {
+        $args['from'] = null;
         $args['to'] = null;
-    } elseif (isset($args['from']) && !empty($args['tonolimit'])) {
-        $args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
+    } elseif (isset($args['from']) && (isset($args['tonolimit']) && !empty($args['tonolimit']))) {
+        $args['from'] = DateUtil::getDatetime($args['from']);
         $args['to'] = null;
     } else {
-        $args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
-        $args['to'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['to']);
+        $args['from'] = DateUtil::getDatetime($args['from']);
+        $args['to'] = DateUtil::getDatetime($args['to']);
     }
 
     // Work out name of story submitter
@@ -804,8 +804,20 @@ function News_userapi_create($args)
     $args['counter'] = 0;
     $args['comments'] = 0;
 
-    if (!DBUtil::insertObject($args, 'stories', 'sid')) {
-        return LogUtil::registerError (_CREATEFAILED);
+    if (!($obj = DBUtil::insertObject($args, 'stories', 'sid'))) {
+        return LogUtil::registerError(_CREATEFAILED);
+    }
+
+    // update the from field to the same cr_date if it's null
+    if (is_null($args['from'])) {
+    	$obj = array(
+    	    'sid'  => $obj['sid'],
+    	    'from' => $obj['cr_date']
+    	);
+
+    	if (!DBUtil::updateObject($obj, 'stories', '', 'sid')) {
+    		LogUtil::registerError(_UPDATEFAILED);
+    	}
     }
 
     // Let any hooks know that we have created a new item

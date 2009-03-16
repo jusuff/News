@@ -38,7 +38,7 @@ define('_NEWS_READS', '%count% reads');
 // date format nice defines
 define('_NEWS_DAYSAGO', '%days% days ago');
 define('_NEWS_DAYSFROMNOW', '%days% days from now');
-define('_NEWS_HOURSAGO', '%hours%  hours ago');
+define('_NEWS_HOURSAGO', '%hours% hours ago');
 define('_NEWS_HOURSFROMNOW', '%hours% hours from now');
 define('_NEWS_MINSAGO', '%mins% mins ago');
 define('_NEWS_MINSFROMNOW', '%mins% mins from now');

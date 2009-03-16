@@ -132,6 +132,7 @@
         <!--[/if]-->
     </fieldset>
 
+    <!--[if $accessadd eq 1]-->
     <fieldset class="pn-form-fieldset">
         <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATIONSHOW']--></a></legend>
         <div id="news_publication_details">
@@ -161,7 +162,7 @@
         </div>
         </div>
     </fieldset>
-    
+
     <!--[if $enableattribution]-->
     <fieldset class="pn-form-fieldset">
         <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_ATTRIBUTES']--></a></legend>
@@ -207,6 +208,7 @@
         </div>
         </div>
     </fieldset>
+    <!--[/if]-->
     <!--[/if]-->
 
     <!--[pnmodcallhooks hookobject='item' hookaction='new' module='News']-->

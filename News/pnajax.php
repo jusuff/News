@@ -226,7 +226,7 @@ function News_ajax_update()
             if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
-            // set published_status to 1 to make the story a pending story
+            // set published_status to 2 to make the story a pending story
             $object = array('published_status' => 2,
                             'sid'              => $story['sid']);
             if (DBUtil::updateObject($object, 'stories', '', 'sid') == false) {

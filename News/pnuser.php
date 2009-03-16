@@ -163,11 +163,22 @@ function News_user_create($args)
                   'bodytextcontenttype' => $story['bodytextcontenttype'],
                   'notes' => $story['notes'],
                   'ihome' => isset($story['ihome']) ? $story['ihome'] : 0,
-                  'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
-                  'tonolimit' => $story['tonolimit'],
-                  'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
+                  'from' => isset($story['fromHour']) ? mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']) : null,
+                  'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+                  'to' => isset($story['toHour']) ? mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']) : null,
                   'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
                   'published_status' => isset($story['published_status']) ? $story['published_status'] : null);
+
+    // Disable the non accessible fields for non editors
+    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+        $item['notes'] = '';
+        $item['ihome'] = 0;
+        $item['from'] = null;
+        $item['tonolimit'] = true;
+        $item['to'] = null;
+        $item['unlimited'] = true;
+        $item['published_status'] = null;
+    }
 
     // Get the referer type for later use
     if (stristr(pnServerGetVar('HTTP_REFERER'), 'type=admin')) {
