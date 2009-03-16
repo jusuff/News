@@ -99,6 +99,7 @@ function News_storiesextblock_display($blockinfo)
     $lang = pnUserGetLang();
     $topicProperty = pnModGetVar('News', 'topicproperty');
     $topicField = empty($topicProperty) ? 'Main' : $topicProperty;
+    $catimagepath = pnModGetVar('News', 'catimagepath');
 
     // --- Setting of the Defaults
     if (!isset($vars['category'])) {
@@ -372,6 +373,7 @@ height:50px;
             $render->assign('scrolldelay', $vars['scrolldelay']);
         }
     }
+    $render->assign('catimagepath', $catimagepath);
     $render->assign('bid', $blockinfo['bid']);
     $render->assign('stories', $storiesoutput);
 

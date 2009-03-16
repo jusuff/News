@@ -619,6 +619,11 @@ function News_admin_updateconfig()
     $modvars['storyorder'] = (int)FormUtil::getPassedValue('storyorder', 1, 'POST');
     $modvars['enablecategorization'] = (bool)FormUtil::getPassedValue('enablecategorization', false, 'POST');
     $modvars['enableattribution'] = (bool)FormUtil::getPassedValue('enableattribution', false, 'POST');
+    $catimagepath = FormUtil::getPassedValue('catimagepath', '/images/categories/', 'POST');
+    if (substr($catimagepath, -1) != '/') {
+        $catimagepath .= '/'; // add slash if needed
+    }
+    $modvars['catimagepath'] = $catimagepath;
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));

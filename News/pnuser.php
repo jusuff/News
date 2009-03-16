@@ -99,7 +99,6 @@ function News_user_new($args)
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
-
         $renderer->assign('catregistry', $catregistry);
     }
 
@@ -514,6 +513,7 @@ function News_user_display($args)
                             'page'      => $page));
 
     $renderer->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
+    $renderer->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
 
     // Now lets assign the informatation to create a pager for the review
     $renderer->assign('pager', array('numitems'     => $numitems,
