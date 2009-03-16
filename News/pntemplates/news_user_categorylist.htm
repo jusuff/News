@@ -14,6 +14,7 @@
 				<!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.name]--><!--[/if]-->
 				<!--[array_field_isset assign='categorydesc' array=$category.display_desc field=$language returnValue=1]-->
 				<!--[assign var='categoryid' value=$category.id]-->
+                <!--[pnsecauthaction realm=0 comp='Categories::category' inst='ID::$category.id' level='ACCESS_EDIT' assign='authcatedit']-->
 
 				<li>
 				<!--[if $shorturls and $shorturlstype eq 0]-->
@@ -22,6 +23,9 @@
 					<a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id]-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
 				<!--[/if]-->
 				(<!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]-->)
+                <!--[if $authcatedit]-->
+					<a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT']--></a>
+                <!--[/if]-->
 				</li>
 			<!--[/foreach]-->
 		</ul>
