@@ -105,7 +105,7 @@
         </div>
     </fieldset>
     <fieldset class="pn-form-fieldset">
-        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATION']--></a></legend>
+        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATIONSHOW']--></a></legend>
         <div id="news_publication_details">
         <div class="pn-formrow">
             <label for="news_ihome"><!--[pnml name='_NEWS_INHOME']--></label>
@@ -118,7 +118,7 @@
         <div id="news_expiration_details">
         <div class="pn-formrow">
             <label><!--[pnml name='_NEWS_FROM']--></label>
-            <!--[html_select_date prefix='from' start_year='-2' end_year='+4' time=$from field_array='story']--> <!--[html_select_time prefix='from' use_24_hours=true display_seconds='no' time=$from field_array='story']-->
+            <!--[html_select_date prefix='from' start_year='-2' end_year='+4' time=$from field_array='story']-->&nbsp;<!--[html_select_time prefix='from' use_24_hours=true display_seconds=false minute_interval='5' time=$from field_array='story']-->
         </div>
         <div class="pn-formrow">
             <label for="news_tonolimit"><!--[pnml name='_NEWS_NOLIMIT']--></label>
@@ -127,7 +127,7 @@
         <div id="news_expiration_date">
         <div class="pn-formrow">
             <label><!--[pnml name='_NEWS_TO']--></label>
-            <!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds='no' time=$to field_array='story']--> <br />
+            <!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds=false minute_interval='5' time=$to field_array='story']--> <br />
         </div>
         </div>
         </div>
