@@ -34,6 +34,9 @@ define('_NEWS_COMMENTSQ', 'Comments?');
 define('_NEWS_POSTEDBYANDON', 'Posted by %username% on %date%');
 define('_NEWS_READ', '1 read');
 define('_NEWS_READS', '%count% reads');
+define('_NEWS_SELFWRITTEN', ', %count% self-written');
+define('_NEWS_NOARTICLES', 'no articles');
+define('_NEWS_RSSFEED', 'RSS Feed');
 
 // date format nice defines
 define('_NEWS_DAYSAGO', '%days% days ago');

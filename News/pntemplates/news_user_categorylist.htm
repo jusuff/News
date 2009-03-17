@@ -22,10 +22,17 @@
 				<!--[else]-->
 					<a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id]-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
 				<!--[/if]-->
-				(<!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]-->)
                 <!--[if $authcatedit]-->
-					<a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT']--></a>
+					<a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
                 <!--[/if]-->
+				(
+                <!--[if $property.nrofarticles.$categoryid gt 0]-->
+                <!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]--><!--[pnml name='_NEWS_SELFWRITTEN' count=$property.nrofyourarticles.$categoryid]-->
+                <!--[else]-->
+                <!--[pnml name='_NEWS_NOARTICLES']-->
+                <!--[/if]-->
+                |&nbsp;<a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--> <!--[pnml name='_NEWS_RSSFEED']--></a>
+                )
 				</li>
 			<!--[/foreach]-->
 		</ul>

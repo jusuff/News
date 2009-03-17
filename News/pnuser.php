@@ -668,12 +668,27 @@ function News_user_categorylist($args)
                                                                         'filterbydate' => true,
                                                                         'category' => array($property => $category['id']),
                                                                         'catregistry' => $catregistry));
+                    // Get the number of articles by the current uid in this category within this category property
+                    $nrofyourarticles[$category['id']] = 0;
+                    if (pnUserLoggedIn()) {
+                        $uid = SessionUtil::getVar('uid');
+                        if (!empty($uid)) {
+                            $nrofyourarticles[$category['id']] = pnModAPIFunc('News', 'user', 'countitems',
+                                                                              array('status' => 0,
+                                                                                    'ihome' => null,
+                                                                                    'filterbydate' => true,
+                                                                                    'uid' => $userid,
+                                                                                    'category' => array($property => $category['id']),
+                                                                                    'catregistry' => $catregistry));
+                        }
+                    }
                 }
                 // Store data per property for listing in the overview
                 $propertiesdata[] = array('name' => $property,
                                           'rootcat' => $rootcat,
                                           'subcategories' => $subcategories,
-                                          'nrofarticles' => $nrofarticles);
+                                          'nrofarticles' => $nrofarticles,
+                                          'nrofyourarticles' => $nrofyourarticles);
             }
         }
 
