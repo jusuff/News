@@ -5,16 +5,16 @@
 
 <!--[if $enablecategorization]-->
 	<h3><!--[pnml name='_NEWS_AVAILABLECATEGORIES']--></h3>
-	<!--[foreach from=$propertiesdata item=property]-->
+	<!--[foreach from=$propertiesdata item='property']-->
 	    <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]--></h3><!--[/if]-->
 		<ul>
-			<!--[foreach from=$property.subcategories item=category]-->
+			<!--[foreach from=$property.subcategories item='category']-->
 				<!--[* get the category name and description avoiding E_ALL errors *]-->
 				<!--[array_field_isset assign='categoryname' array=$category.display_name field=$language returnValue=1]-->
 				<!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.name]--><!--[/if]-->
 				<!--[array_field_isset assign='categorydesc' array=$category.display_desc field=$language returnValue=1]-->
 				<!--[assign var='categoryid' value=$category.id]-->
-                <!--[pnsecauthaction realm=0 comp='Categories::category' inst='ID::$category.id' level='ACCESS_EDIT' assign='authcatedit']-->
+                <!--[pnsecauthaction realm=0 comp='Categories::category' inst="ID::$category.id" level='ACCESS_EDIT' assign='authcatedit']-->
 
 				<li>
 				<!--[if $shorturls and $shorturlstype eq 0]-->
