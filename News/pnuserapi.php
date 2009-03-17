@@ -94,11 +94,13 @@ function News_userapi_getall($args)
     $pntable = pnDBGetTables();
     $storiescolumn = $pntable['stories_column'];
     $queryargs = array();
-    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && !empty($args['language'])) {
-        $queryargs[] = "$storiescolumn[language]='" . DataUtil::formatForStore($args['language']) . "'";
+    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
+        $queryargs[] = "($storiescolumn[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[language] = '')";
+    } elseif (!empty($args['language'])) {
+        $queryargs[] = "$storiescolumn[language] = '" . DataUtil::formatForStore($args['language']) . "'";
     }
 
-    if (isset($args['status']) && !is_null($args['status'])) {
+    if (isset($args['status'])) {
         $queryargs[] = "$storiescolumn[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
     }
 
@@ -285,17 +287,18 @@ function News_userapi_getMonthsWithNews($args)
     if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
         return false;
     }
+
     $pntable =& pnDBGetTables();
     $storiescolumn = $pntable['stories_column'];
-    
+
     // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
     $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[from]) ORDER BY $storiescolumn[from] DESC";
-    
+
     $date = DateUtil::getDatetime();
     $where = "($storiescolumn[from] < '$date')";
-    
+
     $dates = DBUtil::selectFieldArray('stories', 'from', $where, $order);
-    
+
     return $dates;
 }
 
@@ -306,6 +309,17 @@ function News_userapi_getMonthsWithNews($args)
  */
 function News_userapi_countitems($args)
 {
+    // Optional arguments.
+    if (!isset($args['status']) || (empty($args['status']) && $args['status'] !== 0)) {
+        $args['status'] = null;
+    }
+    if (!isset($args['ignoreml']) || !is_bool($args['ignoreml'])) {
+        $args['ignoreml'] = false;
+    }
+    if (!isset($args['language'])) {
+        $args['language'] = '';
+    }
+
     $args['catFilter'] = array();
     if (isset($args['category']) && !empty($args['category'])){
         if (is_array($args['category'])) { 
@@ -322,8 +336,10 @@ function News_userapi_countitems($args)
     $pntable = pnDBGetTables();
     $storiescolumn = $pntable['stories_column'];
     $queryargs = array();
-    if (pnConfigGetVar('multilingual') == 1 && isset($args['ignoreml']) && !$args['ignoreml']) {
-        $queryargs[] = "($storiescolumn[language]='" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[language]='')";
+    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
+        $queryargs[] = "($storiescolumn[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[language] = '')";
+    } elseif (!empty($args['language'])) {
+        $queryargs[] = "$storiescolumn[language] = '" . DataUtil::formatForStore($args['language']) . "'";
     }
 
     if (isset($args['status'])) {
@@ -334,18 +350,46 @@ function News_userapi_countitems($args)
         $queryargs[] = "$storiescolumn[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
     }
 
-    if (isset($args['from']) && isset($args['to'])) {
-        $queryargs[] = "$storiescolumn[from] >= '" . DataUtil::formatForStore($args['from']) . "'";
-        $queryargs[] = "$storiescolumn[from] < '" . DataUtil::formatForStore($args['to']) . "'";
-    } elseif (isset($args['from'])) {
-        $queryargs[] = "$storiescolumn[from] >= '" . DataUtil::formatForStore($args['from']) . "'";    
-    } elseif (isset($args['to'])) {
-        $queryargs[] = "$storiescolumn[from] < '" . DataUtil::formatForStore($args['to']) . "'";    
+    // Check for specific date interval
+    if (isset($args['from']) || isset($args['to'])) {
+        // Both defined
+        if (isset($args['from']) && isset($args['to'])) {
+            $from = DataUtil::formatForStore($args['from']);
+            $to   = DataUtil::formatForStore($args['to']);
+            $queryargs[] = "($storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to')";
+        // Only 'from' is defined
+        } elseif (isset($args['from'])) {
+            $date = DataUtil::formatForStore($args['from']);
+            $queryargs[] = "($storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date'))";
+        // Only 'to' is defined
+        } elseif (isset($args['to'])) {
+            $date = DataUtil::formatForStore($args['to']);
+            $queryargs[] = "($storiescolumn[from] < '$date')";
+        }
+    // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
         $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
         $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
-    
+
+    if (isset($args['tdate'])) {
+        $queryargs[] = "$storiescolumn[from] LIKE '%{$args['tdate']}%'";
+    }
+
+    if (isset($args['query']) && is_array($args['query'])) {
+        // query array with rows like {'field', 'op', 'value'}
+        $allowedoperators = array('>', '>=', '=', '<', '<=', 'LIKE', '!=', '<>');
+        foreach ($args['query'] as $row) {
+            if (is_array($row) && count($row) == 3) {
+                // validate fields and operators
+                list($field, $op, $value) = $row;
+                if (isset($storiescolumn[$field]) && in_array($op, $allowedoperators)) {
+                    $queryargs[] = "$storiescolumn[$field] $op '".DataUtil::formatForStore($value)."'";
+                }
+            }
+        }
+    }
+
     // check for a specific author
     if (isset($args['uid']) && is_int($args['uid'])) {
         $queryargs[] = "$storiescolumn[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
