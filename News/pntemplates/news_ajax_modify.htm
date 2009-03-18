@@ -29,11 +29,11 @@
 
         <!--[if $enablecategorization]-->
         <div class="pn-formrow">
-            <label for="story___CATEGORIES____Main_"><!--[pnml name='_CATEGORY']--></label>
+            <label for="news_categories"><!--[pnml name='_CATEGORY']--></label>
             <!--[pnml assign='lblDef' name='_CHOOSECATEGORY']-->
             <!--[nocache]-->
-            <ul class="selector_category">
-            <!--[foreach from=$categories key='property' item='category']-->
+            <ul id="news_categories" class="selector_category">
+            <!--[foreach from=$catregistry key='property' item='category']-->
                 <!--[array_field_isset array=$__CATEGORIES__ field=$property assign='catExists']-->
                 <!--[if $catExists]-->
                     <!--[array_field_isset array=$__CATEGORIES__.$property field='id' returnValue=1 assign='selectedValue']-->
@@ -51,7 +51,7 @@
         <!--[if $multilingual]-->
         <div class="pn-formrow">
             <label for="news_language"><!--[pnml name='_LANGUAGE']--></label>
-            <!--[languagelist id='news_language' name='story[language]' all=true selected=$language installed=true]-->
+            <!--[languagelist id='news_language' name='story[language]' all=true installed=true selected=$language]-->
         </div>
         <!--[/if]-->
     </fieldset>
@@ -60,13 +60,13 @@
         <legend><!--[pnml name='_NEWS_ARTICLECONTENT']--></legend>
 
         <!--[if $formattedcontent eq 0]-->
-        
-        <div class="pn-warningmsg"><!--[pnml name='_PERMITTEDHTMLTAGSREMINDER']--><!--[pnml name='_PUNC_COLON']--> <!--[allowedhtml]--></div>
-        
+
+        <div class="pn-warningmsg"><!--[pnml name='_PERMITTEDHTMLTAGSREMINDER']--> <!--[allowedhtml]--></div>
+
         <!--[/if]-->
         <div class="pn-formrow">
             <label for="news_hometext"><!--[pnml name='_NEWS_HOMETEXT']--></label>
-            <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="50" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
+            <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
             <span id="news_hometext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
         </div>
 
@@ -74,15 +74,15 @@
         <div class="pn-formrow">
             <label for="news_hometextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
             <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
-                <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
-                <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
+                <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
+                <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
             </select>
         </div>
         <!--[/if]-->
 
         <div class="pn-formrow">
             <label for="news_bodytext"><!--[pnml name='_NEWS_EXTENDEDTEXT']--></label>
-            <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="50" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
+            <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
             <span id="news_bodytext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
         </div>
 
@@ -99,7 +99,7 @@
         <div class="pn-formrow">
             <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_NOTES']--></a></label>
             <div id="news_notes_details">
-            <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="50" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
+            <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
             <span id="news_notes_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
             </div>
         </div>
