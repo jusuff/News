@@ -542,7 +542,7 @@ function News_user_archives($args)
     }
 
     // Dates validation
-    $currentdate = explode(',', adodb_strftime('%Y,%m,%d', time()));
+    $currentdate = explode(',', DateUtil::getDatetime('', '%Y,%m,%d'));
     if (!empty($year) || !empty($month)) {
         if ((empty($year) || empty($month)) ||
             ($year > (int)$currentdate[0] || ($year == (int)$currentdate[0] && $month > (int)$currentdate[1]))) {

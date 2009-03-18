@@ -80,7 +80,7 @@ function News_userapi_getall($args)
 
     $args['catFilter'] = array();
     if (isset($args['category']) && !empty($args['category'])){
-        if (is_array($args['category'])) { 
+        if (is_array($args['category'])) {
             $args['catFilter'] = $args['category'];
         } elseif (isset($args['property'])) {
             $property = $args['property'];
@@ -126,7 +126,7 @@ function News_userapi_getall($args)
         }
     // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
-        $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
+        $date = DateUtil::getDatetime();
         $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
 
@@ -147,7 +147,7 @@ function News_userapi_getall($args)
             }
         }
     }
-    
+
     // check for a specific author
     if (isset($args['uid']) && is_int($args['uid'])) {
         $queryargs[] = "$storiescolumn[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
@@ -157,7 +157,7 @@ function News_userapi_getall($args)
     if (count($queryargs) > 0) {
         $where = implode(' AND ', $queryargs);
     }
-    
+
     $orderby = '';
     // Handle the sort order
     if (!isset($args['order'])) {
@@ -197,7 +197,7 @@ function News_userapi_getall($args)
     if (pnModGetVar('News', 'enablecategorization') && $objArray && isset($args['catregistry']) && $args['catregistry']) {
         ObjectUtil::postProcessExpandedObjectArrayCategories ($objArray, $args['catregistry']);
     }
-    
+
     // Return the items
     return $objArray;
 }
@@ -222,7 +222,7 @@ function News_userapi_get($args)
     }
 
     // form a date using some ofif present...
-    // step 1 - convert month name into 
+    // step 1 - convert month name into
     if (isset($args['monthname']) && !empty($args['monthname'])) {
          $months = explode(' ', _MONTH_SHORT);
          $keys = array_flip($months);
@@ -231,8 +231,7 @@ function News_userapi_get($args)
     // step 2 - convert to a timestamp and back to a db format
     if (isset($args['year']) && !empty($args['year']) && isset($args['monthnum']) &&
         !empty($args['monthnum']) && isset($args['day']) && !empty($args['day'])) {
-         $timestamp = mktime(0, 0, 0, $args['monthnum'], $args['day'], $args['year']);
-         $timestring = adodb_strftime('%Y-%m-%d', $timestamp);
+         $timestring = DateUtil::getDatetime(mktime(0, 0, 0, $args['monthnum'], $args['day'], $args['year']), '%Y-%m-%d');
     }
 
     // define the permissions filter to apply
@@ -281,7 +280,7 @@ function News_userapi_get($args)
  * @author Philipp Niethammer
  * @return array Array of dates (one per month)
  */
-function News_userapi_getMonthsWithNews($args) 
+function News_userapi_getMonthsWithNews($args)
 {
     // Security check
     if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
@@ -322,7 +321,7 @@ function News_userapi_countitems($args)
 
     $args['catFilter'] = array();
     if (isset($args['category']) && !empty($args['category'])){
-        if (is_array($args['category'])) { 
+        if (is_array($args['category'])) {
             $args['catFilter'] = $args['category'];
         } elseif (isset($args['property'])) {
             $property = $args['property'];
@@ -368,7 +367,7 @@ function News_userapi_countitems($args)
         }
     // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
-        $date = adodb_strftime('%Y-%m-%d %H:%M:%S', time());
+        $date = DateUtil::getDatetime();
         $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
     }
 
@@ -429,7 +428,7 @@ function News_userapi_incrementreadcount($args)
  * for it
  * @author unknown
  */
-function News_userapi_getArticleLinks($info) 
+function News_userapi_getArticleLinks($info)
 {
     // Component and instance
     $component = 'Stories::Story';
@@ -854,14 +853,14 @@ function News_userapi_create($args)
 
     // update the from field to the same cr_date if it's null
     if (is_null($args['from'])) {
-    	$obj = array(
-    	    'sid'  => $obj['sid'],
-    	    'from' => $obj['cr_date']
-    	);
+        $obj = array(
+            'sid'  => $obj['sid'],
+            'from' => $obj['cr_date']
+        );
 
-    	if (!DBUtil::updateObject($obj, 'stories', '', 'sid')) {
-    		LogUtil::registerError(_UPDATEFAILED);
-    	}
+        if (!DBUtil::updateObject($obj, 'stories', '', 'sid')) {
+            LogUtil::registerError(_UPDATEFAILED);
+        }
     }
 
     // Let any hooks know that we have created a new item
@@ -892,7 +891,7 @@ function News_userapi_isformatted($args)
         } else {
             $apiargs = 'News'; // old direct parameter
         }
-        
+
         $modconfig = pnModAPIFunc('scribite', 'user', 'getModuleConfig', $apiargs);
         if (in_array($args['func'], (array)$modconfig['modfuncs']) && $modconfig['modeditor'] != '-') {
             return true;
