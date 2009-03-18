@@ -114,14 +114,14 @@ function News_adminapi_update($args)
 
     // check the publishing date options
     if (!empty($args['unlimited'])) {
-        $args['from'] = $item['time'];
+        $args['from'] = $item['cr_date'];
         $args['to'] = null;
     } elseif (!empty($args['tonolimit'])) {
-        $args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
+        $args['from'] = DateUtil::getDatetime($args['from']);
         $args['to'] = null;
     } else {
-    	$args['from'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['from']);
-        $args['to'] = adodb_strftime('%Y-%m-%d %H:%M:%S', $args['to']);
+    	$args['from'] = DateUtil::getDatetime($args['from']);
+        $args['to'] = DateUtil::getDatetime($args['to']);
     }
 
     if (!DBUtil::updateObject($args, 'stories', '', 'sid')) {
