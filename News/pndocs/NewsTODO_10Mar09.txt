@@ -25,7 +25,7 @@ dateformatHuman modifier:
 - Extend the nicevalue with an additional value for Human readable dates with a specified nr of days, so up until nrOfDays ago display that otherwise format
 
 Tickets:
-- Test the autonews and queue update procedure for those 764 tables.
+DONE - Test the autonews and queue update procedure for those 764 tables.
 - editing with ajax and scribite/shorturls etc to be solved. 
  
 
