@@ -373,8 +373,8 @@ function News_admin_view($args)
     $startnum    = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GET');
     $news_status = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
     $language    = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
-    $property    = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'POST');
-    $category    = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'POST');
+    $property    = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'GETPOST');
+    $category    = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'GETPOST');
     $clear       = FormUtil::getPassedValue('clear', false, 'POST');
     $purge       = FormUtil::getPassedValue('purge', false, 'GET');
     $order       = FormUtil::getPassedValue('order', isset($args['order']) ? $args['order'] : 'from', 'GETPOST');
@@ -429,14 +429,15 @@ function News_admin_view($args)
 
     $multilingual = pnConfigGetVar ('multilingual', false);
 
+    $now = DateUtil::getDatetime();
     $status = null;
     if (isset($news_status) && $news_status != '') {
         if ($news_status == 0) {
             $status = 0;
-            $to = DateUtil::getDatetime();
+            $to = $now;
         } elseif ($news_status == 5) {
             $status = 0; // scheduled is actually published in the future
-            $from = DateUtil::getDatetime(); //getDatetime_NextDay
+            $from = $now; //getDatetime_NextDay
         } else {
             $status = $news_status;
         }
@@ -544,7 +545,67 @@ function News_admin_view($args)
         $renderer->assign('property', $property);
         $renderer->assign('category', $category);
     }
-
+    
+    // Count the items for the selected status and category
+    $statuslinks = array();
+    $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
+                                                   array('category' => isset($catFilter) ? $catFilter : null,
+                                                         'status' => 0,
+                                                         'to' => $now)),
+                           'url' => pnModURL('News', 'admin', 'view',
+                                             array('news_status' => 0,
+                                                   'news_property' => $property,
+                                                   'news_'.$property.'_category' => isset($category) ? $category : null)),
+                           'title' => _NEWS_PUBLISHED);
+    $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
+                                                    array('category' => isset($catFilter) ? $catFilter : null,
+                                                          'status' => 0,
+                                                          'from' => $now)),
+                            'url' => pnModURL('News', 'admin', 'view',
+                                              array('news_status' => 5,
+                                                    'news_property' => $property,
+                                                    'news_'.$property.'_category' => isset($category) ? $category : null)),
+                            'title' => _NEWS_SCHEDULED);
+    $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
+                                                    array('category' => isset($catFilter) ? $catFilter : null,
+                                                          'status' => 2)),
+                            'url' => pnModURL('News', 'admin', 'view',
+                                              array('news_status' => 2,
+                                                    'news_property' => $property,
+                                                    'news_'.$property.'_category' => isset($category) ? $category : null)),
+                            'title' => _NEWS_PENDING);
+    $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
+                                                    array('category' => isset($catFilter) ? $catFilter : null,
+                                                          'status' => 4)),
+                            'url' => pnModURL('News', 'admin', 'view',
+                                              array('news_status' => 4,
+                                                    'news_property' => $property,
+                                                    'news_'.$property.'_category' => isset($category) ? $category : null)),
+                            'title' => _NEWS_DRAFT);
+    $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
+                                                    array('category' => isset($catFilter) ? $catFilter : null,
+                                                          'status' => 3)),
+                            'url' => pnModURL('News', 'admin', 'view',
+                                              array('news_status' => 3,
+                                                    'news_property' => $property,
+                                                    'news_'.$property.'_category' => isset($category) ? $category : null)),
+                            'title' => _NEWS_ARCHIVED);
+    $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
+                                                    array('category' => isset($catFilter) ? $catFilter : null,
+                                                          'status' => 1)),
+                            'url' => pnModURL('News', 'admin', 'view',
+                                              array('news_status' => 1,
+                                                    'news_property' => $property,
+                                                    'news_'.$property.'_category' => isset($category) ? $category : null)),
+                            'title' => _NEWS_REJECTED);
+    $alllink = array('count' => $statuslinks[0]['count'] + $statuslinks[1]['count'] + $statuslinks[2]['count'] + $statuslinks[3]['count'] + $statuslinks[4]['count'] + $statuslinks[5]['count'],
+                     'url' => pnModURL('News', 'admin', 'view',
+                                       array('news_property' => $property,
+                                             'news_'.$property.'_category' => isset($category) ? $category : null)),
+                     'title' => _ALL);
+    $renderer->assign('statuslinks', $statuslinks);
+    $renderer->assign('alllink', $alllink);
+  
     // Assign the values for the smarty plugin to produce a pager
     $renderer->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', array('category' => isset($catFilter) ? $catFilter : null)),
                                      'itemsperpage' => $modvars['itemsperpage']));

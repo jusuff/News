@@ -36,7 +36,7 @@ define('_NEWS_DISPLAY', 'Display Settings');
 define('_NEWS_STORIESHOME','Number of articles on News lead page');
 define('_NEWS_ITEMSONINDEXPAGE', 'Number of articles in news index');
 define('_NEWS_REFERERONPRINT','Check referer on printer-friendly pages');
-define('_NEWS_STORIESORDER','Order articles by');
+define('_NEWS_STORIESORDER','Order by');
 define('_NEWS_STORIESORDER0','News ID');
 define('_NEWS_STORIESORDER1','News Date/Time');
 define('_NEWS_TOPICPROPERTY', 'Category to use for legacy Topic template variables');
