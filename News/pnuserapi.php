@@ -746,7 +746,8 @@ function News_userapi_getArticlePreformat($args)
                        'version'     => 1);
 
     if (!empty($info['topicimage'])) {
-        $preformat['searchtopic'] = '<a href="'.DataUtil::formatForDisplay($links['searchtopic']).'"><img src="images/topics/'.$info['topicimage'] .'" title="'.$info['topictext'].'" alt="'.$info['topictext'].'" /></a>';
+        $catimagepath = pnModGetVar('News', 'catimagepath');
+        $preformat['searchtopic'] = '<a href="'.DataUtil::formatForDisplay($links['searchtopic']).'"><img src="'.$catimagepath.$info['topicimage'] .'" title="'.$info['topictext'].'" alt="'.$info['topictext'].'" /></a>';
     } else {
         $preformat['searchtopic'] = '';
     }

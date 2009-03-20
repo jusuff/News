@@ -243,7 +243,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         $render->assign('titlewraptext', $this->titlewraptext);
         
     }
-    $render->assign('linktosubmit',$this->linktosubmit);
+    $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
+    $render->assign('linktosubmit', $this->linktosubmit);
     $render->assign('stories', $items);
     $render->assign('title', $this->title);
     return $render->fetch('contenttype/newsarticles_view.html');
