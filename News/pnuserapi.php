@@ -637,13 +637,12 @@ function News_userapi_getArticleInfo($info)
         $info['fulltext'] = $info['maintext'];
     }
 
+    // Check for comments
     if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News')) {
-        $items  = pnModAPIFunc('EZComments', 'user', 'getall',
-                               array('mod' => 'News',
-                                     'status' => 0,
-                                     'objectid' => $info['sid']));
-
-        $info['commentcount'] = count($items);
+        $info['commentcount'] = pnModAPIFunc('EZComments', 'user', 'countitems',
+                                             array('mod' => 'News',
+                                                   'objectid' => $info['sid'],
+                                                   'status' => 0));
     }
 
     return($info);
