@@ -437,7 +437,7 @@ function News_userapi_getArticleLinks($info)
     $commentextra = pnUserGetCommentOptions();
 
     // Allowed to comment?
-    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News')) {
+    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
         if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
             $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
@@ -638,7 +638,7 @@ function News_userapi_getArticleInfo($info)
     }
 
     // Check for comments
-    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News')) {
+    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         $info['commentcount'] = pnModAPIFunc('EZComments', 'user', 'countitems',
                                              array('mod' => 'News',
                                                    'objectid' => $info['sid'],
@@ -692,7 +692,7 @@ function News_userapi_getArticlePreformat($args)
     $postcomment = '';
     $comment = '';
     $commentlink = '';
-    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News')) {
+    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         // Work out how to say 'comment(s)(?)' correctly
         if ($info['commentcount'] == 0) {
             $comment = _NEWS_COMMENTSQ;

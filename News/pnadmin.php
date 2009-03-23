@@ -273,6 +273,7 @@ function News_admin_update($args)
                           'bodytextcontenttype' => $story['bodytextcontenttype'],
                           'notes' => $story['notes'],
                           'ihome' => isset($story['ihome']) ? $story['ihome'] : 0,
+                          'withcomm' => isset($story['withcomm']) ? $story['withcomm'] : 0,
                           'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
                           'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,

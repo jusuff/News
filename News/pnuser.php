@@ -66,6 +66,7 @@ function News_user_new($args)
         $item['notes'] = '';
         $item['ihome'] = 1;
         $item['language'] = '';
+        $item['withcomm'] = 0;
         $item['from'] = time();
         $item['to'] = time();
         $item['tonolimit'] = 1;
@@ -162,6 +163,7 @@ function News_user_create($args)
                   'bodytextcontenttype' => $story['bodytextcontenttype'],
                   'notes' => $story['notes'],
                   'ihome' => isset($story['ihome']) ? $story['ihome'] : 0,
+                  'withcomm' => isset($story['withcomm']) ? $story['withcomm'] : 0,
                   'from' => isset($story['fromHour']) ? mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']) : null,
                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                   'to' => isset($story['toHour']) ? mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']) : null,
@@ -172,6 +174,7 @@ function News_user_create($args)
     if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         $item['notes'] = '';
         $item['ihome'] = 0;
+        $item['withcomm'] = 0;
         $item['from'] = null;
         $item['tonolimit'] = true;
         $item['to'] = null;

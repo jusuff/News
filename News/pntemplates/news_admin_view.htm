@@ -110,6 +110,10 @@
                 <!--[if $newsitem.infuture]--><!--[pnml name='_NEWS_SCHEDULED']--><!--[else]--><!--[pnml name='_NEWS_PUBLISHED']--><!--[/if]--><br />
                 <!--[$newsitem.from|dateformatHuman:'%x':'2']-->
                 <!--[/if]-->
+                <!--[if $newsitem.withcomm eq '1']-->
+                <br />
+                <!--[pnml name='_NEWS_NOCOMMENTS']-->
+                <!--[/if]-->
             </td>
             <td>
                 <!--[assign var="options" value=$newsitem.options]-->
