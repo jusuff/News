@@ -93,7 +93,7 @@
         <div class="pn-formrow">
             <label for="news_hometext"><!--[pnml name='_NEWS_HOMETEXT']--></label>
             <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-            <span id="news_hometext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            <span id="news_hometext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
         </div>
 
         <!--[if $formattedcontent eq 0]-->
@@ -109,7 +109,7 @@
         <div class="pn-formrow">
             <label for="news_bodytext"><!--[pnml name='_NEWS_EXTENDEDTEXT']--></label>
             <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-            <span id="news_bodytext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            <span id="news_bodytext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
         </div>
 
         <!--[if $formattedcontent eq 0]-->
@@ -127,7 +127,7 @@
             <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_NOTES']--></a></label>
             <div id="news_notes_details">
             <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-            <span id="news_notes_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            <span id="news_notes_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
             </div>
         </div>
         <!--[/if]-->
@@ -176,7 +176,7 @@
         <div id="news_attributes_details">
         <div class="pn-formrow">
             <div class="itemlist_newitemdiv">
-                <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[ pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' title='_ATTRIBUTE_NEW' titleml=true]--> <!--[pnml name='_ATTRIBUTE_NEW']--></a>
+                <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' title='_ATTRIBUTE_NEW' titleml=true]--> <!--[pnml name='_ATTRIBUTE_NEW']--></a>
             </div>
             <ul id="news_attributes" class="itemlist">
                 <!--[if isset($__ATTRIBUTES__)]-->
@@ -192,7 +192,7 @@
                         <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
                     </span>
                     <span class="itemlistcell width7">
-                        <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[ pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
+                        <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
                     </span>
                 </li>
                 <!--[/foreach]-->
@@ -208,7 +208,7 @@
                         <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                     </span>
                     <span class="itemlistcell width7">
-                        <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[ pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
+                        <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
                     </span>
                 </li>
             </ul>

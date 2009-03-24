@@ -1,4 +1,19 @@
 <!--[*  $Id: news_ajax_modify.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+
+
+<!--[* pnajaxheader modname='News' filename='news.js' noscriptaculous=true]-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/sizecheck.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/scriptaculous.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/effects.js']-->
+<!--[if $enableattribution]-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/behaviour.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/dragdrop.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/Zikula.itemlist.js']-->
+<!--[/if *]-->
+
+
+
 <!--[pnml name='_NEWS_MODIFY' assign='templatetitle']-->
 
 <form id="news_ajax_modifyform" class="pn-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" method="post" enctype="application/x-www-form-urlencoded">
@@ -67,7 +82,7 @@
         <div class="pn-formrow">
             <label for="news_hometext"><!--[pnml name='_NEWS_HOMETEXT']--></label>
             <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-            <span id="news_hometext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            <span id="news_hometext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
         </div>
 
         <!--[if $formattedcontent eq 0]-->
@@ -83,7 +98,7 @@
         <div class="pn-formrow">
             <label for="news_bodytext"><!--[pnml name='_NEWS_EXTENDEDTEXT']--></label>
             <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-            <span id="news_bodytext_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            <span id="news_bodytext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
         </div>
 
         <!--[if $formattedcontent eq 0]-->
@@ -100,7 +115,7 @@
             <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_NOTES']--></a></label>
             <div id="news_notes_details">
             <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-            <span id="news_notes_remaining" class="pn-sub"><!--[ pnml name='_NEWS_MAXCHARS' ]--></span>
+            <span id="news_notes_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
             </div>
         </div>
     </fieldset>

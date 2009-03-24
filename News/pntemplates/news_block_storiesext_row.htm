@@ -7,8 +7,8 @@
 <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name='_BY']--> <!--[$aid_uname|userprofilelink]-->
 <!--[if $dispdate]--> <!--[pnml name='_ON']--> <!--[elseif $dispreads OR $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
 <!--[if $dispdate]--><!--[$from|pndate_format:$dateformat]--><!--[if $dispreads OR $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-<!--[if $dispreads]--><!--[if $counter eq 1]--><!--[pnml name='_NEWS_READ']--><!--[else]--><!--[ pnml name='_NEWS_READS' count=$counter ]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-<!--[if $dispcomments]--><!--[if $comments eq 1]--><!--[pnml name='_NEWS_COMMENT']--><!--[else]--><!--[ pnml name='_NEWS_COMMENTS' count=$comments ]--><!--[/if]--><!--[/if]-->)
+<!--[if $dispreads]--><!--[if $counter eq 1]--><!--[pnml name='_NEWS_READ']--><!--[else]--><!--[pnml name='_NEWS_READS' count=$counter]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+<!--[if $dispcomments]--><!--[if $comments eq 1]--><!--[pnml name='_NEWS_COMMENT']--><!--[else]--><!--[pnml name='_NEWS_COMMENTS' count=$comments]--><!--[/if]--><!--[/if]-->)
 <!--[/if]-->
 <!--[if $disphometext]-->
 <div class="storiesext_hometext">
