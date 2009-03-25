@@ -29,6 +29,7 @@ define('_NEWS_SCHEDULED', 'Scheduled');
 
 // common defines
 define('_NEWS_ALLOWCOMMENTS', 'Allow commenting for this article');
+define('_NEWS_NOCOMMENTS', 'No commenting');
 define('_NEWS_COMMENT', '1 comment');
 define('_NEWS_COMMENTS', '%count% comments');
 define('_NEWS_COMMENTSQ', 'Comments?');
