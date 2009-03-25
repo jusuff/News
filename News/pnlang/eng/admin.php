@@ -33,6 +33,7 @@ define('_MODIFYNEWSCONFIG', 'News Publisher Settings');
 define('_NEWS_CATIMAGEPATH', 'Category Image path');
 define('_NEWS_CATIMAGEINFO', 'Each category used within News can have an image associated with it. This image must be located in the category image path specified above. Within the Category administration panel, you can set the associated image by adding a category attribute \'topic_image\' with the name of the image.');
 define('_NEWS_DISPLAY', 'Display Settings');
+define('_NEWS_ENABLEAJAXEDIT', 'Enable inline editing of articles with AJAX');
 define('_NEWS_STORIESHOME','Number of articles on News lead page');
 define('_NEWS_ITEMSONINDEXPAGE', 'Number of articles in news index');
 define('_NEWS_REFERERONPRINT','Check referer on printer-friendly pages');

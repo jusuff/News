@@ -59,6 +59,10 @@
                 <input type="radio" id="refereronprintno" name="refereronprint" value="0"<!--[if $refereronprint eq 0]--> checked="checked"<!--[/if]--> /> <label for="refereronprintno"><!--[pnml name='_NO']--></label>
             </div>
         </div>
+        <div class="pn-adminformrow">
+            <label for="news_enableajaxedit"><!--[pnml name='_NEWS_ENABLEAJAXEDIT']--></label>
+            <input id="news_enableajaxedit" type="checkbox" name="enableajaxedit"<!--[if $enableajaxedit]--> checked="checked"<!--[/if]--> />
+        </div>
     </fieldset>
 
     <!--[pnconfiggetvar name='shorturls' assign='shorturls']-->

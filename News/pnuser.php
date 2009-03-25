@@ -66,7 +66,7 @@ function News_user_new($args)
         $item['notes'] = '';
         $item['ihome'] = 1;
         $item['language'] = '';
-        $item['withcomm'] = 0;
+        $item['withcomm'] = 1;
         $item['from'] = time();
         $item['to'] = time();
         $item['tonolimit'] = 1;
@@ -517,6 +517,7 @@ function News_user_display($args)
 
     $renderer->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
     $renderer->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
+    $renderer->assign('enableajaxedit', pnModGetVar('News', 'enableajaxedit'));
 
     // Now lets assign the informatation to create a pager for the review
     $renderer->assign('pager', array('numitems'     => $numitems,

@@ -194,6 +194,10 @@ function News_ajax_update()
                                         'links'     => $links,
                                         'preformat' => $preformat,
                                         'page'      => $page));
+                // Some vars
+                $renderer->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
+                $renderer->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
+                $renderer->assign('enableajaxedit', pnModGetVar('News', 'enableajaxedit'));
 
                 // Now lets assign the information to create a pager for the review
                 $renderer->assign('pager', array('numitems' => $numitems,

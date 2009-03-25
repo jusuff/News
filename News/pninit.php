@@ -38,6 +38,7 @@ function News_init()
     pnModSetVar('News', 'refereronprint', 0);
     pnModSetVar('News', 'enableattribution', false);
     pnModSetVar('News', 'catimagepath', 'images/categories/');
+    pnModSetVar('News', 'enableajaxedit', true);
 
     // Initialisation successful
     return true;
@@ -142,6 +143,7 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'enableattribution', false);
             // import the topicimagepath, variable tipath deletion is up to Topics module
             pnModSetVar('News', 'catimagepath', pnConfigGetVar('tipath'));
+            pnModSetVar('News', 'enableajaxedit', true);
             // drop old legacy columns
             DBUtil::dropColumn('stories', array('pn_comments', 'pn_themeoverride'));
             return News_upgrade(2.4);

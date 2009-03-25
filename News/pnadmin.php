@@ -687,6 +687,7 @@ function News_admin_updateconfig()
         $catimagepath .= '/'; // add slash if needed
     }
     $modvars['catimagepath'] = $catimagepath;
+    $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));

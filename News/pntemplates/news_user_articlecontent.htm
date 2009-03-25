@@ -13,7 +13,9 @@ var hidepublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONHIDE"]-->';
 
 <!--[nocache]-->
 <div id="news_editlinks"><!--[articleadminlinks sid=$info.sid]--></div>
+<!--[if $enableajaxedit]-->
 <div id="news_editlinks_ajax" class="hidelink"><!--[articleadminlinks sid=$info.sid page=$page type='ajax']--></div>
+<!--[/if]-->
 <!--[/nocache]-->
 
 <p class="news_meta pn-sub"><!--[pnml name='_NEWS_POSTEDBYANDON' username=$info.informant date=$info.briefdatetime]--></p>

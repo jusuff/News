@@ -112,6 +112,13 @@ function News_adminapi_update($args)
         $args['ihome'] = 1;
     }
 
+    // Invert the value of withcomm, 1 in db means no comments allowed
+    if (!isset($args['withcomm']) || $args['withcomm'] == 1) {
+        $args['withcomm'] = 0;
+    } else {
+        $args['withcomm'] = 1;
+    }
+
     // check the publishing date options
     if (!empty($args['unlimited'])) {
         $args['from'] = $item['cr_date'];
