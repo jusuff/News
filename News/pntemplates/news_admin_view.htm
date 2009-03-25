@@ -8,6 +8,13 @@
 <div class="pn-adminpageicon"><!--[pnimg modname='core' src='windowlist.gif' set='icons/large' alt=$templatetitle]--></div>
 <h2><!--[$templatetitle]--></h2>
 
+<p>
+<a href="<!--[$alllink.url]-->"><!--[$alllink.title]--> (<!--[$alllink.count]-->)</a>
+<!--[foreach from=$statuslinks item='statuslink']-->
+<!--[if $statuslink.count gt 0]-->&nbsp;|&nbsp;<a href="<!--[$statuslink.url]-->"><!--[$statuslink.title]--> (<!--[$statuslink.count]-->)</a><!--[/if]-->
+<!--[/foreach]-->
+</p>
+
 <!--[pnconfiggetvar name='multilingual' assign='multilingual']-->
 <!--[if $enablecategorization && $numproperties > 0]-->
 <form action="<!--[pnmodurl modname='News' type='admin' func='view']-->" method="post" enctype="application/x-www-form-urlencoded">
@@ -65,12 +72,6 @@
     </div>
 </form>
 <!--[/if]-->
-
-<br />
-<a href="<!--[$alllink.url]-->"><!--[$alllink.title]--> (<!--[$alllink.count]-->)</a>
-<!--[foreach from=$statuslinks item='statuslink']-->
-<!--[if $statuslink.count gt 0]-->&nbsp;|&nbsp;<a href="<!--[$statuslink.url]-->"><!--[$statuslink.title]--> (<!--[$statuslink.count]-->)</a><!--[/if]-->
-<!--[/foreach]-->
 
 <table class="pn-admintable">
     <thead>
