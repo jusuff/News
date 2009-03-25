@@ -153,10 +153,6 @@ function editnews_saveresponse(req)
         return;
     }
     var json = pndejsonize(req.responseText);
-    // Temporary fix for Core #401, only reload on an update
-    if (json.action == 'update') {
-        location.reload(true);
-    }
 
     Element.update('news_modify', '&nbsp;');
     Element.update('news_articlecontent', json.result);
@@ -168,15 +164,19 @@ function editnews_saveresponse(req)
     Element.show('news_articlecontent');
     switch(json.action) {
         case 'update':
-            // no special action necessary - what needs to be done
-            // has already been done
+            // reload if necessary (e.g. urltitle change)
+            if (json.reloadurl != '') {
+                location.replace(json.reloadurl);
+            }
             break;
         case 'delete':
         case 'pending':
-            // we may now redirect to news list if we want
+            // redirect to the news index
+            location.replace(json.reloadurl);
             break;
         default:
     }
+
     return;
 }
 
@@ -231,9 +231,9 @@ function news_publication_init()
     Event.observe('news_publication_collapse', 'click', news_publication_click);
     $('news_publication_collapse').addClassName('pn-toggle-link');
     // hide the details when unlimited is not set, the details will unfold nicely with the click afterwards.
-    if ($('news_unlimited').checked == false) {
-        $('news_publication_details').hide();
-    }
+//    if ($('news_unlimited').checked == false) {
+//        $('news_publication_details').hide();
+//    }
     news_publication_click();
 }
 
@@ -242,11 +242,11 @@ function news_publication_click()
     if ($('news_publication_details').style.display != "none") {
         Element.addClassName.delay(0.9, $('news_publication_details').parentNode, 'pn-collapsed');
         Element.removeClassName.delay(0.9, $('news_publication_collapse'), 'pn-toggle-link-open');
-        $('news_publication_collapse').update(showpublicationoptions);
+//        $('news_publication_collapse').update(showpublicationoptions);
     } else {
         Element.removeClassName($('news_publication_details').parentNode, 'pn-collapsed');
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
-        $('news_publication_collapse').update(hidepublicationoptions);
+//        $('news_publication_collapse').update(hidepublicationoptions);
     }
     switchdisplaystate('news_publication_details');
 }

@@ -221,6 +221,11 @@ function News_userapi_get($args)
         return LogUtil::registerError (_MODARGSERROR);
     }
 
+    // Check for caching of the DBUtil calls (needed for AJAX editing)
+    if (!isset($args['SQLcache'])) {
+        $args['SQLcache'] = true;
+    }
+    
     // form a date using some ofif present...
     // step 1 - convert month name into
     if (isset($args['monthname']) && !empty($args['monthname'])) {
@@ -246,12 +251,12 @@ function News_userapi_get($args)
                           'level'            => ACCESS_READ);
 
     if (isset($args['sid']) && is_numeric($args['sid'])) {
-        $item = DBUtil::selectObjectByID('stories', $args['sid'], 'sid', null, $permFilter);
+        $item = DBUtil::selectObjectByID('stories', $args['sid'], 'sid', null, $permFilter, null, $args['SQLcache']);
     } elseif (isset($timestring)) {
         $where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_from LIKE '{$timestring}%'";
-        $item = DBUtil::selectObject('stories', $where, null, $permFilter);
+        $item = DBUtil::selectObject('stories', $where, null, $permFilter, null, $args['SQLcache']);
     } else {
-        $item = DBUtil::selectObjectByID('stories', $args['title'], 'urltitle', null, $permFilter);
+        $item = DBUtil::selectObjectByID('stories', $args['title'], 'urltitle', null, $permFilter, null, $args['SQLcache']);
     }
 
     if (empty($item))
