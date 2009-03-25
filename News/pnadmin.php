@@ -437,8 +437,9 @@ function News_admin_view($args)
             $status = 0;
             $to = $now;
         } elseif ($news_status == 5) {
-            $status = 0; // scheduled is actually published in the future
-            $from = $now; //getDatetime_NextDay
+            // scheduled is actually the published status, but in the future
+            $status = 0; 
+            $from = $now;
         } else {
             $status = $news_status;
         }
