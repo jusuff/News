@@ -99,7 +99,7 @@ function News_upgrade($oldversion)
                 }
                 //  drop the comments table if successful
                 if (pnModAPIFunc('EZComments', 'migrate', 'news')) {
-                    // drop table
+                    // drop comments table after migration has succeeded
                     if (!DBUtil::dropTable('comments')) {
                         return LogUtil::registerError (_DELETETABLEFAILED);
                     }
@@ -146,6 +146,9 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'enableajaxedit', true);
             // drop old legacy columns
             DBUtil::dropColumn('stories', array('pn_comments', 'pn_themeoverride'));
+            // clear compiled templates and News cache (see #74)
+            pnModAPIFunc('pnRender', 'user', 'clear_compiled');
+            pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
             return News_upgrade(2.4);
     }
 
