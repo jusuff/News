@@ -396,7 +396,7 @@ function News_userapi_countitems($args)
 
     // check for a specific author
     if (isset($args['uid']) && is_int($args['uid'])) {
-        $queryargs[] = "$storiescolumn[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+        $queryargs[] = "$storiescolumn[cr_uid] = '" . DataUtil::formatForStore($args['uid']) . "'";
     }
 
     $where = '';

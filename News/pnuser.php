@@ -649,6 +649,9 @@ function News_user_categorylist($args)
     $renderer = pnRender::getInstance('News');
 
     $enablecategorization = pnModGetVar('News', 'enablecategorization');
+    $uid = SessionUtil::getVar('uid');
+    $loggedin = pnUserLoggedIn();
+   
     if ($enablecategorization) {
         if (!($class = Loader::loadClass ('CategoryRegistryUtil')) || !($class = Loader::loadClass ('CategoryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil | CategoryUtil')));
@@ -668,23 +671,18 @@ function News_user_categorylist($args)
                     // Get the number of articles in this category within this category property
                     $nrofarticles[$category['id']] = pnModAPIFunc('News', 'user', 'countitems',
                                                                   array('status' => 0,
-                                                                        'ihome' => null,
                                                                         'filterbydate' => true,
                                                                         'category' => array($property => $category['id']),
                                                                         'catregistry' => $catregistry));
                     // Get the number of articles by the current uid in this category within this category property
                     $nrofyourarticles[$category['id']] = 0;
-                    if (pnUserLoggedIn()) {
-                        $uid = SessionUtil::getVar('uid');
-                        if (!empty($uid)) {
-                            $nrofyourarticles[$category['id']] = pnModAPIFunc('News', 'user', 'countitems',
-                                                                              array('status' => 0,
-                                                                                    'ihome' => null,
-                                                                                    'filterbydate' => true,
-                                                                                    'uid' => $userid,
-                                                                                    'category' => array($property => $category['id']),
-                                                                                    'catregistry' => $catregistry));
-                        }
+                    if ($loggedin && !empty($uid)) {
+                        $nrofyourarticles[$category['id']] = pnModAPIFunc('News', 'user', 'countitems',
+                                                                          array('status' => 0,
+                                                                                'filterbydate' => true,
+                                                                                'uid' => $uid,
+                                                                                'category' => array($property => $category['id']),
+                                                                                'catregistry' => $catregistry));
                     }
                 }
                 // Store data per property for listing in the overview
