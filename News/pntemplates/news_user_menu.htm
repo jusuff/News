@@ -2,10 +2,12 @@
 
 <!--[insert name='getstatusmsg']-->
 
+<!--[nocache]-->
 <!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
 <!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
 <!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level='ACCESS_COMMENT' assign='authcomm']-->
 <!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level='ACCESS_EDIT' assign='authedit']-->
+<!--[/nocache]-->
 <div class="pn-frontendbox">
 <h1><!--[pnml name='_NEWS']--></h1>
 <div class="pn-menu">
@@ -13,8 +15,10 @@
 <!--[if $func neq 'main']--><a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[pnml name='_NEWS_FRONTPAGE']--></a>&nbsp;|&nbsp;<!--[/if]-->
 <!--[if $enablecategorization]--><a href="<!--[pnmodurl modname='News' type='user' func='categorylist']-->"><!--[pnml name='_NEWS_CATEGORYLIST']--></a>&nbsp;|&nbsp;<!--[/if]-->
 <a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[pnml name='_NEWS_ARCHIVES']--></a>
+<!--[nocache]-->
 <!--[if $authcomm]-->&nbsp;|&nbsp;<a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnml name='_NEWS_SUBMIT']--></a><!--[/if]-->
 <!--[if $authedit and $pendingcount gt 0]-->&nbsp;|&nbsp;<a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount eq 1]--><!--[pnml name='_NEWS_PENDINGARTICLE']--><!--[else]--><!--[pnml name='_NEWS_PENDINGARTICLES' count=$pendingcount]--><!--[/if]--></a><!--[/if]-->
+<!--[/nocache]-->
 ]
 </div>
 </div>
