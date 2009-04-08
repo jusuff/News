@@ -31,7 +31,12 @@
         <!--[else]-->
         <!--[pnml name='_NEWS_NOARTICLES']-->
         <!--[/if]-->
-        |&nbsp;<a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--> <!--[pnml name='_NEWS_RSSFEED']--></a>
+        |&nbsp;
+        <!--[if $shorturls and $shorturlstype eq 0]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--> <!--[pnml name='_NEWS_RSSFEED']--></a>
+        <!--[else]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--> <!--[pnml name='_NEWS_RSSFEED']--></a>
+        <!--[/if]-->
         )
         <!--[/nocache]-->
         </li>
