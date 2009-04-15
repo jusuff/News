@@ -1,11 +1,11 @@
 News TODO 10-Mar-09
-Last update 26-Mar-09
+Last update 15-Apr-09
 
 New/Modify interface:
 - Adjust New(user/admin)/Modify views with a right column for publicationoptions, status, category and Preview/Publish/Schedule buttons. Sort of based on Wordpress interface
 - Remove Publish/Preview dropdownlist for a seperate Preview/Publish button. Eases Direct publishing one click less. 
 - Adjust publish button into Schedule when unlimited is not checked (make sure that ajax editing also works !)
-- Add Calendar (JSCalendar or Proto/script one) to the Date selection of From and To
+- Add Calendar (JSCalendar or Proto/script one) to the Date selection of From and To (needs change in the templates and processing of the datetime)
 DONE NO ADMIN SETTING YET - Remove seconds from Date seletion and make minutes in 5 minute interval. An admin setting might be a good idea: (only days, only hours, default 10mins, 5mins, mins).
 
 Featuring Articles based upon attributes
@@ -17,8 +17,8 @@ Featuring Articles based upon attributes
 Admin interface:
 - Add inline quick edit mode for title, publication options, status using ajax.
 DONE - Make sure categories are taken into account for the [ all(#) | published (#) | ... ] links. This needs the news_{property}_category form to be independent of property
-- Optional place the actions below the title in a hidden state and showing when you hover over that article (instead of on the right), discuss first with Mateo
-- setting of the number of articles to be shown
+- Optional place the actions below the title in a hidden state and showing when you hover over that article (instead of on the right), discuss first with Mateo (see Wordpress)
+- seperate setting of the number of articles to be shown in the admin interface
 
 Article etc templates:
 - Add the dateformatHuman modifier to the dates there with a nicevalue of 3 (or 4), so only within one day (or specified days as admin setting) display human dates
@@ -33,5 +33,6 @@ DONE SCRIBITE AND AJAXEDIT NOT YET - editing with ajax and scribite/shorturls et
 
 Removing/Cleanup Legacy stuff:
 - Change the permission sheme from Stories:: to News:: (the admin panel in zk111 uses the module name to check for permissions. Requires also an update of the already present permissions during the pninit upgrade.
+- Change the database name from zk_stories to zk_news and make a clear note forPendingContent users that use the dbase directly. Discuss first.
  
 
