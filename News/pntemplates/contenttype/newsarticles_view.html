@@ -39,7 +39,7 @@
 <!--[else]-->
   <p><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESEMPTYMSG"]--></p>
 <!--[/if]-->
-<!--[pnsecauthaction realm=0 comp='Stories::Story' inst='::' level=ACCESS_COMMENT assign="submitauth"]-->
+<!--[securityutil_checkpermission component='Stories::Story' instance='::' level=ACCESS_COMMENT assign="submitauth"]-->
 <!--[if $linktosubmit && $submitauth]-->
  <a href="<!--[pnmodurl modname="News" type="user" func="new"]-->"><!--[pnimg modname="core" set="icons/extrasmall" src="edit_add.gif" alt=_NEWS_SUBMIT altml="true"]--><!--[pnml name="_NEWS_SUBMIT"]--></a>
 <!--[/if]-->

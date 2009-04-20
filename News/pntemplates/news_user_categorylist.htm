@@ -14,7 +14,7 @@
         <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.name]--><!--[/if]-->
         <!--[array_field_isset assign='categorydesc' array=$category.display_desc field=$language returnValue=1]-->
         <!--[assign var='categoryid' value=$category.id]-->
-        <!--[pnsecauthaction realm=0 comp='Categories::category' inst="ID::$category.id" level='ACCESS_EDIT' assign='authcatedit']-->
+        <!--[securityutil_checkpermission component='Categories::category' instance="ID::$category.id" level='ACCESS_EDIT' assign='authcatedit']-->
         <li>
         <!--[if $shorturls and $shorturlstype eq 0]-->
           <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'']-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
