@@ -9,9 +9,9 @@
 <h2><!--[$templatetitle]--></h2>
 
 <p>
-<a href="<!--[$alllink.url]-->"><!--[$alllink.title]--> (<!--[$alllink.count]-->)</a>
+<a href="<!--[$alllink.url|pnvarprepfordisplay]-->"><!--[$alllink.title]--> (<!--[$alllink.count]-->)</a>
 <!--[foreach from=$statuslinks item='statuslink']-->
-<!--[if $statuslink.count gt 0]-->&nbsp;|&nbsp;<a href="<!--[$statuslink.url]-->"><!--[$statuslink.title]--> (<!--[$statuslink.count]-->)</a><!--[/if]-->
+<!--[if $statuslink.count gt 0]-->&nbsp;|&nbsp;<a href="<!--[$statuslink.url|pnvarprepfordisplay]-->"><!--[$statuslink.title]--> (<!--[$statuslink.count]-->)</a><!--[/if]-->
 <!--[/foreach]-->
 </p>
 
