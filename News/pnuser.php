@@ -286,6 +286,7 @@ function News_user_view($args = array())
         // get the categories registered for the News stories
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
         $properties = array_keys($catregistry);
+        $lang = pnUserGetLang();
 
         // validate the property
         // and build the category filter - mateo
@@ -298,16 +299,19 @@ function News_user_view($args = array())
             }
             if (!empty($cat) && isset($cat['path'])) {
                 // include all it's subcategories and build the filter
-                $categories = categoryUtil::getCategoriesByPath($cat['path'], '', 'path');
+                $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
                 $catstofilter = array();
+                $catnames = array();
                 foreach ($categories as $category) {
                     $catstofilter[] = $category['id'];
+                    $catnames[] = isset($category['display_name'][$lang]) ? $category['display_name'][$lang] : $category['name'];
                 }
-                $catFilter = array($prop => $catstofilter); 
+                $catFilter = array($prop => $catstofilter);
             } else {
                 LogUtil::registerError(_NOTAVALIDCATEGORY);
             }
         }
+        $catnames = implode('|', $catnames);
     }
 
     // Get matching news stories
@@ -321,7 +325,11 @@ function News_user_view($args = array())
                                 'catregistry' => isset($catregistry) ? $catregistry : null));
 
     if ($items == false) {
-        LogUtil::registerStatus(pnML('_NOFOUND', array('i' => _NEWS_STORIES)));
+        if ($modvars['enablecategorization'] && isset($catFilter)) {
+            LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUNDINCAT', array('cat' => $catnames)));
+        } else {
+            LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUND'));
+        }
     }
 
     // Create output object
@@ -336,6 +344,7 @@ function News_user_view($args = array())
 
     // assign the root category
     $renderer->assign('category', $cat);
+    $renderer->assign('catnames', $catnames);
 
     $newsitems = array();
     // Loop through each item and display it

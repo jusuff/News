@@ -39,6 +39,8 @@ define('_NEWS_READS', '%count% reads');
 define('_NEWS_SELFWRITTEN', ', %count% self-written');
 define('_NEWS_NOARTICLES', 'no articles');
 define('_NEWS_RSSFEED', 'RSS Feed');
+define('_NEWS_NOARTICLESFOUND', 'No news articles currently published');
+define('_NEWS_NOARTICLESFOUNDINCAT', 'No news articles published in category %cat%');
 
 // date format nice defines
 define('_NEWS_DAYSAGO', '%days% days ago');
