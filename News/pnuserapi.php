@@ -262,6 +262,13 @@ function News_userapi_get($args)
     if (empty($item))
         return false;
 
+    // Sanity check for the published status if required
+    if (isset($args['status'])) {
+        if ($item['published_status'] != $args['status']) {
+            return false;
+        }
+    }
+
     // process the relative paths of the categories
     if (pnModGetVar('News', 'enablecategorization') && !empty($item['__CATEGORIES__'])) {
         static $registeredCats;

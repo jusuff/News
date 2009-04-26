@@ -468,14 +468,17 @@ function News_user_display($args)
 
     // Get the news story
     if (isset($sid)) {
-        $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
+        $item = pnModAPIFunc('News', 'user', 'get', 
+                             array('sid'       => $sid, 
+                                   'status'    => 0));
     } else {
         $item = pnModAPIFunc('News', 'user', 'get', 
                              array('title'     => $title,
                                    'year'      => $year,
                                    'monthname' => $monthname,
                                    'monthnum'  => $monthnum,
-                                   'day'       => $day));
+                                   'day'       => $day,
+                                   'status'    => 0));
         $sid = $item['sid'];
         pnQueryStringSetVar('sid', $sid);
     }
