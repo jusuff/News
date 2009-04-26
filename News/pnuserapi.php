@@ -386,7 +386,7 @@ function News_userapi_countitems($args)
         foreach ($args['query'] as $row) {
             if (is_array($row) && count($row) == 3) {
                 // validate fields and operators
-                list($field, $op, $value) = $row;
+                extract($row);
                 if (isset($storiescolumn[$field]) && in_array($op, $allowedoperators)) {
                     $queryargs[] = "$storiescolumn[$field] $op '".DataUtil::formatForStore($value)."'";
                 }
