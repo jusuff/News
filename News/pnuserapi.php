@@ -299,7 +299,7 @@ function News_userapi_getMonthsWithNews($args)
     $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[from]) ORDER BY $storiescolumn[from] DESC";
 
     $date = DateUtil::getDatetime();
-    $where = "($storiescolumn[from] < '$date')";
+    $where = "($storiescolumn[from] < '$date' AND $storiescolumn[published_status] = '0')";
 
     $dates = DBUtil::selectFieldArray('stories', 'from', $where, $order);
 

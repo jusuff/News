@@ -579,7 +579,8 @@ function News_user_archives($args)
         $items = pnModAPIFunc('News', 'user', 'getall',
                               array('order' => 'from',
                                     'from' => "$year-$month-01 00:00:00",
-                                    'to' => "$year-$month-$day 23:59:59"));
+                                    'to' => "$year-$month-$day 23:59:59",
+                                    'status' => 0));
         $renderer->assign('year', $year);
         $renderer->assign('month', $months[$month-1]);
 
