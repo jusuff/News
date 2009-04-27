@@ -569,7 +569,7 @@ function News_user_archives($args)
     }
 
     // Load localized month names
-    $months = explode(' ', _MONTH_LONG);
+    $monthnames = explode(' ', _MONTH_LONG);
 
     // Create output object
     $cacheid = "$month|$year";
@@ -577,27 +577,38 @@ function News_user_archives($args)
 
     // output vars
     $archivemonths = array();
+    $archiveyears = array();
 
     if (!empty($year) && !empty($month)) {
         $items = pnModAPIFunc('News', 'user', 'getall',
-                              array('order' => 'from',
-                                    'from' => "$year-$month-01 00:00:00",
-                                    'to' => "$year-$month-$day 23:59:59",
+                              array('order'  => 'from',
+                                    'from'   => "$year-$month-01 00:00:00",
+                                    'to'     => "$year-$month-$day 23:59:59",
                                     'status' => 0));
         $renderer->assign('year', $year);
-        $renderer->assign('month', $months[$month-1]);
+        $renderer->assign('month', $monthnames[$month-1]);
 
     } else {
         // get all matching news stories
-        $items = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
+        $monthsyears = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
 
-        foreach ($items as $item) {
-            $month = DateUtil::getDatetime_Field($item, 2);
-            $year  = DateUtil::getDatetime_Field($item, 1);
-
-            $linktext = $months[$month-1]." $year";
-            $archivemonths[] = array('url'   => pnModURL('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
-                                     'title' => $linktext);
+        foreach ($monthsyears as $monthyear) {
+            $month = DateUtil::getDatetime_Field($monthyear, 2);
+            $year  = DateUtil::getDatetime_Field($monthyear, 1);
+            $dates[$year][] = $month;
+        }
+        foreach ($dates as $year => $years) {
+            foreach ($years as $month) {
+                //$linktext = $monthnames[$month-1]." $year";
+                $linktext = $monthnames[$month-1];
+                $nrofarticles = pnModAPIFunc('News', 'user', 'countitems',
+                                             array('from'   => "$year-$month-01 00:00:00",
+                                                   'to'     => "$year-$month-$day 23:59:59",
+                                                   'status' => 0));
+                $archivemonths[$year][$month] = array('url'          => pnModURL('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
+                                                      'title'        => $linktext,
+                                                      'nrofarticles' => $nrofarticles);
+            }
         }
         $items = false;
     }
