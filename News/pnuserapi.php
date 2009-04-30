@@ -649,6 +649,11 @@ function News_userapi_getArticleInfo($info)
         $info['fulltext'] = $info['maintext'];
     }
 
+    // Get the format types. 'home' string is bits 0-1, 'body' is bits 2-3.
+    $info['hometype'] = ($info['format_type']%4);
+    $info['bodytype'] = (($info['format_type']/4)%4);
+    unset($info['format_type']);
+
     // Check for comments
     if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         $info['commentcount'] = pnModAPIFunc('EZComments', 'user', 'countitems',
@@ -677,8 +682,9 @@ function News_userapi_getArticlePreformat($args)
     $component = 'Stories::Story';
     $instance = "$info[aid]::$info[sid]";
 
-    $hometext = $info['hometext'];
-    $bodytext = $info['bodytext'];
+    // Preformat the text according the article format type
+    $hometext = $info['hometype'] ? $info['hometext'] : nl2br($info['hometext']);
+    $bodytext = $info['bodytype'] ? $info['bodytext'] : nl2br($info['bodytext']);
 
     // Only bother with readmore if there is more to read
     $bytesmore = strlen($info['bodytext']);
@@ -687,15 +693,15 @@ function News_userapi_getArticlePreformat($args)
     if ($bytesmore > 0) {
         if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
             $title =  pnML('_NEWS_FULLTEXTOFARTICLE', array('title' => $info['title']));
-            $readmore = '<a title="' . $title . "\" href=\"$links[fullarticle]\">".$title.'</a>';
+            $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
         $bytesmorelink = pnML('_NEWS_BYTESMORE', array('bytes' => $bytesmore));
     }
 
     // Allowed to read full article?
     if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
-        $title = "<a href=\"$links[fullarticle]\">$info[title]</a>";
-        $print = "<a class=\"news_printlink\" href=\"$links[print]\"><img src=\"images/global/print.gif\" alt=\""._NEWS_PRINTER.'" /></a>';
+        $title = '<a href="'.$links['fullarticle'].'">'.$info['title'].'</a>';
+        $print = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/global/print.gif" alt="'._NEWS_PRINTER.'" /></a>';
     } else {
         $title = $info['title'];
         $print = '';
@@ -716,10 +722,10 @@ function News_userapi_getArticlePreformat($args)
 
         // Allowed to comment?
         if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
-            $postcomment = "<a href=\"$links[postcomment]\">"._NEWS_COMMENTSQ.'</a>';
-            $commentlink = '<a title="' . pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title']))."\" href=\"$links[comment]\">$comment</a>";
+            $postcomment = '<a href="'.$links['postcomment'].'">'._NEWS_COMMENTSQ.'</a>';
+            $commentlink = '<a title="'.pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
         } else if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
-            $commentlink = "$comment";
+            $commentlink = $comment;
         }
     }
 
@@ -744,7 +750,7 @@ function News_userapi_getArticlePreformat($args)
     // Set up the array itself
     $preformat = array('bodytext'    => $bodytext,
                        'bytesmore'   => $bytesmorelink,
-                       'category'    => "<a href=\"$links[category]\">$info[cattitle]</a>",
+                       'category'    => '<a href="'.$links['category'].'">'.$info['cattitle'].'</a>',
                        'categories'  => $categories,
                        'postcomment' => $postcomment,
                        'comment'     => $comment,
@@ -766,25 +772,25 @@ function News_userapi_getArticlePreformat($args)
     // More complex extras - use values in the array
     $preformat['more'] = '';
     if ($bytesmore > 0) {
-        $preformat['more'] .= "$preformat[readmore] ($preformat[bytesmore]) ";
+        $preformat['more'] .= $preformat['readmore'].' ('.$preformat['bytesmore'].') ';
     }
-    $preformat['more'] .= "$preformat[comment] $preformat[print]";
+    $preformat['more'] .= $preformat['comment'].' '.$preformat['print'];
 
     if ($info['cat']) {
-        $preformat['catandtitle'] = "$preformat[category]: $preformat[title]";
+        $preformat['catandtitle'] = $preformat['category'].': '.$preformat['title'];
     } else {
         $preformat['catandtitle'] = $preformat['title'];
     }
 
     if (!empty($preformat['bodytext'])) {
-        $preformat['maintext'] = "<div>$preformat[hometext]</div><div>$preformat[bodytext]</div>";
+        $preformat['maintext'] = '<div>'.$preformat['hometext'].'</div><div>'.$preformat['bodytext'].'</div>';
     } else {
-        $preformat['maintext'] = "<div>$preformat[hometext]</div>";
+        $preformat['maintext'] = '<div>'.$preformat['hometext'].'</div>';
     }
     if (!empty($preformat['notes'])) {
-        $preformat['fulltext'] = "<div>$preformat[maintext]</div><div>$preformat[notes]</div>";
+        $preformat['fulltext'] = '<div>'.$preformat['maintext'].'</div><div>'.$preformat['notes'].'</div>';
     } else {
-        $preformat['fulltext'] = "$preformat[maintext]";
+        $preformat['fulltext'] = $preformat['maintext'];
     }
 
     return $preformat;
@@ -919,6 +925,17 @@ function News_userapi_isformatted($args)
     return false;
 }
 
+function _News_getCategoryField()
+{
+    return 'Main';
+}
+
+function _News_getTopicField()
+{
+    $prop = pnModGetVar('News', 'topicproperty');
+    return empty($prop) ? 'Main' : $prop;
+}
+
 /**
  * get meta data for the module
  *
@@ -934,16 +951,4 @@ function News_userapi_getmodulemeta()
                 'deletefunc'  => 'delete',
                 'titlefield'  => 'title',
                 'itemid'      => 'sid');
-}
-
-
-function _News_getCategoryField()
-{
-  return 'Main';
-}
-
-function _News_getTopicField()
-{
-  $prop = pnModGetVar('News', 'topicproperty');
-  return empty($prop) ? 'Main' : $prop;
 }

@@ -24,21 +24,22 @@
         <!--[if $authcatedit]-->
           <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
         <!--[/if]-->
+
+		&nbsp;&nbsp;<span class="pn-sub">
         <!--[nocache]-->
-        (
+        <!--[if $shorturls and $shorturlstype eq 0]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+        <!--[else]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+        <!--[/if]-->
+ 
         <!--[if $property.nrofarticles.$categoryid gt 0]-->
         <!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]--><!--[if $property.nrofyourarticles.$categoryid gt 0]--><!--[pnml name='_NEWS_SELFWRITTEN' count=$property.nrofyourarticles.$categoryid]--><!--[/if]-->
         <!--[else]-->
         <!--[pnml name='_NEWS_NOARTICLES']-->
         <!--[/if]-->
-        |&nbsp;
-        <!--[if $shorturls and $shorturlstype eq 0]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--> <!--[pnml name='_NEWS_RSSFEED']--></a>
-        <!--[else]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--> <!--[pnml name='_NEWS_RSSFEED']--></a>
-        <!--[/if]-->
-        )
         <!--[/nocache]-->
+		</span>
         </li>
       <!--[/foreach]-->
     </ul>

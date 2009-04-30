@@ -297,21 +297,20 @@ function News_user_view($args = array())
             } else {
                 $cat = CategoryUtil::getCategoryByID($cat);
             }
+            $catname = isset($cat['display_name'][$lang]) ? $cat['display_name'][$lang] : $cat['name'];
+
             if (!empty($cat) && isset($cat['path'])) {
                 // include all it's subcategories and build the filter
                 $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
                 $catstofilter = array();
-                $catnames = array();
                 foreach ($categories as $category) {
                     $catstofilter[] = $category['id'];
-                    $catnames[] = isset($category['display_name'][$lang]) ? $category['display_name'][$lang] : $category['name'];
                 }
                 $catFilter = array($prop => $catstofilter);
             } else {
                 LogUtil::registerError(_NOTAVALIDCATEGORY);
             }
         }
-        $catnames = implode('|', $catnames);
     }
 
     // Get matching news stories
@@ -344,7 +343,7 @@ function News_user_view($args = array())
 
     // assign the root category
     $renderer->assign('category', $cat);
-    $renderer->assign('catnames', $catnames);
+    $renderer->assign('catname', isset($catname) ? $catname : null);
 
     $newsitems = array();
     // Loop through each item and display it

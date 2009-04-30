@@ -15,7 +15,7 @@ define('_STORIES_ADDITIONALINFO', 'Additional block information');
 define('_STORIES_BASICINFO', 'Basic block information');
 
 define('_STORIES_CATEGORIES_REGISTRY', 'Category Registry');
-define('_STORIES_CATEGORY', 'Select 0 or more Categories');
+define('_STORIES_CATEGORY', 'Select 0 or more categories');
 define('_STORIES_COUNTER', 'Number of reads');
 
 define('_STORIES_DATEFORMAT', 'Formatting of the date');
