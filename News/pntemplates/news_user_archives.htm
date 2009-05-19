@@ -1,8 +1,12 @@
 <!--[*  $Id: news_user_archives.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 
 <!--[include file='news_user_menu.htm']-->
+
 <div class="pn-frontendcontainer">
 <!--[if $archiveitems eq '']-->
+    <!--[* assign page title *]-->
+    <!--[pnml name='_NEWS_ARCHIVES' assign='NewsArchiveTitle']-->
+    <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
     <h2><!--[pnml name='_NEWS_ARCHIVES']--></h2>
     <!--[foreach from=$archivemonths key='year' item='years']-->
     <h3><!--[$year]--></h3>
@@ -16,6 +20,9 @@
     </ul>
     <!--[/foreach]-->
 <!--[else]-->
+    <!--[* assign page title *]-->
+    <!--[pnml name='_NEWS_ARCHIVESFORDATE' month=$month year=$year assign='NewsArchiveTitle']-->
+    <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
     <h2><!--[pnml name='_NEWS_ARCHIVESFORDATE' month=$month year=$year]--></h2>
     <table class="pn-datatable" style="width:100%;">
       <thead>

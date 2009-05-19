@@ -1,10 +1,13 @@
 <!--[*  $Id: news_user_categorylist.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 
 <!--[include file='news_user_menu.htm']-->
-<br />
 
 <!--[if $enablecategorization]-->
-  <h3><!--[pnml name='_NEWS_AVAILABLECATEGORIES']--></h3>
+  <div class="pn-frontendcontainer">
+  <!--[* assign page title *]-->
+  <!--[pnml name='_NEWS_AVAILABLECATEGORIES' assign='NewsCatTitle']-->
+  <!--[pnpagesetvar name='title' value=$NewsCatTitle]-->
+  <h2><!--[pnml name='_NEWS_AVAILABLECATEGORIES']--></h2>
   <!--[foreach from=$propertiesdata item='property']-->
     <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]--></h3><!--[/if]-->
     <ul>
@@ -44,6 +47,7 @@
       <!--[/foreach]-->
     </ul>
   <!--[/foreach]-->
+  </div>
 <!--[else]-->
   <!--[pnmodfunc modname='News' type='user' func='main']-->
 <!--[/if]-->
