@@ -325,7 +325,7 @@ function News_user_view($args = array())
 
     if ($items == false) {
         if ($modvars['enablecategorization'] && isset($catFilter)) {
-            LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUNDINCAT', array('cat' => $catnames)));
+            LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUNDINCAT', array('cat' => $catname)));
         } else {
             LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUND'));
         }
