@@ -2,10 +2,21 @@
 
 <!--[nocache]-->
 <!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
-<!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
 <!--[securityutil_checkpermission component='Stories::Story' instance='::' level='ACCESS_COMMENT' assign='authcomm']-->
 <!--[securityutil_checkpermission component='Stories::Story' instance='::' level='ACCESS_EDIT' assign='authedit']-->
 <!--[/nocache]-->
+
+<!--[* assign page title *]-->
+<!--[if $func eq 'main']-->
+  <!--[pnconfiggetvar name='entrypoint' default='index.php' assign='entrypoint']-->
+  <!--[pnservergetvar name='REQUEST_URI' default='/' assign='requesturi']-->
+  <!--[assign var='requesturi' value=$requesturi|replace:$baseuri:'']-->
+  <!--[if $requesturi neq '/' AND $requesturi neq "/$entrypoint"]-->
+    <!--[pnpagesetvar name='title' value='_NEWS_FRONTPAGE'|pnml]-->
+  <!--[/if]-->
+<!--[elseif $func eq 'view' AND $catname|default:'' neq '']-->
+  <!--[pnpagesetvar name='title' value=$catname]-->
+<!--[/if]-->
 
 <div class="pn-frontendbox">
 <h1><!--[pnml name='_NEWS']--> <!--[if $catname|default:'' neq '']--> &raquo; <!--[$catname]--><!--[/if]--></h1>
@@ -32,9 +43,12 @@
 <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnml name='_NEWS_SUBMIT']--></a>
 <!--[/if]-->
 
-<!--[if $authedit AND $pendingcount gt 0]-->
+<!--[if $authedit]-->
+<!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
+<!--[if $pendingcount gt 0]-->
 &nbsp;|&nbsp;
 <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount eq 1]--><!--[pnml name='_NEWS_PENDINGARTICLE']--><!--[else]--><!--[pnml name='_NEWS_PENDINGARTICLES' count=$pendingcount]--><!--[/if]--></a>
+<!--[/if]-->
 <!--[/if]-->
 <!--[/nocache]-->
 ]
