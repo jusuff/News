@@ -39,6 +39,7 @@
     <!--[if $accessadd neq 1]-->
     <input type="hidden" name="story[ihome]" value="1" />
     <input type="hidden" name="story[notes]" value="" />
+    <input type="hidden" name="story[withcomm]" value="1" />
     <!--[/if]-->
     <!--[if $formattedcontent eq 1]-->
     <input type="hidden" name="story[hometextcontenttype]" value="1" />
@@ -159,6 +160,10 @@
             <!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds=false minute_interval='5' time=$to field_array='story']--><br />
         </div>
         </div>
+        </div>
+        <div class="pn-formrow">
+            <label for="news_withcomm"><!--[pnml name='_NEWS_ALLOWCOMMENTS']--></label>
+            <input id="news_withcomm" name="story[withcomm]" type="checkbox" value="1" <!--[if $withcomm eq 1]-->checked="checked" <!--[/if]-->/>
         </div>
         </div>
     </fieldset>
