@@ -15,7 +15,7 @@
 $modversion['name']        = 'News';
 $modversion['displayname'] = _NEWS_DISPLAYNAME;
 $modversion['description'] = _NEWS_DESCRIPTION;
-$modversion['version']     = '2.4';
+$modversion['version']     = '2.4.1';
 
 $modversion['credits']     = 'pndocs/credits.txt';
 $modversion['help']        = 'pndocs/install.txt';
