@@ -92,7 +92,7 @@ function News_upgrade($oldversion)
                 return LogUtil::registerError (_UPDATEFAILED);
             }
             // migrate the comments to ezcomments
-            if (pnModAvailable('Comments')) {
+            if (pnModAvailable('Comments')Ê|| defined('_PNINSTALLVER')) {
                 // check for the ezcomments module
                 if (!pnModAvailable('EZComments')) {
                     return LogUtil::registerError (pnML('_MODULENOTAVAILABLE', array('m' => 'EZComments')));
