@@ -58,6 +58,8 @@ function news_searchapi_search($args)
                                           $storiescolumn['hometext'], 
                                           $storiescolumn['bodytext']), 
                                           $storiescolumn['language']);
+    // Only search in published articles
+    $where .= "AND ($storiescolumn[published_status] = '0')";
 
     $sessionId = session_id();
 
