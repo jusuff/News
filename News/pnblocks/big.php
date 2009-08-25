@@ -75,7 +75,8 @@ function News_bigblock_display($blockinfo)
         return;
     } else {
         $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $row = $articles[0]);
-        if (SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_OVERVIEW)) {
+        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_OVERVIEW) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_OVERVIEW)) {
             $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
             $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat', array('info' => $info, 'links' => $links));
         } else {

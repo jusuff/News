@@ -19,7 +19,6 @@
  * loaded. It delivers the table information to the core.
  * It can be loaded explicitly using the pnModDBInfoLoad() API function.
  * 
- * @author       Xiaoyu Huang
  * @return       array       The table information.
  */
 function News_pntables()
@@ -28,8 +27,8 @@ function News_pntables()
     $tables = array();
 
     // Full table definition
-    $tables['stories'] = DBUtil::getLimitedTablename('stories');
-    $tables['stories_column'] = array(
+    $tables['news'] = DBUtil::getLimitedTablename('news');
+    $tables['news_column'] = array(
         'sid'              => 'pn_sid',
         'aid'              => 'pn_cr_uid',   // for back compat
         'title'            => 'pn_title',
@@ -48,7 +47,7 @@ function News_pntables()
         'from'             => 'pn_from',
         'to'               => 'pn_to'
     );
-    $tables['stories_column_def'] = array(
+    $tables['news_column_def'] = array(
         'sid'              => 'I NOTNULL AUTO PRIMARY',
         'title'            => 'C(255) DEFAULT NULL',
         'urltitle'         => 'C(255) DEFAULT NULL',
@@ -67,20 +66,21 @@ function News_pntables()
     );
 
     // Enable categorization services
-    $tables['stories_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');
-    $tables['stories_primary_key_column'] = 'sid';
+    $tables['news_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');
+    $tables['news_primary_key_column'] = 'sid';
 
     // Enable attribution services
-    $tables['stories_db_extra_enable_attribution'] = pnModGetVar('News', 'enableattribution');
+    $tables['news_db_extra_enable_attribution'] = pnModGetVar('News', 'enableattribution');
 
     // add standard data fields
-    ObjectUtil::addStandardFieldsToTableDefinition ($tables['stories_column'], 'pn_');
-    ObjectUtil::addStandardFieldsToTableDataDefinition($tables['stories_column_def']);
+    ObjectUtil::addStandardFieldsToTableDefinition ($tables['news_column'], 'pn_');
+    ObjectUtil::addStandardFieldsToTableDataDefinition($tables['news_column_def']);
 
-    // old comments table for upgrade
+    // old tables for upgrading
     $tables['comments'] = DBUtil::getLimitedTablename('comments');
     $tables['autonews'] = DBUtil::getLimitedTablename('autonews');
     $tables['queue'] = DBUtil::getLimitedTablename('queue');
+    $tables['stories'] = DBUtil::getLimitedTablename('stories');
     $tables['stories_cat'] = DBUtil::getLimitedTablename('stories_cat');
     $tables['topics'] = DBUtil::getLimitedTablename('topics');
 

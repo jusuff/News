@@ -33,11 +33,12 @@ function News_adminapi_delete($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE))) {
         return LogUtil::registerError (_MODULENOAUTH);
     }
 
-    if (!DBUtil::deleteObjectByID('stories', $args['sid'], 'sid')) {
+    if (!DBUtil::deleteObjectByID('news', $args['sid'], 'sid')) {
         return LogUtil::registerError (_DELETEFAILED);
     }
 
@@ -93,16 +94,17 @@ function News_adminapi_update($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT)) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$args[sid]", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT))) {
         return LogUtil::registerError (_MODULENOAUTH);
     }
 
     // calculate the format type
     $args['format_type'] = ($args['bodytextcontenttype']%4)*4 + $args['hometextcontenttype']%4;
 
-    // define the permalink title if not present
+    // define the lowercase permalink, using the title as slug, if not present
     if (!isset($args['urltitle']) || empty($args['urltitle'])) {
-        $args['urltitle'] = DataUtil::formatPermalink($args['title']);
+        $args['urltitle'] = strtolower(DataUtil::formatPermalink($args['title']));
     }
 
     // The ihome table is inverted from what would seem logical
@@ -131,7 +133,7 @@ function News_adminapi_update($args)
         $args['to'] = DateUtil::getDatetime($args['to']);
     }
 
-    if (!DBUtil::updateObject($args, 'stories', '', 'sid')) {
+    if (!DBUtil::updateObject($args, 'news', '', 'sid')) {
         return LogUtil::registerError (_UPDATEFAILED);
     }
 
@@ -155,7 +157,8 @@ function News_adminapi_update($args)
 function News_adminapi_purgepermalinks($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
         return LogUtil::registerError(_MODULENOAUTH);
     }
 
@@ -167,7 +170,7 @@ function News_adminapi_purgepermalinks($args)
     }
 
     // get all the ID and permalink of the table
-    $data = DBUtil::selectObjectArray('stories', '', '', -1, -1, 'sid', null, null, array('sid', 'urltitle'));
+    $data = DBUtil::selectObjectArray('news', '', '', -1, -1, 'sid', null, null, array('sid', 'urltitle'));
 
     // loop the data searching for non equal permalinks
     $perma = '';
@@ -188,7 +191,7 @@ function News_adminapi_purgepermalinks($args)
     if (empty($data)) {
         return true;
     // store the modified permalinks
-    } elseif (DBUtil::updateObjectArray($data, 'stories', 'sid')) {
+    } elseif (DBUtil::updateObjectArray($data, 'news', 'sid')) {
         // Let the calling process know that we have finished successfully
         return true;
     } else {
@@ -208,13 +211,16 @@ function news_adminapi_getlinks()
 
     pnModLangLoad('News', 'admin');
 
-    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         $links[] = array('url' => pnModURL('News', 'admin', 'view'), 'text' => _NEWS_VIEW);
     }
-    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
+        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         $links[] = array('url' => pnModURL('News', 'admin', 'new'), 'text' =>  _NEWS_CREATE);
     }
-    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
+        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
         $links[] = array('url' => pnModURL('News', 'admin', 'view', array('purge' => 1)), 'text' => _PURGEPERMALINKS);
         $links[] = array('url' => pnModURL('News', 'admin', 'modifyconfig'), 'text' => _MODIFYNEWSCONFIG);
     }

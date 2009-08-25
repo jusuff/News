@@ -56,7 +56,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   {
     // Get the registrered categories for the News module
     Loader::loadClass('CategoryRegistryUtil');
-    $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+    $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
     $properties = array_keys($catregistry);
 
     // indispensable vars
@@ -131,7 +131,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         // load the categories system
         Loader::loadClass('CategoryRegistryUtil');
         // Get the registrered categories for the News module
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $apiargs['catregistry'] = $catregistry;
         $apiargs['category'] = $this->categories;
     }
@@ -219,7 +219,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                     $items[$k]['hometextwrapped'] = true;
                 }
             }
-            $items[$k]['readperm']  = SecurityUtil::checkPermission('Stories::Story', "$items[$k][aid]::$items[$k][sid]", ACCESS_READ);
+            $items[$k]['readperm']  = (SecurityUtil::checkPermission('News::', "$items[$k][aid]::$items[$k][sid]", ACCESS_READ) ||
+                                       SecurityUtil::checkPermission('Stories::Story', "$items[$k][aid]::$items[$k][sid]", ACCESS_READ));
         }
         if ($this->dispuname||$this->dispdate||$this->dispreads||$this->dispcomments) {
             $render->assign('dispinfo', true);
@@ -316,7 +317,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
         // Get the registrered categories for the News module
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $render->assign('catregistry', $catregistry);
     }
     $render->assign('enablecategorization', $enablecategorization);

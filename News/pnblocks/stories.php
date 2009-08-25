@@ -111,7 +111,8 @@ function News_storiesblock_display($blockinfo)
     $storiesoutput = array();
     foreach ($items as $item) {
         $storyreadperm = false;
-        if (SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_READ) ||
+            SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_READ)) {
             $storyreadperm = true;
         }
 
@@ -155,7 +156,7 @@ function News_storiesblock_modify($blockinfo)
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
     }
-    $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'stories', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
+    $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
     $render->assign('mainCategory', $mainCat);
     $render->assign(pnModGetVar('News'));
 

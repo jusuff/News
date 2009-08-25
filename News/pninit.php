@@ -20,7 +20,7 @@
 function News_init()
 {
     // Create table
-    if (!DBUtil::createTable('stories')) {
+    if (!DBUtil::createTable('news')) {
         return false;
     }
 
@@ -38,7 +38,7 @@ function News_init()
     pnModSetVar('News', 'refereronprint', 0);
     pnModSetVar('News', 'enableattribution', false);
     pnModSetVar('News', 'catimagepath', 'images/categories/');
-    pnModSetVar('News', 'enableajaxedit', true);
+    pnModSetVar('News', 'enableajaxedit', false);
 
     // Initialisation successful
     return true;
@@ -51,11 +51,6 @@ function News_init()
  */
 function News_upgrade($oldversion)
 {
-    // upgrade table
-    if (!DBUtil::changeTable('stories')) {
-        return false;
-    }
-
     // Upgrade dependent on old version number
     switch($oldversion) {
         case 1.3:
@@ -130,6 +125,7 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'refereronprint', pnConfigGetVar('refereronprint', 0));
             return News_upgrade(2.3);
         case 2.3:
+            $prefix = pnConfigGetVar('prefix');
             $tables = pnDBGetTables();
             // when from is not set, put it to the creation date
             $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
@@ -143,14 +139,41 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'enableattribution', false);
             // import the topicimagepath, variable tipath deletion is up to Topics module
             pnModSetVar('News', 'catimagepath', pnConfigGetVar('tipath'));
-            pnModSetVar('News', 'enableajaxedit', true);
+            pnModSetVar('News', 'enableajaxedit', false);
             // drop old legacy columns
-            DBUtil::dropColumn('stories', 'pn_comments');
-            DBUtil::dropColumn('stories', 'pn_themeoverride');
+            DBUtil::dropColumn('stories', $prefix.'_comments');
+            DBUtil::dropColumn('stories', $prefix.'_themeoverride');
             // clear compiled templates and News cache (see #74)
             pnModAPIFunc('pnRender', 'user', 'clear_compiled');
             pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
             return News_upgrade(2.4);
+        case 2.4:
+        case '2.4.1':
+            $prefix = pnConfigGetVar('prefix');
+            $tables = pnDBGetTables();
+            // rename the database table from stories to news
+            if (!DBUtil::renameTable('stories', 'news')) {
+                    return LogUtil::registerError (_RENAMETABLEFAILED);
+            }
+            // upgrade table
+            if (!DBUtil::changeTable('news')) {
+                return false;
+            }
+            // update permissions with new scheme News::
+            $group_perms_table  = $tables['group_perms'];
+            $group_perms_column = $tables['group_perms_column'];
+            $sqls[] = 'UPDATE ' . $group_perms_table . ' SET ' . $group_perms_column['component'] . '=\'News::\' WHERE ' . $group_perms_column['component'] . '=\'Stories::Story\'';
+            // update categories_mapobj and categories_registry with new tablename (categories tables not in $tables ?)
+            $categories_mapobj_table  = $prefix . '_categories_mapobj';
+            $sqls[] = 'UPDATE ' . $categories_mapobj_table . ' SET cmo_table=\'news\' WHERE cmo_table=\'stories\'';
+            $categories_registry_table  = $prefix . '_categories_registry';
+            $sqls[] = 'UPDATE ' . $categories_registry_table . ' SET crg_table=\'news\' WHERE crg_table=\'stories\'';
+            foreach ($sqls as $sql) {
+                if (!DBUtil::executeSQL($sql)) {
+                    return LogUtil::registerError (_UPDATETABLEFAILED);
+                }
+            }
+            return News_upgrade(2.5);
     }
 
     // Update successful
@@ -165,7 +188,7 @@ function News_upgrade($oldversion)
 function News_delete()
 {
     // drop table
-    if (!DBUtil::dropTable('stories')) {
+    if (!DBUtil::dropTable('news')) {
         return false;
     }
 
@@ -326,7 +349,7 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
         // create an entry in the categories registry to the Main property
         $registry = new PNCategoryRegistry();
         $registry->setDataField('modname', 'News');
-        $registry->setDataField('table', 'stories');
+        $registry->setDataField('table', 'news');
         $registry->setDataField('property', 'Main');
         $registry->setDataField('category_id', $rootcat['id']);
         $registry->insert();
@@ -480,7 +503,7 @@ function _news_import_autonews_queue()
                       'lu_date'       => DateUtil::getDatetime(),
                       'lu_uid'        => pnUserGetVar('uid'));
 
-        // Insert the imoprted object in stories and preserve the creation/lastupdated values set above.
+        // Insert the imported object in stories and preserve the creation/lastupdated values set above.
         $res = DBUtil::insertObject($objj, 'stories', 'sid', true);
 
         // Manually update the topic and catid, since those are not in pntables and still needed for category migration

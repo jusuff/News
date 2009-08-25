@@ -37,7 +37,8 @@ function News_user_main()
 function News_user_new($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -99,7 +100,7 @@ function News_user_new($args)
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $renderer->assign('catregistry', $catregistry);
     }
 
@@ -116,7 +117,8 @@ function News_user_new($args)
     $renderer->assign('formattedcontent', $formattedcontent);
 
     $renderer->assign('accessadd', 0);
-    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
+        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         $renderer->assign('accessadd', 1);
     }
 
@@ -171,7 +173,8 @@ function News_user_create($args)
                   'published_status' => isset($story['published_status']) ? $story['published_status'] : null);
 
     // Disable the non accessible fields for non editors
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD))) {
         $item['notes'] = '';
         $item['ihome'] = 0;
         $item['withcomm'] = 0;
@@ -256,7 +259,8 @@ function News_user_create($args)
 function News_user_view($args = array())
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -283,8 +287,8 @@ function News_user_view($args = array())
         if (!($class = Loader::loadClass('CategoryUtil')) || !($class = Loader::loadClass('CategoryRegistryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryUtil | CategoryRegistryUtil')));
         }
-        // get the categories registered for the News stories
-        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+        // get the categories registered for News
+        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties = array_keys($catregistry);
         $lang = pnUserGetLang();
 
@@ -552,7 +556,8 @@ function News_user_archives($args)
     $day   = '31';
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -664,7 +669,8 @@ function News_user_preview($args)
 function News_user_categorylist($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -680,7 +686,7 @@ function News_user_categorylist($args)
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil | CategoryUtil')));
         }
         // Get the categories registered for News
-        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties  = array_keys($catregistry);
 
         $propertiesdata = array();

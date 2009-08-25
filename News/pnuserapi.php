@@ -29,10 +29,11 @@ class news_result_checker
     // A return value of true means "keep result" - false means "discard".
     function checkResult(&$item)
     {
-        $ok = SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW);
+        $ok = (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_OVERVIEW) || 
+               SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW));
         if ($this->enablecategorization)
         {
-            ObjectUtil::expandObjectWithCategories($item, 'stories', 'sid');
+            ObjectUtil::expandObjectWithCategories($item, 'news', 'sid');
             $ok = $ok && CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News');
         }
         return $ok;
@@ -74,7 +75,8 @@ function News_userapi_getall($args)
     $items = array();
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
         return $items;
     }
 
@@ -91,21 +93,21 @@ function News_userapi_getall($args)
 
     // populate an array with each part of the where clause and then implode the array if there is a need.
     // credit to Jorg Napp for this technique - markwest
-    $pntable = pnDBGetTables();
-    $storiescolumn = $pntable['stories_column'];
+    $tables = pnDBGetTables();
+    $news_column = $tables['news_column'];
     $queryargs = array();
     if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
-        $queryargs[] = "($storiescolumn[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[language] = '')";
+        $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $news_column[language] = '')";
     } elseif (!empty($args['language'])) {
-        $queryargs[] = "$storiescolumn[language] = '" . DataUtil::formatForStore($args['language']) . "'";
+        $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
     }
 
     if (isset($args['status'])) {
-        $queryargs[] = "$storiescolumn[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
+        $queryargs[] = "$news_column[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
     }
 
     if (isset($args['ihome'])) {
-        $queryargs[] = "$storiescolumn[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
+        $queryargs[] = "$news_column[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
     }
 
     // Check for specific date interval
@@ -114,24 +116,24 @@ function News_userapi_getall($args)
         if (isset($args['from']) && isset($args['to'])) {
             $from = DataUtil::formatForStore($args['from']);
             $to   = DataUtil::formatForStore($args['to']);
-            $queryargs[] = "($storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to')";
+            $queryargs[] = "($news_column[from] >= '$from' AND $news_column[from] < '$to')";
         // Only 'from' is defined
         } elseif (isset($args['from'])) {
             $date = DataUtil::formatForStore($args['from']);
-            $queryargs[] = "($storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date'))";
+            $queryargs[] = "($news_column[from] >= '$date' AND ($news_column[to] IS NULL OR $news_column[to] >= '$date'))";
         // Only 'to' is defined
         } elseif (isset($args['to'])) {
             $date = DataUtil::formatForStore($args['to']);
-            $queryargs[] = "($storiescolumn[from] < '$date')";
+            $queryargs[] = "($news_column[from] < '$date')";
         }
     // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
         $date = DateUtil::getDatetime();
-        $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
+        $queryargs[] = "('$date' >= $news_column[from] AND ($news_column[to] IS NULL OR '$date' <= $news_column[to]))";
     }
 
     if (isset($args['tdate'])) {
-        $queryargs[] = "$storiescolumn[from] LIKE '%{$args['tdate']}%'";
+        $queryargs[] = "$news_column[from] LIKE '%{$args['tdate']}%'";
     }
 
     if (isset($args['query']) && is_array($args['query'])) {
@@ -141,8 +143,8 @@ function News_userapi_getall($args)
             if (is_array($row) && count($row) == 3) {
                 // validate fields and operators
                 list($field, $op, $value) = $row;
-                if (isset($storiescolumn[$field]) && in_array($op, $allowedoperators)) {
-                    $queryargs[] = "$storiescolumn[$field] $op '".DataUtil::formatForStore($value)."'";
+                if (isset($news_column[$field]) && in_array($op, $allowedoperators)) {
+                    $queryargs[] = "$news_column[$field] $op '".DataUtil::formatForStore($value)."'";
                 }
             }
         }
@@ -150,7 +152,7 @@ function News_userapi_getall($args)
 
     // check for a specific author
     if (isset($args['uid']) && is_int($args['uid'])) {
-        $queryargs[] = "$storiescolumn[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+        $queryargs[] = "$news_column[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
     }
 
     $where = '';
@@ -171,20 +173,20 @@ function News_userapi_getall($args)
             default:
                 $order = 'from';
         }
-    } elseif (isset($storiescolumn[$args['order']])) {
+    } elseif (isset($news_column[$args['order']])) {
         $order = $args['order'];
     }
 
     if (!empty($order)) {
         if (isset($args['orderdir']) && in_array(strtoupper($args['orderdir'], array('ASC', 'DESC')))) {
-            $orderby = $storiescolumn[$order].' '.strtoupper($args['orderdir']);
+            $orderby = $news_column[$order].' '.strtoupper($args['orderdir']);
         } else {
-            $orderby = $storiescolumn[$order].' DESC';
+            $orderby = $news_column[$order].' DESC';
         }
     }
 
     $permChecker = new news_result_checker();
-    $objArray = DBUtil::selectObjectArrayFilter('stories', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $args['catFilter']);
+    $objArray = DBUtil::selectObjectArrayFilter('news', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $args['catFilter']);
 
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
@@ -239,24 +241,24 @@ function News_userapi_get($args)
          $timestring = DateUtil::getDatetime(mktime(0, 0, 0, $args['monthnum'], $args['day'], $args['year']), '%Y-%m-%d');
     }
 
-    // define the permissions filter to apply
+    // define the permissions filter to apply, switched to News:: permission scheme, no fallback for Stories::Story ATM
     $permFilter = array();
     $permFilter[] = array('realm' => 0,
-                          'component_left'   => 'Stories',
+                          'component_left'   => 'News',
                           'component_middle' => '',
-                          'component_right'  => 'Story',
+                          'component_right'  => '',
                           'instance_left'    => 'aid',
                           'instance_middle'  => '',
                           'instance_right'   => 'sid',
                           'level'            => ACCESS_READ);
 
     if (isset($args['sid']) && is_numeric($args['sid'])) {
-        $item = DBUtil::selectObjectByID('stories', $args['sid'], 'sid', null, $permFilter, null, $args['SQLcache']);
+        $item = DBUtil::selectObjectByID('news', $args['sid'], 'sid', null, $permFilter, null, $args['SQLcache']);
     } elseif (isset($timestring)) {
         $where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_from LIKE '{$timestring}%'";
-        $item = DBUtil::selectObject('stories', $where, null, $permFilter, null, $args['SQLcache']);
+        $item = DBUtil::selectObject('news', $where, null, $permFilter, null, $args['SQLcache']);
     } else {
-        $item = DBUtil::selectObjectByID('stories', $args['title'], 'urltitle', null, $permFilter, null, $args['SQLcache']);
+        $item = DBUtil::selectObjectByID('news', $args['title'], 'urltitle', null, $permFilter, null, $args['SQLcache']);
     }
 
     if (empty($item))
@@ -276,7 +278,7 @@ function News_userapi_get($args)
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
                 pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
             }
-            $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+            $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         }
         ObjectUtil::postProcessExpandedObjectCategories($item['__CATEGORIES__'], $registeredCats);
 
@@ -295,20 +297,20 @@ function News_userapi_get($args)
 function News_userapi_getMonthsWithNews($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
         return false;
     }
 
-    $pntable =& pnDBGetTables();
-    $storiescolumn = $pntable['stories_column'];
+    $tables =& pnDBGetTables();
+    $news_column = $tables['news_column'];
 
     // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
-    $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $storiescolumn[from]) ORDER BY $storiescolumn[from] DESC";
+    $order = "GROUP BY EXTRACT(YEAR_MONTH FROM $news_column[from]) ORDER BY $news_column[from] DESC";
 
     $date = DateUtil::getDatetime();
-    $where = "($storiescolumn[from] < '$date' AND $storiescolumn[published_status] = '0')";
-
-    $dates = DBUtil::selectFieldArray('stories', 'from', $where, $order);
+    $where = "($news_column[from] < '$date' AND $news_column[published_status] = '0')";
+    $dates = DBUtil::selectFieldArray('news', 'from', $where, $order);
 
     return $dates;
 }
@@ -344,21 +346,21 @@ function News_userapi_countitems($args)
 
     // Get optional arguments a build the where conditional
     // Credit to Jorg Napp for this superb technique.
-    $pntable = pnDBGetTables();
-    $storiescolumn = $pntable['stories_column'];
+    $tables = pnDBGetTables();
+    $news_column = $tables['news_column'];
     $queryargs = array();
     if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
-        $queryargs[] = "($storiescolumn[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $storiescolumn[language] = '')";
+        $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $news_column[language] = '')";
     } elseif (!empty($args['language'])) {
-        $queryargs[] = "$storiescolumn[language] = '" . DataUtil::formatForStore($args['language']) . "'";
+        $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
     }
 
     if (isset($args['status'])) {
-        $queryargs[] = "$storiescolumn[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
+        $queryargs[] = "$news_column[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
     }
 
     if (isset($args['ihome'])) {
-        $queryargs[] = "$storiescolumn[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
+        $queryargs[] = "$news_column[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
     }
 
     // Check for specific date interval
@@ -367,24 +369,24 @@ function News_userapi_countitems($args)
         if (isset($args['from']) && isset($args['to'])) {
             $from = DataUtil::formatForStore($args['from']);
             $to   = DataUtil::formatForStore($args['to']);
-            $queryargs[] = "($storiescolumn[from] >= '$from' AND $storiescolumn[from] < '$to')";
+            $queryargs[] = "($news_column[from] >= '$from' AND $news_column[from] < '$to')";
         // Only 'from' is defined
         } elseif (isset($args['from'])) {
             $date = DataUtil::formatForStore($args['from']);
-            $queryargs[] = "($storiescolumn[from] >= '$date' AND ($storiescolumn[to] IS NULL OR $storiescolumn[to] >= '$date'))";
+            $queryargs[] = "($news_column[from] >= '$date' AND ($news_column[to] IS NULL OR $news_column[to] >= '$date'))";
         // Only 'to' is defined
         } elseif (isset($args['to'])) {
             $date = DataUtil::formatForStore($args['to']);
-            $queryargs[] = "($storiescolumn[from] < '$date')";
+            $queryargs[] = "($news_column[from] < '$date')";
         }
     // or can filter with the current date
     } elseif (isset($args['filterbydate'])) {
         $date = DateUtil::getDatetime();
-        $queryargs[] = "('$date' >= $storiescolumn[from] AND ($storiescolumn[to] IS NULL OR '$date' <= $storiescolumn[to]))";
+        $queryargs[] = "('$date' >= $news_column[from] AND ($news_column[to] IS NULL OR '$date' <= $news_column[to]))";
     }
 
     if (isset($args['tdate'])) {
-        $queryargs[] = "$storiescolumn[from] LIKE '%{$args['tdate']}%'";
+        $queryargs[] = "$news_column[from] LIKE '%{$args['tdate']}%'";
     }
 
     if (isset($args['query']) && is_array($args['query'])) {
@@ -394,8 +396,8 @@ function News_userapi_countitems($args)
             if (is_array($row) && count($row) == 3) {
                 // validate fields and operators
                 extract($row);
-                if (isset($storiescolumn[$field]) && in_array($op, $allowedoperators)) {
-                    $queryargs[] = "$storiescolumn[$field] $op '".DataUtil::formatForStore($value)."'";
+                if (isset($news_column[$field]) && in_array($op, $allowedoperators)) {
+                    $queryargs[] = "$news_column[$field] $op '".DataUtil::formatForStore($value)."'";
                 }
             }
         }
@@ -403,7 +405,7 @@ function News_userapi_countitems($args)
 
     // check for a specific author
     if (isset($args['uid']) && is_int($args['uid'])) {
-        $queryargs[] = "$storiescolumn[cr_uid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+        $queryargs[] = "$news_column[cr_uid] = '" . DataUtil::formatForStore($args['uid']) . "'";
     }
 
     $where = '';
@@ -411,7 +413,7 @@ function News_userapi_countitems($args)
         $where = ' WHERE ' . implode(' AND ', $queryargs);
     }
 
-    return DBUtil::selectObjectCount ('stories', $where, 'sid', false, $args['catFilter']);
+    return DBUtil::selectObjectCount ('news', $where, 'sid', false, $args['catFilter']);
 }
 
 /**
@@ -427,9 +429,9 @@ function News_userapi_incrementreadcount($args)
     }
 
     if (isset($args['sid'])) {
-        return DBUtil::incrementObjectFieldByID('stories', 'counter', $args['sid'], 'sid');
+        return DBUtil::incrementObjectFieldByID('news', 'counter', $args['sid'], 'sid');
     } else {
-        return DBUtil::incrementObjectFieldByID('stories', 'counter', $args['title'], 'urltitle');
+        return DBUtil::incrementObjectFieldByID('news', 'counter', $args['title'], 'urltitle');
     }
 }
 
@@ -442,16 +444,11 @@ function News_userapi_incrementreadcount($args)
  */
 function News_userapi_getArticleLinks($info)
 {
-    // Component and instance
-    $component = 'Stories::Story';
-    $instance = "$info[aid]::$info[sid]";
-
-    $commentextra = pnUserGetCommentOptions();
-
     // Allowed to comment?
     if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
-        if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
+        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
             $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
         }
     } else {
@@ -460,7 +457,8 @@ function News_userapi_getArticleLinks($info)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
         $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
     } else {
         $fullarticle = '';
@@ -678,10 +676,6 @@ function News_userapi_getArticlePreformat($args)
     $info = $args['info'];
     $links = $args['links'];
 
-    // Component and instance
-    $component = 'Stories::Story';
-    $instance = "$info[aid]::$info[sid]";
-
     // Preformat the text according the article format type
     $hometext = $info['hometype'] ? $info['hometext'] : nl2br($info['hometext']);
     $bodytext = $info['bodytype'] ? $info['bodytext'] : nl2br($info['bodytext']);
@@ -691,7 +685,8 @@ function News_userapi_getArticlePreformat($args)
     $readmore = '';
     $bytesmorelink = '';
     if ($bytesmore > 0) {
-        if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
             $title =  pnML('_NEWS_FULLTEXTOFARTICLE', array('title' => $info['title']));
             $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
@@ -699,7 +694,8 @@ function News_userapi_getArticlePreformat($args)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
         $title = '<a href="'.$links['fullarticle'].'">'.$info['title'].'</a>';
         $print = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/global/print.gif" alt="'._NEWS_PRINTER.'" /></a>';
     } else {
@@ -721,10 +717,12 @@ function News_userapi_getArticlePreformat($args)
         }
 
         // Allowed to comment?
-        if (SecurityUtil::checkPermission($component, $instance, ACCESS_COMMENT)) {
+        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
             $postcomment = '<a href="'.$links['postcomment'].'">'._NEWS_COMMENTSQ.'</a>';
             $commentlink = '<a title="'.pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
-        } else if (SecurityUtil::checkPermission($component, $instance, ACCESS_READ)) {
+        } else if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
+                   SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
             $commentlink = $comment;
         }
     }
@@ -815,9 +813,11 @@ function News_userapi_create($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
         return LogUtil::registerError (_MODULENOAUTH);
-    } elseif (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    } elseif (SecurityUtil::checkPermission('News:;', '::', ACCESS_ADD) ||
+              SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         if (!isset($args['published_status'])) {
             $args['published_status'] = 0;
         }
@@ -828,9 +828,9 @@ function News_userapi_create($args)
     // calculate the format type
     $args['format_type'] = ($args['bodytextcontenttype']%4)*4 + $args['hometextcontenttype']%4;
 
-    // define the permalink title if not present
+    // define the lowercase permalink, using the title as slug, if not present
     if (!isset($args['urltitle']) || empty($args['urltitle'])) {
-        $args['urltitle'] = DataUtil::formatPermalink($args['title']);
+        $args['urltitle'] = strtolower(DataUtil::formatPermalink($args['title']));
     }
 
     // The ihome table is inverted from what would seem logical
@@ -872,7 +872,7 @@ function News_userapi_create($args)
     $args['counter'] = 0;
     $args['comments'] = 0;
 
-    if (!($obj = DBUtil::insertObject($args, 'stories', 'sid'))) {
+    if (!($obj = DBUtil::insertObject($args, 'news', 'sid'))) {
         return LogUtil::registerError(_CREATEFAILED);
     }
 
@@ -883,7 +883,7 @@ function News_userapi_create($args)
             'from' => $obj['cr_date']
         );
 
-        if (!DBUtil::updateObject($obj, 'stories', '', 'sid')) {
+        if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
             LogUtil::registerError(_UPDATEFAILED);
         }
     }

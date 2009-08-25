@@ -17,6 +17,7 @@
  *
  * @author Frank Schummertz
  * @param 'sid'   int the story id
+ * @param 'page'   int the story page
  * @return string HTML string
  */
 function News_ajax_modify()
@@ -26,13 +27,13 @@ function News_ajax_modify()
 
     // Get the news article
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
-
     if ($item == false) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY))));
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$sid", ACCESS_EDIT)) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$sid", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$sid", ACCESS_EDIT))) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
     }
 
@@ -68,7 +69,7 @@ function News_ajax_modify()
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
-        $categories  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+        $categories  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
 
         $renderer->assign('categories', $categories);
     }
@@ -114,7 +115,6 @@ function News_ajax_update()
 
     // Get the current news article
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $story['sid']));
-
     if ($item == false) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY))));
     }
@@ -133,7 +133,8 @@ function News_ajax_update()
     switch($story['action']) {
         case 'update':
             // Security check
-            if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
+            if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$story[sid]", ACCESS_EDIT) ||
+                  SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT))) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             // Update the story
@@ -224,13 +225,14 @@ function News_ajax_update()
 
         case 'pending':
             // Security check
-            if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT)) {
+            if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$story[sid]", ACCESS_EDIT) ||
+                  SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT))) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             // set published_status to 2 to make the story a pending story
             $object = array('published_status' => 2,
                             'sid'              => $story['sid']);
-            if (DBUtil::updateObject($object, 'stories', '', 'sid') == false) {
+            if (DBUtil::updateObject($object, 'news', '', 'sid') == false) {
                 $output = DataUtil::formatForDisplayHTML(_UPDATEFAILED);
             } else {
                 // Success
@@ -242,7 +244,8 @@ function News_ajax_update()
 
         case 'delete':
             // Security check
-            if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_DELETE)) {
+            if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$story[sid]", ACCESS_DELETE) ||
+                  SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_DELETE))) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(_MODULENOAUTH));
             }
             if (pnModAPIFunc('News', 'admin', 'delete', array('sid' => $story['sid']))) {

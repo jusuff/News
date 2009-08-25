@@ -26,7 +26,8 @@ function news_searchapi_info()
  **/
 function news_searchapi_options($args)
 {
-    if (SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         // Create output object - this object will store all of our output so that
         // we can return it easily when required
         $renderer = pnRender::getInstance('News');
@@ -42,14 +43,15 @@ function news_searchapi_options($args)
  **/
 function news_searchapi_search($args)
 {
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ))) {
         return true;
     }
 
     pnModDBInfoLoad('Search');
     $pntable = pnDBGetTables();
-    $storiestable  = $pntable['stories'];
-    $storiescolumn = $pntable['stories_column'];
+    $storiestable  = $pntable['news'];
+    $storiescolumn = $pntable['news_column'];
     $searchTable   = $pntable['search_result'];
     $searchColumn  = $pntable['search_result_column'];
 
@@ -76,7 +78,7 @@ VALUES ";
     pnModAPILoad('News', 'user');
 
     $permChecker = new news_result_checker();
-    $stories = DBUtil::selectObjectArrayFilter('stories', $where, null, null, null, '', $permChecker, null);
+    $stories = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
 
     foreach ($stories as $story)
     {

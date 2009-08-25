@@ -27,7 +27,8 @@
 function News_admin_main()
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -89,7 +90,8 @@ function News_admin_modify($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', "$dbitem[aid]::$sid", ACCESS_EDIT)) {
+    if (!(SecurityUtil::checkPermission('News::', "$dbitem[aid]::$sid", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$dbitem[aid]::$sid", ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -138,7 +140,7 @@ function News_admin_modify($args)
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
-        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+        $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
 
         // check if the __CATEGORIES__ info needs a fix (when preview)
         if (isset($item['__CATEGORIES__'])) {
@@ -216,7 +218,8 @@ function News_admin_update($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -325,7 +328,8 @@ function News_admin_delete($args)
     }
 
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -367,7 +371,8 @@ function News_admin_delete($args)
 function News_admin_view($args)
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -408,7 +413,7 @@ function News_admin_view($args)
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties = array_keys($catregistry);
 
         // Validate and build the category filter - mateo
@@ -489,7 +494,8 @@ function News_admin_view($args)
                            'image' => 'demo.gif',
                            'title' => _VIEW);
 
-        if (SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
+        if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_EDIT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
             $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
                                'image' => 'xedit.gif',
                                'title' => _EDIT);
@@ -625,14 +631,15 @@ function News_admin_view($args)
 function News_admin_modifyconfig()
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
         return LogUtil::registerPermissionError();
     }
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
     }
-    $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+    $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
     $propertyName  = pnModGetVar('News', 'topicproperty');
     $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
@@ -660,7 +667,8 @@ function News_admin_modifyconfig()
 function News_admin_updateconfig()
 {
     // Security check
-    if (!SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
+          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -692,7 +700,7 @@ function News_admin_updateconfig()
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
         pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
     }
-    $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'stories');
+    $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
     $topicproperty = FormUtil::getPassedValue('topicproperty', null, 'POST');
     $modvars['topicproperty'] = $properties[$topicproperty];

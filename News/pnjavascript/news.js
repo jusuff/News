@@ -15,15 +15,20 @@ Event.observe(window,
 
 function news_init_check() 
 {
-    if($('news_loadnews')) {
+    if ($('news_loadnews')) {
         Element.hide('news_loadnews');
     }
-    if($('news_editlinks')) {
+    if ($('news_editlinks')) {
         Element.remove('news_editlinks');
     }
-    if($('news_editlinks_ajax')) {
+    if ($('news_editlinks_ajax')) {
         Element.removeClassName($('news_editlinks_ajax'), 'hidelink'); 
     }
+/*
+    if ($('news_sample_urltitle')) {
+        news_title_init();
+    }
+*/    
     if ($('news_meta_collapse')) {
         news_meta_init();
     }
@@ -39,15 +44,17 @@ function news_init_check()
     if ($('news_attributes_collapse')) {
         news_attributes_init();
     }
-    if($('news_multicategory_filter')) {
+    if ($('news_multicategory_filter')) {
         news_filter_init(); 
     } 
 }
 
+
 /**
- * Starts the update process by calling the approrpiate Ajax function
+ * Start the editing/updating process by calling the appropriate Ajax function
  *
  *@params sid    the story id;
+ *@params page   the page id;
  *@return none;
  *@author Frank Schummertz
  */
@@ -77,13 +84,13 @@ function editnews(sid, page)
 function editnews_init(req) 
 {
     Element.hide('news_loadnews');
-
     if(req.status != 200 ) { 
         pnshowajaxerror(req.responseText);
         return;
     }
     var json = pndejsonize(req.responseText);
     editing = true;
+    // Fill the news_modify div with rendered template news_ajax_modify.htm
     Element.update('news_modify', json.result);
     Element.hide('news_savenews');
     Element.hide('news_articlecontent');
@@ -187,6 +194,14 @@ function editnews_saveresponse(req)
  * with the switchdisplaystate funtion of javascript/ajax/pnajax.js. This function uses BlindDown and BlindUp
  * when scriptaculous Effects is loaded and otherwise show and hide of prototype.
  */
+/*
+function news_title_init()
+{
+//    Event.observe('news_title', 'change', savedraft);
+    $('news_sample_urltitle_edit').hide();
+    $('news_status_info').hide();
+}
+*/
 
 function news_filter_init()
 {
@@ -220,21 +235,26 @@ function news_unlimited_onchange()
     switchdisplaystate('news_expiration_details');
 }
 
-
 function news_tonolimit_onchange()
 {
     switchdisplaystate('news_expiration_date');
 }
 
+
 function news_publication_init()
 {
     Event.observe('news_publication_collapse', 'click', news_publication_click);
     $('news_publication_collapse').addClassName('pn-toggle-link');
-    // hide the details when unlimited is not set, the details will unfold nicely with the click afterwards.
-//    if ($('news_unlimited').checked == false) {
-//        $('news_publication_details').hide();
-//    }
-    news_publication_click();
+    // show  the publication details  when unlimited is not set
+    if ($('news_unlimited').checked == true) {
+        $('news_publication_details').parentNode.addClassName('pn-collapsed');
+        $('news_publication_details').hide();
+    } else {
+        $('news_publication_collapse').addClassName('pn-toggle-link-open');
+        $('news_publication_details').parentNode.removeClassName('pn-collapsed');
+        $('news_publication_details').show();
+    }
+//    news_publication_click();
 }
 
 function news_publication_click()
@@ -242,11 +262,11 @@ function news_publication_click()
     if ($('news_publication_details').style.display != "none") {
         Element.addClassName.delay(0.9, $('news_publication_details').parentNode, 'pn-collapsed');
         Element.removeClassName.delay(0.9, $('news_publication_collapse'), 'pn-toggle-link-open');
-//        $('news_publication_collapse').update(showpublicationoptions);
+//        $('news_publication_collapse').update(showpublicationoptions); // Change the button text
     } else {
         Element.removeClassName($('news_publication_details').parentNode, 'pn-collapsed');
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
-//        $('news_publication_collapse').update(hidepublicationoptions);
+//        $('news_publication_collapse').update(hidepublicationoptions); // Change the button text
     }
     switchdisplaystate('news_publication_details');
 }

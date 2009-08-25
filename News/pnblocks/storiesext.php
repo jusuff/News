@@ -222,7 +222,7 @@ height:50px;
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
         // Get the registrered categories for the News module
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $apiargs['catregistry'] = $catregistry;
         $apiargs['category'] = $vars['category'];
     }
@@ -339,7 +339,7 @@ height:50px;
         if ($vars['dispuname']||$vars['dispdate']||$vars['dispreads']||$vars['dispcomments']) {
             $render->assign('dispinfo', true);
         }
-        $render->assign('readperm',(bool)SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_READ));
+        $render->assign('readperm',(bool)(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_READ) || SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_READ)));
         $render->assign($vars);
         $render->assign($item);
         // Get the cached output per row
@@ -510,7 +510,7 @@ height:50px;
             pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
         }
         // Get the registrered categories for the News module
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'stories');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $render->assign('catregistry', $catregistry);
     }
     $render->assign('enablecategorization', $enablecategorization);

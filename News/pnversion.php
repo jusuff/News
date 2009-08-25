@@ -15,14 +15,14 @@
 $modversion['name']        = 'News';
 $modversion['displayname'] = _NEWS_DISPLAYNAME;
 $modversion['description'] = _NEWS_DESCRIPTION;
-$modversion['version']     = '2.4.1';
+$modversion['version']     = '2.5';
 
 $modversion['credits']     = 'pndocs/credits.txt';
 $modversion['help']        = 'pndocs/install.txt';
 $modversion['changelog']   = 'pndocs/changelog.txt';
 $modversion['license']     = 'pndocs/license.txt';
 $modversion['official']    = 1;
-$modversion['author']      = 'Mark West, Mateo Tibaquira, Erik Spaan';
+$modversion['author']      = 'Mark West, Erik Spaan, Mateo Tibaquira';
 $modversion['contact']     = 'http://code.zikula.org/news';
 
-$modversion['securityschema'] = array('Stories::Story' => 'Author ID::Story ID');
+$modversion['securityschema'] = array('News::' => 'Author ID::Story ID');
