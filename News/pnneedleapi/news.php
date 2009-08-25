@@ -24,7 +24,7 @@
  * @param $args['nid'] needle id
  * @return array()
  */
-function MultiHook_needleapi_news($args)
+function News_needleapi_news($args)
 {
     // Get arguments from argument array
     $nid = $args['nid'];

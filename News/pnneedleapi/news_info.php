@@ -24,7 +24,7 @@
  * @param none
  * @return string with short usage description
  */
-function MultiHook_needleapi_news_info()
+function News_needleapi_news_info()
 {
     $info = array('module'  => 'News', 
                   'info'    => 'NEWS{sid}',
