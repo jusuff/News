@@ -281,9 +281,9 @@ function News_userapi_get($args)
             $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         }
         ObjectUtil::postProcessExpandedObjectCategories($item['__CATEGORIES__'], $registeredCats);
-
-        if (!CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News'))
+        if (!CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News')) {
             return false;
+        }
     }
 
     return $item;
