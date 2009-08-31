@@ -243,6 +243,25 @@ function News_user_create($args)
     if ($sid != false) {
         // Success
         LogUtil::registerStatus(pnML('_CREATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
+        
+/*
+        // Notify the configured addresses of a new Pending Review article
+        $pending_notif = pnModGetVar('News', 'pending_notif', false);
+        if ($pending_notif && $item['published_status'] == 2) {
+            $fromname    = pnModGetVar('News', 'pending_notif_fromname', pnConfigGetVar('sitename'));
+            $fromaddress = pnModGetVar('News', 'pending_notif_fromaddress', pnConfigGetVar('adminmail'));
+            $toname      = pnModGetVar('News', 'pending_notif_toname', pnConfigGetVar('sitename'));
+            $toaddress   = pnModGetVar('News', 'pending_notif_toaddress', pnConfigGetVar('adminmail'));
+            $subject     = pnModGetVar('News', 'pending_notif_subject');
+            $body        = 'To Be Filled in';
+            $html        = pnModGetVar('News', 'pending_notif_html');
+            $sent        = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toaddress'  => $toaddress,
+                                                                               'fromaddress'=> $fromaddress,
+                                                                               'subject'    => $subject,
+                                                                               'body'       => $message,
+                                                                               'html'       => $html));
+        }
+*/        
     }
 
     return pnRedirect(pnModURL('News', $referertype, 'view'));
