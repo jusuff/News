@@ -139,7 +139,7 @@ function News_admin_modify($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (__('Error! Unable to load class CategoryRegistryUtil'));
+            pn_exit(__('Error! Unable to load class CategoryRegistryUtil'));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
 
@@ -475,7 +475,7 @@ function News_admin_view($args)
         2  => __('Pending Review', $dom),
         3  => __('Archived', $dom),
         4  => __('Draft', $dom),
-        5  => _NEWS_SCHEDULED
+        5  => __('Scheduled', $dom)
     );
 
 /*    // Load localized month names
@@ -705,7 +705,7 @@ function News_admin_updateconfig()
     $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-        pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
+        pn_exit(__('Error! Unable to load class CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);

@@ -27,7 +27,7 @@ function News_init()
 
     // create our default category
     if (!_news_createdefaultcategory()) {
-        return LogUtil::registerError (__('Error! Creation attempt failed.', $dom));
+        return LogUtil::registerError(__('Error! Creation attempt failed.', $dom));
     }
 
     // Set up config variables
@@ -75,7 +75,7 @@ function News_upgrade($oldversion)
             $sqls[] = "UPDATE $tables[stories] SET pn_urltitle = REPLACE(pn_title, ' ', '{$shorturlsep}')";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
-                    return LogUtil::registerError (__('Error! Table update failed.', $dom));
+                    return LogUtil::registerError(__('Error! Table update failed.', $dom));
                 }
             }
             // drop the old columns
@@ -86,19 +86,19 @@ function News_upgrade($oldversion)
         case 2.0:
             // import autonews and queue articles
             if (!_news_import_autonews_queue()) {
-                return LogUtil::registerError (__('Error! Update attempt failed.', $dom));
+                return LogUtil::registerError(__('Error! Update attempt failed.', $dom));
             }
             // migrate the comments to ezcomments
             if (pnModAvailable('Comments') || defined('_PNINSTALLVER')) {
                 // check for the ezcomments module
                 if (!pnModAvailable('EZComments')) {
-                    return LogUtil::registerError (__('The EZComments module is not available.', $dom));
+                    return LogUtil::registerError(__('The EZComments module is not available.', $dom));
                 }
                 //  drop the comments table if successful
                 if (pnModAPIFunc('EZComments', 'migrate', 'news')) {
                     // drop comments table after migration has succeeded
                     if (!DBUtil::dropTable('comments')) {
-                        return LogUtil::registerError (__('Error! Table deletion failed.', $dom));
+                        return LogUtil::registerError(__('Error! Table deletion failed.', $dom));
                     }
                     // remove the Comments module
                     pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('Comments')));
@@ -106,10 +106,10 @@ function News_upgrade($oldversion)
             }
             // drop the autonews and queue tables, articles are already imported
             if (!DBUtil::dropTable('autonews')) {
-                return LogUtil::registerError (__('Error! Table deletion failed.', $dom));
+                return LogUtil::registerError(__('Error! Table deletion failed.', $dom));
             }
             if (!DBUtil::dropTable('queue')) {
-                return LogUtil::registerError (__('Error! Table deletion failed.', $dom));
+                return LogUtil::registerError(__('Error! Table deletion failed.', $dom));
             }
             // remove the AddStory and Submit_News modules
             pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('AddStory')));
@@ -120,7 +120,7 @@ function News_upgrade($oldversion)
             pnModDBInfoLoad('News', 'News', true);
 
             if (!_news_migratecategories()) {
-                return LogUtil::registerError (__('Error! Update attempt failed.', $dom));
+                return LogUtil::registerError(__('Error! Update attempt failed.', $dom));
             }
             return News_upgrade(2.2);
         case 2.2:
@@ -135,7 +135,7 @@ function News_upgrade($oldversion)
             $sqls[] = "UPDATE $tables[stories] SET pn_hometext = '' WHERE pn_hometext IS NULL";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
-                    return LogUtil::registerError (__('Error! Table update failed.', $dom));
+                    return LogUtil::registerError(__('Error! Table update failed.', $dom));
                 }
             }
             pnModSetVar('News', 'enableattribution', false);
@@ -155,7 +155,7 @@ function News_upgrade($oldversion)
             $tables = pnDBGetTables();
             // rename the database table from stories to news
             if (!DBUtil::renameTable('stories', 'news')) {
-                    return LogUtil::registerError (__('Error! Table rename failed.', $dom));
+                    return LogUtil::registerError(__('Error! Table rename failed.', $dom));
             }
             // upgrade table
             if (!DBUtil::changeTable('news')) {
@@ -172,7 +172,7 @@ function News_upgrade($oldversion)
             $sqls[] = 'UPDATE ' . $categories_registry_table . ' SET crg_table=\'news\' WHERE crg_table=\'stories\'';
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
-                    return LogUtil::registerError (__('Error! Table update failed.', $dom));
+                    return LogUtil::registerError(__('Error! Table update failed.', $dom));
                 }
             }
             return News_upgrade(2.5);
@@ -300,7 +300,7 @@ function _news_migratecategories()
     }
     foreach ($pages as $page) {
         if (!DBUtil::updateObject($page, 'stories', '', 'sid')) {
-            return LogUtil::registerError (__('Error! Update attempt failed.', $dom));
+            return LogUtil::registerError(__('Error! Update attempt failed.', $dom));
         }
     }
 
@@ -387,8 +387,8 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
         // pnModLangLoad doesn't handle type 1 modules
         //pnModLangLoad('Topics', 'version');
         Loader::includeOnce("modules/Topics/lang/{$lang}/version.php");
-        $cat->setDataField('display_name', array($lang => _TOPICS_DISPLAYNAME));
-        $cat->setDataField('display_desc', array($lang => _TOPICS_DESCRIPTION));
+        $cat->setDataField('display_name', array($lang => __('Topics', $dom)));
+        $cat->setDataField('display_desc', array($lang => __('Display site topics.', $dom)));
         if (!$cat->validate('admin')) {
             return false;
         }
@@ -466,7 +466,7 @@ function _news_import_autonews_queue()
         // Manually update the topic and catid, since those are not in pntables and still needed for category migration
         $sql = "UPDATE $tables[stories] SET pn_catid = '".$obj['catid']."', pn_topic = '".$obj['topic']."' WHERE pn_sid = ".$objj['sid'];
         if (!DBUtil::executeSQL($sql)) {
-            return LogUtil::registerError (__('Error! Table update failed.', $dom));
+            return LogUtil::registerError(__('Error! Table update failed.', $dom));
         }
         $i++;
     }
@@ -515,7 +515,7 @@ function _news_import_autonews_queue()
         // Manually update the topic and catid, since those are not in pntables and still needed for category migration
         $sql = "UPDATE $tables[stories] SET pn_catid = '0', pn_topic = '".$obj['topic']."' WHERE pn_sid = ".$objj['sid'];
         if (!DBUtil::executeSQL($sql)) {
-            return LogUtil::registerError (__('Error! Table update failed.', $dom));
+            return LogUtil::registerError(__('Error! Table update failed.', $dom));
         }
         $i++;
     }

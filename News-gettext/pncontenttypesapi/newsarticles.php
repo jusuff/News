@@ -290,7 +290,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         }
         $catname = implode(' | ', $catnames);
         $output = '<h4>' . DataUtil::formatForDisplayHTML($this->title) . '</h4>';
-        $output .= '<p>' . DataUtil::formatForDisplayHTML(__f('News articles list of the <b>"%s"</b> category', $catname, $dom)) . '</p>';
+        $output .= '<p>' . __f('News articles list of the <b>"%s"</b> category', $catname, $dom) . '</p>';
         return $output;
     }
 
@@ -319,7 +319,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         if ($enablecategorization) {
             // load the categories system
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom))
+            pn_exit(__('Error! Unable to load class CategoryRegistryUtil', $dom))
 
 
                 ;

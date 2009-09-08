@@ -33,7 +33,7 @@ function News_storiesblock_info()
 {
     $dom = ZLanguage::getModuleDomain('News');
     return array('text_type'       => __('Stories', $dom),
-                 'module'          => __('News', $dom),
+                 'module'          => 'News',
                  'text_type_long'  => __('Story Titles', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,

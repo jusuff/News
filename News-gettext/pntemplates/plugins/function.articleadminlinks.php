@@ -85,12 +85,12 @@ function smarty_function_articleadminlinks($params, &$smarty)
             require_once $smarty->_get_plugin_filepath('function','pnajaxheader');
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'news.js'), $smarty);
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'sizecheck.js'), $smarty);
-            $articlelinks .= '<img id="news_loadnews" src="'.pnGetBaseURL().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . _EDIT . '</a> ' . $params['end'] . "</span>\n";
+            $articlelinks .= '<img id="news_loadnews" src="'.pnGetBaseURL().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
         } else {
-            $articlelinks .= "<span class=\"" . $params['class'] . "\"> " . $params['start'] . " <a href=\"" . DataUtil::formatForDisplayHTML(pnModURL('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . _EDIT . '</a>';
+            $articlelinks .= "<span class=\"" . $params['class'] . "\"> " . $params['start'] . " <a href=\"" . DataUtil::formatForDisplayHTML(pnModURL('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . __('Edit', $dom) . '</a>';
             if (SecurityUtil::checkPermission('News::', "$info[aid]:$info[cattitle]:$info[sid]", ACCESS_DELETE) ||
                 SecurityUtil::checkPermission('Stories::Story', "$info[aid]:$info[cattitle]:$info[sid]", ACCESS_DELETE)) {
-                $articlelinks .= " " . $params['seperator'] . " <a href=\"" . DataUtil::formatForDisplay(pnModURL('News', 'admin', 'delete', array('sid' => $params['sid']))) . '">' . _DELETE . '</a>';
+                $articlelinks .= " " . $params['seperator'] . " <a href=\"" . DataUtil::formatForDisplay(pnModURL('News', 'admin', 'delete', array('sid' => $params['sid']))) . '">' . __('Delete', $dom) . '</a>';
             }
             $articlelinks .= " " . $params['end'] . "</span>\n";
         }

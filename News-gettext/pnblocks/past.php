@@ -33,7 +33,7 @@ function News_pastblock_info()
 {
     $dom = ZLanguage::getModuleDomain('News');
     return array('text_type'      => __('Past', $dom),
-                 'module'         => __('News', $dom),
+                 'module'         => 'News',
                  'text_type_long' => __('Past Articles', $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,

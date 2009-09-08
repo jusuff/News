@@ -50,9 +50,9 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
     //TODO A All this needs to be removed... we just use plurals here - drak
     if ($diff['d'] < 0) {
         if ($niceval == 1) {
-            $res = __f('%days% days ago';, array('days' => abs($diff['d'])));
+            $res = __f('%days% days ago', array('days' => abs($diff['d'])), $dom);
         } elseif ($niceval < 4 && $diff['d'] == -1) {
-            $res = pnML('_NEWS_YESTERDAY');
+            $res = __('Yesterday', $dom);
         } else {
             $res = DateUtil::formatDatetime($string, $format);
         }
@@ -60,28 +60,28 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
         if ($niceval > 2) {
             $res = DateUtil::formatDatetime($string, $format);
         } elseif ($diff['d'] == 1) {
-            $res = pnML('_NEWS_TOMORROW');
+            $res = __('Tomorrow', $dom);
         } else {
-            $res = __f('%days% days from now';, array('days' => $diff['d']));
+            $res = __f('%days% days from now', array('days' => $diff['d']), $dom);
         }
     } else {
         // no day difference
         if ($diff['h'] < 0) {
-            $res = __f('%hours% hours ago';, array('hours' => abs($diff['h'])));
+            $res = __f('%hours% hours ago', array('hours' => abs($diff['h'])), $dom);
         } elseif ($diff['h'] > 0) {
-            $res = __f('%hours% hours from now';, array('hours' => $diff['h']));
+            $res = __f('%hours% hours from now', array('hours' => $diff['h']), $dom);
         } else {
             // no hour difference
             if ($diff['m'] < 0) {
-                $res = __f('%mins% mins ago';, array('mins' => abs($diff['m'])));
+                $res = __f('%mins% mins ago', array('mins' => abs($diff['m'])), $dom);
             } elseif ($diff['m'] > 0) {
-                $res = __f('%mins% mins from now';, array('mins' => $diff['m']));
+                $res = __f('%mins% mins from now', array('mins' => $diff['m']), $dom);
             } else {
                 // no min difference
                 if ($diff['s'] < 0) {
-                    $res = __f('%secs% secs ago';, array('secs' => abs($diff['s'])));
+                    $res = __f('%secs% secs ago', array('secs' => abs($diff['s'])), $dom);
                 } else {
-                    $res = __f('%secs% secs from now';, array('secs' => $diff['s']));
+                    $res = __f('%secs% secs from now', array('secs' => $diff['s']), $dom);
                 }
             }
         }

@@ -70,7 +70,7 @@ function News_storiesextblock_info()
 {
     $dom = ZLanguage::getModuleDomain('News');
     return array('text_type'       => __('StoriesExtended', $dom),
-                 'module'          => __('News', $dom),
+                 'module'          => 'News',
                  'text_type_long'  => __('Story Titles Extended', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,
@@ -255,7 +255,7 @@ height:50px;
     if (empty($items)) {
         if ($vars['showemptyresult']) {
             // Show empty result message instead of empty block if variable is set
-            $blockinfo['content'] = DataUtil::formatForDisplayHTML(__('No News', $dom));
+            $blockinfo['content'] = __('No News', $dom);
              return pnBlockThemeBlock($blockinfo);
         } else {
             return;
@@ -510,7 +510,7 @@ height:50px;
     if ($enablecategorization) {
         // load the categories system
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
+            pn_exit(__('Error! Unable to load class CategoryRegistryUtil', $dom));
         }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');

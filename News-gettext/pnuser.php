@@ -99,7 +99,7 @@ function News_user_new($args)
     if ($modvars['enablecategorization']) {
         // load the categories system
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (__('Error! Unable to load class CategoryRegistryUtils', $dom));
+            pn_exit(__('Error! Unable to load class CategoryRegistryUtils', $dom));
         }
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $renderer->assign('catregistry', $catregistry);
@@ -307,7 +307,7 @@ function News_user_view($args = array())
     // check if categorization is enabled
     if ($modvars['enablecategorization']) {
         if (!($class = Loader::loadClass('CategoryUtil')) || !($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (__('Error! Unable to load class CategoryUtil | CategoryRegistryUtil', $dom));
+            pn_exit(__('Error! Unable to load class CategoryUtil | CategoryRegistryUtil', $dom));
         }
         // get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -353,7 +353,7 @@ function News_user_view($args = array())
         if ($modvars['enablecategorization'] && isset($catFilter)) {
             LogUtil::registerStatus(__f('No news articles published in category %s', $catname, $dom));
         } else {
-            LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUND'));
+            LogUtil::registerStatus(__('No news articles currently published', $dom));
         }
     }
 
@@ -709,7 +709,7 @@ function News_user_categorylist($args)
 
     if ($enablecategorization) {
         if (!($class = Loader::loadClass ('CategoryRegistryUtil')) || !($class = Loader::loadClass ('CategoryUtil'))) {
-            pn_exit (__('Error! Unable to load class CategoryRegistryUtil | CategoryUtil', $dom));
+            pn_exit(__('Error! Unable to load class CategoryRegistryUtil | CategoryUtil', $dom));
         }
         // Get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
