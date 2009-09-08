@@ -31,9 +31,10 @@ function News_storiesblock_init()
  */
 function News_storiesblock_info()
 {
-    return array('text_type'       => 'Stories',
-                 'module'          => 'News',
-                 'text_type_long'  => 'Story Titles',
+    $dom = ZLanguage::getModuleDomain('News');
+    return array('text_type'       => __('Stories', $dom),
+                 'module'          => __('News', $dom),
+                 'text_type_long'  => __('Story Titles', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,
                  'form_refresh'    => false,
@@ -50,6 +51,7 @@ function News_storiesblock_info()
  */
 function News_storiesblock_display($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // security check
     if (!SecurityUtil::checkPermission('Storiesblock::', $blockinfo['title'].'::', ACCESS_OVERVIEW)) {
         return;
@@ -84,7 +86,7 @@ function News_storiesblock_display($blockinfo)
     $apiargs['ignorecats'] = true;
     if (isset($vars['category']) && !empty($vars['category'])) {
         if (!($class = Loader::loadClass('CategoryUtil')) || !($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryUtil | CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryUtil | CategoryRegistryUtil', $dom));
         }
         $cat = CategoryUtil::getCategoryByID($vars['category']);
         $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
@@ -138,6 +140,7 @@ function News_storiesblock_display($blockinfo)
  */
 function News_storiesblock_modify($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Break out options from our content field
     $vars = pnBlockVarsFromContent($blockinfo['content']);
 
@@ -154,7 +157,7 @@ function News_storiesblock_modify($blockinfo)
 
     // load the categories system
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-        pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+        pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
     }
     $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
     $render->assign('mainCategory', $mainCat);
@@ -176,6 +179,7 @@ function News_storiesblock_modify($blockinfo)
  */
 function News_storiesblock_update($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get current content
     $vars = pnBlockVarsFromContent($blockinfo['content']);
 

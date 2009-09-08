@@ -20,26 +20,27 @@
  */
 function News_adminapi_delete($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Argument check
     if (!isset($args['sid']) || !is_numeric($args['sid'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // Get the news story
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
-        return LogUtil::registerError (_NOSUCHITEM);
+        return LogUtil::registerError (__('No such item found.', $dom));
     }
 
     // Security check
     if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
           SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE))) {
-        return LogUtil::registerError (_MODULENOAUTH);
+        return LogUtil::registerError (__('Sorry! No authorization to access this module.', $dom));
     }
 
     if (!DBUtil::deleteObjectByID('news', $args['sid'], 'sid')) {
-        return LogUtil::registerError (_DELETEFAILED);
+        return LogUtil::registerError (__('Error! Sorry! Deletion attempt failed.', $dom));
     }
 
     // Let any hooks know that we have deleted an item
@@ -68,6 +69,7 @@ function News_adminapi_delete($args)
  */
 function News_adminapi_update($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Argument check
     if (!isset($args['sid']) ||
         !isset($args['title']) ||
@@ -79,7 +81,7 @@ function News_adminapi_update($args)
         !isset($args['published_status']) ||
         !isset($args['from']) ||
         !isset($args['to'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     if (!isset($args['language'])) {
@@ -90,13 +92,13 @@ function News_adminapi_update($args)
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
-        return LogUtil::registerError (_NOSUCHITEM);
+        return LogUtil::registerError (__('No such item found.', $dom));
     }
 
     // Security check
     if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$args[sid]", ACCESS_EDIT) ||
           SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT))) {
-        return LogUtil::registerError (_MODULENOAUTH);
+        return LogUtil::registerError (__('Sorry! No authorization to access this module.', $dom));
     }
 
     // calculate the format type
@@ -134,7 +136,7 @@ function News_adminapi_update($args)
     }
 
     if (!DBUtil::updateObject($args, 'news', '', 'sid')) {
-        return LogUtil::registerError (_UPDATEFAILED);
+        return LogUtil::registerError (__('Error! Update attempt failed.', $dom));
     }
 
     // Let any hooks know that we have updated an item.
@@ -156,10 +158,11 @@ function News_adminapi_update($args)
  */
 function News_adminapi_purgepermalinks($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
-        return LogUtil::registerError(_MODULENOAUTH);
+        return LogUtil::registerError(__('Sorry! No authorization to access this module.', $dom));
     }
 
     // disable categorization to do this (if enabled)
@@ -207,6 +210,7 @@ function News_adminapi_purgepermalinks($args)
  */
 function news_adminapi_getlinks()
 {
+    $dom = ZLanguage::getModuleDomain('News');
     $links = array();
 
     pnModLangLoad('News', 'admin');
@@ -221,8 +225,8 @@ function news_adminapi_getlinks()
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
-        $links[] = array('url' => pnModURL('News', 'admin', 'view', array('purge' => 1)), 'text' => _PURGEPERMALINKS);
-        $links[] = array('url' => pnModURL('News', 'admin', 'modifyconfig'), 'text' => _MODIFYNEWSCONFIG);
+        $links[] = array('url' => pnModURL('News', 'admin', 'view', array('purge' => 1)), 'text' => __('Purge PermaLinks', $dom));
+        $links[] = array('url' => pnModURL('News', 'admin', 'modifyconfig'), 'text' => __('News Publisher Settings', $dom));
     }
 
     return $links;

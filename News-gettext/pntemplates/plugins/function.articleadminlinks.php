@@ -45,6 +45,7 @@
  */
 function smarty_function_articleadminlinks($params, &$smarty)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // get the info template var
     $info = $smarty->get_template_vars('info');
 

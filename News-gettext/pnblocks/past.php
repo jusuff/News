@@ -31,9 +31,10 @@ function News_pastblock_init()
  */
 function News_pastblock_info()
 {
-    return array('text_type'      => 'Past',
-                 'module'         => 'News',
-                 'text_type_long' => 'Past Articles',
+    $dom = ZLanguage::getModuleDomain('News');
+    return array('text_type'      => __('Past', $dom),
+                 'module'         => __('News', $dom),
+                 'text_type_long' => __('Past Articles', $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -49,6 +50,7 @@ function News_pastblock_info()
  */
 function News_pastblock_display($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // security check
     if (!SecurityUtil::checkPermission('Pastblock::', "$blockinfo[title]::", ACCESS_READ)) {
         return;
@@ -117,7 +119,7 @@ function News_pastblock_display($blockinfo)
     $renderer->assign('news', $news);
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = _PASTARTICLES;
+        $blockinfo['title'] = __('Past News', $dom);
     }
     $blockinfo['content'] = $renderer->fetch('news_block_past.htm');
 
@@ -133,6 +135,7 @@ function News_pastblock_display($blockinfo)
  */
 function News_pastblock_modify($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Break out options from our content field
     $vars = pnBlockVarsFromContent($blockinfo['content']);
 
@@ -163,6 +166,7 @@ function News_pastblock_modify($blockinfo)
  */
 function News_pastblock_update($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get current content
     $vars = pnBlockVarsFromContent($blockinfo['content']);
 

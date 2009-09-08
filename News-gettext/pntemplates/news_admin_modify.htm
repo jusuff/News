@@ -8,15 +8,15 @@
 <!--[pnpageaddvar name='javascript' value='javascript/ajax/dragdrop.js']-->
 <!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/Zikula.itemlist.js']-->
 <!--[/if]-->
-<!--[pnml name='_NEWS_MODIFY' assign='templatetitle']-->
+<!--[gt text="Edit News Article" assign='templatetitle']-->
 
 <!--[include file='news_admin_menu.htm']-->
 
 <script type="text/javascript">
 /* <![CDATA[ */
-    var bytesused = '<!--[pnml name="_NEWS_CHARSUSED"]-->';
-    var showpublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONSHOW"]-->';
-    var hidepublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONHIDE"]-->';
+    var bytesused = '<!--[gt text="#{chars} chars out of 65536"]-->';
+    var showpublicationoptions = '<!--[gt text="Show Publishing Options"]-->';
+    var hidepublicationoptions = '<!--[gt text="Hide Publishing Options"]-->';
 <!--[if $enableattribution]-->
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
@@ -44,23 +44,23 @@
     <!--[/if]-->
 
     <fieldset class="pn-form-fieldset">
-    <legend><!--[pnml name='_NEWS_OVERVIEW']--></legend>
+    <legend><!--[gt text="Heading Info"]--></legend>
 
         <div class="pn-formrow">
-            <label for="news_title"><!--[pnml name='_TITLE']--></label>
+            <label for="news_title"><!--[gt text="Title"]--></label>
             <input id="news_title" class="pn-form-text" name="story[title]" type="text" size="32" maxlength="255" value="<!--[$title|pnvarprepfordisplay]-->" />
         </div>
 
         <div class="pn-formrow">
-            <label for="news_urltitle"><!--[pnml name='_PERMALINKTITLE']--></label>
+            <label for="news_urltitle"><!--[gt text="PermaLink URL title"]--></label>
             <input id="news_urltitle" class="pn-form-text" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
-            <span class="pn-sub"><!--[pnml name='_PERMALINKTITLEBLANK']--></span>
+            <span class="pn-sub"><!--[gt text="(Blank = auto-generate)"]--></span>
         </div>
 
         <!--[if $enablecategorization]-->
         <div class="pn-formrow">
-            <label for="news_categories"><!--[pnml name='_CATEGORY']--></label>
-            <!--[pnml assign='lblDef' name='_CHOOSECATEGORY']-->
+            <label for="news_categories"><!--[gt text="Category"]--></label>
+            <!--[pnml assign='lblDef' name='Choose Category']-->
             <!--[nocache]-->
             <ul id="news_categories" class="selector_category">
             <!--[foreach from=$catregistry key='property' item='category']-->
@@ -80,90 +80,90 @@
         <!--[pnconfiggetvar name='multilingual' assign='multilingual']-->
         <!--[if $multilingual]-->
         <div class="pn-formrow">
-            <label for="news_language"><!--[pnml name='_LANGUAGE']--></label>
+            <label for="news_language"><!--[gt text="Language"]--></label>
             <!--[languagelist id='news_language' name='story[language]' all=true installed=true selected=$language]-->
         </div>
         <!--[/if]-->
     </fieldset>
 
     <fieldset class="pn-form-fieldset">
-        <legend><!--[pnml name='_NEWS_ARTICLECONTENT']--></legend>
+        <legend><!--[gt text="Article Content"]--></legend>
 
         <!--[if $formattedcontent eq 0]-->
-        <div class="pn-warningmsg"><!--[pnml name='_PERMITTEDHTMLTAGSREMINDER']--> <!--[allowedhtml]--></div>
+        <div class="pn-warningmsg"><!--[gt text="Permitted HTML tags:"]--> <!--[allowedhtml]--></div>
         <!--[/if]-->
         <div class="pn-formrow">
-            <label for="news_hometext"><!--[pnml name='_NEWS_HOMETEXT']--></label>
+            <label for="news_hometext"><!--[gt text="Lead page teaser"]--></label>
             <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-            <span id="news_hometext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
+            <span id="news_hometext_remaining" class="pn-sub"><!--[gt text="(Limit: 65536 characters)"]--></span>
         </div>
 
         <!--[if $formattedcontent eq 0]-->
         <div class="pn-formrow">
-            <label for="news_hometextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
+            <label for="news_hometextcontenttype"><!--[gt text="Content format type"]--></label>
             <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
-                <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
-                <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
+                <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text="Plain Text"]--></option>
+                <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text="Formatted Text"]--></option>
             </select>
         </div>
         <!--[/if]-->
 
         <div class="pn-formrow">
-            <label for="news_bodytext"><!--[pnml name='_NEWS_EXTENDEDTEXT']--></label>
+            <label for="news_bodytext"><!--[gt text="Article body"]--></label>
             <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-            <span id="news_bodytext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
+            <span id="news_bodytext_remaining" class="pn-sub"><!--[gt text="(Limit: 65536 characters)"]--></span>
         </div>
 
         <!--[if $formattedcontent eq 0]-->
         <div class="pn-formrow">
-            <label for="news_bodytextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
+            <label for="news_bodytextcontenttype"><!--[gt text="Content format type"]--></label>
             <select id="news_bodytextcontenttype" name="story[bodytextcontenttype]">
-                <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
-                <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
+                <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text="Plain Text"]--></option>
+                <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text="Formatted Text"]--></option>
             </select>
         </div>
         <!--[/if]-->
 
         <div class="pn-formrow">
-            <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_NOTES']--></a></label>
+            <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text="Show Footnote"]--></a></label>
             <div id="news_notes_details">
             <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-            <span id="news_notes_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
+            <span id="news_notes_remaining" class="pn-sub"><!--[gt text="(Limit: 65536 characters)"]--></span>
             </div>
         </div>
     </fieldset>
 
     <fieldset class="pn-form-fieldset">
-        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATIONSHOW']--></a></legend>
+        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[gt text="Show Publishing Options"]--></a></legend>
 
         <div id="news_publication_details">
         <div class="pn-formrow">
-            <label for="news_ihome"><!--[pnml name='_NEWS_INHOME']--></label>
+            <label for="news_ihome"><!--[gt text="Publish on news lead page"]--></label>
             <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" <!--[if $ihome eq 0]-->checked="checked" <!--[/if]-->/>
         </div>
         <div class="pn-formrow">
-            <label for="news_unlimited"><!--[pnml name='_NEWS_UNLIMITED']--></label>
+            <label for="news_unlimited"><!--[gt text="No time limit"]--></label>
             <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" <!--[if $unlimited eq 1]-->checked="checked" <!--[/if]-->/>
         </div>
 
         <div id="news_expiration_details">
         <div class="pn-formrow">
-            <label><!--[pnml name='_NEWS_FROM']--></label>
+            <label><!--[gt text="Start date"]--></label>
             <!--[html_select_date prefix='from' start_year='-2' end_year='+4' time=$from field_array='story']-->&nbsp;<!--[html_select_time prefix='from' use_24_hours=true display_seconds=false minute_interval='5' time=$from field_array='story']-->
         </div>
         <div class="pn-formrow">
-            <label for="news_tonolimit"><!--[pnml name='_NEWS_NOLIMIT']--></label>
+            <label for="news_tonolimit"><!--[gt text="No end date"]--></label>
             <input id="news_tonolimit" name="story[tonolimit]" type="checkbox" value="1" <!--[if $tonolimit eq 1]-->checked="checked" <!--[/if]-->/>
         </div>
         <div id="news_expiration_date">
         <div class="pn-formrow">
-            <label><!--[pnml name='_NEWS_TO']--></label>
+            <label><!--[gt text="End date"]--></label>
             <!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds=false minute_interval='5' time=$to field_array='story']--><br />
         </div>
         </div>
         </div>
         <div class="pn-formrow">
-            <label for="news_withcomm"><!--[pnml name='_NEWS_ALLOWCOMMENTS']--></label>
+            <label for="news_withcomm"><!--[gt text="Allow commenting for this article"]--></label>
             <input id="news_withcomm" name="story[withcomm]" type="checkbox" value="1" <!--[if $withcomm eq 0]-->checked="checked" <!--[/if]-->/>
         </div>
         </div>
@@ -171,11 +171,11 @@
 
     <!--[if $enableattribution]-->
     <fieldset class="pn-form-fieldset">
-        <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_ATTRIBUTES']--></a></legend>
+        <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[gt text="Article attributes"]--></a></legend>
         <div id="news_attributes_details">
         <div class="pn-formrow">
             <div class="itemlist_newitemdiv">
-                <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' title='_NEWS_ATTRIBUTE_NEW' titleml=true]--> <!--[pnml name='_NEWS_ATTRIBUTE_NEW']--></a><br />
+                <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' __alt='' __title='New article attribute']--> <!--[gt text="New article attribute"]--></a><br />
             </div>
             <ul id="news_attributes" class="itemlist">
                 <!--[if isset($__ATTRIBUTES__)]-->
@@ -191,7 +191,7 @@
                         <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
                     </span>
                     <span class="itemlistcell width7">
-                        <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
+                        <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete']--></button>
                     </span>
                 </li>
                 <!--[/foreach]-->
@@ -209,7 +209,7 @@
                         <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                     </span>
                     <span class="itemlistcell width7">
-                        <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
+                        <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete']--></button>
                     </span>
                 </li>
             </ul>
@@ -219,15 +219,15 @@
     <!--[/if]-->
 
     <fieldset class="pn-form-fieldset">
-        <legend><a id="news_meta_collapse" href="javascript:void(0);"><!--[pnml name='_META_FLC']--></a></legend>
+        <legend><a id="news_meta_collapse" href="javascript:void(0);"><!--[gt text="Meta Data"]--></a></legend>
         <div id="news_meta_details">
         <ul>
             <!--[pnusergetvar name='uname' uid=$cr_uid assign='username']-->
-            <li><!--[pnml name='_CREATEDBY' username=$username]--></li>
-            <li><!--[pnml name='_CREATEDON' date=$cr_date|pndate_format]--></li>
+            <li><!--[gt text="Created by %s" tag1=$username]--></li>
+            <li><!--[gt text="Created on %s" tag1=$cr_date|pndate_format]--></li>
             <!--[pnusergetvar name='uname' uid=$lu_uid assign='username']-->
-            <li><!--[pnml name='_UPDATEDBY' username=$username]--></li>
-            <li><!--[pnml name='_UPDATEDON' date=$lu_date|pndate_format]--></li>
+            <li><!--[gt text="Last updated by %s" tag1=$username]--></li>
+            <li><!--[gt text="Updated on %s" tag1=$lu_date|pndate_format]--></li>
         </ul>
         </div>
     </fieldset>
@@ -235,26 +235,26 @@
     <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 
     <div class="pn-formrow">
-        <label for="news_published_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
+        <label for="news_published_status"><!--[gt text="Status"]--></label>
         <select id="news_published_status" name="story[published_status]">
-            <option value="0"<!--[if $published_status eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PUBLISHED']--></option>
-            <option value="1"<!--[if $published_status eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_REJECTED']--></option>
-            <option value="2"<!--[if $published_status eq 2]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PENDING']--></option>
-            <option value="3"<!--[if $published_status eq 3]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_ARCHIVED']--></option>
+            <option value="0"<!--[if $published_status eq 0]--> selected="selected"<!--[/if]-->><!--[gt text="Published"]--></option>
+            <option value="1"<!--[if $published_status eq 1]--> selected="selected"<!--[/if]-->><!--[gt text="Rejected"]--></option>
+            <option value="2"<!--[if $published_status eq 2]--> selected="selected"<!--[/if]-->><!--[gt text="Pending Review"]--></option>
+            <option value="3"<!--[if $published_status eq 3]--> selected="selected"<!--[/if]-->><!--[gt text="Archived"]--></option>
         </select>
     </div>
 
     <div class="pn-formrow">
-        <label for="news_preview"><!--[pnml name='_NEWS_POSTORPREVIEW']--></label>
+        <label for="news_preview"><!--[gt text="Action"]--></label>
         <select id="news_preview" name="story[preview]">
-            <option value="0"><!--[pnml name='_NEWS_PREVIEWSTORY']--></option>
-            <option value="1" selected="selected"><!--[pnml name='_NEWS_POSTSTORY']--></option>
+            <option value="0"><!--[gt text="Preview"]--></option>
+            <option value="1" selected="selected"><!--[gt text="Publish"]--></option>
         </select>
     </div>
 
     <div class="pn-formrow pn-formbuttons">
-        <!--[pnbutton src='button_ok.gif' set='icons/small' alt='_OK' title='_OK']-->
-        <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' alt='_CANCEL' altml=true title='_CANCEL' titleml=true]--></a>
+        <!--[pnbutton src='button_ok.gif' set='icons/small' __alt='OK' __title='OK']-->
+        <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel']--></a>
     </div>
 </div>
 </form>

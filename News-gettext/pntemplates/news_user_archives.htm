@@ -5,34 +5,34 @@
 <div class="pn-frontendcontainer">
 <!--[if $archiveitems eq '']-->
     <!--[* assign page title *]-->
-    <!--[pnml name='_NEWS_ARCHIVES' assign='NewsArchiveTitle']-->
+    <!--[gt text="Archive" assign='NewsArchiveTitle']-->
     <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
-    <h2><!--[pnml name='_NEWS_ARCHIVES']--></h2>
+    <h2><!--[gt text="Archive"]--></h2>
     <!--[foreach from=$archivemonths key='year' item='years']-->
     <h3><!--[$year]--></h3>
     <ul>
         <!--[foreach from=$years item='month']-->
         <li>
           <a href="<!--[$month.url|pnvarprepfordisplay]-->"><!--[$month.title|pnvarprepfordisplay]--></a>
-          <span class="pn-sub">(<!--[if $month.nrofarticles eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$month.nrofarticles]--><!--[/if]-->)</span>
+          <span class="pn-sub">(<!--[gt text="%s article" plural="%s articles" tag1=$month.nrofarticles]-->)</span>
         </li>
         <!--[/foreach]-->
     </ul>
     <!--[/foreach]-->
 <!--[else]-->
     <!--[* assign page title *]-->
-    <!--[pnml name='_NEWS_ARCHIVESFORDATE' month=$month year=$year assign='NewsArchiveTitle']-->
+    <!--[gt text='Archive for %1$s, %2$s' tag1=$month tag2=$year assign='NewsArchiveTitle']-->
     <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
-    <h2><!--[pnml name='_NEWS_ARCHIVESFORDATE' month=$month year=$year]--></h2>
+    <h2><!--[gt text='Archive for %1$s, %2$s' tag1=$month tag2=$year]--></h2>
     <table class="pn-datatable" style="width:100%;">
       <thead>
         <tr>
-          <th><!--[pnml name='_TITLE']--></th>
+          <th><!--[gt text="Title"]--></th>
           <!--[if $enablecategorization]-->
-            <th><!--[pnml name='_CATEGORY']--></th>
+            <th><!--[gt text="Category"]--></th>
           <!--[/if]-->
-          <th><!--[pnml name='_NEWS_VIEWS']--></th>
-          <th><!--[pnml name='_NEWS_POSTED']--></th>
+          <th><!--[gt text="Views"]--></th>
+          <th><!--[gt text="Date posted"]--></th>
         </tr>
       </thead>
       <tbody>

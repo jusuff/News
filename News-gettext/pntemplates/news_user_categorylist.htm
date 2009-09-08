@@ -5,9 +5,9 @@
 <!--[if $enablecategorization]-->
   <div class="pn-frontendcontainer">
   <!--[* assign page title *]-->
-  <!--[pnml name='_NEWS_AVAILABLECATEGORIES' assign='NewsCatTitle']-->
+  <!--[gt text="Available categories" assign='NewsCatTitle']-->
   <!--[pnpagesetvar name='title' value=$NewsCatTitle]-->
-  <h2><!--[pnml name='_NEWS_AVAILABLECATEGORIES']--></h2>
+  <h2><!--[gt text="Available categories"]--></h2>
   <!--[foreach from=$propertiesdata item='property']-->
     <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]--></h3><!--[/if]-->
     <ul>
@@ -25,21 +25,22 @@
           <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id]-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
         <!--[/if]-->
         <!--[if $authcatedit]-->
-          <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
+          <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' __alt='Edit']--></a>
         <!--[/if]-->
 
 		&nbsp;&nbsp;<span class="pn-sub">
         <!--[nocache]-->
         <!--[if $shorturls and $shorturlstype eq 0]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS Feed']--></a>
         <!--[else]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS Feed']--></a>
         <!--[/if]-->
  
+        <!--[* TODO A - Change this stuff to use plural *]-->
         <!--[if $property.nrofarticles.$categoryid gt 0]-->
-        <!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]--><!--[if $property.nrofyourarticles.$categoryid gt 0]--><!--[pnml name='_NEWS_SELFWRITTEN' count=$property.nrofyourarticles.$categoryid]--><!--[/if]-->
+        <!--[if $property.nrofarticles.$categoryid eq 1]--><!--[gt text="1 article"]--><!--[else]--><!--[gt text="%count% articles"]--><!--[/if]--><!--[if $property.nrofyourarticles.$categoryid gt 0]--><!--[gt text=", %count% self-written"]--><!--[/if]-->
         <!--[else]-->
-        <!--[pnml name='_NEWS_NOARTICLES']-->
+        <!--[gt text="no articles"]-->
         <!--[/if]-->
         <!--[/nocache]-->
 		</span>

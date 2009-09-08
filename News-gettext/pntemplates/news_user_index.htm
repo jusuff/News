@@ -2,7 +2,7 @@
 
 <div class="news_index">
   <h2 class="news_title"><!--[$preformat.title]--></h2>
-  <span class="news_meta pn-sub"><!--[pnml name='_NEWS_POSTEDBYANDON' username=$info.informant date=$info.briefdatetime]--></span>
+  <span class="news_meta pn-sub"><!--[gt text='Posted by %1$s on %2$s' tag1=$info.informant tag2=$info.briefdatetime]--></span>
 
   <div class="news_body">
     <!--[$info.hometext|pnvarprephtmldisplay]-->
@@ -14,7 +14,7 @@
 
   <p class="news_footer">
     <!--[if !empty($info.categories)]-->
-    <!--[pnml name='_NEWS_FILEDUNDER']--><!--[foreach from=$preformat.categories item='categorylink']--> | <!--[$categorylink]--><!--[/foreach]-->
+    <!--[gt text="Filed under"]--><!--[foreach from=$preformat.categories item='categorylink']--> | <!--[$categorylink]--><!--[/foreach]-->
     <br />
     <!--[/if]-->
     <!--[$preformat.readmore]--> <!--[*recommend modname='News' itemid=$info.sid*]--> <!--[$preformat.print]-->

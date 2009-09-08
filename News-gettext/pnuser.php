@@ -36,6 +36,7 @@ function News_user_main()
  */
 function News_user_new($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
@@ -98,7 +99,7 @@ function News_user_new($args)
     if ($modvars['enablecategorization']) {
         // load the categories system
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryRegistryUtils', $dom));
         }
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $renderer->assign('catregistry', $catregistry);
@@ -149,6 +150,7 @@ function News_user_new($args)
  */
 function News_user_create($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get parameters from whatever input we need
     $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
 
@@ -207,11 +209,11 @@ function News_user_create($args)
     // Validate the input
     $validationerror = false;
     if ($item['preview'] != 0 && empty($item['title'])) {
-        $validationerror = _TITLE;
+        $validationerror = __('Title', $dom);
     }
     // both text fields can't be empty
     if ($item['preview'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
-        $validationerror = _NEWS_ARTICLECONTENT;
+        $validationerror = __('Article Content', $dom);
     }
 
     // if the user has selected to preview the article we then route them back
@@ -219,7 +221,7 @@ function News_user_create($args)
     if ($item['preview'] == 0 || $validationerror !== false) {
         // log the error found if any
         if ($validationerror !== false) {
-            LogUtil::registerError(pnML('_NOFOUND', array('i' => $validationerror)));
+            LogUtil::registerError(__f('No %s found.', $validationerror, $dom));
         }
         // back to the referer form
         SessionUtil::setVar('newsitem', $item);
@@ -242,8 +244,8 @@ function News_user_create($args)
 
     if ($sid != false) {
         // Success
-        LogUtil::registerStatus(pnML('_CREATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
-        
+        LogUtil::registerStatus(__('Done! News story created.', $dom));
+
 /*
         // Notify the configured addresses of a new Pending Review article
         $pending_notif = pnModGetVar('News', 'pending_notif', false);
@@ -261,7 +263,7 @@ function News_user_create($args)
                                                                                'body'       => $message,
                                                                                'html'       => $html));
         }
-*/        
+*/
     }
 
     return pnRedirect(pnModURL('News', $referertype, 'view'));
@@ -277,6 +279,7 @@ function News_user_create($args)
  */
 function News_user_view($args = array())
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
@@ -304,7 +307,7 @@ function News_user_view($args = array())
     // check if categorization is enabled
     if ($modvars['enablecategorization']) {
         if (!($class = Loader::loadClass('CategoryUtil')) || !($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryUtil | CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryUtil | CategoryRegistryUtil', $dom));
         }
         // get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -331,7 +334,7 @@ function News_user_view($args = array())
                 }
                 $catFilter = array($prop => $catstofilter);
             } else {
-                LogUtil::registerError(_NOTAVALIDCATEGORY);
+                LogUtil::registerError(__('Invalid category', $dom));
             }
         }
     }
@@ -348,7 +351,7 @@ function News_user_view($args = array())
 
     if ($items == false) {
         if ($modvars['enablecategorization'] && isset($catFilter)) {
-            LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUNDINCAT', array('cat' => $catname)));
+            LogUtil::registerStatus(__f('No news articles published in category %s', $catname, $dom));
         } else {
             LogUtil::registerStatus(pnML('_NEWS_NOARTICLESFOUND'));
         }
@@ -410,7 +413,7 @@ function News_user_view($args = array())
     $renderer->assign('newsitems', $newsitems);
 
     // Assign the values for the smarty plugin to produce a pager
-    $renderer->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', 
+    $renderer->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems',
                                                                 array('status' => 0,
                                                                       'filterbydate' => true,
                                                                       'ihome' => isset($args['ihome']) ? $args['ihome'] : null,
@@ -432,6 +435,7 @@ function News_user_view($args = array())
  */
 function News_user_display($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get parameters from whatever input we need
     $sid       = (int)FormUtil::getPassedValue('sid', null, 'REQUEST');
     $objectid  = (int)FormUtil::getPassedValue('objectid', null, 'REQUEST');
@@ -453,7 +457,7 @@ function News_user_display($args)
 
     // Validate the essential parameters
     if ((empty($sid) || !is_numeric($sid)) && (empty($title))) {
-        return LogUtil::registerError(_MODARGSERROR);
+        return LogUtil::registerError(__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
     if (!empty($title)) {
         unset($sid);
@@ -490,11 +494,11 @@ function News_user_display($args)
 
     // Get the news story
     if (isset($sid)) {
-        $item = pnModAPIFunc('News', 'user', 'get', 
-                             array('sid'       => $sid, 
+        $item = pnModAPIFunc('News', 'user', 'get',
+                             array('sid'       => $sid,
                                    'status'    => 0));
     } else {
-        $item = pnModAPIFunc('News', 'user', 'get', 
+        $item = pnModAPIFunc('News', 'user', 'get',
                              array('title'     => $title,
                                    'year'      => $year,
                                    'monthname' => $monthname,
@@ -506,7 +510,7 @@ function News_user_display($args)
     }
 
     if ($item === false) {
-        return LogUtil::registerError(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY)), 404);
+        return LogUtil::registerError(__('No such news article found.', $dom), 404);
     }
 
     // Explode the review into an array of seperate pages
@@ -569,6 +573,7 @@ function News_user_display($args)
  */
 function News_user_archives($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get parameters from whatever input we need
     $year  = (int)FormUtil::getPassedValue('year', null, 'REQUEST');
     $month = (int)FormUtil::getPassedValue('month', null, 'REQUEST');
@@ -592,7 +597,7 @@ function News_user_archives($args)
     }
 
     // Load localized month names
-    $monthnames = explode(' ', _MONTH_LONG);
+    $monthnames = explode(' ', __('January February March April May June July August September October November December', $dom));
 
     // Create output object
     $cacheid = "$month|$year";
@@ -651,6 +656,7 @@ function News_user_archives($args)
  */
 function News_user_preview($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get parameters from whatever input we need
     $title               = FormUtil::getPassedValue('title', null, 'REQUEST');
     $hometext            = FormUtil::getPassedValue('hometext', null, 'REQUEST');
@@ -687,6 +693,7 @@ function News_user_preview($args)
  */
 function News_user_categorylist($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
@@ -699,10 +706,10 @@ function News_user_categorylist($args)
     $enablecategorization = pnModGetVar('News', 'enablecategorization');
     $uid = SessionUtil::getVar('uid');
     $loggedin = pnUserLoggedIn();
-   
+
     if ($enablecategorization) {
         if (!($class = Loader::loadClass ('CategoryRegistryUtil')) || !($class = Loader::loadClass ('CategoryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil | CategoryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryRegistryUtil | CategoryUtil', $dom));
         }
         // Get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');

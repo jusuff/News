@@ -20,7 +20,7 @@
  * shows the module menu and returns or calls whatever the module
  * designer feels should be the default function (often this is the
  * view() function)
- * 
+ *
  * @author Mark West
  * @return string HTML output
  */
@@ -62,6 +62,7 @@ function News_admin_new()
  */
 function News_admin_modify($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     $sid = FormUtil::getPassedValue('sid', isset($args['sid']) ? $args['sid'] : null, 'GETPOST');
     $objectid = FormUtil::getPassedValue('objectid', isset($args['objectid']) ? $args['objectid'] : null, 'GET');
     // At this stage we check to see if we have been passed $objectid
@@ -79,14 +80,14 @@ function News_admin_modify($args)
 
     // Validate the essential parameters
     if (empty($sid)) {
-        return LogUtil::registerError(_MODARGSERROR);
+        return LogUtil::registerError(__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // Get the news article in the db
     $dbitem = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
 
     if ($dbitem === false) {
-        return LogUtil::registerError(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY)), 404);
+        return LogUtil::registerError(__('No such news article', $dom), 404);
     }
 
     // Security check
@@ -138,7 +139,7 @@ function News_admin_modify($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryRegistryUtil'));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
 
@@ -196,6 +197,7 @@ function News_admin_modify($args)
  */
 function News_admin_update($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
     if (!empty($story['objectid'])) {
         $story['sid'] = $story['objectid'];
@@ -203,7 +205,7 @@ function News_admin_update($args)
 
     // Validate the essential parameters
     if (empty($story['sid'])) {
-        return LogUtil::registerError(_MODARGSERROR);
+        return LogUtil::registerError(__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // Confirm authorisation code
@@ -214,7 +216,7 @@ function News_admin_update($args)
     // Get the unedited news article for the permissions check
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $story['sid']));
     if ($item === false) {
-        return LogUtil::registerError(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY)), 404);
+        return LogUtil::registerError(__('No such news article found.', $dom), 404);
     }
 
     // Security check
@@ -226,11 +228,11 @@ function News_admin_update($args)
     // Validate the input
     $validationerror = false;
     if ($story['preview'] != 0 && empty($story['title'])) {
-        $validationerror = _TITLE;
+        $validationerror = __('Title', $dom);
     }
     // both text fields can't be empty
     if ($story['preview'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
-        $validationerror = _NEWS_ARTICLECONTENT;
+        $validationerror = __('Article Content', $dom);
     }
 
     // Reformat the attributes array
@@ -251,7 +253,7 @@ function News_admin_update($args)
     if ($story['preview'] == 0 || $validationerror !== false) {
         // log the error found if any
         if ($validationerror !== false) {
-            LogUtil::registerError(pnML('_NOFOUND', array('i' => $validationerror)));
+            LogUtil::registerError(__f('No %s found.', $validationerror, $dom));
         }
         // back to the referer form
         SessionUtil::setVar('newsitem', $story);
@@ -283,7 +285,7 @@ function News_admin_update($args)
                           'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
                           'published_status' => $story['published_status']))) {
         // Success
-        LogUtil::registerStatus(pnML('_UPDATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
+        LogUtil::registerStatus(__('News article updated.', $dom));
     }
 
     return pnRedirect(pnModURL('News', 'admin', 'view'));
@@ -308,6 +310,7 @@ function News_admin_update($args)
  */
 function News_admin_delete($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     $sid = FormUtil::getPassedValue('sid', isset($args['sid']) ? $args['sid'] : null, 'REQUEST');
     $objectid = FormUtil::getPassedValue('objectid', isset($args['objectid']) ? $args['objectid'] : null, 'REQUEST');
     $confirmation = FormUtil::getPassedValue('confirmation', null, 'POST');
@@ -317,14 +320,14 @@ function News_admin_delete($args)
 
     // Validate the essential parameters
     if (empty($sid)) {
-        return LogUtil::registerError(_MODARGSERROR);
+        return LogUtil::registerError(__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // Get the news story
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
 
     if ($item == false) {
-        return LogUtil::registerError(pnML('_NOSUCHITEM', array('i' => _NEWS_STORY)), 404);
+        return LogUtil::registerError(__('No such news article found.', $dom), 404);
     }
 
     // Security check
@@ -356,7 +359,7 @@ function News_admin_delete($args)
     // Delete
     if (pnModAPIFunc('News', 'admin', 'delete', array('sid' => $sid))) {
         // Success
-        LogUtil::registerStatus(pnML('_DELETEITEMSUCCEDED', array('i' => _NEWS_STORY)));
+        LogUtil::registerStatus(__('News article deleted.', $dom));
     }
 
     return pnRedirect(pnModURL('News', 'admin', 'view'));
@@ -370,6 +373,7 @@ function News_admin_delete($args)
  */
 function News_admin_view($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT))) {
@@ -388,9 +392,9 @@ function News_admin_view($args)
 
     if ($purge) {
         if (pnModAPIFunc('News', 'admin', 'purgepermalinks')) {
-            LogUtil::registerStatus(_PURGEPERMALINKSSUCCESFUL);
+            LogUtil::registerStatus(__('Purging of the pemalinks was successful', $dom));
         } else {
-            LogUtil::registerError(_PURGEPERMALINKSFAILED);
+            LogUtil::registerError(__('Purging of the pemalinks has failed', $dom));
         }
         return pnRedirect(strpos(pnServerGetVar('HTTP_REFERER'), 'purge') ? pnModURL('News', 'admin', 'view') : pnServerGetVar('HTTP_REFERER'));
     }
@@ -411,7 +415,7 @@ function News_admin_view($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryRegistryUtil'));
         }
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties = array_keys($catregistry);
@@ -443,7 +447,7 @@ function News_admin_view($args)
             $to = $now;
         } elseif ($news_status == 5) {
             // scheduled is actually the published status, but in the future
-            $status = 0; 
+            $status = 0;
             $from = $now;
         } else {
             $status = $news_status;
@@ -465,17 +469,17 @@ function News_admin_view($args)
 
     // Set the possible status for later use
     $itemstatus = array (
-        '' => _ALL, 
-        0  => _NEWS_PUBLISHED,
-        1  => _NEWS_REJECTED,
-        2  => _NEWS_PENDING,
-        3  => _NEWS_ARCHIVED,
-        4  => _NEWS_DRAFT,
+        '' => __('All', $dom),
+        0  => __('Published', $dom),
+        1  => __('Rejected', $dom),
+        2  => __('Pending Review', $dom),
+        3  => __('Archived', $dom),
+        4  => __('Draft', $dom),
         5  => _NEWS_SCHEDULED
     );
 
 /*    // Load localized month names
-    $months = explode(' ', _MONTH_LONG);
+    $months = explode(' ', __('January February March April May June July August September October November December', $dom));
     $newsmonths = array();
     // get all matching news stories
     $monthsyears = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
@@ -492,18 +496,18 @@ function News_admin_view($args)
         $options = array();
         $options[] = array('url'   => pnModURL('News', 'user', 'display', array('sid' => $item['sid'])),
                            'image' => 'demo.gif',
-                           'title' => _VIEW);
+                           'title' => __('View', $dom));
 
         if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_EDIT) ||
             SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
             $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
                                'image' => 'xedit.gif',
-                               'title' => _EDIT);
+                               'title' => __('Edit', $dom));
 
             if (SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'delete', array('sid' => $item['sid'])),
                                    'image' => '14_layer_deletelayer.gif',
-                                   'title' => _DELETE);
+                                   'title' => __('Delete', $dom));
             }
         }
         $item['options'] = $options;
@@ -511,13 +515,13 @@ function News_admin_view($args)
         if (in_array($item['published_status'], array_keys($itemstatus))) {
             $item['status'] = $itemstatus[$item['published_status']];
         } else {
-            $item['status'] = _NEWS_UNKNOWN;
+            $item['status'] = __('Unknown', $dom);
         }
 
         if ($item['ihome'] == 0) {
-            $item['ihome'] = _YES;
+            $item['ihome'] = __('Yes', $dom);
         } else {
-            $item['ihome'] = _NO;
+            $item['ihome'] = __('No', $dom);
         }
 
         $item['infuture'] = DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0;
@@ -540,8 +544,8 @@ function News_admin_view($args)
     $renderer->assign('itemstatus', $itemstatus);
     $renderer->assign('order', $order);
     $renderer->assign('orderoptions', array(
-                                        'from' => _NEWS_STORIESORDER1, 
-                                        'sid' => _NEWS_STORIESORDER0));
+                                        'from' => __('News Date/Time', $dom),
+                                        'sid' => __('News ID', $dom)));
 //    $renderer->assign('monthyear', $monthyear);
 //    $renderer->assign('newsmonths', $newsmonths);
 
@@ -553,7 +557,7 @@ function News_admin_view($args)
         $renderer->assign('property', $property);
         $renderer->assign('category', $category);
     }
-    
+
     // Count the items for the selected status and category
     $statuslinks = array();
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
@@ -564,7 +568,7 @@ function News_admin_view($args)
                                              array('news_status' => 0,
                                                    'news_property' => $property,
                                                    'news_'.$property.'_category' => isset($category) ? $category : null)),
-                           'title' => _NEWS_PUBLISHED);
+                           'title' => __('Published', $dom));
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,
                                                           'status' => 0,
@@ -573,7 +577,7 @@ function News_admin_view($args)
                                               array('news_status' => 5,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => _NEWS_SCHEDULED);
+                            'title' => __('Scheduled', $dom));
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,
                                                           'status' => 2)),
@@ -581,7 +585,7 @@ function News_admin_view($args)
                                               array('news_status' => 2,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => _NEWS_PENDING);
+                            'title' => __('Pending Review', $dom));
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,
                                                           'status' => 4)),
@@ -589,7 +593,7 @@ function News_admin_view($args)
                                               array('news_status' => 4,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => _NEWS_DRAFT);
+                            'title' => __('Draft', $dom));
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,
                                                           'status' => 3)),
@@ -597,7 +601,7 @@ function News_admin_view($args)
                                               array('news_status' => 3,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => _NEWS_ARCHIVED);
+                            'title' => __('Archived', $dom));
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,
                                                           'status' => 1)),
@@ -605,15 +609,15 @@ function News_admin_view($args)
                                               array('news_status' => 1,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => _NEWS_REJECTED);
+                            'title' => __('Rejected', $dom));
     $alllink = array('count' => $statuslinks[0]['count'] + $statuslinks[1]['count'] + $statuslinks[2]['count'] + $statuslinks[3]['count'] + $statuslinks[4]['count'] + $statuslinks[5]['count'],
                      'url' => pnModURL('News', 'admin', 'view',
                                        array('news_property' => $property,
                                              'news_'.$property.'_category' => isset($category) ? $category : null)),
-                     'title' => _ALL);
+                     'title' => __('All', $dom));
     $renderer->assign('statuslinks', $statuslinks);
     $renderer->assign('alllink', $alllink);
-  
+
     // Assign the values for the smarty plugin to produce a pager
     $renderer->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', array('category' => isset($catFilter) ? $catFilter : null)),
                                      'itemsperpage' => $modvars['itemsperpage']));
@@ -630,6 +634,7 @@ function News_admin_view($args)
  */
 function News_admin_modifyconfig()
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
@@ -637,7 +642,7 @@ function News_admin_modifyconfig()
     }
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-        pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+        pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
@@ -666,6 +671,8 @@ function News_admin_modifyconfig()
  */
 function News_admin_updateconfig()
 {
+    $dom = ZLanguage::getModuleDomain('News');
+    $dom = ZLanguage::getModuleDomain('News');
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
@@ -698,7 +705,7 @@ function News_admin_updateconfig()
     $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
 
     if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-        pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+        pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
@@ -717,7 +724,7 @@ function News_admin_updateconfig()
     pnModCallHooks('module','updateconfig','News', array('module' => 'News'));
 
     // the module configuration has been updated successfuly
-    LogUtil::registerStatus(_CONFIGUPDATED);
+    LogUtil::registerStatus(__('Done! Module configuration updated.', $dom));
 
     return pnRedirect(pnModURL('News', 'admin', 'main'));
 }

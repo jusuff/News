@@ -29,7 +29,7 @@ class news_result_checker
     // A return value of true means "keep result" - false means "discard".
     function checkResult(&$item)
     {
-        $ok = (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_OVERVIEW) || 
+        $ok = (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_OVERVIEW) ||
                SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW));
         if ($this->enablecategorization)
         {
@@ -48,6 +48,8 @@ class news_result_checker
  */
 function News_userapi_getall($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // Optional arguments.
     if (!isset($args['status']) || (empty($args['status']) && $args['status'] !== 0)) {
         $args['status'] = null;
@@ -68,7 +70,7 @@ function News_userapi_getall($args)
     if ((!empty($args['status']) && !is_numeric($args['status'])) ||
         !is_numeric($args['startnum']) ||
         !is_numeric($args['numitems'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // create a empty result set
@@ -191,7 +193,7 @@ function News_userapi_getall($args)
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
     if ($objArray === false) {
-        return LogUtil::registerError(_GETFAILED);
+        return LogUtil::registerError(__('Error! Could not load items.', $dom));
     }
 
     // need to do this here as the category expansion code can't know the
@@ -212,6 +214,8 @@ function News_userapi_getall($args)
  */
 function News_userapi_get($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // optional arguments
     if (isset($args['objectid'])) {
        $args['sid'] = $args['objectid'];
@@ -220,18 +224,18 @@ function News_userapi_get($args)
     // Argument check
     if ((!isset($args['sid']) || !is_numeric($args['sid'])) &&
          !isset($args['title'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // Check for caching of the DBUtil calls (needed for AJAX editing)
     if (!isset($args['SQLcache'])) {
         $args['SQLcache'] = true;
     }
-    
+
     // form a date using some ofif present...
     // step 1 - convert month name into
     if (isset($args['monthname']) && !empty($args['monthname'])) {
-         $months = explode(' ', _MONTH_SHORT);
+         $months = explode(' ', __('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec', $dom));
          $keys = array_flip($months);
          $args['monthnum'] = $keys[ucfirst($args['monthname'])] + 1;
     }
@@ -276,7 +280,7 @@ function News_userapi_get($args)
         static $registeredCats;
         if (!isset($registeredCats)) {
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-                pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+                pn_exit (__('Error! Unable to load class CategoryRegistryUtils', $dom));
             }
             $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         }
@@ -423,9 +427,10 @@ function News_userapi_countitems($args)
  */
 function News_userapi_incrementreadcount($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     if ((!isset($args['sid']) || !is_numeric($args['sid'])) &&
          !isset($args['title'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     if (isset($args['sid'])) {
@@ -444,6 +449,7 @@ function News_userapi_incrementreadcount($args)
  */
 function News_userapi_getArticleLinks($info)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Allowed to comment?
     if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
@@ -524,12 +530,14 @@ function News_userapi_getArticleLinks($info)
  */
 function News_userapi_getArticleInfo($info)
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // Dates
     $info['unixtime']      = strtotime($info['from']);
-    $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], _DATETIMELONG);
-    $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], _DATETIMEBRIEF);
-    $info['longdate']      = DateUtil::getDatetime($info['unixtime'], _DATELONG);
-    $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], _DATEBRIEF);
+    $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], __('%A, %B %d, %Y - %I:%M %p', $dom));
+    $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], __('%b %d, %Y - %I:%M %p', $dom));
+    $info['longdate']      = DateUtil::getDatetime($info['unixtime'], __('%A, %B %d, %Y', $dom));
+    $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], __('%b %d, %Y', $dom));
 
     // Work out name of story submitter
     if ($info['aid'] == 0) {
@@ -673,6 +681,8 @@ function News_userapi_getArticleInfo($info)
  */
 function News_userapi_getArticlePreformat($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     $info = $args['info'];
     $links = $args['links'];
 
@@ -687,17 +697,17 @@ function News_userapi_getArticlePreformat($args)
     if ($bytesmore > 0) {
         if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
-            $title =  pnML('_NEWS_FULLTEXTOFARTICLE', array('title' => $info['title']));
+            $title =  __f('Read more about %s', $info['title'], $dom);
             $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
-        $bytesmorelink = pnML('_NEWS_BYTESMORE', array('bytes' => $bytesmore));
+        $bytesmorelink = __f('%s bytes more', $bytesmore, $dom);
     }
 
     // Allowed to read full article?
     if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
         SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
         $title = '<a href="'.$links['fullarticle'].'">'.$info['title'].'</a>';
-        $print = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/global/print.gif" alt="'._NEWS_PRINTER.'" /></a>';
+        $print = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/global/print.gif" alt="'.__('Printer-friendly page', $dom).'" /></a>';
     } else {
         $title = $info['title'];
         $print = '';
@@ -707,20 +717,13 @@ function News_userapi_getArticlePreformat($args)
     $comment = '';
     $commentlink = '';
     if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
-        // Work out how to say 'comment(s)(?)' correctly
-        if ($info['commentcount'] == 0) {
-            $comment = _NEWS_COMMENTSQ;
-        } else if ($info['commentcount'] == 1) {
-            $comment = _NEWS_COMMENT;
-        } else {
-            $comment = pnML('_NEWS_COMMENTS', array('count' => $info['commentcount']));
-        }
+        $comment = _fn('%s comment', '%s comments', $info['commentcount'], $dom);
 
         // Allowed to comment?
         if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
-            $postcomment = '<a href="'.$links['postcomment'].'">'._NEWS_COMMENTSQ.'</a>';
-            $commentlink = '<a title="'.pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
+            $postcomment = '<a href="'.$links['postcomment'].'">'.__('New', $dom).S_COMMENTSQ.'</a>';
+            $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
         } else if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
                    SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
             $commentlink = $comment;
@@ -729,7 +732,7 @@ function News_userapi_getArticlePreformat($args)
 
     // Notes, if there are any
     if (isset($info['notes']) && !empty($info['notes'])) {
-        $notes = pnML('_NEWS_FOOTNOTES', array('notes' => $info['notes']), true);
+        $notes = __f('Foot notes: %s', $info['notes'], $dom);
     } else {
         $notes = '';
     }
@@ -802,6 +805,7 @@ function News_userapi_getArticlePreformat($args)
  */
 function News_userapi_create($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Argument check
     if (!isset($args['title']) || empty($args['title']) ||
         !isset($args['hometext']) ||
@@ -809,13 +813,13 @@ function News_userapi_create($args)
         !isset($args['bodytext']) ||
         !isset($args['bodytextcontenttype']) ||
         !isset($args['notes'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
-        return LogUtil::registerError (_MODULENOAUTH);
+        return LogUtil::registerError (__('Sorry! No authorization to access this module.', $dom));
     } elseif (SecurityUtil::checkPermission('News:;', '::', ACCESS_ADD) ||
               SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         if (!isset($args['published_status'])) {
@@ -873,7 +877,7 @@ function News_userapi_create($args)
     $args['comments'] = 0;
 
     if (!($obj = DBUtil::insertObject($args, 'news', 'sid'))) {
-        return LogUtil::registerError(_CREATEFAILED);
+        return LogUtil::registerError(__('Error! Creation attempt failed.', $dom));
     }
 
     // update the from field to the same cr_date if it's null
@@ -884,7 +888,7 @@ function News_userapi_create($args)
         );
 
         if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
-            LogUtil::registerError(_UPDATEFAILED);
+            LogUtil::registerError(__('Error! Update attempt failed.', $dom));
         }
     }
 

@@ -1,5 +1,5 @@
 <!--[*  $Id: news_admin_delete.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
-<!--[pnml name='_NEWS_DELETE' assign='templatetitle']-->
+<!--[gt text="Delete News Article" assign='templatetitle']-->
 
 <!--[include file='news_admin_menu.htm']-->
 
@@ -14,11 +14,11 @@
     <input type="hidden" name="sid" value="<!--[$sid|pnvarprepfordisplay]-->" />
 
     <div class="pn-adminformrow">
-        <p><!--[pnml name='_NEWS_CONFIRMDELETE']--></p>
+        <p><!--[gt text="Do you really want to delete this News Article?"]--></p>
     </div>
     <div class="pn-adminformrow pn-adminformbuttons">
-        <!--[pnbutton src='button_ok.gif' set='icons/small' alt='_DELETE' title='_DELETE']-->
-        <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' alt='_CANCEL' altml=true title='_CANCEL' titleml=true]--></a>
+        <!--[pnbutton src='button_ok.gif' set='icons/small' __alt='Delete' __title='Delete']-->
+        <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel']--></a>
     </div>
 </div>
 </form>

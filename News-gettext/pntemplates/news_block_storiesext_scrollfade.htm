@@ -1,7 +1,7 @@
 <!--[*  $Id:  $  *]-->
 <!--[pnpageaddvar name="javascript" value="modules/News/pnjavascript/storiesext_fade.js"]-->
-<!--[pnml name='#storiesext'|cat:$bid assign=divid]-->
-<!--[pnml name=$scrollstyle|replace:'%DIVID%':$divid assign=parsedstyle]-->
+<!--[gt text="#storiesext"|cat:$bid assign=divid]-->
+<!--[gt text=$scrollstyle|replace:'%DIVID%':$divid assign=parsedstyle]-->
 <!--[pnpageaddvar name="rawtext" value='<style type="text/css">'|cat:$parsedstyle|cat:'</style>']-->
 <!--[foreach from=$stories item=story key=k]-->
 <div id="storiesext<!--[$bid]--><!--[$k]-->"><!--[$story]--></div>
@@ -15,5 +15,5 @@ inc++}
 new fadescroller(scrollcontent,"storiesext<!--[$bid]-->",<!--[$scrolldelay]-->)
 </script>
 <!--[securityutil_checkpermission_block component='Storiesextblock::' instance='$title::' level=ACCESS_ADMIN]-->
-<div style="position:relative;top:-1em;margin-bottom:-1em;text-align:right;"><a href="<!--[pnmodurl modname="Blocks" type="admin" func="modify" bid=$bid]-->"><!--[pnimg modname="core" set="icons/extrasmall" src="edit.gif" alt=_STORIES_BLOCKEDIT altml="true"]--></a></div>
+<div style="position:relative;top:-1em;margin-bottom:-1em;text-align:right;"><a href="<!--[pnmodurl modname="Blocks" type="admin" func="modify" bid=$bid]-->"><!--[pnimg modname="core" set="icons/extrasmall" src="edit.gif" alt=_STORIESBlockEDIT altml="true"]--></a></div>
 <!--[/securityutil_checkpermission_block]-->

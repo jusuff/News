@@ -17,7 +17,7 @@
  **/
 function news_searchapi_info()
 {
-    return array('title' => 'News', 
+    return array('title' => 'News',
                  'functions' => array('News' => 'search'));
 }
 
@@ -55,17 +55,17 @@ function news_searchapi_search($args)
     $searchTable   = $pntable['search_result'];
     $searchColumn  = $pntable['search_result_column'];
 
-    $where = search_construct_where($args, 
-                                    array($storiescolumn['title'], 
-                                          $storiescolumn['hometext'], 
-                                          $storiescolumn['bodytext']), 
+    $where = search_construct_where($args,
+                                    array($storiescolumn['title'],
+                                          $storiescolumn['hometext'],
+                                          $storiescolumn['bodytext']),
                                           $storiescolumn['language']);
     // Only search in published articles
     $where .= "AND ($storiescolumn[published_status] = '0')";
 
     $sessionId = session_id();
 
-    $insertSql = 
+    $insertSql =
 "INSERT INTO $searchTable
   ($searchColumn[title],
    $searchColumn[text],
@@ -82,7 +82,7 @@ VALUES ";
 
     foreach ($stories as $story)
     {
-          $sql = $insertSql . '(' 
+          $sql = $insertSql . '('
                  . '\'' . DataUtil::formatForStore($story['title']) . '\', '
                  . '\'' . DataUtil::formatForStore($story['hometext']) . '\', '
                  . '\'' . DataUtil::formatForStore($story['sid']) . '\', '
@@ -91,7 +91,7 @@ VALUES ";
                  . '\'' . DataUtil::formatForStore($sessionId) . '\')';
           $insertResult = DBUtil::executeSQL($sql);
           if (!$insertResult) {
-              return LogUtil::registerError (_GETFAILED);
+              return LogUtil::registerError (__('Error! Could not load items.', $dom));
           }
     }
 

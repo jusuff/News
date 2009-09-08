@@ -31,9 +31,10 @@ function News_bigblock_init()
  */
 function News_bigblock_info()
 {
-    return array('text_type'      => 'Big',
-                 'module'         => 'News',
-                 'text_type_long' => 'Today\'s Big Story',
+    $dom = ZLanguage::getModuleDomain('News');
+    return array('text_type'      => __('Big', $dom),
+                 'module'         => __('News', $dom),
+                 'text_type_long' => __('Today\'s Big Story', $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -49,6 +50,7 @@ function News_bigblock_info()
  */
 function News_bigblock_display($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // security check
     if (!SecurityUtil::checkPermission('Bigblock::', "$blockinfo[title]::", ACCESS_READ)) {
         return;
@@ -85,7 +87,7 @@ function News_bigblock_display($blockinfo)
     }
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = _TODAYBIG;
+        $blockinfo['title'] = __('Today\'s Top News', $dom);
     }
 
     $renderer = pnRender::getInstance('News');

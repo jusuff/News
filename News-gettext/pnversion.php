@@ -12,10 +12,11 @@
  * @subpackage News
  */
 
+$dom = ZLanguage::getModuleDomain('News');
 $modversion['name']        = 'News';
-$modversion['displayname'] = _NEWS_DISPLAYNAME;
-$modversion['description'] = _NEWS_DESCRIPTION;
-$modversion['version']     = '2.5';
+$modversion['displayname'] = __('News', $dom);
+$modversion['description'] = __('Provides the ability to add, remove and edit news articles published on the News lead page and in the various blocks', $dom);
+$modversion['version']     = '2.6';
 
 $modversion['credits']     = 'pndocs/credits.txt';
 $modversion['help']        = 'pndocs/install.txt';

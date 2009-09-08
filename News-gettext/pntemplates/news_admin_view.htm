@@ -1,6 +1,6 @@
 <!--[*  $Id: news_admin_view.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 <!--[pnajaxheader modname='News' filename='news.js' nobehaviour=true noscriptaculous=true]-->
-<!--[pnml name='_NEWS_VIEW' assign='templatetitle']-->
+<!--[gt text="View News Articles list" assign='templatetitle']-->
 
 <!--[include file='news_admin_menu.htm']-->
 
@@ -19,8 +19,8 @@
 <!--[if $enablecategorization && $numproperties > 0]-->
 <form action="<!--[pnmodurl modname='News' type='admin' func='view']-->" method="post" enctype="application/x-www-form-urlencoded">
     <div id="news_multicategory_filter">
-        <label for="news_property"><!--[pnml name='_CATEGORY']--></label>
-        <!--[pnml assign='lblDef' name='_ALL']-->
+        <label for="news_property"><!--[gt text="Category"]--></label>
+        <!--[pnml assign='lblDef' name='All']-->
         <!--[nocache]-->
             <!--[if $numproperties gt 1]-->
                 <!--[html_options id='news_property' name='news_property' options=$properties selected=$property]-->
@@ -43,32 +43,32 @@
             </div>
             <!--[if $multilingual]-->
                 &nbsp;
-                <label for="news_language"><!--[pnml name='_LANGUAGE']--></label>
+                <label for="news_language"><!--[gt text="Language"]--></label>
                 <!--[languagelist id='news_language' name='language' all=true installed=true selected=$language]-->
             <!--[/if]-->
         <!--[/nocache]-->
         &nbsp;
-        <label for="news_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
+        <label for="news_status"><!--[gt text="Status"]--></label>
         <!--[html_options name='news_status' id='news_status' options=$itemstatus selected=$news_status]-->
         &nbsp;
-        <label for="order"><!--[pnml name='_NEWS_STORIESORDER']--></label>
+        <label for="order"><!--[gt text="Order by"]--></label>
         <!--[html_options name='order' id='order' options=$orderoptions selected=$order]-->
         &nbsp;&nbsp;
-        <input name="submit" type="submit" value="<!--[pnml name='_FILTER']-->" />
-        <input name="clear" type="submit" value="<!--[pnml name='_RESET']-->" />
+        <input name="submit" type="submit" value="<!--[gt text="Filter"]-->" />
+        <input name="clear" type="submit" value="<!--[gt text="Reset"]-->" />
     </div>
 </form>
 <!--[elseif $multilingual]-->
 <form action="<!--[pnmodurl modname='News' type='admin' func='view']-->" method="post" enctype="application/x-www-form-urlencoded">
     <div id="news_multicategory_filter">
-        <label for="news_language"><!--[pnml name='_LANGUAGE']--></label>
+        <label for="news_language"><!--[gt text="Language"]--></label>
         <!--[nocache]-->
             <!--[languagelist id='news_language' name='language' all=true installed=true selected=$language]-->
         <!--[/nocache]-->
-        <label for="news_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
+        <label for="news_status"><!--[gt text="Status"]--></label>
         <!--[html_options name='news_status' id='news_status' options=$itemstatus selected=$status]-->
-        <input name="submit" type="submit" value="<!--[pnml name='_FILTER']-->" />
-        <input name="clear" type="submit" value="<!--[pnml name='_RESET']-->" />
+        <input name="submit" type="submit" value="<!--[gt text="Filter"]-->" />
+        <input name="clear" type="submit" value="<!--[gt text="Reset"]-->" />
     </div>
 </form>
 <!--[/if]-->
@@ -76,15 +76,15 @@
 <table class="pn-admintable">
     <thead>
     <tr>
-        <th><!--[pnml name='_ID']--></th>
-        <th><!--[pnml name='_ARTICLETITLE_FLC']--></th>
-        <th><!--[pnml name='_NEWS_AUTHOR']--></th>
+        <th><!--[gt text="Internal ID"]--></th>
+        <th><!--[gt text="Article Title"]--></th>
+        <th><!--[gt text="Author"]--></th>
         <!--[if $enablecategorization]-->
-        <th><!--[pnml name='_CATEGORY']--></th>
+        <th><!--[gt text="Category"]--></th>
         <!--[/if]-->
-        <th><!--[pnml name='_NEWS_INHOMEQUESTION']--></th>
-        <th><!--[pnml name='_DATE']--></th>
-        <th><!--[pnml name='_ACTIONS']--></th>
+        <th><!--[gt text="Lead Page"]--></th>
+        <th><!--[gt text="Date"]--></th>
+        <th><!--[gt text="Actions"]--></th>
     </tr>
     </thead>
     <tbody>
@@ -93,8 +93,8 @@
             <td><!--[$newsitem.sid|pnvarprepfordisplay]--></td>
             <td>
                 <!--[$newsitem.title|strip_tags|pnvarprepfordisplay]-->
-                <!--[if $newsitem.published_status eq 2]--><strong><em> - <!--[pnml name='_NEWS_PENDING']--></em></strong><!--[/if]-->
-                <!--[if $newsitem.published_status eq 4]--><strong><em> - <!--[pnml name='_NEWS_DRAFT']--></em></strong><!--[/if]-->
+                <!--[if $newsitem.published_status eq 2]--><strong><em> - <!--[gt text="Pending Review"]--></em></strong><!--[/if]-->
+                <!--[if $newsitem.published_status eq 4]--><strong><em> - <!--[gt text="Draft"]--></em></strong><!--[/if]-->
             </td>
             <td><!--[$newsitem.informant|pnvarprepfordisplay]--></td>
             <!--[if $enablecategorization]-->
@@ -105,15 +105,15 @@
             <td><!--[$newsitem.ihome|pnvarprepfordisplay]--></td>
             <td>
                 <!--[if $newsitem.published_status eq '2']-->
-                <!--[pnml name='_NEWS_LASTUPDATED']--><br />
+                <!--[gt text="Last Modified"]--><br />
                 <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->
                 <!--[else]-->
-                <!--[if $newsitem.infuture]--><!--[pnml name='_NEWS_SCHEDULED']--><!--[else]--><!--[pnml name='_NEWS_PUBLISHED']--><!--[/if]--><br />
+                <!--[if $newsitem.infuture]--><!--[gt text="Scheduled"]--><!--[else]--><!--[gt text="Published"]--><!--[/if]--><br />
                 <!--[$newsitem.from|dateformatHuman:'%x':'2']-->
                 <!--[/if]-->
                 <!--[if $newsitem.withcomm eq '1']-->
                 <br />
-                <em><!--[pnml name='_NEWS_NOCOMMENTS']--></em>
+                <em><!--[gt text="No commenting"]--></em>
                 <!--[/if]-->
             </td>
             <td>
@@ -124,17 +124,17 @@
             </td>
         </tr>
     <!--[foreachelse]-->
-        <tr class="pn-admintableempty"><td colspan="<!--[if $enablecategorization]-->7<!--[else]-->6<!--[/if]-->"><!--[pnml name='_NOITEMSFOUND']--></td></tr>
+        <tr class="pn-admintableempty"><td colspan="<!--[if $enablecategorization]-->7<!--[else]-->6<!--[/if]-->"><!--[gt text="No items found."]--></td></tr>
     <!--[/foreach]-->
     </tbody>
 </table>
 
 <form action="<!--[pnmodurl modname='News' type='admin' func='modify']-->" method="post">
     <div>
-        <label for="directsid"><!--[pnml name='_NEWS_DIRECTACCESS']--></label>
+        <label for="directsid"><!--[gt text="Access an older article by its ID:"]--></label>
         <input type="text" id="directsid" name="sid" value="" size="5" maxlength="8" />
-        <input name="submit" type="submit" value="<!--[pnml name='_SUBMIT']-->" />
-        <input name="reset" type="reset" value="<!--[pnml name='_RESET']-->" /> 
+        <input name="submit" type="submit" value="<!--[gt text="Submit"]-->" />
+        <input name="reset" type="reset" value="<!--[gt text="Reset"]-->" /> 
     </div>
 </form>
 

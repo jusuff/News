@@ -20,9 +20,10 @@
  */
 function News_userapi_decodeurl($args)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // check we actually have some vars to work with...
     if (!isset($args['vars'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerError (__('Error! Could not do what you wanted. Please check your input.', $dom));
     }
 
     // define the available user functions

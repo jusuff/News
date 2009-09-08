@@ -29,7 +29,7 @@
  * Version 2.1
  * - Bug #3 fixed (choice of published status to show)
  * Version 2.2
- * - Bug fixes for EZComments comment count 
+ * - Bug fixes for EZComments comment count
  * Version 2.3
  * - Added possibilty of choosing multiple Categories with multiple Category Properties
  * - Added the choice of showing a "No News" message when no relevant news is found
@@ -68,9 +68,10 @@ function News_storiesextblock_init()
  */
 function News_storiesextblock_info()
 {
-    return array('text_type'       => 'StoriesExtended',
-                 'module'          => 'News',
-                 'text_type_long'  => 'Story Titles Extended',
+    $dom = ZLanguage::getModuleDomain('News');
+    return array('text_type'       => __('StoriesExtended', $dom),
+                 'module'          => __('News', $dom),
+                 'text_type_long'  => __('Story Titles Extended', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,
                  'form_refresh'    => false,
@@ -87,6 +88,7 @@ function News_storiesextblock_info()
  */
 function News_storiesextblock_display($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // --- Security check
     if (!SecurityUtil::checkPermission( 'Storiesextblock::', "$blockinfo[title]::", ACCESS_OVERVIEW)) {
         return;
@@ -117,7 +119,7 @@ function News_storiesextblock_display($blockinfo)
     if (!isset($vars['limit'])) {
         $vars['limit'] = 5;
     }
-    // Maximum article age in days 
+    // Maximum article age in days
     if (!isset($vars['dayslimit'])) {
         $vars['dayslimit'] = 0;
     }
@@ -187,7 +189,7 @@ voice-family: "\"}\"";
 voice-family:inherit;
 /* regular height */
 height:50px;
-} 
+}
 /* Opera browser */
 html>body %DIVID% {
 height:50px;
@@ -210,7 +212,7 @@ height:50px;
         case 2: // lead page articles
             $apiargs['ihome'] = 0;
             break;
-        // all - doesn't need ihome 
+        // all - doesn't need ihome
     }
     $apiargs['numitems'] = $vars['limit']; // Nr of articles to obtain
     $apiargs['status'] = $vars['status']; // Published status
@@ -219,20 +221,20 @@ height:50px;
     if ($enablecategorization) {
         // load the categories system
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
         }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $apiargs['catregistry'] = $catregistry;
         $apiargs['category'] = $vars['category'];
     }
-    
+
     // Limit the shown articles in days using DateUtil
     if ((int)$vars['dayslimit']>0 && $vars['order']==0) {
         $apiargs['from'] = DateUtil::getDatetime_NextDay(-$vars['dayslimit']);
         $apiargs['to'] = DateUtil::getDatetime();
     }
-    
+
     // Handle the sorting order
     switch ($vars['order']) {
         case 1:
@@ -242,7 +244,7 @@ height:50px;
         default:
             // Use News module setting, so don't set apiargs[order]
     }
-    
+
     // Make sure datefiltering is done. Solves #12
     $apiargs['filterbydate'] = true;
 
@@ -253,13 +255,13 @@ height:50px;
     if (empty($items)) {
         if ($vars['showemptyresult']) {
             // Show empty result message instead of empty block if variable is set
-            $blockinfo['content'] = DataUtil::formatForDisplayHTML(_STORIES_EMPTYRESULT);
+            $blockinfo['content'] = DataUtil::formatForDisplayHTML(__('No News', $dom));
              return pnBlockThemeBlock($blockinfo);
         } else {
             return;
         }
     }
-    
+
     // UserUtil is not automatically loaded, so load it now if needed and set anonymous
     if ($vars['dispuname']) {
         Loader::loadClass('UserUtil');
@@ -276,7 +278,7 @@ height:50px;
     } else {
         $rowtemplate = 'news_block_storiesext_row.htm';
     }
-    
+
     // --- loop through the items and prepare every News item for display
     foreach ($items as $item) {
         // Get specific information from the article. It was a choice not to use the pnuserapi functions
@@ -307,7 +309,7 @@ height:50px;
             $item['topicpath']  = '';
             $item['topicsearchurl'] = '';
         }
-        // Optional new image if the difference in days from the publishing date and now < the limit 
+        // Optional new image if the difference in days from the publishing date and now < the limit
         $item['itemnewimage'] = ($vars['dispnewimage'] && DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 3) < (int)$vars['newimagelimit']);
         // Wrap the title if needed
         if ($vars['maxtitlelength']>0 && strlen($item['title']) > (int)$vars['maxtitlelength'])  {
@@ -348,7 +350,7 @@ height:50px;
 
     // Turn of caching for the block display
     $render->caching = false;
-    
+
     // Use the configured template if set, otherwise use the default static/scrolling ones.
     if (!empty($vars['blocktemplate'])) {
         $blocktemplate = $vars['blocktemplate'];
@@ -390,9 +392,10 @@ height:50px;
  */
 function News_storiesextblock_modify($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Break out options from our content field
     $vars = pnBlockVarsFromContent($blockinfo['content']);
- 
+
     // Defaults
     if (!isset($vars['category'])) {
         $vars['category'] = null;
@@ -409,7 +412,7 @@ function News_storiesextblock_modify($blockinfo)
     if (!isset($vars['limit'])) {
         $vars['limit'] = 5;
     }
-    // Maximum article age in days 
+    // Maximum article age in days
     if (!isset($vars['dayslimit'])) {
         $vars['dayslimit'] = 0;
     }
@@ -482,7 +485,7 @@ voice-family: "\"}\"";
 voice-family:inherit;
 /* regular height */
 height:50px;
-} 
+}
 /* Opera browser */
 html>body %DIVID% {
 height:50px;
@@ -507,7 +510,7 @@ height:50px;
     if ($enablecategorization) {
         // load the categories system
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+            pn_exit (__('Error! Unable to load class CategoryRegistryUtil', $dom));
         }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
@@ -530,6 +533,7 @@ height:50px;
  */
 function News_storiesextblock_update($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     // Get current content
     $vars = pnBlockVarsFromContent($blockinfo['content']);
 
@@ -568,8 +572,8 @@ function News_storiesextblock_update($blockinfo)
     $vars['scrollmspeed'] = (int)FormUtil::getPassedValue('scrollmspeed', 0, 'POST');
 
     $render = pnRender::getInstance('News');
-    
-    // Check the templates 
+
+    // Check the templates
     if (!$render->template_exists($vars['rowtemplate'])) {
         $vars['rowtemplate'] = '';
     }

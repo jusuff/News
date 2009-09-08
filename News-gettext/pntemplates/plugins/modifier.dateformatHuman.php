@@ -11,7 +11,7 @@
 */
 
 /**
- * Smarty modifier to format datetimes in a more Human Readable form 
+ * Smarty modifier to format datetimes in a more Human Readable form
  * (like tomorow, 4 days from now, 6 hours ago)
  *
  * Example
@@ -30,6 +30,7 @@
  */
 function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
 {
+    $dom = ZLanguage::getModuleDomain('News');
     if (empty($format)) {
         $format = '%x';
     }
@@ -42,13 +43,14 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
     if (empty($niceval)) {
         $niceval = 2;
     }
-    
+
     // now format the date with respect to the current datetime
     $res = '';
     $diff = DateUtil::getDatetimeDiff($now, $string);
+    //TODO A All this needs to be removed... we just use plurals here - drak
     if ($diff['d'] < 0) {
         if ($niceval == 1) {
-            $res = pnML('_NEWS_DAYSAGO', array('days' => abs($diff['d'])));
+            $res = __f('%days% days ago';, array('days' => abs($diff['d'])));
         } elseif ($niceval < 4 && $diff['d'] == -1) {
             $res = pnML('_NEWS_YESTERDAY');
         } else {
@@ -60,26 +62,26 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
         } elseif ($diff['d'] == 1) {
             $res = pnML('_NEWS_TOMORROW');
         } else {
-            $res = pnML('_NEWS_DAYSFROMNOW', array('days' => $diff['d']));
+            $res = __f('%days% days from now';, array('days' => $diff['d']));
         }
     } else {
         // no day difference
         if ($diff['h'] < 0) {
-            $res = pnML('_NEWS_HOURSAGO', array('hours' => abs($diff['h'])));
+            $res = __f('%hours% hours ago';, array('hours' => abs($diff['h'])));
         } elseif ($diff['h'] > 0) {
-            $res = pnML('_NEWS_HOURSFROMNOW', array('hours' => $diff['h']));
+            $res = __f('%hours% hours from now';, array('hours' => $diff['h']));
         } else {
             // no hour difference
             if ($diff['m'] < 0) {
-                $res = pnML('_NEWS_MINSAGO', array('mins' => abs($diff['m'])));
+                $res = __f('%mins% mins ago';, array('mins' => abs($diff['m'])));
             } elseif ($diff['m'] > 0) {
-                $res = pnML('_NEWS_MINSFROMNOW', array('mins' => $diff['m']));
+                $res = __f('%mins% mins from now';, array('mins' => $diff['m']));
             } else {
                 // no min difference
                 if ($diff['s'] < 0) {
-                    $res = pnML('_NEWS_SECSAGO', array('secs' => abs($diff['s'])));
+                    $res = __f('%secs% secs ago';, array('secs' => abs($diff['s'])));
                 } else {
-                    $res = pnML('_NEWS_SECSFROMNOW', array('secs' => $diff['s']));
+                    $res = __f('%secs% secs from now';, array('secs' => $diff['s']));
                 }
             }
         }
