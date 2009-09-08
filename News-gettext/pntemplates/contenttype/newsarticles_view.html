@@ -1,0 +1,45 @@
+<!--[*  $Id:  $  *]-->
+<h4><!--[$title]--></h4>
+<!--[if $stories]-->
+<ul class="content_stories">
+ <!--[foreach from=$stories item=story]-->
+ <li>
+  <!--[if $story.readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->"><!--[/if]-->
+  <!--[if $story.dispnewimage]--><!--[pnimg modname=core set=$newimageset src=$newimagesrc alt=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGE altml=true]--><!--[/if]-->
+  <!--[$story.title|pnvarprephtmldisplay]--><!--[if $story.titlewrapped]--><!--[$titlewraptext|pnvarprephtmldisplay]--><!--[/if]-->
+  <!--[if $story.readperm]--></a><!--[/if]-->
+  <!--[* Optional additional info on the story *]-->
+  <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[pnml name='_BY']--> <!--[$story.aid_uname|userprofilelink]-->
+   <!--[if $dispdate]--> <!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESON"]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+   <!--[if $dispdate]--><!--[$story.from|pndate_format:"$dateformat"]--><!--[if $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+   <!--[if $dispreads]--><!--[if $story.counter eq 1]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREAD"]--><!--[else]--><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESREADS" count=$story.counter]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+   <!--[if $dispcomments]--><!--[if $story.comments eq 1]--><!--[pnml name="_NEWS_COMMENT"]--><!--[else]--><!--[pnml name="_NEWS_COMMENTS" count=$story.comments]--><!--[/if]--><!--[/if]-->)
+  <!--[/if]--><br />
+  <!--[* Optional hometext display *]-->
+  <!--[if $disphometext]-->
+   <div class="content_newsarticles_hometext">
+   <!--[if $story.hometextwrapped]-->
+    <!--[$story.hometext|truncatehtml:$maxhometextlength:''|pnvarprephtmldisplay]-->
+    <!--[if $story.readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->"><!--[/if]-->
+    <!--[$hometextwraptext|pnvarprephtmldisplay]-->
+    <!--[if $story.readperm]--></a><!--[/if]-->
+   <!--[else]-->
+    <!--[$story.hometext|pnvarprephtmldisplay]-->
+   <!--[/if]-->
+   </div>
+  <!--[/if]-->
+  <!--[* Remove this line to use the topic link and topicimage per News item as below -->
+  <!--[if $story.topicsearchurl neq '']-->
+   <div class="content_newsarticles_news_meta"><a href="<!--[$story.topicsearchurl]-->"><!--[if $story.topicimage neq '']--><img src="<!--[$catimagepath]--><!--[$story.topicimage]-->" alt="<!--[$story.topicname|pnvarprephtmldisplay]-->" title="<!--[$story.topicname|pnvarprephtmldisplay]-->" /><!--[else]--><!--[$story.topicname|pnvarprephtmldisplay]--><!--[/if]--></a></div>
+  <!--[/if]-->
+  <!-- Remove this line to use the topic link and topicimage per News item as above *]-->
+ </li>
+ <!--[/foreach]-->
+</ul>
+<!--[else]-->
+  <p><!--[pnml name="_NEWS_CONTENTTYPE_NEWSARTICLESEMPTYMSG"]--></p>
+<!--[/if]-->
+<!--[securityutil_checkpermission component='Stories::Story' instance='::' level=ACCESS_COMMENT assign="submitauth"]-->
+<!--[if $linktosubmit && $submitauth]-->
+ <a href="<!--[pnmodurl modname="News" type="user" func="new"]-->"><!--[pnimg modname="core" set="icons/extrasmall" src="edit_add.gif" alt=_NEWS_SUBMIT altml="true"]--><!--[pnml name="_NEWS_SUBMIT"]--></a>
+<!--[/if]-->

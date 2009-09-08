@@ -1,0 +1,55 @@
+<!--[*  $Id: news_user_archives.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+<!--[include file='news_user_menu.htm']-->
+
+<div class="pn-frontendcontainer">
+<!--[if $archiveitems eq '']-->
+    <!--[* assign page title *]-->
+    <!--[pnml name='_NEWS_ARCHIVES' assign='NewsArchiveTitle']-->
+    <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
+    <h2><!--[pnml name='_NEWS_ARCHIVES']--></h2>
+    <!--[foreach from=$archivemonths key='year' item='years']-->
+    <h3><!--[$year]--></h3>
+    <ul>
+        <!--[foreach from=$years item='month']-->
+        <li>
+          <a href="<!--[$month.url|pnvarprepfordisplay]-->"><!--[$month.title|pnvarprepfordisplay]--></a>
+          <span class="pn-sub">(<!--[if $month.nrofarticles eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$month.nrofarticles]--><!--[/if]-->)</span>
+        </li>
+        <!--[/foreach]-->
+    </ul>
+    <!--[/foreach]-->
+<!--[else]-->
+    <!--[* assign page title *]-->
+    <!--[pnml name='_NEWS_ARCHIVESFORDATE' month=$month year=$year assign='NewsArchiveTitle']-->
+    <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
+    <h2><!--[pnml name='_NEWS_ARCHIVESFORDATE' month=$month year=$year]--></h2>
+    <table class="pn-datatable" style="width:100%;">
+      <thead>
+        <tr>
+          <th><!--[pnml name='_TITLE']--></th>
+          <!--[if $enablecategorization]-->
+            <th><!--[pnml name='_CATEGORY']--></th>
+          <!--[/if]-->
+          <th><!--[pnml name='_NEWS_VIEWS']--></th>
+          <th><!--[pnml name='_NEWS_POSTED']--></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--[section name='items' loop=$archiveitems]-->
+        <tr>
+          <td><a href="<!--[pnmodurl modname='News' type='user' func='display' sid=$archiveitems[items].sid|pnvarprepfordisplay]-->"><!--[$archiveitems[items].title|pnvarprepfordisplay]--></a></td>
+            <!--[if $enablecategorization]-->
+            <td>
+                <!--[* assignedcategorieslist item=$archiveitems[items] format=1 start='' end='' seperator=',' possible after http://code.zikula.org/core/ticket/1043 plugin enhancements *]-->
+                <!--[assignedcategorieslist item=$archiveitems[items]]-->
+            </td>
+            <!--[/if]-->
+          <td><!--[$archiveitems[items].counter|pnvarprepfordisplay]--></td>
+          <td><!--[$archiveitems[items].from|pndate_format|pnvarprepfordisplay]--></td>
+        </tr>
+        <!--[/section]-->
+      </tbody>
+    </table>
+<!--[/if]-->
+</div>

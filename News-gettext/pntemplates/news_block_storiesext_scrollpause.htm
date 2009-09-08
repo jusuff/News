@@ -1,0 +1,19 @@
+<!--[*  $Id:  $  *]-->
+<!--[pnpageaddvar name="javascript" value="modules/News/pnjavascript/storiesext_pausing.js"]-->
+<!--[pnml name='#storiesext'|cat:$bid assign=divid]-->
+<!--[pnml name=$scrollstyle|replace:'%DIVID%':$divid assign=parsedstyle]-->
+<!--[pnpageaddvar name="rawtext" value='<style type="text/css">'|cat:$parsedstyle|cat:'</style>']-->
+<!--[foreach from=$stories item=story key=k]-->
+<div id="storiesext<!--[$bid]--><!--[$k]-->"><!--[$story]--></div>
+<!--[/foreach]-->
+<script type="text/javascript">
+var scrollcontent=new Array();var inc=0;
+while (document.getElementById("storiesext<!--[$bid]-->"+inc)){
+scrollcontent[inc]=document.getElementById("storiesext<!--[$bid]-->"+inc).innerHTML;
+document.getElementById("storiesext<!--[$bid]-->"+inc).style.display="none";
+inc++}
+new pausescroller(scrollcontent,"storiesext<!--[$bid]-->","storiesextscroll",<!--[$scrolldelay]-->)
+</script>
+<!--[securityutil_checkpermission_block component='Storiesextblock::' instance='$title::' level=ACCESS_ADMIN]-->
+<div style="position:relative;top:-1em;margin-bottom:-1em;text-align:right;"><a href="<!--[pnmodurl modname="Blocks" type="admin" func="modify" bid=$bid]-->"><!--[pnimg modname="core" set="icons/extrasmall" src="edit.gif" alt=_STORIES_BLOCKEDIT altml="true"]--></a></div>
+<!--[/securityutil_checkpermission_block]-->

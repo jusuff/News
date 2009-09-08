@@ -1,0 +1,53 @@
+<!--[*  $Id: news_user_categorylist.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+<!--[include file='news_user_menu.htm']-->
+
+<!--[if $enablecategorization]-->
+  <div class="pn-frontendcontainer">
+  <!--[* assign page title *]-->
+  <!--[pnml name='_NEWS_AVAILABLECATEGORIES' assign='NewsCatTitle']-->
+  <!--[pnpagesetvar name='title' value=$NewsCatTitle]-->
+  <h2><!--[pnml name='_NEWS_AVAILABLECATEGORIES']--></h2>
+  <!--[foreach from=$propertiesdata item='property']-->
+    <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]--></h3><!--[/if]-->
+    <ul>
+      <!--[foreach from=$property.subcategories item='category']-->
+        <!--[* get the category name and description avoiding E_ALL errors *]-->
+        <!--[array_field_isset assign='categoryname' array=$category.display_name field=$language returnValue=1]-->
+        <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.name]--><!--[/if]-->
+        <!--[array_field_isset assign='categorydesc' array=$category.display_desc field=$language returnValue=1]-->
+        <!--[assign var='categoryid' value=$category.id]-->
+        <!--[securityutil_checkpermission component='Categories::category' instance="ID::$category.id" level='ACCESS_EDIT' assign='authcatedit']-->
+        <li>
+        <!--[if $shorturls and $shorturlstype eq 0]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'']-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
+        <!--[else]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id]-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
+        <!--[/if]-->
+        <!--[if $authcatedit]-->
+          <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
+        <!--[/if]-->
+
+		&nbsp;&nbsp;<span class="pn-sub">
+        <!--[nocache]-->
+        <!--[if $shorturls and $shorturlstype eq 0]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+        <!--[else]-->
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+        <!--[/if]-->
+ 
+        <!--[if $property.nrofarticles.$categoryid gt 0]-->
+        <!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]--><!--[if $property.nrofyourarticles.$categoryid gt 0]--><!--[pnml name='_NEWS_SELFWRITTEN' count=$property.nrofyourarticles.$categoryid]--><!--[/if]-->
+        <!--[else]-->
+        <!--[pnml name='_NEWS_NOARTICLES']-->
+        <!--[/if]-->
+        <!--[/nocache]-->
+		</span>
+        </li>
+      <!--[/foreach]-->
+    </ul>
+  <!--[/foreach]-->
+  </div>
+<!--[else]-->
+  <!--[pnmodfunc modname='News' type='user' func='main']-->
+<!--[/if]-->

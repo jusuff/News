@@ -1,0 +1,116 @@
+<!--[*  $Id: news_admin_modifyconfig.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+<!--[include file='news_admin_menu.htm']-->
+
+<div class="pn-admincontainer">
+<div class="pn-adminpageicon"><!--[pnimg modname='core' src='configure.gif' set='icons/large' alt='_MODIFYNEWSCONFIG' altml=true]--></div>
+<h2><!--[pnml name='_MODIFYNEWSCONFIG']--></h2>
+
+<form class="pn-adminform" action="<!--[pnmodurl modname='News' type='admin' func='updateconfig']-->" method="post" enctype="application/x-www-form-urlenpred">
+<div>
+    <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
+
+    <fieldset>
+    <legend><!--[pnml name='_CATEGORIES']--></legend>
+        <div class="pn-adminformrow">
+            <label for="news_enablecategorization"><!--[pnml name='_ENABLECATEGORIZATION']--></label>
+            <input id="news_enablecategorization" type="checkbox" name="enablecategorization"<!--[if $enablecategorization]--> checked="checked"<!--[/if]--> />
+        </div>
+        <div class="pn-adminformrow">
+            <label for="topicproperty"><!--[pnml name='_NEWS_TOPICPROPERTY']--></label>
+            <!--[html_options id='topicproperty' name='topicproperty' options=$properties selected=$property]-->
+        </div>
+        <div class="pn-adminformrow">
+            <label for="settings_catimagepath"><!--[pnml name='_NEWS_CATIMAGEPATH']--></label>
+            <input id="settings_catimagepath" type="text" name="catimagepath" value="<!--[$catimagepath|pnvarprepfordisplay]-->" size="40" maxlength="80" />
+            <div class="pn-informationmsg"><!--[pnml name='_NEWS_CATIMAGEINFO']--></div>
+        </div>
+    </fieldset>
+
+    <fieldset>
+    <legend><!--[pnml name='_NEWS_ATTRIBUTES']--></legend>
+        <div class="pn-adminformrow">
+            <label for="news_enableattribution"><!--[pnml name='_NEWS_ENABLEATTRIBUTION']--></label>
+            <input id="news_enableattribution" type="checkbox" name="enableattribution"<!--[if $enableattribution]--> checked="checked"<!--[/if]--> />
+        </div>
+    </fieldset>
+
+    <fieldset>
+    <legend><!--[pnml name='_NEWS_DISPLAY']--></legend>
+        <div class="pn-adminformrow">
+            <label for="settings_storyorder"><!--[pnml name='_NEWS_STORIESORDER']--></label>
+            <select id="settings_storyorder" name="storyorder" size="1">
+                <option value="0"<!--[if $storyorder eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_STORIESORDER0']--></option>
+                <option value="1"<!--[if $storyorder eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_STORIESORDER1']--></option>
+            </select>
+        </div>
+        <div class="pn-adminformrow">
+            <label for="settings_storyhome"><!--[pnml name='_NEWS_STORIESHOME']--></label>
+            <input id="settings_storyhome" type="text" name="storyhome" value="<!--[$storyhome|pnvarprepfordisplay]-->" size="5" maxlength="5" />
+        </div>
+        <div class="pn-adminformrow">
+            <label for="news_itemsperpage"><!--[pnml name='_NEWS_ITEMSONINDEXPAGE']--></label>
+            <input id="news_itemsperpage" type="text" name="itemsperpage" size="3" value="<!--[$itemsperpage|pnvarprepfordisplay]-->" />
+        </div>
+        <div class="pn-adminformrow">
+            <label for="news_refereronprint"><!--[pnml name='_NEWS_REFERERONPRINT']--></label>
+            <div id="news_refereronprint">
+                <input type="radio" id="refereronprintyes" name="refereronprint" value="1"<!--[if $refereronprint eq 1]--> checked="checked"<!--[/if]--> /> <label for="refereronprintyes"><!--[pnml name='_YES']--></label>
+                <input type="radio" id="refereronprintno" name="refereronprint" value="0"<!--[if $refereronprint eq 0]--> checked="checked"<!--[/if]--> /> <label for="refereronprintno"><!--[pnml name='_NO']--></label>
+            </div>
+        </div>
+        <div class="pn-adminformrow">
+            <label for="news_enableajaxedit"><!--[pnml name='_NEWS_ENABLEAJAXEDIT']--></label>
+            <input id="news_enableajaxedit" type="checkbox" name="enableajaxedit"<!--[if $enableajaxedit]--> checked="checked"<!--[/if]--> />
+        </div>
+    </fieldset>
+
+    <!--[pnconfiggetvar name='shorturls' assign='shorturls']-->
+    <!--[if $shorturls eq true]-->
+    <!--[pnajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true nobehaviour=true noscriptaculous=true]-->
+    <fieldset>
+    <legend><!--[pnml name='_NEWS_URLS']--></legend>
+        <p><!--[pnml name='_NEWS_URLSHELP']--></p>
+        <input id="news_permalink_customformat" name="customformat" type="hidden"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
+        <div class="pn-adminformrow">
+            <label><!--[pnml name='_NEWS_URLSDATENAME']--></label>
+            <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
+            <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[pnml name='_NEWS_URLTITLE']-->/</span>
+        </div>
+        <div class="pn-adminformrow">
+            <label><!--[pnml name='_NEWS_URLSNUMERIC']--></label>
+            <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%"<!--[if $permalinkformat eq '%storyid%']--> checked="checked"<!--[/if]--> />
+            <span><!--[$baseurl]--><!--[pnmodgetinfo modname='News' info='displayname']-->/123</span>
+        </div>
+        <div class="pn-adminformrow">
+            <label><!--[pnml name='_NEWS_URLSCUSTOM']--></label>
+            <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" <!--[if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
+        </div>
+        <div class="pn-adminformrow">
+            <label><!--[pnml name='_NEWS_URLSCUSTOMSTRUCTURE']--></label>
+            <input id="news_permalink_format" onclick="news_permalink_onclick()" name="permalinkstructure" type="text"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
+            <div><!--[pnml name='_NEWS_URLSCUSTOMREQUIRED']--></div>
+        </div>
+        <h4><!--[pnml name='_NEWS_URLVARS']--></h4>
+        <ul>
+            <li>%year% - <!--[pnml name='_NEWS_URLVARSYEAR']--></li>
+            <li>%monthnum% - <!--[pnml name='_NEWS_URLVARSMONTHNUM']--></li>
+            <li>%monthname% - <!--[pnml name='_NEWS_URLVARSMONTHNAME']--></li>
+            <li>%day% - <!--[pnml name='_NEWS_URLVARSDAY']--></li>
+            <li>%storytitle% - <!--[pnml name='_NEWS_URLVARSSTORYTITLE']--></li>
+            <li>%storyid% - <!--[pnml name='_NEWS_URLVARSSTORYID']--> </li>
+            <li>%category% - <!--[pnml name='_CATEGORY']--> </li>
+        </ul>
+    </fieldset>
+    <!--[/if]-->
+
+    <!--[pnmodcallhooks hookobject='module' hookaction='modifyconfig' hookid='News' module='News']-->
+
+    <div class="pn-adminformrow pn-adminformbuttons">
+        <!--[pnbutton src='button_ok.gif' set='icons/small' alt='_OK' title='_OK']-->
+        <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' alt='_CANCEL' altml=true title='_CANCEL' titleml=true]--></a>
+    </div>
+</div>
+</form>
+
+</div>

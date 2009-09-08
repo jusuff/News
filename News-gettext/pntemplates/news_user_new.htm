@@ -1,0 +1,250 @@
+<!--[*  $Id: news_user_new.htm 82 2009-02-25 23:09:21Z mateo $  *]-->
+<!--[pnajaxheader modname='News' filename='news.js' noscriptaculous=true]-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/sizecheck.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/scriptaculous.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/effects.js']-->
+<!--[if $enableattribution]-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/behaviour.js']-->
+<!--[pnpageaddvar name='javascript' value='javascript/ajax/dragdrop.js']-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/Zikula.itemlist.js']-->
+<!--[/if]-->
+<!--[pnml name='_SUBMITNEWS' assign='templatetitle']-->
+
+<!--[include file='news_user_menu.htm']-->
+
+<script type="text/javascript">
+/* <![CDATA[ */
+    var bytesused = '<!--[pnml name="_NEWS_CHARSUSED"]-->';
+    var showpublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONSHOW"]-->';
+    var hidepublicationoptions = '<!--[pnml name="_NEWS_PUBLICATIONHIDE"]-->';
+<!--[if $enableattribution]-->
+    var itemlist_news_attributes = null;
+    Event.observe(window, 'load', function() {
+        itemlist_news_attributes = new Zikula.itemlist('news_attributes');
+    }, false);
+<!--[/if]-->
+/* ]]> */
+</script>
+
+<div class="pn-frontendcontainer">
+
+<!--[if $preview neq '']-->
+<div class="news_article news_preview"><!--[$preview]--></div>
+<!--[/if]-->
+
+<h2><!--[$templatetitle]--></h2>
+<form id="news_user_newform" class="pn-form" action="<!--[pnmodurl modname='News' type='user' func='create']-->" method="post" enctype="application/x-www-form-urlencoded">
+<div>
+    <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
+    <!--[if $accessadd neq 1]-->
+    <input type="hidden" name="story[ihome]" value="1" />
+    <input type="hidden" name="story[notes]" value="" />
+    <input type="hidden" name="story[withcomm]" value="1" />
+    <!--[/if]-->
+    <!--[if $formattedcontent eq 1]-->
+    <input type="hidden" name="story[hometextcontenttype]" value="1" />
+    <input type="hidden" name="story[bodytextcontenttype]" value="1" />
+    <!--[/if]-->
+
+    <fieldset class="pn-form-fieldset">
+        <legend><!--[pnml name='_NEWS_OVERVIEW']--></legend>
+
+        <div class="pn-formrow">
+            <label for="news_title"><!--[pnml name='_TITLE']--></label>
+            <input id="news_title" class="pn-form-text" name="story[title]" type="text" size="32" maxlength="255" value="<!--[$title|pnvarprepfordisplay]-->" />
+        </div>
+
+        <div class="pn-formrow">
+            <label for="news_urltitle"><!--[pnml name='_PERMALINKTITLE']--></label>
+            <input id="news_urltitle" class="pn-form-text" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
+            <span class="pn-sub"><!--[pnml name='_PERMALINKTITLEBLANK']--></span>
+        </div>
+
+        <!--[if $enablecategorization]-->
+        <div class="pn-formrow">
+            <label for="news_categories"><!--[pnml name='_CATEGORY']--></label>
+            <!--[pnml assign='lblDef' name='_CHOOSECATEGORY']-->
+            <!--[nocache]-->
+            <ul id="news_categories" class="selector_category">
+            <!--[foreach from=$catregistry key='property' item='category']-->
+                <!--[array_field_isset assign='selectedValue' array=$__CATEGORIES__ field=$property returnValue=1]-->
+                <li><!--[selector_category category=$category name="story[__CATEGORIES__][$property]" field='id' selectedValue=$selectedValue defaultValue='0' defaultText=$lblDef]--></li>
+            <!--[/foreach]-->
+            </ul>
+            <!--[/nocache]-->
+        </div>
+        <!--[/if]-->
+
+        <!--[pnconfiggetvar name='multilingual' assign='multilingual']-->
+        <!--[if $multilingual]-->
+        <div class="pn-formrow">
+            <label for="news_language"><!--[pnml name='_LANGUAGE']--></label>
+            <!--[languagelist id='news_language' name='story[language]' all=true installed=true selected=$language]-->
+        </div>
+        <!--[/if]-->
+    </fieldset>
+
+    <fieldset class="pn-form-fieldset">
+        <legend><!--[pnml name='_NEWS_ARTICLECONTENT']--></legend>
+
+        <!--[if $formattedcontent eq 0]-->
+        <div class="pn-warningmsg"><!--[pnml name='_PERMITTEDHTMLTAGSREMINDER']--><!--[pnml name='_PUNC_COLON']--> <!--[allowedhtml]--></div>
+        <!--[/if]-->
+        <div class="pn-formrow">
+            <label for="news_hometext"><!--[pnml name='_NEWS_HOMETEXT']--></label>
+            <textarea id="news_hometext" class="pn-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
+            <span id="news_hometext_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
+        </div>
+
+        <!--[if $formattedcontent eq 0]-->
+        <div class="pn-formrow">
+            <label for="news_hometextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
+            <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
+                <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
+                <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
+            </select>
+        </div>
+        <!--[/if]-->
+
+        <div class="pn-formrow">
+            <label for="news_bodytext"><!--[pnml name='_NEWS_EXTENDEDTEXT']--></label>
+            <textarea id="news_bodytext" class="pn-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
+            <span id="news_bodytext_remaining" class="pn-sub"><!--[pnml name='_NEWS_CHARSUSED']--></span>
+        </div>
+
+        <!--[if $formattedcontent eq 0]-->
+        <div class="pn-formrow">
+            <label for="news_bodytextcontenttype"><!--[pnml name='_NEWS_CONTENTTYPE']--></label>
+            <select id="news_bodytextcontenttype" name="story[bodytextcontenttype]">
+                <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PLAINTEXT']--></option>
+                <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_FORMATTEDTEXT']--></option>
+            </select>
+        </div>
+        <!--[/if]-->
+
+        <!--[if $accessadd eq 1]-->
+        <div class="pn-formrow">
+            <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_NOTES']--></a></label>
+            <div id="news_notes_details">
+            <textarea id="news_notes" class="pn-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
+            <span id="news_notes_remaining" class="pn-sub"><!--[pnml name='_NEWS_MAXCHARS']--></span>
+            </div>
+        </div>
+        <!--[/if]-->
+    </fieldset>
+
+    <!--[if $accessadd eq 1]-->
+    <fieldset class="pn-form-fieldset">
+        <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_PUBLICATIONSHOW']--></a></legend>
+        <div id="news_publication_details">
+        <div class="pn-formrow">
+            <label for="news_ihome"><!--[pnml name='_NEWS_INHOME']--></label>
+            <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" <!--[if $ihome eq 1]-->checked="checked" <!--[/if]-->/>
+        </div>
+        <div class="pn-formrow">
+            <label for="news_unlimited"><!--[pnml name='_NEWS_UNLIMITED']--></label>
+            <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" <!--[if $unlimited eq 1]-->checked="checked" <!--[/if]-->/>
+        </div>
+        <div id="news_expiration_details">
+        <div class="pn-formrow">
+            <label><!--[pnml name='_NEWS_FROM']--></label>
+            <!--[html_select_date prefix='from' start_year='-2' end_year='+4' time=$from field_array='story']-->&nbsp;<!--[html_select_time prefix='from' use_24_hours=true display_seconds=false minute_interval='5' time=$from field_array='story']-->
+        </div>
+        <div class="pn-formrow">
+            <label for="news_tonolimit"><!--[pnml name='_NEWS_NOLIMIT']--></label>
+            <input id="news_tonolimit" name="story[tonolimit]" type="checkbox" value="1" <!--[if $tonolimit eq 1]-->checked="checked" <!--[/if]-->/>
+        </div>
+        <div id ="news_expiration_date">
+        <div class="pn-formrow">
+            <label><!--[pnml name='_NEWS_TO']--></label>
+            <!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds=false minute_interval='5' time=$to field_array='story']--><br />
+        </div>
+        </div>
+        </div>
+        <div class="pn-formrow">
+            <label for="news_withcomm"><!--[pnml name='_NEWS_ALLOWCOMMENTS']--></label>
+            <input id="news_withcomm" name="story[withcomm]" type="checkbox" value="1" <!--[if $withcomm eq 1]-->checked="checked" <!--[/if]-->/>
+        </div>
+        </div>
+    </fieldset>
+
+    <!--[if $enableattribution]-->
+    <fieldset class="pn-form-fieldset">
+        <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[pnml name='_NEWS_ATTRIBUTES']--></a></legend>
+        <div id="news_attributes_details">
+        <div class="pn-formrow">
+            <div class="itemlist_newitemdiv">
+                <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' title='_NEWS_ATTRIBUTE_NEW' titleml=true]--> <!--[pnml name='_NEWS_ATTRIBUTE_NEW']--></a><br />
+            </div>
+            <ul id="news_attributes" class="itemlist">
+                <!--[if isset($__ATTRIBUTES__)]-->
+                <!--[counter name='news_attributes' reset=true print=false start=0]-->
+                <!--[foreach from=$__ATTRIBUTES__ key='name' item='value']-->
+                <!--[counter name='news_attributes' print=false assign='attrnum']-->
+                <li id="listitem_news_attributes_<!--[$attrnum]-->" class="sortable pn-clearfix <!--[cycle values='pn-odd,pn-even']-->">
+                    <span class="itemlistcell width4">&nbsp;</span>
+                    <span class="itemlistcell width44">
+                        <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_name" name="story[attributes][<!--[$attrnum]-->][name]" size="25" maxlength="255" value="<!--[$name]-->" />
+                    </span>
+                    <span class="itemlistcell width44">
+                        <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
+                    </span>
+                    <span class="itemlistcell width7">
+                        <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
+                    </span>
+                </li>
+				<!--[foreachelse]-->
+					<li>&nbsp;</li>
+                <!--[/foreach]-->
+                <!--[/if]-->
+            </ul>
+            <ul style="display:none">
+                <li id="news_attributes_emptyitem" class="sortable pn-clearfix">
+                    <span class="itemlistcell width4">&nbsp;</span>
+                    <span class="itemlistcell width44">
+                        <input class="iteminput" type="text" id="story_attributes_X_name" name="dummy[]" size="25" maxlength="255" value="" />
+                    </span>
+                    <span class="itemlistcell width44">
+                        <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
+                    </span>
+                    <span class="itemlistcell width7">
+                        <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' alt='_DELETE' altml=true title='_DELETE' titleml=true]--></button>
+                    </span>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </fieldset>
+    <!--[/if]-->
+    <!--[/if]-->
+
+    <!--[pnmodcallhooks hookobject='item' hookaction='new' module='News']-->
+
+    <!--[if $accessadd eq 1]-->
+    <div class="pn-formrow">
+        <label for="news_published_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
+        <select id="news_published_status" name="story[published_status]">
+            <option value="0"<!--[if $published_status eq 0]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PUBLISHED']--></option>
+            <option value="1"<!--[if $published_status eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_REJECTED']--></option>
+            <option value="2"<!--[if $published_status eq 2]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_PENDING']--></option>
+            <option value="3"<!--[if $published_status eq 3]--> selected="selected"<!--[/if]-->><!--[pnml name='_NEWS_ARCHIVED']--></option>
+        </select>
+    </div>
+    <!--[/if]-->
+
+    <div class="pn-formrow">
+        <label for="news_preview"><!--[pnml name='_NEWS_POSTORPREVIEW']--></label>
+        <select id="news_preview" name="story[preview]">
+            <option value="0"><!--[pnml name='_NEWS_PREVIEWSTORY']--></option>
+            <option value="1"><!--[pnml name='_NEWS_SUBMIT']--></option>
+        </select>
+    </div>
+
+    <div class="pn-formrow pn-formbuttons">
+        <!--[pnbutton src='button_ok.gif' set='icons/small' alt='_OK' title='_OK']-->
+        <a href="<!--[pnmodurl modname='News' type='user' func='view]-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' alt='_CANCEL' altml=true title='_CANCEL' titleml=true]--></a>
+    </div>
+</div>
+</form>
+
+</div>

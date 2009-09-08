@@ -1,0 +1,13 @@
+<!--[*  $Id: news_user_preview.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+<h2><!--[pnml name='_NEWS_NEWSARTICLEPREVIEW']--></h2>
+
+<h2 class="news_title"><!--[$preview.title]--></h2>
+<div id="news_body" class="news_body">
+    <!--[$preview.hometext|pnmodcallhooks:'News']-->
+    <hr />
+    <!--[$preview.bodytext|pnmodcallhooks:'News']-->
+</div>
+<!--[if $preview.notes neq '']-->
+<p id="news_notes" class="news_meta"><!--[$preview.notes]--></p>
+<!--[/if]-->

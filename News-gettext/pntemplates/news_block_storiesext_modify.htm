@@ -1,0 +1,192 @@
+<!--[*  $Id:  $  *]-->
+<!--[pnajaxheader modname='News' filename='news_storiesextblock_modify.js' effects=true nobehaviour=true noscriptaculous=true]-->
+<fieldset>
+<legend><!--[pnml name='_STORIES_BASICINFO']--></legend>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_show"><!--[pnml name='_STORIES_WHICHSTORIES']--></label>
+	<select id="news_storiesextblock_show" name="show">
+		<option value="1"<!--[if $show eq 1]--> checked="checked"<!--[/if]-->><!--[pnml name='_STORIES_DISPLAYALL']--></option>
+		<option value="2"<!--[if $show eq 2]--> checked="checked"<!--[/if]-->><!--[pnml name='_STORIES_DISPLAYFRONTPAGE']--></option>
+		<option value="3"<!--[if $show eq 3]--> checked="checked"<!--[/if]-->><!--[pnml name='_STORIES_DISPLAYNONFRONTPAGE']--></option>
+	</select>
+</div>
+<!--[if $enablecategorization]-->
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_categories"><!--[pnml name='_STORIES_CATEGORY']--> (<a href="<!--[pnmodurl modname='Categories' type='admin' func='editregistry']-->"><!--[pnml name='_STORIES_CATEGORIES_REGISTRY']--></a>)</label>
+	<!--[nocache]-->
+	<ul id="news_storiesextblock_categories" class="selector_category">
+	<!--[foreach from=$catregistry key='prop' item='cat']-->
+		<!--[array_field_isset assign='selectedValue' array=$category field=$prop returnValue=1]-->
+		<li>
+          <!--[selector_category category=$cat name="category[$prop]" multipleSize=5 selectedValue=$selectedValue]-->
+          <input type="button" value="<!--[pnml name='_ALL']-->" onclick="news_storiesextblock_selectAllOptions(this.form.category_<!--[$prop]-->___, true);">
+          <input type="button" value="<!--[pnml name='_STORIES_SELECTNONE']-->" onclick="news_storiesextblock_selectAllOptions(this.form.category_<!--[$prop]-->___, false);">
+        </li>
+	<!--[/foreach]-->
+	</ul>
+    <!--[/nocache]-->
+</div>
+<!--[/if]-->
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_limit"><!--[pnml name='_STORIES_MAXNUM']--></label>
+	<input id="news_storiesextblock_limit" type="text" name="limit" size="5" value="<!--[$limit|pnvarprepfordisplay]-->" />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_status"><!--[pnml name='_NEWS_PUBLISHEDSTATUS']--></label>
+	<select id="news_storiesextblock_status" name="status">
+		<option value="0"<!--[if $status eq 0]--> checked="checked"<!--[/if]-->><!--[pnml name='_NEWS_PUBLISHED']--></option>
+		<option value="1"<!--[if $status eq 1]--> checked="checked"<!--[/if]-->><!--[pnml name='_NEWS_REJECTED']--></option>
+		<option value="2"<!--[if $status eq 2]--> checked="checked"<!--[/if]-->><!--[pnml name='_NEWS_PENDING']--></option>
+		<option value="3"<!--[if $status eq 3]--> checked="checked"<!--[/if]-->><!--[pnml name='_NEWS_ARCHIVED']--></option>
+	</select>
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_order"><!--[pnml name='_STORIES_ORDER']--></label>
+	<select id="news_storiesextblock_order" name="order">
+		<option value="0"<!--[if $order eq 0]--> checked="checked"<!--[/if]-->><!--[pnml name='_STORIES_NEWSSETTING']--></option>
+		<option value="1"<!--[if $order eq 1]--> checked="checked"<!--[/if]-->><!--[pnml name='_STORIES_COUNTER']--></option>
+	</select>
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dayslimit"><!--[pnml name='_STORIES_MAXDAYS']--></label>
+	<input id="news_storiesextblock_dayslimit" type="text" name="dayslimit" size="5" value="<!--[$dayslimit|pnvarprepfordisplay]-->" />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_maxtitlelength"><!--[pnml name='_STORIES_MAXTITLELENGTH']--></label>
+	<input id="news_storiesextblock_maxtitlelength" type="text" name="maxtitlelength" size="5" value="<!--[$maxtitlelength|pnvarprepfordisplay]-->" />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_titlewraptxt"><!--[pnml name='_STORIES_TITLEWRAPTXT']--></label>
+	<input id="news_storiesextblock_titlewraptxt" type="text" name="titlewraptxt" size="10" value="<!--[$titlewraptxt|pnvarprepfordisplay]-->" />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_showemptyresult"><!--[pnml name='_STORIES_SHOWEMPTYRESULT']--></label>
+	<input id="news_storiesextblock_showemptyresult" type="checkbox" value="1" name="showemptyresult"<!--[if $showemptyresult]--> checked="checked"<!--[/if]--> />
+</div>
+</fieldset>
+
+<fieldset>
+<legend><!--[pnml name='_STORIES_TEMPLATE_OVERRIDE']--></legend>
+<div class="pn-adminformrow">
+	<div class="pn-informationmsg"><!--[pnml name='_STORIES_TEMPLATE_OVERRIDE_INFO']--></div>
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_blocktemplate"><!--[pnml name='_STORIES_TEMPLATE_BLOCK']--></label>
+	<input id="news_storiesextblock_blocktemplate" type="text" name="blocktemplate" size="30" value="<!--[$blocktemplate|pnvarprepfordisplay]-->" />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_rowtemplate"><!--[pnml name='_STORIES_TEMPLATE_ROW']--></label>
+	<input id="news_storiesextblock_rowtemplate" type="text" name="rowtemplate" size="30" value="<!--[$rowtemplate|pnvarprepfordisplay]-->" />
+</div>
+</fieldset>
+
+<fieldset>
+<legend><!--[pnml name='_STORIES_ADDITIONALINFO']--></legend>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dispuname"><!--[pnml name='_STORIES_DISPUNAME']--></label>
+	<input id="news_storiesextblock_dispuname" type="checkbox" value="1" name="dispuname"<!--[if $dispuname]--> checked="checked"<!--[/if]--> />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dispdate"><!--[pnml name='_STORIES_DISPDATE']--></label>
+	<input id="news_storiesextblock_dispdate" type="checkbox" value="1" name="dispdate"<!--[if $dispdate]--> checked="checked"<!--[/if]--> />
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dateformat"><!--[pnml name='_STORIES_DATEFORMAT']--></label>
+	<input id="news_storiesextblock_dateformat" type="text" name="dateformat" size="10" value="<!--[$dateformat|pnvarprepfordisplay]-->" />
+	(<a href="http://www.php.net/manual/en/function.strftime.php" target="_new"><!--[pnml name='_STORIES_DATEFORMATLINK']--></a>)
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dispreads"><!--[pnml name='_STORIES_DISPREADS']--></label>
+	<input id="news_storiesextblock_dispreads" type="checkbox" value="1" name="dispreads"<!--[if $dispreads]--> checked="checked"<!--[/if]--> />
+</div>
+<!--[pnmodavailable modname='EZComments' assign='EZComments']-->
+<!--[if $EZComments]-->
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dispcomments"><!--[pnml name='_STORIES_DISPCOMMENTS']--></label>
+	<input id="news_storiesextblock_dispcomments" type="checkbox"value="1"  name="dispcomments"<!--[if $dispcomments]--> checked="checked"<!--[/if]--> />
+</div>
+<!--[/if]-->
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_dispsplitchar"><!--[pnml name='_STORIES_SPLITCHAR']--></label>
+	<input id="news_storiesextblock_splitchar" type="text" name="dispsplitchar" size="10" value="<!--[$dispsplitchar|pnvarprepfordisplay]-->" />
+</div>
+</fieldset>
+
+<fieldset>
+<legend><!--[pnml name='_STORIES_DISPHOMETEXT']--></legend>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_disphometext"><!--[pnml name='_STORIES_DISPHOMETEXT']--></label>
+	<div id="news_storiesextblock_disphometext">
+        <input id="news_storiesextblock_disphometext_yes" type="radio" name="disphometext" value="1" <!--[if $disphometext eq 1]-->checked="checked"<!--[/if]--> /> <!--[pnml name="_YES"]-->
+        <input id="news_storiesextblock_disphometext_no" type="radio" name="disphometext" value="0" <!--[if $disphometext eq 0]-->checked="checked"<!--[/if]--> /> <!--[pnml name="_NO"]-->
+    </div>
+</div>
+<div id="news_storiesextblock_disphometext_container">
+	<div class="pn-adminformrow">
+		<div class="pn-informationmsg"><!--[pnml name='_STORIES_HOMETEXTWARNING']--></div>
+	</div>
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_maxhometextlength"><!--[pnml name='_STORIES_MAXHOMETEXTLENGTH']--></label>
+        <input id="news_storiesextblock_maxhometextlength" type="text" name="maxhometextlength" size="5" value="<!--[$maxhometextlength|pnvarprepfordisplay]-->" />
+    </div>
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_hometextwraptxt"><!--[pnml name='_STORIES_HOMETEXTWRAPTEXT']--></label>
+        <input id="news_storiesextblock_hometextwraptxt" type="text" name="hometextwraptxt" size="10" value="<!--[$hometextwraptxt|pnvarprepfordisplay]-->" />
+    </div>
+</div>
+</fieldset>
+
+<fieldset>
+<legend><!--[pnml name='_STORIES_DISPNEWIMAGE']--></legend>
+<div class="pn-adminformrow">
+    <label for="news_storiesextblock_dispnewimage"><!--[pnml name='_STORIES_DISPNEWIMAGE']--></label>
+    <div id="news_storiesextblock_dispnewimage">
+        <input id="news_storiesextblock_dispnewimage_yes" type="radio" name="dispnewimage" value="1" <!--[if $dispnewimage eq 1]-->checked="checked"<!--[/if]--> /> <!--[pnml name="_YES"]-->
+        <input id="news_storiesextblock_dispnewimage_no" type="radio" name="dispnewimage" value="0" <!--[if $dispnewimage eq 0]-->checked="checked"<!--[/if]--> /> <!--[pnml name="_NO"]-->
+    </div>
+</div>
+<div id="news_storiesextblock_dispnewimage_container">
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_newimagelimit"><!--[pnml name='_STORIES_NEWIMAGELIMIT']--></label>
+        <input id="news_storiesextblock_newimagelimit" type="text" name="newimagelimit" size="5" value="<!--[$newimagelimit|pnvarprepfordisplay]-->" />
+    </div>
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_newimageset"><!--[pnml name='_STORIES_NEWIMAGESET']--></label>
+        <input id="news_storiesextblock_newimageset" type="text" name="newimageset" size="40" value="<!--[$newimageset|pnvarprepfordisplay]-->" />
+    </div>
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_newimagesrc"><!--[pnml name='_STORIES_NEWIMAGESRC']--></label>
+        <input id="news_storiesextblock_newimagesrc" type="text" name="newimagesrc" size="40" value="<!--[$newimagesrc|pnvarprepfordisplay]-->" />
+    </div>
+</div>
+</fieldset>
+
+<fieldset>
+<legend><!--[pnml name='_STORIES_SCROLLING']--></legend>
+<div class="pn-adminformrow">
+    <div class="pn-informationmsg"><!--[pnml name='_STORIES_SCROLLINGDESC' html=1]--></div>
+</div>
+<div class="pn-adminformrow">
+	<label for="news_storiesextblock_scrolling"><!--[pnml name='_STORIES_SCROLLING']--></label>
+	<select id="news_storiesextblock_scrolling" name="scrolling">
+		<option value="1"<!--[if $scrolling eq 1]--> selected="selected"<!--[/if]-->><!--[pnml name='_STORIES_NOSCROLLING']--></option>
+		<option value="2"<!--[if $scrolling eq 2]--> selected="selected"<!--[/if]-->><!--[pnml name='_STORIES_PAUSESCROLLING']--></option>
+		<option value="3"<!--[if $scrolling eq 3]--> selected="selected"<!--[/if]-->><!--[pnml name='_STORIES_FADESCROLLING']--></option>
+		<option value="4"<!--[if $scrolling eq 4]--> selected="selected"<!--[/if]-->><!--[pnml name='_STORIES_MARQUEESCROLLING']--></option>
+	</select>
+</div>
+<div id="news_storiesextblock_scrolling_container">
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_scrollstyle"><!--[pnml name='_STORIES_SCROLLSTYLE']--></label>
+        <textarea id="news_storiesextblock_scrollstyle" name="scrollstyle" rows="8" cols="40"><!--[$scrollstyle|pnvarprepfordisplay]--></textarea>
+    </div>
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_scrolldelay"><!--[pnml name='_STORIES_SCROLLDELAY']--></label>
+        <input id="news_storiesextblock_scrolldelay" type="text" name="scrolldelay" size="10" value="<!--[$scrolldelay|pnvarprepfordisplay]-->" />
+    </div>
+    <div class="pn-adminformrow">
+        <label for="news_storiesextblock_scrollmspeed"><!--[pnml name='_STORIES_SCROLLMSPEED']--></label>
+        <input id="news_storiesextblock_scrollmspeed" type="text" name="scrollmspeed" size="10" value="<!--[$scrollmspeed|pnvarprepfordisplay]-->" />
+    </div>
+</div>
+</fieldset>

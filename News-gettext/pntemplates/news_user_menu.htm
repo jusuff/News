@@ -1,0 +1,56 @@
+<!--[*  $Id: news_user_menu.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+
+<!--[nocache]-->
+<!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
+<!--[securityutil_checkpermission component='Stories::Story' instance='::' level='ACCESS_COMMENT' assign='authcomm']-->
+<!--[securityutil_checkpermission component='Stories::Story' instance='::' level='ACCESS_EDIT' assign='authedit']-->
+<!--[/nocache]-->
+
+<!--[* assign page title *]-->
+<!--[if $func eq 'main']-->
+  <!--[pnconfiggetvar name='entrypoint' default='index.php' assign='entrypoint']-->
+  <!--[pnservergetvar name='REQUEST_URI' default='/' assign='requesturi']-->
+  <!--[assign var='requesturi' value=$requesturi|replace:$baseuri:'']-->
+  <!--[if $requesturi neq '/' AND $requesturi neq "/$entrypoint"]-->
+    <!--[pnpagesetvar name='title' value='_NEWS_FRONTPAGE'|pnml]-->
+  <!--[/if]-->
+<!--[elseif $func eq 'view' AND $catname|default:'' neq '']-->
+  <!--[pnpagesetvar name='title' value=$catname]-->
+<!--[/if]-->
+
+<div class="pn-frontendbox">
+<h1><!--[pnml name='_NEWS']--> <!--[if $catname|default:'' neq '']--> &raquo; <!--[$catname]--><!--[/if]--></h1>
+<!--[insert name='getstatusmsg' class='pn-informationmsg']-->
+<div class="pn-menu">
+[
+<!--[if $func neq 'main']-->
+<a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[pnml name='_NEWS_FRONTPAGE']--></a>
+<!--[/if]-->
+
+<!--[if $enablecategorization AND $func neq 'categorylist']-->
+<!--[if $func neq 'main']-->&nbsp;|&nbsp;<!--[/if]-->
+<a href="<!--[pnmodurl modname='News' type='user' func='categorylist']-->"><!--[pnml name='_NEWS_CATEGORYLIST']--></a>
+<!--[/if]-->
+
+<!--[if $func neq 'archives']-->
+&nbsp;|&nbsp;
+<a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[pnml name='_NEWS_ARCHIVES']--></a>
+<!--[/if]-->
+
+<!--[nocache]-->
+<!--[if $authcomm AND $func neq 'new']-->
+&nbsp;|&nbsp;
+<a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnml name='_NEWS_SUBMIT']--></a>
+<!--[/if]-->
+
+<!--[if $authedit]-->
+<!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
+<!--[if $pendingcount gt 0]-->
+&nbsp;|&nbsp;
+<a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount eq 1]--><!--[pnml name='_NEWS_PENDINGARTICLE']--><!--[else]--><!--[pnml name='_NEWS_PENDINGARTICLES' count=$pendingcount]--><!--[/if]--></a>
+<!--[/if]-->
+<!--[/if]-->
+<!--[/nocache]-->
+]
+</div>
+</div>
