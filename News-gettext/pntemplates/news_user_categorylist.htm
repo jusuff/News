@@ -5,9 +5,9 @@
 <!--[if $enablecategorization]-->
   <div class="pn-frontendcontainer">
   <!--[* assign page title *]-->
-  <!--[gt text="Available categories" assign='NewsCatTitle']-->
+  <!--[gt text="Available Categories" assign='NewsCatTitle']-->
   <!--[pnpagesetvar name='title' value=$NewsCatTitle]-->
-  <h2><!--[gt text="Available categories"]--></h2>
+  <h2><!--[gt text="Available Categories"]--></h2>
   <!--[foreach from=$propertiesdata item='property']-->
     <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]--></h3><!--[/if]-->
     <ul>

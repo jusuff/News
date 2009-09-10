@@ -14,7 +14,7 @@
         <!--[foreach from=$years item='month']-->
         <li>
           <a href="<!--[$month.url|pnvarprepfordisplay]-->"><!--[$month.title|pnvarprepfordisplay]--></a>
-          <span class="pn-sub">(<!--[gt text="%s article" plural="%s articles" tag1=$month.nrofarticles]-->)</span>
+          <span class="pn-sub">(<!--[gt text="%s article" plural="%s articles" tag1=$month.nrofarticles count=$month.nrofarticles]-->)</span>
         </li>
         <!--[/foreach]-->
     </ul>

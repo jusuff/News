@@ -5,7 +5,7 @@
  <!--[foreach from=$stories item=story]-->
  <li>
   <!--[if $story.readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->"><!--[/if]-->
-  <!--[if $story.dispnewimage]--><!--[pnimg modname=core set=$newimageset src=$newimagesrc alt=_NEWS_CONTENTTYPE_NEWSARTICLESNEWIMAGE]--><!--[/if]-->
+  <!--[if $story.dispnewimage]--><!--[pnimg modname=core set=$newimageset src=$newimagesrc __alt='New Article Image']--><!--[/if]--> 
   <!--[$story.title|pnvarprephtmldisplay]--><!--[if $story.titlewrapped]--><!--[$titlewraptext|pnvarprephtmldisplay]--><!--[/if]-->
   <!--[if $story.readperm]--></a><!--[/if]-->
   <!--[* Optional additional info on the story *]-->

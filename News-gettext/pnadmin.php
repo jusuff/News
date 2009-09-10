@@ -139,7 +139,7 @@ function News_admin_modify($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit(__('Error! Unable to load class CategoryRegistryUtil'));
+            pn_exit(__('Error! Unable to load class CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
 

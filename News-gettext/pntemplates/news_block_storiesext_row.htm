@@ -8,7 +8,7 @@
 <!--[if $dispdate]--> <!--[gt text="on"]--> <!--[elseif $dispreads OR $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
 <!--[if $dispdate]--><!--[$from|pndate_format:$dateformat]--><!--[if $dispreads OR $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
 <!--[if $dispreads]--><!--[gt text="1 read" plural="%s reads" count=$counter]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-<!--[if $dispcomments]--><!--[gt text="%s comment" plural="%s comments" counter=$comments]--><!--[/if]-->)
+<!--[if $dispcomments]--><!--[gt text="%s comment" plural="%s comments" count=$comments]--><!--[/if]-->)
 <!--[/if]-->
 <!--[if $disphometext]-->
 <div class="storiesext_hometext">

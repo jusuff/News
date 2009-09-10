@@ -217,11 +217,11 @@ function news_adminapi_getlinks()
 
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
-        $links[] = array('url' => pnModURL('News', 'admin', 'view'), 'text' => _NEWS_VIEW);
+        $links[] = array('url' => pnModURL('News', 'admin', 'view'), 'text' => __('View News Articles list', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
-        $links[] = array('url' => pnModURL('News', 'admin', 'new'), 'text' =>  _NEWS_CREATE);
+        $links[] = array('url' => pnModURL('News', 'admin', 'new'), 'text' => __('Create a News Article', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {

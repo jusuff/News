@@ -20,7 +20,7 @@
 <form action="<!--[pnmodurl modname='News' type='admin' func='view']-->" method="post" enctype="application/x-www-form-urlencoded">
     <div id="news_multicategory_filter">
         <label for="news_property"><!--[gt text="Category"]--></label>
-        <!--[pnml assign='lblDef' name='All']-->
+        <!--[gt text="All" assign='lblDef']-->
         <!--[nocache]-->
             <!--[if $numproperties gt 1]-->
                 <!--[html_options id='news_property' name='news_property' options=$properties selected=$property]-->

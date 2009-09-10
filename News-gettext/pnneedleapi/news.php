@@ -26,6 +26,7 @@
  */
 function News_needleapi_news($args)
 {
+    $mhdom = ZLanguage::getModuleDomain('News');
     // Get arguments from argument array
     $nid = $args['nid'];
     unset($args);
@@ -51,16 +52,16 @@ function News_needleapi_news($args)
                     $title = DataUtil::formatForDisplay($obj['title']);
                     $cache[$nid] = '<a href="' . $url . '" title="' . $title . '">' . $title . '</a>';
                 } else {
-                    $cache[$nid] = '<em>' . DataUtil::formatForDisplay(_MH_NEWS_UNKNOWNPAGE . ' (' . $nid . ')') . '</em>';
+                    $cache[$nid] = '<em>' . DataUtil::formatForDisplay(__('unknown page', $mhdom) . ' (' . $nid . ')') . '</em>';
                 }
         
             } else {
-                $cache[$nid] = '<em>' . DataUtil::formatForDisplay(_MH_NEWS_NOTAVAILABLE) . '</em>';
+                $cache[$nid] = '<em>' . DataUtil::formatForDisplay(__('News not available', $mhdom)) . '</em>';
             }
         }
         $result = $cache[$nid];
     } else {
-        $result = '<em>' . DataUtil::formatForDisplay(_MH_NEWS_NONEEDLEID) . '</em>';
+        $result = '<em>' . DataUtil::formatForDisplay(__('no needle id', $mhdom)) . '</em>';
     }
     return $result;
     
