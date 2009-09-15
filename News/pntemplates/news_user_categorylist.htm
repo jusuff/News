@@ -9,40 +9,93 @@
   <!--[pnpagesetvar name='title' value=$NewsCatTitle]-->
   <h2><!--[pnml name='_NEWS_AVAILABLECATEGORIES']--></h2>
   <!--[foreach from=$propertiesdata item='property']-->
-    <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]--></h3><!--[/if]-->
+    <!--[if $propertiesdata|@count gt 1]--><h3><!--[$property.name]-->
+        <!--[if $property.category.news_totalarticlecount gt 0]-->
+            <!--[if $property.category.news_totalarticlecount eq 1]-->(<!--[pnml name='_NEWS_ARTICLE']-->)<!--[else]-->(<!--[pnml name='_NEWS_ARTICLES' count=$property.category.news_totalarticlecount]-->)<!--[/if]-->
+        <!--[else]-->
+            (<!--[pnml name='_NEWS_NOARTICLES']-->)
+        <!--[/if]-->
+        </h3>
+    <!--[/if]-->
+    <!--[assign var='category' value=`$property.category`]-->
     <ul>
-      <!--[foreach from=$property.subcategories item='category']-->
+      <!--[foreach from=$category.subcategories item='category']-->
         <!--[* get the category name and description avoiding E_ALL errors *]-->
-        <!--[array_field_isset assign='categoryname' array=$category.display_name field=$language returnValue=1]-->
-        <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.name]--><!--[/if]-->
-        <!--[array_field_isset assign='categorydesc' array=$category.display_desc field=$language returnValue=1]-->
-        <!--[assign var='categoryid' value=$category.id]-->
-        <!--[securityutil_checkpermission component='Categories::category' instance="ID::$category.id" level='ACCESS_EDIT' assign='authcatedit']-->
+        <!--[array_field_isset assign='categoryname' array=$category.category.display_name field=$language returnValue=1]-->
+        <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.category.name]--><!--[/if]-->
+        <!--[array_field_isset assign='categorydesc' array=$category.category.display_desc field=$language returnValue=1]-->
+        <!--[assign var='categoryid' value=$category.category.id]-->
+        <!--[securityutil_checkpermission component='Categories::category' instance="ID::$category.category.id" level='ACCESS_EDIT' assign='authcatedit']-->
         <li>
         <!--[if $shorturls and $shorturlstype eq 0]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'']-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.path|replace:$property.category.path:'']-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
         <!--[else]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id]-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.id]-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
         <!--[/if]-->
         <!--[if $authcatedit]-->
-          <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
+          <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
         <!--[/if]-->
 
 		&nbsp;&nbsp;<span class="pn-sub">
         <!--[nocache]-->
         <!--[if $shorturls and $shorturlstype eq 0]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.path|replace:$property.rootcat.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.path|replace:$property.category.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
         <!--[else]-->
-          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+          <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
         <!--[/if]-->
  
-        <!--[if $property.nrofarticles.$categoryid gt 0]-->
-        <!--[if $property.nrofarticles.$categoryid eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$property.nrofarticles.$categoryid]--><!--[/if]--><!--[if $property.nrofyourarticles.$categoryid gt 0]--><!--[pnml name='_NEWS_SELFWRITTEN' count=$property.nrofyourarticles.$categoryid]--><!--[/if]-->
+        <!--[if $category.category.news_totalarticlecount gt 0]-->
+            <!--[if $category.category.news_articlecount eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$category.category.news_articlecount]--><!--[/if]-->
+            <!--[if $category.category.news_totalarticlecount gt $category.category.news_articlecount]-->| <!--[$category.category.news_totalarticlecount]--> <!--[pnml name='_TOTAL']--><!--[/if]-->
+            <!--[if $category.category.news_yourarticlecount gt 0]-->| <!--[pnml name='_NEWS_SELFWRITTEN' count=$category.category.news_yourarticlecount]--><!--[/if]-->
         <!--[else]-->
-        <!--[pnml name='_NEWS_NOARTICLES']-->
+            <!--[pnml name='_NEWS_NOARTICLES']-->
         <!--[/if]-->
         <!--[/nocache]-->
 		</span>
+        
+        <!--[* Second level category display *]-->
+        <!--[if !empty($category.subcategories)]-->
+        <ul style="margin-bottom:0">
+        <!--[foreach from=$category.subcategories item='subcat']-->
+            <!--[array_field_isset assign='categoryname' array=$subcat.category.display_name field=$language returnValue=1]-->
+            <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$subcat.category.name]--><!--[/if]-->
+            <!--[array_field_isset assign='categorydesc' array=$subcat.category.display_desc field=$language returnValue=1]-->
+            <!--[assign var='categoryid' value=$subcat.category.id]-->
+            <!--[securityutil_checkpermission component='Categories::category' instance="ID::$subcat.category.id" level='ACCESS_EDIT' assign='authcatedit']-->
+            <li>
+            <!--[if $shorturls and $shorturlstype eq 0]-->
+              <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.path|replace:$property.category.path:'']-->" title="<!--[$categorydesc]-->"><!--[$categoryname]--></a>
+            <!--[else]-->
+              <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.id]-->" title="<!--[$subcatdesc]-->"><!--[$categoryname]--></a>
+            <!--[/if]-->
+            <!--[if $authcatedit]-->
+              <a href="<!--[pnmodurl modname='Categories' type='admin' func='edit' mode='edit' cid=$subcat.category.id]-->"><!--[pnimg modname='core' set='icons/extrasmall' src='xedit.gif' alt='_EDIT' altml=true]--></a>
+            <!--[/if]-->
+    
+            &nbsp;&nbsp;<span class="pn-sub">
+            <!--[nocache]-->
+            <!--[if $shorturls and $shorturlstype eq 0]-->
+              <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.path|replace:$property.category.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+            <!--[else]-->
+              <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.id theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' alt='_NEWS_RSSFEED' altml=true]--></a>
+            <!--[/if]-->
+     
+            <!--[if $subcat.category.news_totalarticlecount gt 0]-->
+                <!--[if $subcat.category.news_articlecount eq 1]--><!--[pnml name='_NEWS_ARTICLE']--><!--[else]--><!--[pnml name='_NEWS_ARTICLES' count=$subcat.category.news_articlecount]--><!--[/if]-->
+                <!--[if $subcat.category.news_totalarticlecount gt $subcat.category.news_articlecount]-->| <!--[$subcat.category.news_totalarticlecount]--> <!--[pnml name='_TOTAL']--><!--[/if]-->
+                <!--[if $subcat.category.news_yourarticlecount gt 0]-->| <!--[pnml name='_NEWS_SELFWRITTEN' count=$subcat.category.news_yourarticlecount]--><!--[/if]-->
+            <!--[else]-->
+                <!--[pnml name='_NEWS_NOARTICLES']-->
+            <!--[/if]-->
+            <!--[/nocache]-->
+            </span>
+            </li>
+        <!--[/foreach]-->
+        </ul>
+        <!--[/if]-->
+        <!--[* End of second level subcategories *]-->
+        
         </li>
       <!--[/foreach]-->
     </ul>
