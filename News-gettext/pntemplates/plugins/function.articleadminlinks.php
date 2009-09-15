@@ -11,21 +11,6 @@
 */
 
 /**
- * pnRender plugin
- *
- * This file is a plugin for pnRender, the Zikula implementation of Smarty
- *
- * @package      Zikula_3rdParty_Modules
- * @subpackage   News
- * @version      $Id: function.articleadminlinks.php 75 2009-02-24 04:51:52Z mateo $
- * @author       The Zikula development team
- * @link         http://www.zikula.org  The Zikula Home Page
- * @copyright    Copyright (C) 2002 by the Zikula Development Team
- * @license      http://www.gnu.org/copyleft/gpl.html GNU General Public License
- */
-
-
-/**
  * Smarty function to display edit and delete links for a news article
  *
  * Example
@@ -77,9 +62,6 @@ function smarty_function_articleadminlinks($params, &$smarty)
     if (SecurityUtil::checkPermission('News::', "$info[aid]:$info[cattitle]:$info[sid]", ACCESS_EDIT) ||
         SecurityUtil::checkPermission('Stories::Story', "$info[aid]:$info[cattitle]:$info[sid]", ACCESS_EDIT)) {
         // load our ajax files into the header
-//        require_once $smarty->_get_plugin_filepath('function','pnajaxheader');
-//        smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'news.js'), $smarty);
-//        smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'sizecheck.js'), $smarty);
         if (isset($params['type']) && $params['type'] == 'ajax') {
             // load our ajax files into the header
             require_once $smarty->_get_plugin_filepath('function','pnajaxheader');
