@@ -264,6 +264,11 @@ function News_admin_update($args)
         SessionUtil::delVar('newsitem');
     }
 
+    // Check if the article goes from not published to published
+    if ($item['published_status'] != 0 && $story['published_status'] == 0) {
+        $story['approver'] = SessionUtil::getVar('uid');
+    }
+
     // Update the story
     if (pnModAPIFunc('News', 'admin', 'update',
                     array('sid' => $story['sid'],

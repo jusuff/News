@@ -261,6 +261,11 @@ function News_admin_update($args)
         // As we're not previewing the item let's remove it from the session
         SessionUtil::delVar('newsitem');
     }
+    
+    // Check if the article goes from not published to published
+    if ($item['published_status'] != 0 && $story['published_status'] == 0) {
+        $story['approver'] = SessionUtil::getVar('uid');
+    }
 
     // Update the story
     if (pnModAPIFunc('News', 'admin', 'update',
@@ -281,7 +286,8 @@ function News_admin_update($args)
                           'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                           'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
-                          'published_status' => $story['published_status']))) {
+                          'published_status' => $story['published_status'],
+                          'approver' => $story['approver']))) {
         // Success
         LogUtil::registerStatus(pnML('_UPDATEITEMSUCCEDED', array('i' => _NEWS_STORY)));
     }

@@ -869,8 +869,14 @@ function News_userapi_create($args)
         if (empty($args['informant'])) {
             $args['informant'] = $anonymous;
         }
+        $args['approver'] = 0;
     } else {
         $args['informant'] = pnUserGetVar('uname');
+        if ($args['published_status'] == 0) {
+            $args['approver'] = SessionUtil::getVar('uid');
+        } else {
+            $args['approver'] = 0;
+        }
     }
 
     $args['counter'] = 0;
