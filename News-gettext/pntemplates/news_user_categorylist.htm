@@ -14,7 +14,7 @@
     <!--[/if]-->
     <!--[assign var='category' value=`$property.category`]-->
     <ul>
-      <!--[foreach from=$property.subcategories item='category']-->
+      <!--[foreach from=$category.subcategories item='category']-->
         <!--[* get the category name and description avoiding E_ALL errors *]-->
         <!--[array_field_isset assign='categoryname' array=$category.display_name field=$language returnValue=1]-->
         <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.name]--><!--[/if]-->
