@@ -34,7 +34,7 @@ function News_storiesblock_info()
 
     return array('module'          => 'News',
                  'text_type'       => __('Article titles', $dom),
-                 'text_type_long'  => __('Displays some article titles', $dom),
+                 'text_type_long'  => __('Display article titles', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,
                  'form_refresh'    => false,

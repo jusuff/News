@@ -33,8 +33,8 @@ function News_bigblock_info()
     $dom = ZLanguage::getModuleDomain('News');
 
     return array('module'         => 'News',
-                 'text_type'      => __('Big story', $dom),
-                 'text_type_long' => __("Today's top article", $dom),
+                 'text_type'      => __('Most read article', $dom),
+                 'text_type_long' => __("Today's most read article", $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -75,6 +75,7 @@ function News_bigblock_display($blockinfo)
                              array('tdate' => $tdate,
                                    'ihome' => 0,
                                    'order' => 'counter',
+                                   'status' => 0,
                                    'numitems' => 1));
 
     if (empty($articles)) {
@@ -91,7 +92,7 @@ function News_bigblock_display($blockinfo)
     }
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = __("Today's top article", $dom);
+        $blockinfo['title'] = __("Today's most read article", $dom);
     }
 
     $render = & pnRender::getInstance('News');

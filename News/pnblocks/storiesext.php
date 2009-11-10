@@ -70,8 +70,8 @@ function News_storiesextblock_info()
     $dom = ZLanguage::getModuleDomain('News');
 
     return array('module'          => 'News',
-                 'text_type'       => __('Articles extended', $dom),
-                 'text_type_long'  => __('Articles titles extended', $dom),
+                 'text_type'       => __('Article titles extended', $dom),
+                 'text_type_long'  => __('Display article titles with extended options', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,
                  'form_refresh'    => false,
