@@ -50,7 +50,7 @@ function News_needleapi_news($args)
                 $title = DataUtil::formatForDisplay($obj['title']);
                 $cache[$nid] = '<a href="' . $url . '" title="' . $title . '">' . $title . '</a>';
             } else {
-                $cache[$nid] = '<em>' . __f("Unknown news article '%s'", $nid, $dom) . '</em>';
+                $cache[$nid] = '<em>' . __f("Unknown article '%s'", $nid, $dom) . '</em>';
             }
         }
         $result = $cache[$nid];

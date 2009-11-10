@@ -35,4 +35,4 @@ Removing/Cleanup Legacy stuff:
 - Change the permission sheme from Stories:: to News:: (the admin panel in zk111 uses the module name to check for permissions. Requires also an update of the already present permissions during the pninit upgrade.
 - Change the database name from zk_stories to zk_news and make a clear note forPendingContent users that use the dbase directly. Discuss first.
  
-
+* Fix the Hide Publishing Options

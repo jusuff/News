@@ -537,10 +537,10 @@ function News_userapi_getArticleInfo($info)
 {
     // Dates
     $info['unixtime']      = strtotime($info['from']);
-    $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], __('%A, %B %d, %Y - %I:%M %p', $dom));
-    $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], __('%b %d, %Y - %I:%M %p', $dom));
-    $info['longdate']      = DateUtil::getDatetime($info['unixtime'], __('%A, %B %d, %Y', $dom));
-    $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], __('%b %d, %Y', $dom));
+    $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], 'datetimelong');
+    $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], 'datetimebrief');
+    $info['longdate']      = DateUtil::getDatetime($info['unixtime'], 'datelong');
+    $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], 'datebrief');
 
     // Work out name of story submitter
     if ($info['aid'] == 0) {
@@ -722,11 +722,9 @@ function News_userapi_getArticlePreformat($args)
     if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         // Work out how to say 'comment(s)(?)' correctly
         if ($info['commentcount'] == 0) {
-            $comment = __('comments?', $dom);
-        } else if ($info['commentcount'] == 1) {
-            $comment = __('1 comment', $dom);
+            $comment = __('Comments?', $dom);
         } else {
-            $comment = __f('%s comments', $info['commentcount'], $dom);
+            $comment = _fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount'], $dom);
         }
 
         // Allowed to comment?

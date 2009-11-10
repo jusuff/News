@@ -34,7 +34,7 @@ function News_bigblock_info()
 
     return array('module'         => 'News',
                  'text_type'      => __('Big story', $dom),
-                 'text_type_long' => __("Today's Big Story", $dom),
+                 'text_type_long' => __("Today's top article", $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -91,7 +91,7 @@ function News_bigblock_display($blockinfo)
     }
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = __("Today's top news", $dom);
+        $blockinfo['title'] = __("Today's top article", $dom);
     }
 
     $render = & pnRender::getInstance('News');

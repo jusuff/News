@@ -310,7 +310,7 @@ function News_user_view($args = array())
     // check if categorization is enabled
     if ($modvars['enablecategorization']) {
         if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s%]', 'CategoryUtil | CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryUtil | CategoryRegistryUtil', $dom));
         }
         // get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');

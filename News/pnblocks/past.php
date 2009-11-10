@@ -124,7 +124,8 @@ function News_pastblock_display($blockinfo)
     $render->assign('dom', $dom);
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = __('Past News', $dom);
+        //! default past block title
+        $blockinfo['title'] = __('Past news', $dom);
     }
 
     $blockinfo['content'] = $render->fetch('news_block_past.htm');

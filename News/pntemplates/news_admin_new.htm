@@ -101,8 +101,8 @@
             <div class="z-formrow">
                 <label for="news_hometextcontenttype"><!--[gt text='Content format type']--></label>
                 <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
-                    <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain Text']--></option>
-                    <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted Text']--></option>
+                    <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain text']--></option>
+                    <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted text']--></option>
                 </select>
             </div>
             <!--[/if]-->
@@ -117,15 +117,15 @@
             <div class="z-formrow">
                 <label for="news_bodytextcontenttype"><!--[gt text='Content format type']--></label>
                 <select id="news_bodytextcontenttype" name="story[bodytextcontenttype]">
-                    <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain Text']--></option>
-                    <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted Text']--></option>
+                    <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain text']--></option>
+                    <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted text']--></option>
                 </select>
             </div>
             <!--[/if]-->
 
             <!--[if $accessadd eq 1]-->
             <div class="z-formrow">
-                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Show Footnote']--></a></label>
+                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Show footnote']--></a></label>
                 <p id="news_notes_details">
                 <textarea id="news_notes" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
                 <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
@@ -177,7 +177,7 @@
             <div id="news_attributes_details">
             <div class="z-formrow">
                 <div class="itemlist_newitemdiv">
-                    <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' __alt='' __title='New article attribute' ]--> <!--[gt text='New article attribute']--></a>
+                    <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='New article attribute']--> <!--[gt text='New article attribute']--></a>
                 </div>
                 <ul id="news_attributes" class="itemlist">
                     <!--[if isset($_Attributes__)]-->

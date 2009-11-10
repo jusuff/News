@@ -257,7 +257,7 @@ height:50px;
     if (empty($items)) {
         if ($vars['showemptyresult']) {
             // Show empty result message instead of empty block if variable is set
-            $blockinfo['content'] = DataUtil::formatForDisplayHTML(__('No news', $dom));
+            $blockinfo['content'] = __('No articles.', $dom);
             return pnBlockThemeBlock($blockinfo);
         } else {
             return;

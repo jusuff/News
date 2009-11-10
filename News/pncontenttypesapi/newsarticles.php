@@ -56,7 +56,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   function getTitle()
   {
       $dom = ZLanguage::getModuleDomain('News');
-      return __('Recent News Articles', $dom);
+      return __('Recent news articles', $dom);
   }
 
   function getDescription()

@@ -22,7 +22,7 @@
                 <!--[html_options id='topicproperty' name='topicproperty' options=$properties selected=$property]-->
             </div>
             <div class="z-formrow">
-                <label for="settings_catimagepath"><!--[gt text='Category Image path']--></label>
+                <label for="settings_catimagepath"><!--[gt text='Category image path']--></label>
                 <input id="settings_catimagepath" type="text" name="catimagepath" value="<!--[$catimagepath|pnvarprepfordisplay]-->" size="40" maxlength="80" />
                 <div class="z-informationmsg"><!--[gt text='Each category used within News can have an image associated with it. This image must be located in the category image path specified above. Within the Category administration panel, you can set the associated image by adding a category attribute 'topic_image' with the name of the image.']--></div>
             </div>
@@ -37,7 +37,7 @@
         </fieldset>
 
         <fieldset>
-            <legend><!--[gt text='Display Settings']--></legend>
+            <legend><!--[gt text='Display settings']--></legend>
             <div class="z-formrow">
                 <label for="settings_storyorder"><!--[gt text='Order by']--></label>
                 <select id="settings_storyorder" name="storyorder" size="1">
@@ -74,7 +74,7 @@
             <p class="z-informationmsg"><!--[gt text='Select a predefined PermaLink format, or choose your own']--></p>
             <input id="news_permalink_customformat" name="customformat" type="hidden"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
             <div class="z-formrow">
-                <label><!--[gt text='Date- and name-based']--></label>
+                <label><!--[gt text='Date and name-based']--></label>
                 <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
                 <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[gt text='your-story-title']-->/</span>
             </div>

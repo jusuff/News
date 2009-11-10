@@ -91,7 +91,7 @@ VALUES ";
                  . '\'' . DataUtil::formatForStore($sessionId) . '\')';
           $insertResult = DBUtil::executeSQL($sql);
           if (!$insertResult) {
-              return LogUtil::registerError(__('Error! Could not load items.', $dom));
+              return LogUtil::registerError(__('Error! Could not load any articles.', $dom));
           }
     }
 

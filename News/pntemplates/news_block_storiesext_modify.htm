@@ -49,35 +49,39 @@
         </select>
     </div>
     <div class="z-formrow">
-        <label for="news_storiesextblock_dayslimit"><!--[gt text='Maximum age of the articles in days (0 means no limit)' domain=$dom]--></label>
+        <label for="news_storiesextblock_dayslimit"><!--[gt text='Maximum age of the articles in days' domain=$dom]--></label>
         <input id="news_storiesextblock_dayslimit" type="text" name="dayslimit" size="5" value="<!--[$dayslimit|pnvarprepfordisplay]-->" />
+        <em class="z-formnote"><!--[gt text='(0 means no limit)']--></em>
     </div>
     <div class="z-formrow">
-        <label for="news_storiesextblock_maxtitlelength"><!--[gt text='Maximum title length in characters (0 means no limit)' domain=$dom]--></label>
+        <label for="news_storiesextblock_maxtitlelength"><!--[gt text='Maximum title length in characters' domain=$dom]--></label>
         <input id="news_storiesextblock_maxtitlelength" type="text" name="maxtitlelength" size="5" value="<!--[$maxtitlelength|pnvarprepfordisplay]-->" />
+        <em class="z-formnote"><!--[gt text='(0 means no limit)']--></em>
     </div>
     <div class="z-formrow">
         <label for="news_storiesextblock_titlewraptxt"><!--[gt text='Suffix text when titles are wrapped' domain=$dom]--></label>
         <input id="news_storiesextblock_titlewraptxt" type="text" name="titlewraptxt" size="10" value="<!--[$titlewraptxt|pnvarprepfordisplay]-->" />
     </div>
     <div class="z-formrow">
-        <label for="news_storiesextblock_showemptyresult"><!--[gt text='Show 'No News' block output for no News instead of empty block' domain=$dom]--></label>
+        <label for="news_storiesextblock_showemptyresult"><!--[gt text="Show 'No articles.' block output for no News instead of empty block" domain=$dom]--></label>
         <input id="news_storiesextblock_showemptyresult" type="checkbox" value="1" name="showemptyresult"<!--[if $showemptyresult]--> checked="checked"<!--[/if]--> />
     </div>
 </fieldset>
 
 <fieldset>
-    <legend><!--[gt text='Specification of your own Templates' domain=$dom]--></legend>
+    <legend><!--[gt text='Specification of your own templates' domain=$dom]--></legend>
     <div class="z-formrow">
-        <div class="z-informationmsg"><!--[gt text='If you don't want to use the default templates, you have to specify them here. The default row template is news_block_storiesext_row.htm. The default block template depends on the scroll setting, default static template is news_block_storiesext.htm and for scrolling news_block_storiesext_scrollNAME.htm is used.' domain=$dom]--></div>
+        <div class="z-informationmsg"><!--[gt text="If you don't want to use the default templates, you have to specify them here. The default row template is news_block_storiesext_row.htm. The default block template depends on the scroll setting, default static template is news_block_storiesext.htm and for scrolling news_block_storiesext_scrollNAME.htm is used." domain=$dom]--></div>
     </div>
     <div class="z-formrow">
-        <label for="news_storiesextblock_blocktemplate"><!--[gt text='Template for display of the block (leave empty for default)' domain=$dom]--></label>
+        <label for="news_storiesextblock_blocktemplate"><!--[gt text='Template for display of the block' domain=$dom]--></label>
         <input id="news_storiesextblock_blocktemplate" type="text" name="blocktemplate" size="30" value="<!--[$blocktemplate|pnvarprepfordisplay]-->" />
+        <em class="z-formnote"><!--[gt text='(leave empty for default)']--></em>
     </div>
     <div class="z-formrow">
-        <label for="news_storiesextblock_rowtemplate"><!--[gt text='Template for layout of every row (leave empty for default)' domain=$dom]--></label>
+        <label for="news_storiesextblock_rowtemplate"><!--[gt text='Template for layout of every row' domain=$dom]--></label>
         <input id="news_storiesextblock_rowtemplate" type="text" name="rowtemplate" size="30" value="<!--[$rowtemplate|pnvarprepfordisplay]-->" />
+        <em class="z-formnote"><!--[gt text='(leave empty for default)']--></em>
     </div>
 </fieldset>
 
@@ -94,7 +98,7 @@
     <div class="z-formrow">
         <label for="news_storiesextblock_dateformat"><!--[gt text='Formatting of the date' domain=$dom]--></label>
         <input id="news_storiesextblock_dateformat" type="text" name="dateformat" size="10" value="<!--[$dateformat|pnvarprepfordisplay]-->" />
-        (<a href="http://www.php.net/manual/en/function.strftime.php" target="_new"><!--[gt text='Description strftime' domain=$dom]--></a>)
+        <em class="z-formnote">(<a href="http://www.php.net/manual/en/function.strftime.php" target="_new"><!--[gt text='Description of strftime' domain=$dom]--></a>)</em>
     </div>
     <div class="z-formrow">
         <label for="news_storiesextblock_dispreads"><!--[gt text='Show the number of reads' domain=$dom]--></label>
@@ -127,8 +131,9 @@
             <div class="z-informationmsg"><!--[gt text='When wrapping the hometext, incomplete HTML markups elements will be made complete again by the truncatehtml plugin.' domain=$dom]--></div>
         </div>
         <div class="z-formrow">
-            <label for="news_storiesextblock_maxhometextlength"><!--[gt text='Maximum hometext length in characters (0 means no limit)' domain=$dom]--></label>
+            <label for="news_storiesextblock_maxhometextlength"><!--[gt text='Maximum hometext length in characters' domain=$dom]--></label>
             <input id="news_storiesextblock_maxhometextlength" type="text" name="maxhometextlength" size="5" value="<!--[$maxhometextlength|pnvarprepfordisplay]-->" />
+            <em class="z-formnote"><!--[gt text='(0 means no limit)']--></em>
         </div>
         <div class="z-formrow">
             <label for="news_storiesextblock_hometextwraptxt"><!--[gt text='Suffix text used in hometext wrapping' domain=$dom]--></label>
@@ -152,12 +157,14 @@
             <input id="news_storiesextblock_newimagelimit" type="text" name="newimagelimit" size="5" value="<!--[$newimagelimit|pnvarprepfordisplay]-->" />
         </div>
         <div class="z-formrow">
-            <label for="news_storiesextblock_newimageset"><!--[gt text='New image set (pnimg plugin)' domain=$dom]--></label>
+            <label for="news_storiesextblock_newimageset"><!--[gt text='New image set' domain=$dom]--></label>
             <input id="news_storiesextblock_newimageset" type="text" name="newimageset" size="40" value="<!--[$newimageset|pnvarprepfordisplay]-->" />
+            <em class="z-formnote"><!--[gt text='(pnimg plugin)']--></em>
         </div>
         <div class="z-formrow">
-            <label for="news_storiesextblock_newimagesrc"><!--[gt text='New image filename (pnimg plugin)' domain=$dom]--></label>
+            <label for="news_storiesextblock_newimagesrc"><!--[gt text='New image filename' domain=$dom]--></label>
             <input id="news_storiesextblock_newimagesrc" type="text" name="newimagesrc" size="40" value="<!--[$newimagesrc|pnvarprepfordisplay]-->" />
+            <em class="z-formnote"><!--[gt text='(pnimg plugin)']--></em>
         </div>
     </div>
 </fieldset>
@@ -182,8 +189,9 @@
             <textarea id="news_storiesextblock_scrollstyle" name="scrollstyle" rows="8" cols="40"><!--[$scrollstyle|pnvarprepfordisplay]--></textarea>
         </div>
         <div class="z-formrow">
-            <label for="news_storiesextblock_scrolldelay"><!--[gt text='Delay between scrolls/ startdelay for marquee (msec)' domain=$dom]--></label>
+            <label for="news_storiesextblock_scrolldelay"><!--[gt text='Delay between scrolls/ startdelay for marquee' domain=$dom]--></label>
             <input id="news_storiesextblock_scrolldelay" type="text" name="scrolldelay" size="10" value="<!--[$scrolldelay|pnvarprepfordisplay]-->" />
+            <em class="z-formnote"><!--[gt text='(in miliseconds)']--></em>
         </div>
         <div class="z-formrow">
             <label for="news_storiesextblock_scrollmspeed"><!--[gt text='Speed of the marquee scroller 1-10' domain=$dom]--></label>
