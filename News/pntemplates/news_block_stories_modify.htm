@@ -12,10 +12,12 @@
 <!--[if $enablecategorization]-->
 <div class="z-formrow">
     <label for="category"><!--[gt text='Category' domain=$dom]--></label>
-    <!--[gt text='Choose Category' domain=$dom assign='lblDef']-->
-    <!--[nocache]-->
-    <!--[selector_category category=$mainCategory name='category' field='id' selectedValue=$category defaultValue='0' defaultText=$lblDef]-->
-    <!--[/nocache]-->
+    <div>
+        <!--[gt text='Choose Category' domain=$dom assign='lblDef']-->
+        <!--[nocache]-->
+        <!--[selector_category category=$mainCategory name='category' field='id' selectedValue=$category defaultValue='0' defaultText=$lblDef]-->
+        <!--[/nocache]-->
+    </div>
 </div>
 <!--[/if]-->
 

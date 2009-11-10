@@ -213,6 +213,8 @@ function News_adminapi_purgepermalinks($args)
  */
 function news_adminapi_getlinks()
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     $links = array();
 
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
