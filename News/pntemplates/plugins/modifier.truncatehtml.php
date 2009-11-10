@@ -35,34 +35,36 @@
 */
 function smarty_modifier_truncatehtml($string, $length, $etc='...', $break_words=false)
 {
-    if ($length == 0 && empty($string))
+    if ($length == 0 && empty($string)) {
         return '';
+    }
 
     // String length without html tags
     $noTagLength = strlen(strip_tags($string));
     if ($noTagLength > $length) {
         $isText = true;
-        $ret = "";
+        $ret = '';
         $i = 0;
-        $currentChar = "";
+        $currentChar = '';
         $lastSpacePosition = -1;
-        $lastChar = "";
+        $lastChar = '';
         $tagsArray = array();
-        $currentTag = "";
+        $currentTag = '';
 
         // Parser loop
-        for ($j=0; $j<strlen($string); $j++) {
+        for ($j = 0; $j < strlen($string); $j++) {
             $currentChar = substr($string, $j, 1);
             $ret .= $currentChar;
 
             // Lesser than event
-            if ($currentChar == "<")
+            if ($currentChar == '<') {
                 $isText = false;
+            }
 
             // Character handler
             if ($isText) {
                 // Memorize last space position for wordwrap
-                if ($currentChar == " ") {
+                if ($currentChar == ' ') {
                     $lastSpacePosition = $j;
                 } else {
                     $lastChar = $currentChar;
@@ -73,29 +75,30 @@ function smarty_modifier_truncatehtml($string, $length, $etc='...', $break_words
             }
 
             // Greater than event
-            if ($currentChar == ">") {
+            if ($currentChar == '>') {
                 $isText = true;
                 // Opening tag handler
-                if ((strpos($currentTag, "<") !== FALSE) &&
-                        (strpos($currentTag, "/>") === FALSE) &&
-                        (strpos($currentTag, "</") === FALSE)) {
+                if ((strpos($currentTag, '<') !== FALSE) &&
+                        (strpos($currentTag, '/>') === FALSE) &&
+                        (strpos($currentTag, '</') === FALSE)) {
 
                     // Tag has attribute(s)
-                    if (strpos($currentTag, " ") !== FALSE) {
-                        $currentTag = substr($currentTag, 1, strpos($currentTag, " ") - 1);
+                    if (strpos($currentTag, ' ') !== FALSE) {
+                        $currentTag = substr($currentTag, 1, strpos($currentTag, ' ') - 1);
                     } else {
                         // Tag doesn't have attribute(s)
                         $currentTag = substr($currentTag, 1, -1);
                     }
                     // Put the tag in the array for restoring
                     array_push ($tagsArray, $currentTag);
-                } elseif (strpos($currentTag, "</") !== FALSE) {
+                } elseif (strpos($currentTag, '</') !== FALSE) {
                     array_pop($tagsArray);
                 }
-                $currentTag = "";
+                $currentTag = '';
             }
-            if ($i >= $length)
+            if ($i >= $length) {
                 break;
+            }
         }
 
         // Cut HTML string at last space position
@@ -108,13 +111,15 @@ function smarty_modifier_truncatehtml($string, $length, $etc='...', $break_words
         // Close broken XHTML elements
         while (sizeof($tagsArray) != 0) {
             $aTag = array_pop($tagsArray);
-            $ret .= "</" . $aTag . ">\n";
+            $ret .= "</$aTag>\n";
         }
         // Add optional suffix
         if (!empty($etc)) {
-            $ret .= " " . $etc;
+            $ret .= ' ' . $etc;
         }
+
         return $ret;
+
     } else {
         // String not truncated
         return $string;

@@ -46,6 +46,7 @@ function smarty_function_nextpostlink($params, &$smarty)
         $info = $smarty->get_template_vars('info');
         $params['sid'] = $info['sid'];
     }
+
     if (!isset($params['layout'])) {
         $params['layout'] = '%link% <span class="news_metanav">&raquo;</span>';
     }

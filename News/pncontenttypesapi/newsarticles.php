@@ -43,11 +43,32 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   var $newimagesrc;
   var $linktosubmit;
 
-  function getModule() { return 'News'; }
-  function getName() { return 'newsarticles'; }
-  function getTitle() { return _NEWS_CONTENTTYPE_NEWSARTICLESTITLE; }
-  function getDescription() { return _NEWS_CONTENTTYPE_NEWSARTICLESDESCR; }
-  function isTranslatable() { return false; }
+  function getModule()
+  {
+      return 'News';
+  }
+
+  function getName()
+  {
+      return 'newsarticles';
+  }
+
+  function getTitle()
+  {
+      $dom = ZLanguage::getModuleDomain('News');
+      return __('Recent News Articles', $dom);
+  }
+
+  function getDescription()
+  {
+      $dom = ZLanguage::getModuleDomain('News');
+      return __('Shows a specific number of news articles from one or all the categories available', $dom);
+  }
+
+  function isTranslatable()
+  {
+      return false;
+  }
 
   /**
    * Load the data into the object
@@ -56,7 +77,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   {
     // Get the registrered categories for the News module
     Loader::loadClass('CategoryRegistryUtil');
-    $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
+    $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
     $properties = array_keys($catregistry);
 
     // indispensable vars
@@ -96,13 +117,14 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   function display()
   {
     // Parameters for category related items properties like topicimage
-    $lang = pnUserGetLang();
+    $lang = ZLanguage::getLanguageCode();
     $topicProperty = pnModGetVar('News', 'topicproperty');
     $topicField = empty($topicProperty) ? 'Main' : $topicProperty;
 
     // work out the parameters for the News api call
     $apiargs = array();
-    switch ($this->show) {
+    switch ($this->show)
+    {
         case 3: // non lead page articles
             $apiargs['ihome'] = 1;
             break;
@@ -115,7 +137,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $apiargs['status'] = $this->status; // Published status
 
     // Handle the sorting order
-    switch ($this->order) {
+    switch ($this->order)
+    {
         case 1:
             $apiargs['order'] = 'counter';
             break;
@@ -141,7 +164,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         $apiargs['from'] = DateUtil::getDatetime_NextDay(-$this->dayslimit);
         $apiargs['to'] = DateUtil::getDatetime();
     }
-    
+
     // Apply datefiltering
     $apiargs['filterbydate'] = true;    
 
@@ -149,7 +172,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
 
     // create the output object
-    $render = pnRender::getInstance('News', false);
+    $render = & pnRender::getInstance('News', false);
 
     // UserUtil is not automatically loaded, so load it now if needed and set anonymous
     if ($this->dispuname) {
@@ -160,7 +183,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     // check for an empty return
     if (!empty($items)) {
         // loop through the items and prepare for display
-        foreach (array_keys($items) as $k) {
+        foreach (array_keys($items) as $k)
+        {
             // Get specific information from the article. It was a choice not to use the pnuserapi functions
             // GetArticleInfo, GetArticleLinks and getArticlesPreformat because of speed etc.
             // --- Check for Topic related properties like topicimage, topicsearchurl etc.
@@ -189,6 +213,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                 $items[$k]['topicpath']  = '';
                 $items[$k]['topicsearchurl'] = '';
             }
+
             // Optional new image if the difference in days from the publishing date and now < the specified limit
             $items[$k]['dispnewimage'] = ($this->dispnewimage && DateUtil::getDatetimeDiff_AsField($items[$k]['from'], DateUtil::getDatetime(), 3) < (int)$this->newimagelimit);
             // Wrap the title if needed
@@ -256,9 +281,10 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
    */
   function displayEditing()
   {
+    $dom = ZLanguage::getModuleDomain('News');
     Loader::loadClass('CategoryUtil');
     $properties = array_keys($this->categories);
-    $lang = pnUserGetLang();
+    $lang = ZLanguage::getLanguageCode();
     // Construct the selected categories array
     $catnames = array();
     foreach ($properties as $prop) {
@@ -269,15 +295,17 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     }
     $catname = implode(' | ',$catnames);
     $output = '<h4>' .  DataUtil::formatForDisplayHTML($this->title) . '</h4>';
-    $output .= '<p>' . DataUtil::formatForDisplayHTML(pnML('_NEWS_CONTENTTYPE_NEWSARTICLESOFTHECAT', array('category'=>$catname))) . '</p>';
+    $output .= '<p>' . __f('News articles list of the <b>"%s"</b> category', $catname, $dom) . '</p>';
     return $output;
   }
-  
+
   /**
    * Load the intial data into the object
    */
   function getDefaultData()
   { 
+    $dom = ZLanguage::getModuleDomain('News');
+
     return array('title' => '',
                  'categories' => null,
                  'status' => 0,
@@ -289,7 +317,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                  'titlewraptext' => '...',
                  'disphometext' => false,
                  'maxhometextlength' => 300,
-                 'hometextwraptext' => '['._NEWS_CONTENTTYPE_NEWSARTICLESREADMORE.']',
+                 'hometextwraptext' => '['.__('read more', $dom).']',
                  'dispuname' => false,
                  'dispdate' => true,
                  'dateformat' => '%x',
@@ -308,13 +336,15 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
    */
   function startEditing(&$render)
   {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // Get the News categorization setting
     $enablecategorization = pnModGetVar('News', 'enablecategorization');
     // Select categories only if enabled for the News module, otherwise selector will not be shown in modify template
     if ($enablecategorization) {
         // load the categories system
-        if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+        if (!Loader::loadClass('CategoryRegistryUtil')) {
+            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
         }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
@@ -323,28 +353,28 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $render->assign('enablecategorization', $enablecategorization);
 
     $showoptions = array(
-        array('value' => 1, 'text' => _ALL),
-        array('value' => 2, 'text' => _NEWS_CONTENTTYPE_NEWSARTICLESFRONTPAGE),
-        array('value' => 3, 'text' => _NEWS_CONTENTTYPE_NEWSARTICLESNONFRONTPAGE)
+        array('value' => 1, 'text' => __('All', $dom)),
+        array('value' => 2, 'text' => __('Lead page', $dom)),
+        array('value' => 3, 'text' => __('Non lead page', $dom))
     );
 
     $statusoptions = array(
-        array('value' => 0, 'text' => _NEWS_PUBLISHED),
-        array('value' => 1, 'text' => _NEWS_REJECTED),
-        array('value' => 2, 'text' => _NEWS_PENDING),
-        array('value' => 3, 'text' => _NEWS_ARCHIVED)
+        array('value' => 0, 'text' => __('Published', $dom)),
+        array('value' => 1, 'text' => __('Rejected', $dom)),
+        array('value' => 2, 'text' => __('Pending Review', $dom)),
+        array('value' => 3, 'text' => __('Archived', $dom))
     );
 
     $orderoptions = array(
-        array('value' => 0, 'text' => _NEWS_CONTENTTYPE_ORDERBYNEWSSETTING),
-        array('value' => 1, 'text' => _NEWS_CONTENTTYPE_ORDERBYCOUNTER)
+        array('value' => 0, 'text' => __('News module setting', $dom)),
+        array('value' => 1, 'text' => __('Number of reads', $dom))
     );
 
     $render->assign('showoptions', $showoptions);
     $render->assign('statusoptions', $statusoptions);
     $render->assign('orderoptions', $orderoptions);
   }
-  
+
   /**
    * Optional checking of the entered data
    */

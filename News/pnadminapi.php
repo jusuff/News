@@ -14,6 +14,7 @@
 
 /**
  * delete a News item
+ *
  * @author Mark West
  * @param $args['sid'] ID of the item
  * @return bool true on success, false on failure
@@ -22,24 +23,26 @@ function News_adminapi_delete($args)
 {
     // Argument check
     if (!isset($args['sid']) || !is_numeric($args['sid'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     // Get the news story
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
-        return LogUtil::registerError (_NOSUCHITEM);
+        return LogUtil::registerError(__('No such article found.', $dom));
     }
 
     // Security check
     if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
           SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE))) {
-        return LogUtil::registerError (_MODULENOAUTH);
+        return LogUtil::registerPermissionError();
     }
 
     if (!DBUtil::deleteObjectByID('news', $args['sid'], 'sid')) {
-        return LogUtil::registerError (_DELETEFAILED);
+        return LogUtil::registerError(__('Error! Deletion attempt failed.', $dom));
     }
 
     // Let any hooks know that we have deleted an item
@@ -51,6 +54,7 @@ function News_adminapi_delete($args)
 
 /**
  * update a News item
+ *
  * @author Mark West
  * @param int $args['sid'] the id of the item to be updated
  * @param int $args['objectid'] generic object id maps to sid if present
@@ -79,8 +83,10 @@ function News_adminapi_update($args)
         !isset($args['published_status']) ||
         !isset($args['from']) ||
         !isset($args['to'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     if (!isset($args['language'])) {
         $args['language'] = '';
@@ -90,13 +96,13 @@ function News_adminapi_update($args)
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
-        return LogUtil::registerError (_NOSUCHITEM);
+        return LogUtil::registerError(__('No such article found.', $dom));
     }
 
     // Security check
     if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$args[sid]", ACCESS_EDIT) ||
           SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT))) {
-        return LogUtil::registerError (_MODULENOAUTH);
+        return LogUtil::registerPermissionError();
     }
 
     // calculate the format type
@@ -129,21 +135,21 @@ function News_adminapi_update($args)
         $args['from'] = DateUtil::getDatetime($args['from']);
         $args['to'] = null;
     } else {
-    	$args['from'] = DateUtil::getDatetime($args['from']);
+        $args['from'] = DateUtil::getDatetime($args['from']);
         $args['to'] = DateUtil::getDatetime($args['to']);
     }
 
     if (!DBUtil::updateObject($args, 'news', '', 'sid')) {
-        return LogUtil::registerError (_UPDATEFAILED);
+        return LogUtil::registerError(__('Error! Update attempt failed.', $dom));
     }
 
     // Let any hooks know that we have updated an item.
     pnModCallHooks('item', 'update', $args['sid'], array('module' => 'News'));
 
     // The item has been modified, so we clear all cached pages of this item.
-    $renderer = pnRender::getInstance('News');
-    $renderer->clear_cache(null, $args['sid']);
-    $renderer->clear_cache('news_user_view.htm');
+    $render = & pnRender::getInstance('News');
+    $render->clear_cache(null, $args['sid']);
+    $render->clear_cache('news_user_view.htm');
 
     // Let the calling process know that we have finished successfully
     return true;
@@ -159,7 +165,7 @@ function News_adminapi_purgepermalinks($args)
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
-        return LogUtil::registerError(_MODULENOAUTH);
+        return LogUtil::registerPermissionError();
     }
 
     // disable categorization to do this (if enabled)
@@ -194,9 +200,9 @@ function News_adminapi_purgepermalinks($args)
     } elseif (DBUtil::updateObjectArray($data, 'news', 'sid')) {
         // Let the calling process know that we have finished successfully
         return true;
-    } else {
-        return false;
     }
+
+    return false;
 }
 
 /**
@@ -209,20 +215,23 @@ function news_adminapi_getlinks()
 {
     $links = array();
 
-    pnModLangLoad('News', 'admin');
-
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
-        $links[] = array('url' => pnModURL('News', 'admin', 'view'), 'text' => _NEWS_VIEW);
+        $links[] = array('url'  => pnModURL('News', 'admin', 'view'),
+                         'text' => __('View News Articles list', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
-        $links[] = array('url' => pnModURL('News', 'admin', 'new'), 'text' =>  _NEWS_CREATE);
+        $links[] = array('url'  => pnModURL('News', 'admin', 'new'),
+                         'text' =>  __('Create a News Article', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
-        $links[] = array('url' => pnModURL('News', 'admin', 'view', array('purge' => 1)), 'text' => _PURGEPERMALINKS);
-        $links[] = array('url' => pnModURL('News', 'admin', 'modifyconfig'), 'text' => _MODIFYNEWSCONFIG);
+        $links[] = array('url'  => pnModURL('News', 'admin', 'view', array('purge' => 1)),
+                         'text' => __('Purge PermaLinks', $dom));
+
+        $links[] = array('url'  => pnModURL('News', 'admin', 'modifyconfig'),
+                         'text' => __('News Publisher Settings', $dom));
     }
 
     return $links;

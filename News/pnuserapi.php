@@ -31,15 +31,16 @@ class news_result_checker
     {
         $ok = (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_OVERVIEW) || 
                SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW));
+
         if ($this->enablecategorization)
         {
             ObjectUtil::expandObjectWithCategories($item, 'news', 'sid');
             $ok = $ok && CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News');
         }
+
         return $ok;
     }
 }
-
 
 /**
  * get all news items
@@ -68,7 +69,7 @@ function News_userapi_getall($args)
     if ((!empty($args['status']) && !is_numeric($args['status'])) ||
         !is_numeric($args['startnum']) ||
         !is_numeric($args['numitems'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
 
     // create a empty result set
@@ -79,6 +80,8 @@ function News_userapi_getall($args)
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
         return $items;
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     $args['catFilter'] = array();
     if (isset($args['category']) && !empty($args['category'])){
@@ -96,8 +99,9 @@ function News_userapi_getall($args)
     $tables = pnDBGetTables();
     $news_column = $tables['news_column'];
     $queryargs = array();
+
     if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
-        $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $news_column[language] = '')";
+        $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR $news_column[language] = '')";
     } elseif (!empty($args['language'])) {
         $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
     }
@@ -165,7 +169,8 @@ function News_userapi_getall($args)
     if (!isset($args['order'])) {
         $args['order'] = pnModGetVar('News', 'storyorder');
 
-        switch ($args['order']) {
+        switch ($args['order'])
+        {
             case 0:
                 $order = 'sid';
                 break;
@@ -191,13 +196,13 @@ function News_userapi_getall($args)
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
     if ($objArray === false) {
-        return LogUtil::registerError(_GETFAILED);
+        return LogUtil::registerError(__('Error! Could not load any articles.', $dom));
     }
 
     // need to do this here as the category expansion code can't know the
     // root category which we need to build the relative path component
     if (pnModGetVar('News', 'enablecategorization') && $objArray && isset($args['catregistry']) && $args['catregistry']) {
-        ObjectUtil::postProcessExpandedObjectArrayCategories ($objArray, $args['catregistry']);
+        ObjectUtil::postProcessExpandedObjectArrayCategories($objArray, $args['catregistry']);
     }
 
     // Return the items
@@ -220,21 +225,24 @@ function News_userapi_get($args)
     // Argument check
     if ((!isset($args['sid']) || !is_numeric($args['sid'])) &&
          !isset($args['title'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     // Check for caching of the DBUtil calls (needed for AJAX editing)
     if (!isset($args['SQLcache'])) {
         $args['SQLcache'] = true;
     }
-    
+
     // form a date using some ofif present...
     // step 1 - convert month name into
     if (isset($args['monthname']) && !empty($args['monthname'])) {
-         $months = explode(' ', _MONTH_SHORT);
+         $months = explode(' ', __('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec', $dom));
          $keys = array_flip($months);
          $args['monthnum'] = $keys[ucfirst($args['monthname'])] + 1;
     }
+
     // step 2 - convert to a timestamp and back to a db format
     if (isset($args['year']) && !empty($args['year']) && isset($args['monthnum']) &&
         !empty($args['monthnum']) && isset($args['day']) && !empty($args['day'])) {
@@ -276,12 +284,12 @@ function News_userapi_get($args)
         static $registeredCats;
         if (!isset($registeredCats)) {
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-                pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+                pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
             }
             $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         }
         ObjectUtil::postProcessExpandedObjectCategories($item['__CATEGORIES__'], $registeredCats);
-        if (!CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News')) {
+        if (!CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'], 'News')) {
             return false;
         }
     }
@@ -317,6 +325,7 @@ function News_userapi_getMonthsWithNews($args)
 
 /**
  * utility function to count the number of items held by this module
+ *
  * @author Mark West
  * @return int number of items held by this module
  */
@@ -349,8 +358,9 @@ function News_userapi_countitems($args)
     $tables = pnDBGetTables();
     $news_column = $tables['news_column'];
     $queryargs = array();
+
     if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
-        $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(pnUserGetLang()) . "' OR $news_column[language] = '')";
+        $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR $news_column[language] = '')";
     } elseif (!empty($args['language'])) {
         $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
     }
@@ -413,11 +423,12 @@ function News_userapi_countitems($args)
         $where = ' WHERE ' . implode(' AND ', $queryargs);
     }
 
-    return DBUtil::selectObjectCount ('news', $where, 'sid', false, $args['catFilter']);
+    return DBUtil::selectObjectCount('news', $where, 'sid', false, $args['catFilter']);
 }
 
 /**
  * increment the item read count
+ *
  * @author Mark West
  * @return bool true on success, false on failiure
  */
@@ -425,7 +436,7 @@ function News_userapi_incrementreadcount($args)
 {
     if ((!isset($args['sid']) || !is_numeric($args['sid'])) &&
          !isset($args['title'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
 
     if (isset($args['sid'])) {
@@ -526,10 +537,10 @@ function News_userapi_getArticleInfo($info)
 {
     // Dates
     $info['unixtime']      = strtotime($info['from']);
-    $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], _DATETIMELONG);
-    $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], _DATETIMEBRIEF);
-    $info['longdate']      = DateUtil::getDatetime($info['unixtime'], _DATELONG);
-    $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], _DATEBRIEF);
+    $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], __('%A, %B %d, %Y - %I:%M %p', $dom));
+    $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], __('%b %d, %Y - %I:%M %p', $dom));
+    $info['longdate']      = DateUtil::getDatetime($info['unixtime'], __('%A, %B %d, %Y', $dom));
+    $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], __('%b %d, %Y', $dom));
 
     // Work out name of story submitter
     if ($info['aid'] == 0) {
@@ -555,7 +566,7 @@ function News_userapi_getArticleInfo($info)
 
     // For legacy reasons we add some hardwired category and topic variables
     if (!empty($info['categories']) && pnModGetVar('News', 'enablecategorization')) {
-        $lang = pnUserGetLang();
+        $lang = ZLanguage::getLanguageCode();
         $categoryField = _News_getCategoryField();
         $topicField = _News_getTopicField();
 
@@ -649,7 +660,7 @@ function News_userapi_getArticleInfo($info)
 
     // Get the format types. 'home' string is bits 0-1, 'body' is bits 2-3.
     $info['hometype'] = ($info['format_type']%4);
-    $info['bodytype'] = (($info['format_type']/4)%4);
+    $info['bodytype'] = ($info['format_type']/4)%4;
     unset($info['format_type']);
 
     // Check for comments
@@ -673,7 +684,9 @@ function News_userapi_getArticleInfo($info)
  */
 function News_userapi_getArticlePreformat($args)
 {
-    $info = $args['info'];
+    $dom = ZLanguage::getModuleDomain('News');
+
+    $info  = $args['info'];
     $links = $args['links'];
 
     // Preformat the text according the article format type
@@ -687,17 +700,17 @@ function News_userapi_getArticlePreformat($args)
     if ($bytesmore > 0) {
         if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
-            $title =  pnML('_NEWS_FULLTEXTOFARTICLE', array('title' => $info['title']));
+            $title =  __('Read more', $dom);
             $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
-        $bytesmorelink = pnML('_NEWS_BYTESMORE', array('bytes' => $bytesmore));
+        $bytesmorelink = __f('%s bytes more', $bytesmore, $dom);
     }
 
     // Allowed to read full article?
     if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
         SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
         $title = '<a href="'.$links['fullarticle'].'">'.$info['title'].'</a>';
-        $print = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/global/print.gif" alt="'._NEWS_PRINTER.'" /></a>';
+        $print = '<a class="news_printlink" href="'.$links['print'].'">'.__('Print', $dom).' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
     } else {
         $title = $info['title'];
         $print = '';
@@ -709,18 +722,18 @@ function News_userapi_getArticlePreformat($args)
     if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
         // Work out how to say 'comment(s)(?)' correctly
         if ($info['commentcount'] == 0) {
-            $comment = _NEWS_COMMENTSQ;
+            $comment = __('comments?', $dom);
         } else if ($info['commentcount'] == 1) {
-            $comment = _NEWS_COMMENT;
+            $comment = __('1 comment', $dom);
         } else {
-            $comment = pnML('_NEWS_COMMENTS', array('count' => $info['commentcount']));
+            $comment = __f('%s comments', $info['commentcount'], $dom);
         }
 
         // Allowed to comment?
         if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
-            $postcomment = '<a href="'.$links['postcomment'].'">'._NEWS_COMMENTSQ.'</a>';
-            $commentlink = '<a title="'.pnML('_NEWS_COMMENTSFORARTICLE', array('comments' => $info['commentcount'], 'title' => $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
+            $postcomment = '<a href="'.$links['postcomment'].'">'.__('Comments?', $dom).'</a>';
+            $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
         } else if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
                    SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
             $commentlink = $comment;
@@ -729,7 +742,7 @@ function News_userapi_getArticlePreformat($args)
 
     // Notes, if there are any
     if (isset($info['notes']) && !empty($info['notes'])) {
-        $notes = pnML('_NEWS_FOOTNOTES', array('notes' => $info['notes']), true);
+        $notes = __f('Foot notes: %s', $info['notes'], $dom);
     } else {
         $notes = '';
     }
@@ -737,7 +750,7 @@ function News_userapi_getArticlePreformat($args)
     // Build the categories preformated content
     $categories = array();
     if (!empty($links['categories']) && is_array($links['categories']) && pnModGetVar('News', 'enablecategorization')) {
-        $lang = pnUserGetLang();
+        $lang = ZLanguage::getLanguageCode();
         $properties = array_keys($links['categories']);
         foreach ($properties as $prop) {
             $catname = isset($info['categories'][$prop]['display_name'][$lang]) ? $info['categories'][$prop]['display_name'][$lang] : $info['categories'][$prop]['name'];
@@ -796,6 +809,7 @@ function News_userapi_getArticlePreformat($args)
 
 /**
  * create a new News item
+ *
  * @param $args['name'] name of the item
  * @param $args['number'] number of the item
  * @return mixed News item ID on success, false on failure
@@ -809,13 +823,15 @@ function News_userapi_create($args)
         !isset($args['bodytext']) ||
         !isset($args['bodytextcontenttype']) ||
         !isset($args['notes'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
-        return LogUtil::registerError (_MODULENOAUTH);
+        return LogUtil::registerPermissionError();
     } elseif (SecurityUtil::checkPermission('News:;', '::', ACCESS_ADD) ||
               SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         if (!isset($args['published_status'])) {
@@ -879,7 +895,7 @@ function News_userapi_create($args)
     $args['comments'] = 0;
 
     if (!($obj = DBUtil::insertObject($args, 'news', 'sid'))) {
-        return LogUtil::registerError(_CREATEFAILED);
+        return LogUtil::registerError(__('Error! Creation attempt failed.', $dom));
     }
 
     // update the from field to the same cr_date if it's null
@@ -890,7 +906,7 @@ function News_userapi_create($args)
         );
 
         if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
-            LogUtil::registerError(_UPDATEFAILED);
+            LogUtil::registerError(__('Error! Update attempt failed.', $dom));
         }
     }
 
@@ -898,8 +914,8 @@ function News_userapi_create($args)
     pnModCallHooks('item', 'create', $args['sid'], array('module' => 'News'));
 
     // An item was created, so we clear all cached pages of the items list.
-    $renderer = pnRender::getInstance('News');
-    $renderer->clear_cache('news_user_view.htm');
+    $render = & pnRender::getInstance('News');
+    $render->clear_cache('news_user_view.htm');
 
     // Return the id of the newly created item to the calling process
     return $args['sid'];
@@ -907,7 +923,6 @@ function News_userapi_create($args)
 
 /**
  * analize if the News module has an Scribite! editor assigned
- *
  */
 function News_userapi_isformatted($args)
 {
@@ -928,6 +943,7 @@ function News_userapi_isformatted($args)
             return true;
         }
     }
+
     return false;
 }
 
@@ -944,7 +960,6 @@ function _News_getTopicField()
 
 /**
  * get meta data for the module
- *
  */
 function News_userapi_getmodulemeta()
 {

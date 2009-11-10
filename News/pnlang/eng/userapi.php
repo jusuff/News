@@ -17,3 +17,4 @@ define('_NEWS_FRIEND', 'Tell a friend');
 define('_NEWS_FULLTEXTOFARTICLE', 'Read more about %title%');
 define('_NEWS_PRINTER', 'Printer-friendly page');
 define('_NEWS_FOOTNOTES', 'Foot notes: %notes%');
+define('_NEWS_READMORE', 'Read more');

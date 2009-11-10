@@ -29,39 +29,34 @@ function News_needleapi_news($args)
     // Get arguments from argument array
     $nid = $args['nid'];
     unset($args);
-    
+
     // cache the results
     static $cache;
-    if(!isset($cache)) {
-        $cache = array();
-    } 
 
-    pnModLangLoad('MultiHook', 'news');
-    if(!empty($nid)) {
-        if(!isset($cache[$nid])) {
+    if (!isset($cache)) {
+        $cache = array();
+    }
+
+    $dom = ZLanguage::getModuleDomain('News');
+
+    if (!empty($nid)) {
+        if (!isset($cache[$nid])) {
             // not in cache array
 
-            if(pnModAvailable('News')) {
-                // nid is the sid
-                
-                $obj = pnModAPIFunc('News', 'user', 'get', array('sid' => $nid));
+            $obj = pnModAPIFunc('News', 'user', 'get', array('sid' => $nid));
 
-                if($obj != false) {
-                    $url   = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $nid)));
-                    $title = DataUtil::formatForDisplay($obj['title']);
-                    $cache[$nid] = '<a href="' . $url . '" title="' . $title . '">' . $title . '</a>';
-                } else {
-                    $cache[$nid] = '<em>' . DataUtil::formatForDisplay(_MH_NEWS_UNKNOWNPAGE . ' (' . $nid . ')') . '</em>';
-                }
-        
+            if ($obj != false) {
+                $url   = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $nid)));
+                $title = DataUtil::formatForDisplay($obj['title']);
+                $cache[$nid] = '<a href="' . $url . '" title="' . $title . '">' . $title . '</a>';
             } else {
-                $cache[$nid] = '<em>' . DataUtil::formatForDisplay(_MH_NEWS_NOTAVAILABLE) . '</em>';
+                $cache[$nid] = '<em>' . __f("Unknown news article '%s'", $nid, $dom) . '</em>';
             }
         }
         $result = $cache[$nid];
     } else {
-        $result = '<em>' . DataUtil::formatForDisplay(_MH_NEWS_NONEEDLEID) . '</em>';
+        $result = '<em>' . __('No needle ID passed', $dom) . '</em>';
     }
+
     return $result;
-    
 }

@@ -29,5 +29,6 @@ function News_needleapi_news_info()
     $info = array('module'  => 'News', 
                   'info'    => 'NEWS{sid}',
                   'inspect' => false);
+
     return $info;
 }

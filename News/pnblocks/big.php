@@ -19,8 +19,7 @@
  */
 function News_bigblock_init()
 {
-    // Security
-    SecurityUtil::registerPermissionSchema('Bigblock::', 'Block title::');
+    SecurityUtil::registerPermissionSchema('Bigblock::', 'Block ID::');
 }
 
 /**
@@ -31,9 +30,11 @@ function News_bigblock_init()
  */
 function News_bigblock_info()
 {
-    return array('text_type'      => 'Big',
-                 'module'         => 'News',
-                 'text_type_long' => 'Today\'s Big Story',
+    $dom = ZLanguage::getModuleDomain('News');
+
+    return array('module'         => 'News',
+                 'text_type'      => __('Big story', $dom),
+                 'text_type_long' => __("Today's Big Story", $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -50,9 +51,11 @@ function News_bigblock_info()
 function News_bigblock_display($blockinfo)
 {
     // security check
-    if (!SecurityUtil::checkPermission('Bigblock::', "$blockinfo[title]::", ACCESS_READ)) {
+    if (!SecurityUtil::checkPermission('Bigblock::', "$blockinfo[bid]::", ACCESS_READ)) {
         return;
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     // get todays date
     $today = getdate();
@@ -69,7 +72,10 @@ function News_bigblock_display($blockinfo)
 
     // call the API
     $articles = pnModAPIFunc('News', 'user', 'getall',
-                             array('tdate' => $tdate, 'ihome' => 0, 'order' => 'counter', 'numitems' => 1));
+                             array('tdate' => $tdate,
+                                   'ihome' => 0,
+                                   'order' => 'counter',
+                                   'numitems' => 1));
 
     if (empty($articles)) {
         return;
@@ -85,15 +91,18 @@ function News_bigblock_display($blockinfo)
     }
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = _TODAYBIG;
+        $blockinfo['title'] = __("Today's top news", $dom);
     }
 
-    $renderer = pnRender::getInstance('News');
+    $render = & pnRender::getInstance('News');
 
-    $renderer->assign(array('info' => $info,
+    $render->assign('dom', $dom);
+
+    $render->assign(array('info' => $info,
                             'links' => $links,
                             'preformat' => $preformat));
 
-    $blockinfo['content'] = $renderer->fetch('news_block_big.htm');
+    $blockinfo['content'] = $render->fetch('news_block_big.htm');
+
     return pnBlockThemeBlock($blockinfo);
 }

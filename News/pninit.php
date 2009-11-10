@@ -19,6 +19,8 @@
  */
 function News_init()
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // Create table
     if (!DBUtil::createTable('news')) {
         return false;
@@ -26,7 +28,7 @@ function News_init()
 
     // create our default category
     if (!_news_createdefaultcategory()) {
-        return LogUtil::registerError (_CREATEFAILED);
+        return LogUtil::registerError(__('Error! Creation attempt failed.', $dom));
     }
 
     // Set up config variables
@@ -51,17 +53,20 @@ function News_init()
  */
 function News_upgrade($oldversion)
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // Upgrade dependent on old version number
-    switch($oldversion) {
-        case 1.3:
-        case 1.4:
+    switch ($oldversion)
+    {
+        case '1.3':
+        case '1.4':
             pnModSetVar('News', 'storyhome', pnConfigGetVar('storyhome'));
             pnConfigDelVar('storyhome');
             pnModSetVar('News', 'storyorder', pnConfigGetVar('storyorder'));
             pnConfigDelVar('storyorder');
             pnModSetVar('News', 'itemsperpage', 25);
-            return News_upgrade(1.5);
-        case 1.5:
+
+        case '1.5':
             $tables = pnDBGetTables();
             $shorturlsep = pnConfigGetVar('shorturlsseparator');
             // move the data from the author uid to creator and updator uid
@@ -73,30 +78,34 @@ function News_upgrade($oldversion)
             $sqls[] = "UPDATE $tables[stories] SET pn_urltitle = REPLACE(pn_title, ' ', '{$shorturlsep}')";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
-                    return LogUtil::registerError (_UPDATETABLEFAILED);
+                    LogUtil::registerError(__('Error! Table update failed.', $dom));
+                    return '1.5';
                 }
             }
             // drop the old columns
             DBUtil::dropColumn('stories', array('pn_aid'));
             DBUtil::dropColumn('stories', array('pn_time'));
             pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
-            return News_upgrade(2.0);
-        case 2.0:
+
+        case '2.0':
             // import autonews and queue articles
             if (!_news_import_autonews_queue()) {
-                return LogUtil::registerError (_UPDATEFAILED);
+                LogUtil::registerError(__('Error! Update attempt failed.', $dom));
+                return '2.0';
             }
             // migrate the comments to ezcomments
             if (pnModAvailable('Comments') || defined('_PNINSTALLVER')) {
                 // check for the ezcomments module
                 if (!pnModAvailable('EZComments')) {
-                    return LogUtil::registerError (pnML('_MODULENOTAVAILABLE', array('m' => 'EZComments')));
+                    LogUtil::registerError(__f('Error! The <strong>%s</strong> module is not available.', 'EZComments', $dom));
+                    return '2.0';
                 }
                 //  drop the comments table if successful
                 if (pnModAPIFunc('EZComments', 'migrate', 'news')) {
                     // drop comments table after migration has succeeded
                     if (!DBUtil::dropTable('comments')) {
-                        return LogUtil::registerError (_DELETETABLEFAILED);
+                        LogUtil::registerError(__('Error! Table deletion failed.', $dom));
+                        return '2.0';
                     }
                     // remove the Comments module
                     pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('Comments')));
@@ -104,27 +113,30 @@ function News_upgrade($oldversion)
             }
             // drop the autonews and queue tables, articles are already imported
             if (!DBUtil::dropTable('autonews')) {
-                return LogUtil::registerError (_DELETETABLEFAILED);
+                LogUtil::registerError(__('Error! Table deletion failed.', $dom));
+                return '2.0';
             }
             if (!DBUtil::dropTable('queue')) {
-                return LogUtil::registerError (_DELETETABLEFAILED);
+                LogUtil::registerError(__('Error! Table deletion failed.', $dom));
+                return '2.0';
             }
             // remove the AddStory and Submit_News modules
             pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('AddStory')));
             pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('Submit_News')));
-            return News_upgrade(2.1);
-        case 2.1:
+
+        case '2.1':
             pnModSetVar('News', 'enablecategorization', true);
             pnModDBInfoLoad('News', 'News', true);
 
             if (!_news_migratecategories()) {
-                return LogUtil::registerError (_UPDATEFAILED);
+                LogUtil::registerError(__('Error! Update attempt failed.', $dom));
+                return '2.1';
             }
-            return News_upgrade(2.2);
-        case 2.2:
+
+        case '2.2':
             pnModSetVar('News', 'refereronprint', pnConfigGetVar('refereronprint', 0));
-            return News_upgrade(2.3);
-        case 2.3:
+
+        case '2.3':
             $prefix = pnConfigGetVar('prefix');
             $tables = pnDBGetTables();
             // when from is not set, put it to the creation date
@@ -133,7 +145,8 @@ function News_upgrade($oldversion)
             $sqls[] = "UPDATE $tables[stories] SET pn_hometext = '' WHERE pn_hometext IS NULL";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
-                    return LogUtil::registerError (_UPDATETABLEFAILED);
+                    LogUtil::registerError(__('Error! Table update failed.', $dom));
+                    return '2.3';
                 }
             }
             pnModSetVar('News', 'enableattribution', false);
@@ -146,18 +159,19 @@ function News_upgrade($oldversion)
             // clear compiled templates and News cache (see #74)
             pnModAPIFunc('pnRender', 'user', 'clear_compiled');
             pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
-            return News_upgrade(2.4);
-        case 2.4:
+
+        case '2.4':
         case '2.4.1':
             $prefix = pnConfigGetVar('prefix');
             $tables = pnDBGetTables();
             // rename the database table from stories to news
             if (!DBUtil::renameTable('stories', 'news')) {
-                    return LogUtil::registerError (_RENAMETABLEFAILED);
+                LogUtil::registerError(__('Error! Table rename failed.', $dom));
+                return '2.4.1';
             }
             // upgrade table
             if (!DBUtil::changeTable('news')) {
-                return false;
+                return '2.4.1';
             }
             // update permissions with new scheme News::
             $group_perms_table  = $tables['group_perms'];
@@ -170,10 +184,13 @@ function News_upgrade($oldversion)
             $sqls[] = 'UPDATE ' . $categories_registry_table . ' SET crg_table=\'news\' WHERE crg_table=\'stories\'';
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
-                    return LogUtil::registerError (_UPDATETABLEFAILED);
+                    LogUtil::registerError(__('Error! Table update failed.', $dom));
+                    return '2.4.1';
                 }
             }
-            return News_upgrade(2.5);
+
+        case '2.5':
+            // migration routines
     }
 
     // Update successful
@@ -232,7 +249,7 @@ function _news_migratecategories()
     Loader::loadClassFromModule('Categories', 'CategoryRegistry');
 
     // get the language file
-    $lang = pnUserGetLang();
+    $lang = ZLanguage::getLanguageCode();
 
     // create the Main category and entry in the categories registry
     _news_createdefaultcategory('/__SYSTEM__/Modules/News');
@@ -297,7 +314,7 @@ function _news_migratecategories()
     }
     foreach ($pages as $page) {
         if (!DBUtil::updateObject($page, 'stories', '', 'sid')) {
-            return LogUtil::registerError (_UPDATEFAILED);
+            return LogUtil::registerError(__('Error! Update attempt failed.', $dom));
         }
     }
 
@@ -323,7 +340,8 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
     Loader::loadClassFromModule('Categories', 'CategoryRegistry');
 
     // get the language file
-    $lang = pnUserGetLang();
+    $lang = ZLanguage::getLanguageCode();
+    $dom = ZLanguage::getModuleDomain('News');
 
     // get the category path for which we're going to insert our place holder category
     $rootcat = CategoryUtil::getCategoryByPath('/__SYSTEM__/Modules');
@@ -334,8 +352,8 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
         $cat = new PNCategory ();
         $cat->setDataField('parent_id', $rootcat['id']);
         $cat->setDataField('name', 'News');
-        $cat->setDataField('display_name', array($lang => _NEWS_NAME));
-        $cat->setDataField('display_desc', array($lang => _NEWS_DESCRIPTION));
+        $cat->setDataField('display_name', array($lang => __('News', $dom)));
+        $cat->setDataField('display_desc', array($lang => __('Provides the ability to add, remove and edit news articles published on the News lead page and in the various blocks', $dom)));
         if (!$cat->validate('admin')) {
             return false;
         }
@@ -366,7 +384,8 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
 function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
 {
     // get the language file
-    $lang = pnUserGetLang();
+    $lang = ZLanguage::getLanguageCode();
+    $dom = ZLanguage::getModuleDomain('News');
 
     // get the category path for which we're going to insert our place holder category
     $rootcat = CategoryUtil::getCategoryByPath('/__SYSTEM__/Modules');
@@ -381,9 +400,8 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
         $cat->setDataField('name', 'Topics');
         // pnModLangLoad doesn't handle type 1 modules
         //pnModLangLoad('Topics', 'version');
-        Loader::includeOnce("modules/Topics/lang/{$lang}/version.php");
-        $cat->setDataField('display_name', array($lang => _TOPICS_DISPLAYNAME));
-        $cat->setDataField('display_desc', array($lang => _TOPICS_DESCRIPTION));
+        $cat->setDataField('display_name', array($lang => __('Topics', $dom)));
+        $cat->setDataField('display_desc', array($lang => __('Display and manage the site topics.', $dom)));
         if (!$cat->validate('admin')) {
             return false;
         }
@@ -413,6 +431,8 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
  */
 function _news_import_autonews_queue()
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     $tables = pnDBGetTables();
     $shorturlsep = pnConfigGetVar('shorturlsseparator');
 
@@ -460,7 +480,7 @@ function _news_import_autonews_queue()
         // Manually update the topic and catid, since those are not in pntables and still needed for category migration
         $sql = "UPDATE $tables[stories] SET pn_catid = '".$obj['catid']."', pn_topic = '".$obj['topic']."' WHERE pn_sid = ".$objj['sid'];
         if (!DBUtil::executeSQL($sql)) {
-            return LogUtil::registerError (_UPDATETABLEFAILED);
+            return LogUtil::registerError(__('Error! Table update failed.', $dom));
         }
         $i++;
     }
@@ -470,8 +490,8 @@ function _news_import_autonews_queue()
     $sql = "SELECT * FROM {$tables[queue]}";
     $result = DBUtil::executeSQL($sql);
     $i = 0;
-    for(; !$result->EOF; $result->MoveNext()) {
-
+    for(; !$result->EOF; $result->MoveNext())
+    {
         list ( $obj['qid'],
                $obj['uid'],
                $obj['arcd'],
@@ -509,7 +529,7 @@ function _news_import_autonews_queue()
         // Manually update the topic and catid, since those are not in pntables and still needed for category migration
         $sql = "UPDATE $tables[stories] SET pn_catid = '0', pn_topic = '".$obj['topic']."' WHERE pn_sid = ".$objj['sid'];
         if (!DBUtil::executeSQL($sql)) {
-            return LogUtil::registerError (_UPDATETABLEFAILED);
+            return LogUtil::registerError(__('Error! Table update failed.', $dom));
         }
         $i++;
     }

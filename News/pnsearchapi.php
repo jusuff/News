@@ -30,9 +30,9 @@ function news_searchapi_options($args)
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         // Create output object - this object will store all of our output so that
         // we can return it easily when required
-        $renderer = pnRender::getInstance('News');
-        $renderer->assign('active',(isset($args['active'])&&isset($args['active']['News']))||(!isset($args['active'])));
-        return $renderer->fetch('news_search_options.htm');
+        $render = & pnRender::getInstance('News');
+        $render->assign('active', (isset($args['active']) && isset($args['active']['News'])) || (!isset($args['active'])));
+        return $render->fetch('news_search_options.htm');
     }
 
     return '';
@@ -91,13 +91,12 @@ VALUES ";
                  . '\'' . DataUtil::formatForStore($sessionId) . '\')';
           $insertResult = DBUtil::executeSQL($sql);
           if (!$insertResult) {
-              return LogUtil::registerError (_GETFAILED);
+              return LogUtil::registerError(__('Error! Could not load items.', $dom));
           }
     }
 
     return true;
 }
-
 
 /**
  * Do last minute access checking and assign URL to items
@@ -114,4 +113,3 @@ function news_searchapi_search_check(&$args)
 
     return true;
 }
-

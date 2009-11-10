@@ -56,8 +56,7 @@
  */
 function News_storiesextblock_init()
 {
-    // Security
-    pnSecAddSchema('Storiesextblock::', 'Block title::');
+    SecurityUtil::registerPermissionSchema('Storiesextblock::', 'Block ID::');
 }
 
 /**
@@ -68,9 +67,11 @@ function News_storiesextblock_init()
  */
 function News_storiesextblock_info()
 {
-    return array('text_type'       => 'StoriesExtended',
-                 'module'          => 'News',
-                 'text_type_long'  => 'Story Titles Extended',
+    $dom = ZLanguage::getModuleDomain('News');
+
+    return array('module'          => 'News',
+                 'text_type'       => __('Stories extended', $dom),
+                 'text_type_long'  => __('Stories titles extended', $dom),
                  'allow_multiple'  => true,
                  'form_content'    => false,
                  'form_refresh'    => false,
@@ -87,16 +88,17 @@ function News_storiesextblock_info()
  */
 function News_storiesextblock_display($blockinfo)
 {
-    // --- Security check
-    if (!SecurityUtil::checkPermission( 'Storiesextblock::', "$blockinfo[title]::", ACCESS_OVERVIEW)) {
+    if (!SecurityUtil::checkPermission('Storiesextblock::', "$blockinfo[bid]::", ACCESS_OVERVIEW)) {
         return;
     }
+
+    $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
     $vars = pnBlockVarsFromContent($blockinfo['content']);
     // Get the News categorization setting
     $enablecategorization = pnModGetVar('News', 'enablecategorization');
-    $lang = pnUserGetLang();
+    $lang = ZLanguage::getLanguageCode();
     $topicProperty = pnModGetVar('News', 'topicproperty');
     $topicField = empty($topicProperty) ? 'Main' : $topicProperty;
     $catimagepath = pnModGetVar('News', 'catimagepath');
@@ -203,7 +205,8 @@ height:50px;
 
     // --- Work out the parameters for the News api call, fill the apiargs array with the necessary fields
     $apiargs = array();
-    switch ($vars['show']) {
+    switch ($vars['show'])
+    {
         case 3: // non lead page articles
             $apiargs['ihome'] = 1;
             break;
@@ -218,23 +221,24 @@ height:50px;
     // Make a category filter only if categorization is enabled in News module
     if ($enablecategorization) {
         // load the categories system
-        if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+        if (!Loader::loadClass('CategoryRegistryUtil')) {
+            pn_exit(__f('Error! Unable to load class [%s]'), 'CategoryRegistryUtil');
         }
         // Get the registrered categories for the News module
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $apiargs['catregistry'] = $catregistry;
         $apiargs['category'] = $vars['category'];
     }
-    
+
     // Limit the shown articles in days using DateUtil
-    if ((int)$vars['dayslimit']>0 && $vars['order']==0) {
+    if ((int)$vars['dayslimit'] > 0 && $vars['order'] == 0) {
         $apiargs['from'] = DateUtil::getDatetime_NextDay(-$vars['dayslimit']);
         $apiargs['to'] = DateUtil::getDatetime();
     }
-    
+
     // Handle the sorting order
-    switch ($vars['order']) {
+    switch ($vars['order'])
+    {
         case 1:
             $apiargs['order'] = 'counter';
             break;
@@ -242,7 +246,7 @@ height:50px;
         default:
             // Use News module setting, so don't set apiargs[order]
     }
-    
+
     // Make sure datefiltering is done. Solves #12
     $apiargs['filterbydate'] = true;
 
@@ -253,13 +257,13 @@ height:50px;
     if (empty($items)) {
         if ($vars['showemptyresult']) {
             // Show empty result message instead of empty block if variable is set
-            $blockinfo['content'] = DataUtil::formatForDisplayHTML(_STORIES_EMPTYRESULT);
-             return pnBlockThemeBlock($blockinfo);
+            $blockinfo['content'] = DataUtil::formatForDisplayHTML(__('No news', $dom));
+            return pnBlockThemeBlock($blockinfo);
         } else {
             return;
         }
     }
-    
+
     // UserUtil is not automatically loaded, so load it now if needed and set anonymous
     if ($vars['dispuname']) {
         Loader::loadClass('UserUtil');
@@ -267,7 +271,7 @@ height:50px;
     }
 
     // create the output object
-    $render = pnRender::getInstance('News');
+    $render = & pnRender::getInstance('News');
 
     // --- Select the configurable row template or the default. The row templates is cached with its sid (storyid)
     $storiesoutput = array();
@@ -276,7 +280,7 @@ height:50px;
     } else {
         $rowtemplate = 'news_block_storiesext_row.htm';
     }
-    
+
     // --- loop through the items and prepare every News item for display
     foreach ($items as $item) {
         // Get specific information from the article. It was a choice not to use the pnuserapi functions
@@ -310,7 +314,7 @@ height:50px;
         // Optional new image if the difference in days from the publishing date and now < the limit 
         $item['itemnewimage'] = ($vars['dispnewimage'] && DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 3) < (int)$vars['newimagelimit']);
         // Wrap the title if needed
-        if ($vars['maxtitlelength']>0 && strlen($item['title']) > (int)$vars['maxtitlelength'])  {
+        if ($vars['maxtitlelength'] > 0 && strlen($item['title']) > (int)$vars['maxtitlelength'])  {
             // wrap the title with wordwrap (instead of substr)
             $a = explode('[[[wrap]]]', wordwrap($item['title'], (int)$vars['maxtitlelength'], '[[[wrap]]]'));
             $item['title'] = $a[0];
@@ -332,7 +336,7 @@ height:50px;
             $item['comments'] = pnModAPIFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $item['sid'], 'status' => 0));
         }
         if ($vars['disphometext']) {
-            if ($vars['maxhometextlength']>0 && strlen(strip_tags($item['hometext'])) > (int)$vars['maxhometextlength']) {
+            if ($vars['maxhometextlength'] > 0 && strlen(strip_tags($item['hometext'])) > (int)$vars['maxhometextlength']) {
                 $item['hometextwrapped'] = true;
             }
         }
@@ -377,7 +381,10 @@ height:50px;
     $render->assign('bid', $blockinfo['bid']);
     $render->assign('stories', $storiesoutput);
 
+    $render->assign('dom', $dom);
+
     $blockinfo['content'] = $render->fetch($blocktemplate);
+
     return pnBlockThemeBlock($blockinfo);
 }
 
@@ -390,9 +397,11 @@ height:50px;
  */
 function News_storiesextblock_modify($blockinfo)
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // Break out options from our content field
     $vars = pnBlockVarsFromContent($blockinfo['content']);
- 
+
     // Defaults
     if (!isset($vars['category'])) {
         $vars['category'] = null;
@@ -499,23 +508,25 @@ height:50px;
     $enablecategorization = pnModGetVar('News', 'enablecategorization');
 
     // Create output object
-    $render = pnRender::getInstance('News');
+    $render = & pnRender::getInstance('News');
     // As Admin output changes often, we do not want caching.
     $render->caching = false;
 
     // Select categories only if enabled for the News module, otherwise selector will not be shown in modify template
     if ($enablecategorization) {
         // load the categories system
-        if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit (pnML('_UNABLETOLOADCLASS', array('s' => 'CategoryRegistryUtil')));
+        if (!Loader::loadClass('CategoryRegistryUtil')) {
+            pn_exit(__f('Error! Unable to load class [%s]'), 'CategoryRegistryUtil', $dom);
         }
         // Get the registrered categories for the News module
-        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
+        $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $render->assign('catregistry', $catregistry);
     }
     $render->assign('enablecategorization', $enablecategorization);
     // assign the block vars
     $render->assign($vars);
+
+    $render->assign('dom', $dom);
 
     // Return the output that has been generated by this function
     return $render->fetch('news_block_storiesext_modify.htm');
@@ -567,8 +578,8 @@ function News_storiesextblock_update($blockinfo)
     $vars['scrolldelay'] = (int)FormUtil::getPassedValue('scrolldelay', 0, 'POST');
     $vars['scrollmspeed'] = (int)FormUtil::getPassedValue('scrollmspeed', 0, 'POST');
 
-    $render = pnRender::getInstance('News');
-    
+    $render = & pnRender::getInstance('News');
+
     // Check the templates 
     if (!$render->template_exists($vars['rowtemplate'])) {
         $vars['rowtemplate'] = '';

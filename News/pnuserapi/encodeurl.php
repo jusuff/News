@@ -22,7 +22,7 @@ function News_userapi_encodeurl($args)
 {
     // check we have the required input
     if (!isset($args['modname']) || !isset($args['func']) || !isset($args['args'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
 
     if (!isset($args['type'])) {

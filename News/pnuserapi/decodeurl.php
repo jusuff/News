@@ -22,7 +22,7 @@ function News_userapi_decodeurl($args)
 {
     // check we actually have some vars to work with...
     if (!isset($args['vars'])) {
-        return LogUtil::registerError (_MODARGSERROR);
+        return LogUtil::registerArgsError();
     }
 
     // define the available user functions
@@ -41,7 +41,7 @@ function News_userapi_decodeurl($args)
         pnQueryStringSetVar('func', $args['vars'][2]);
         $nextvar = 3;
     }
-    
+
     $func = FormUtil::getPassedValue('func', 'main', 'GET');
 
     // for now let the core handle the view function
@@ -109,5 +109,6 @@ function News_userapi_decodeurl($args)
             }
         }
     }
+
     return true;
 }

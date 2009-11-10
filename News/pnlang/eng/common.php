@@ -33,6 +33,7 @@ define('_NEWS_NOCOMMENTS', 'No commenting');
 define('_NEWS_COMMENT', '1 comment');
 define('_NEWS_COMMENTS', '%count% comments');
 define('_NEWS_COMMENTSQ', 'Comments?');
+define('_NEWS_POSTEDBY', 'Posted by %username%');
 define('_NEWS_POSTEDBYANDON', 'Posted by %username% on %date%');
 define('_NEWS_READ', '1 read');
 define('_NEWS_READS', '%count% reads');
