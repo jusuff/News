@@ -92,7 +92,7 @@
         <input id="news_storiesextblock_dispuname" type="checkbox" value="1" name="dispuname"<!--[if $dispuname]--> checked="checked"<!--[/if]--> />
     </div>
     <div class="z-formrow">
-        <label for="news_storiesextblock_dispdate"><!--[gt text='Show the article date' domain=$dom]--></label>
+        <label for="news_storiesextblock_dispdate"><!--[gt text='Show the article creation date' domain=$dom]--></label>
         <input id="news_storiesextblock_dispdate" type="checkbox" value="1" name="dispdate"<!--[if $dispdate]--> checked="checked"<!--[/if]--> />
     </div>
     <div class="z-formrow">
@@ -157,12 +157,12 @@
             <input id="news_storiesextblock_newimagelimit" type="text" name="newimagelimit" size="5" value="<!--[$newimagelimit|pnvarprepfordisplay]-->" />
         </div>
         <div class="z-formrow">
-            <label for="news_storiesextblock_newimageset"><!--[gt text='New image set' domain=$dom]--></label>
+            <label for="news_storiesextblock_newimageset"><!--[gt text='The image set for the new image' domain=$dom]--></label>
             <input id="news_storiesextblock_newimageset" type="text" name="newimageset" size="40" value="<!--[$newimageset|pnvarprepfordisplay]-->" />
             <em class="z-formnote"><!--[gt text='(pnimg plugin)']--></em>
         </div>
         <div class="z-formrow">
-            <label for="news_storiesextblock_newimagesrc"><!--[gt text='New image filename' domain=$dom]--></label>
+            <label for="news_storiesextblock_newimagesrc"><!--[gt text='The new image filename from the set' domain=$dom]--></label>
             <input id="news_storiesextblock_newimagesrc" type="text" name="newimagesrc" size="40" value="<!--[$newimagesrc|pnvarprepfordisplay]-->" />
             <em class="z-formnote"><!--[gt text='(pnimg plugin)']--></em>
         </div>
