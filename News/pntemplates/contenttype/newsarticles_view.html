@@ -7,14 +7,14 @@
     <!--[foreach from=$stories item=story]-->
     <li>
         <!--[if $story.readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->"><!--[/if]-->
-        <!--[if $story.dispnewimage]--><!--[pnimg modname='core' set=$newimageset src=$newimagesrc __alt='New article' ]--><!--[/if]-->
-        <!--[$story.title|pnvarprephtmldisplay]--><!--[if $story.titlewrapped]--><!--[$titlewraptext|pnvarprephtmldisplay]--><!--[/if]-->
+            <!--[if $story.dispnewimage]--><!--[pnimg modname='core' set=$newimageset src=$newimagesrc __alt='New article' ]--><!--[/if]-->
+            <!--[$story.title|pnvarprephtmldisplay]--><!--[if $story.titlewrapped]--><!--[$titlewraptext|pnvarprephtmldisplay]--><!--[/if]-->
         <!--[if $story.readperm]--></a><!--[/if]-->
 
         <!--[* Optional additional info on the story *]-->
         <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[gt text='by %s' tag1=$story.aid_uname|userprofilelink]-->
         <!--[if $dispdate]--> <!--[gt text='on %s' tag1=$story.from|pndate_format:$dateformat]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-        <!--[if $dispreads]--><!--[$story.counter gt 0]--><!--[gt text='%s read' plural='%s reads' count=$story.counter]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
+        <!--[if $dispreads]--><!--[if $story.counter gt 0]--><!--[gt text='%s read' plural='%s reads' count=$story.counter tag1=$story.counter]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
         <!--[if $dispcomments]--><!--[if $story.comments eq 1]--><!--[gt text='1 comment']--><!--[else]--><!--[gt text='%s comments' tag1=$story.comments]--><!--[/if]--><!--[/if]-->)
         <!--[/if]--><br />
 
@@ -24,11 +24,11 @@
             <!--[if $story.hometextwrapped]-->
             <!--[$story.hometext|truncatehtml:$maxhometextlength:''|pnvarprephtmldisplay]-->
             <!--[if $story.readperm]--><a href="<!--[pnmodurl modname=News func=display sid=$story.sid]-->"><!--[/if]-->
-            <!--[$hometextwraptext|pnvarprephtmldisplay]-->
+                <!--[$hometextwraptext|pnvarprephtmldisplay]-->
             <!--[if $story.readperm]--></a><!--[/if]-->
-        <!--[else]-->
+            <!--[else]-->
             <!--[$story.hometext|pnvarprephtmldisplay]-->
-        <!--[/if]-->
+            <!--[/if]-->
         </div>
         <!--[/if]-->
 
@@ -41,10 +41,10 @@
     <!--[/foreach]-->
 </ul>
 <!--[else]-->
-  <p><!--[gt text='No recent articles found.']--></p>
+<p><!--[gt text='No recent articles found.']--></p>
 <!--[/if]-->
 
 <!--[securityutil_checkpermission component='Stories::Story' instance='::' level=ACCESS_COMMENT assign='submitauth']-->
 <!--[if $linktosubmit && $submitauth]-->
-    <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnimg modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit Article']--><!--[gt text='Submit Article']--></a>
+<a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnimg modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit Article']--><!--[gt text='Submit Article']--></a>
 <!--[/if]-->

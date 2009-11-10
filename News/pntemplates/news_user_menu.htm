@@ -22,7 +22,7 @@
   <!--[/if]-->
 <!--[/if]-->
 
-<h1><!--[gt text='News']--><!--[if $catname|default:'' neq '']--> &raquo; <!--[$catname]--><!--[/if]--></h1>
+<h2><!--[gt text='News']--><!--[if $catname|default:'' neq '']--> &raquo; <!--[$catname]--><!--[/if]--></h2>
 <!--[if $theme neq 'Printer']-->
 <div class="z-menu">
     <span class="z-menuitem-title">
@@ -51,7 +51,7 @@
         <!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
         <!--[if $pendingcount gt 0]-->
         &nbsp;|&nbsp;
-        <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount gt 0]--><!--[gt text='%s pending' plural='%s pending' count=$pendingcount]--><!--[/if]--></a>
+        <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount gt 0]--><!--[gt text='%s pending' plural='%s pending' count=$pendingcount tag1=$pendingcount]--><!--[/if]--></a>
         <!--[/if]-->
         <!--[/if]-->
         <!--[/nocache]-->

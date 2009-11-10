@@ -1,7 +1,7 @@
 <!--[*  $Id: news_user_index.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 
 <div class="news_index">
-    <h2 class="news_title"><!--[$preformat.title]--></h2>
+    <h3 class="news_title"><!--[$preformat.title]--></h3>
     <span class="news_meta z-sub"><!--[gt text='Posted by %1$s on %2$s' tag1=$info.informant tag2=$info.briefdatetime]--></span>
 
     <div class="news_body">
@@ -15,20 +15,20 @@
     <p class="news_footer">
         <!--[if !empty($info.categories)]-->
         <!--[gt text='Filed under']-->:
-		<!--[foreach name='categorylinks' from=$preformat.categories item='categorylink']-->
-		    <!--[$categorylink]-->
-		    <!--[if $smarty.foreach.categorylinks.last neq true]-->
-		    ,&nbsp;
-		    <!--[/if]-->
-		<!--[/foreach]-->
+        <!--[foreach name='categorylinks' from=$preformat.categories item='categorylink']-->
+        <!--[$categorylink]-->
+        <!--[if $smarty.foreach.categorylinks.last neq true]-->
+        ,&nbsp;
+        <!--[/if]-->
+        <!--[/foreach]-->
         <span class="text_separator">|</span>
         <!--[/if]-->
         <!--[$preformat.readmore]-->
-		<span class="text_separator">|</span>
-		<!--[*
-		<!--[recommend modname='News' itemid=$info.sid]-->
-		<span class="text_separator">|</span>
-		*]-->
-		<!--[$preformat.print]-->
+        <span class="text_separator">|</span>
+        <!--[*
+        <!--[recommend modname='News' itemid=$info.sid]-->
+        <span class="text_separator">|</span>
+        *]-->
+        <!--[$preformat.print]-->
     </p>
 </div>
