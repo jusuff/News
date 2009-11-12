@@ -709,7 +709,7 @@ function News_userapi_getArticlePreformat($args)
     // Allowed to read full article?
     if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
         SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
-        $title = '<a href="'.$links['fullarticle'].'">'.$info['title'].'</a>';
+        $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
         $print = '<a class="news_printlink" href="'.$links['print'].'">'.__('Print', $dom).' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
     } else {
         $title = $info['title'];
@@ -759,7 +759,7 @@ function News_userapi_getArticlePreformat($args)
     // Set up the array itself
     $preformat = array('bodytext'    => $bodytext,
                        'bytesmore'   => $bytesmorelink,
-                       'category'    => '<a href="'.$links['category'].'">'.$info['cattitle'].'</a>',
+                       'category'    => '<a href="'.$links['category'].'" title="'.$info['cattitle'].'">'.$info['cattitle'].'</a>',
                        'categories'  => $categories,
                        'postcomment' => $postcomment,
                        'comment'     => $comment,
