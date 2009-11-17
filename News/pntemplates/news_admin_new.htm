@@ -245,8 +245,16 @@
             </fieldset>
 
             <div class="z-formbuttons">
-                <!--[pnbutton src='button_ok.gif' set='icons/small' __alt='OK' __title='OK']-->
-                <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel' ]--></a>
+                <!--[pnbutton name='story[action]' value='0' __alt='Preview' __title='Preview' src='text_block.gif' set='icons/small']-->
+                <!--[if $accessadd neq 1]-->
+                <!--[pnbutton name='story[action]' value='1' __alt='Submit' __title='Submit' src='button_ok.gif' set='icons/small']-->
+                <!--[else]-->
+                <!--[pnbutton name='story[action]' value='2' __alt='Publish' __title='Publish' src='button_ok.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='4' __alt='Pending' __title='Mark as pending' src='folder_yellow.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='3' __alt='Reject' __title='Reject this article' src='folder_red.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='5' __alt='Archive' __title='Archive' src='folder_tar.gif' set='icons/small']-->
+                <!--[/if]-->
+                <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel' __title='Cancel']--></a>
             </div>
         </div>
     </form>

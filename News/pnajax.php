@@ -110,14 +110,15 @@ function News_ajax_modify()
  */
 function News_ajax_update()
 {
-    $story = FormUtil::getPassedValue('story', null, 'POST');
-    $page  = (int)FormUtil::getPassedValue('page', 1, 'POST');
+    $story  = FormUtil::getPassedValue('story', null, 'POST');
+    $action = FormUtil::getPassedValue('action', null, 'POST');
+    $page   = (int)FormUtil::getPassedValue('page', 1, 'POST');
 
     $dom = ZLanguage::getModuleDomain('News');
 
     // Get the current news article
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $story['sid']));
-    if ($item == false) {
+    if ($item == false || !$action) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(__f('No such article found.', $dom)));
     }
 
@@ -125,20 +126,14 @@ function News_ajax_update()
         AjaxUtil::error(DataUtil::formatForDisplayHTML(__("Invalid 'authkey':  this probably means that you pressed the 'Back' button, or that the page 'authkey' expired. Please refresh the page and try again.", $dom)));
     }
 
+    $output = $action;
     $oldurltitle = $item['urltitle'];
 
-    // Notable by its absence there is no security check here
-
-    $output = $story['action'];
-    switch ($story['action'])
+    switch ($action)
     {
         case 'update':
-            // Security check
-            if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$story[sid]", ACCESS_EDIT) ||
-                  SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT))) {
-                AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this page.', $dom)));
-            }
             // Update the story
+            // Security check inside of the API func
             if (pnModAPIFunc('News', 'admin', 'update',
                             array('sid' => $story['sid'],
                                   'title' => DataUtil::convertFromUTF8($story['title']),
@@ -242,11 +237,7 @@ function News_ajax_update()
             break;
 
         case 'delete':
-            // Security check
-            if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$story[sid]", ACCESS_DELETE) ||
-                  SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_DELETE))) {
-                AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! No authorization to access this page.', $dom)));
-            }
+            // Security check inside of the API func
             if (pnModAPIFunc('News', 'admin', 'delete', array('sid' => $story['sid']))) {
                 // Success
                 // the url for reloading, after deleting refer to the news index
@@ -261,6 +252,6 @@ function News_ajax_update()
     }
 
     return array('result' => $output,
-                 'action' => $story['action'],
+                 'action' => $action,
                  'reloadurl' => $reloadurl);
 }

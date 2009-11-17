@@ -80,7 +80,6 @@ function News_adminapi_update($args)
         !isset($args['bodytext']) ||
         !isset($args['bodytextcontenttype']) ||
         !isset($args['notes']) ||
-        !isset($args['published_status']) ||
         !isset($args['from']) ||
         !isset($args['to'])) {
         return LogUtil::registerArgsError();
@@ -103,6 +102,21 @@ function News_adminapi_update($args)
     if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$args[sid]", ACCESS_EDIT) ||
           SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
+    }
+
+    // evaluates the input action
+    $args['action'] = isset($args['action']) ? $args['action'] : null;
+    switch ($args['action'])
+    {
+        case 1: // submitted => pending
+            $args['published_status'] = 2;
+            break;
+        case 2: // published
+        case 3: // rejected
+        case 4: // pending
+        case 5: // archived
+            $args['published_status'] = $args['action']-2;
+            break;
     }
 
     // calculate the format type

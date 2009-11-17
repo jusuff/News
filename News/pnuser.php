@@ -174,7 +174,7 @@ function News_user_create($args)
                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                   'to' => isset($story['toHour']) ? mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']) : null,
                   'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
-                  'published_status' => isset($story['published_status']) ? $story['published_status'] : null);
+                  'action' => isset($story['action']) ? $story['action'] : 0);
 
     // Disable the non accessible fields for non editors
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
@@ -186,7 +186,9 @@ function News_user_create($args)
         $item['tonolimit'] = true;
         $item['to'] = null;
         $item['unlimited'] = true;
-        $item['published_status'] = null;
+        if ($item['action'] > 1) {
+            $item['action'] = 0;
+        }
     }
 
     // Get the referer type for later use
@@ -210,17 +212,17 @@ function News_user_create($args)
 
     // Validate the input
     $validationerror = false;
-    if ($item['preview'] != 0 && empty($item['title'])) {
+    if ($item['action'] != 0 && empty($item['title'])) {
         $validationerror = __f('Empty %s passed.', __('Title', $dom), $dom);
     }
     // both text fields can't be empty
-    if ($item['preview'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
+    if ($item['action'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
         $validationerror = __f('Empty %s passed.', __('Article content', $dom), $dom);
     }
 
     // if the user has selected to preview the article we then route them back
     // to the new function with the arguments passed here
-    if ($item['preview'] == 0 || $validationerror !== false) {
+    if ($item['action'] == 0 || $validationerror !== false) {
         // log the error found if any
         if ($validationerror !== false) {
             LogUtil::registerError($validationerror);

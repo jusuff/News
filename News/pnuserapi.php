@@ -826,11 +826,27 @@ function News_userapi_create($args)
 
     $dom = ZLanguage::getModuleDomain('News');
 
+    // evaluates the input action
+    $args['action'] = isset($args['action']) ? $args['action'] : null;
+    switch ($args['action'])
+    {
+        case 1: // submitted => pending
+            $args['published_status'] = 2;
+            break;
+        case 2: // published
+        case 3: // rejected
+        case 4: // pending
+        case 5: // archived
+            $args['published_status'] = $args['action']-2;
+            break;
+    }
+
     // Security check
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
         return LogUtil::registerPermissionError();
-    } elseif (SecurityUtil::checkPermission('News:;', '::', ACCESS_ADD) ||
+
+    } elseif (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
               SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         if (!isset($args['published_status'])) {
             $args['published_status'] = 0;
@@ -873,23 +889,18 @@ function News_userapi_create($args)
         $args['to'] = DateUtil::getDatetime($args['to']);
     }
 
-    // Work out name of story submitter
-    if (!pnUserLoggedIn()) {
-        $anonymous = pnConfigGetVar('anonymous');
-        if (empty($args['informant'])) {
-            $args['informant'] = $anonymous;
-        }
-        $args['approver'] = 0;
+    // Work out name of story submitter and approver
+    $args['approver'] = 0;
+    if (!pnUserLoggedIn() && empty($args['informant'])) {
+        $args['informant'] = pnConfigGetVar('anonymous');
     } else {
         $args['informant'] = pnUserGetVar('uname');
         if ($args['published_status'] == 0) {
             $args['approver'] = SessionUtil::getVar('uid');
-        } else {
-            $args['approver'] = 0;
         }
     }
 
-    $args['counter'] = 0;
+    $args['counter']  = 0;
     $args['comments'] = 0;
 
     if (!($obj = DBUtil::insertObject($args, 'news', 'sid'))) {
@@ -898,10 +909,7 @@ function News_userapi_create($args)
 
     // update the from field to the same cr_date if it's null
     if (is_null($args['from'])) {
-        $obj = array(
-            'sid'  => $obj['sid'],
-            'from' => $obj['cr_date']
-        );
+        $obj = array('sid'  => $obj['sid'], 'from' => $obj['cr_date']);
 
         if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
             LogUtil::registerError(__('Error! Update attempt failed.', $dom));

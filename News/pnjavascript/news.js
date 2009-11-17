@@ -121,12 +121,12 @@ function editnews_cancel()
  *@return none;
  *@author Frank Schummertz
  */
-function editnews_save()
+function editnews_save(action)
 {
-    if(editing==true) {
+    if (editing == true) {
         editing = false;
         Element.show('news_savenews');
-        var pars = 'module=News&func=update&' + Form.serialize('news_ajax_modifyform');
+        var pars = 'module=News&func=update&action='+ action +'&' + Form.serialize('news_ajax_modifyform');
         var myAjax = new Ajax.Request(
             document.location.pnbaseURL+'ajax.php', 
             {

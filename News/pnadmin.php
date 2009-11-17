@@ -151,6 +151,12 @@ function News_admin_modify($args)
     // Create output object
     $render = & pnRender::getInstance('News', false);
 
+    $render->assign('accessadd', 0);
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
+        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+        $render->assign('accessadd', 1);
+    }
+
     if ($modvars['enablecategorization']) {
         $render->assign('catregistry', $catregistry);
     }
@@ -224,11 +230,11 @@ function News_admin_update($args)
 
     // Validate the input
     $validationerror = false;
-    if ($story['preview'] != 0 && empty($story['title'])) {
+    if ($story['action'] != 0 && empty($story['title'])) {
         $validationerror = __f('Empty %s passed.', __('Title', $dom), $dom);
     }
     // both text fields can't be empty
-    if ($story['preview'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
+    if ($story['action'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
         $validationerror = __f('Empty %s passed.', __('Article content', $dom), $dom);
     }
 
@@ -247,7 +253,7 @@ function News_admin_update($args)
 
     // if the user has selected to preview the article we then route them back
     // to the new function with the arguments passed here
-    if ($story['preview'] == 0 || $validationerror !== false) {
+    if ($story['action'] == 0 || $validationerror !== false) {
         // log the error found if any
         if ($validationerror !== false) {
             LogUtil::registerError($validationerror);
@@ -285,8 +291,8 @@ function News_admin_update($args)
                           'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                           'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
-                          'published_status' => $story['published_status'],
-                          'approver' => $story['approver']))) {
+                          'approver' => $story['approver'],
+                          'action' => $story['action']))) {
         // Success
         LogUtil::registerStatus(__('Done! Article updated.', $dom));
     }

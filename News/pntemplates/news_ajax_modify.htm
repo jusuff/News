@@ -1,4 +1,6 @@
 <!--[*  $Id: news_ajax_modify.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+<!--[securityutil_checkpermission component='News::' instance="story[aid]::story[sid]" level='ACCESS_DELETE' assign='mayDelete']-->
+
 
 <!--[gt text='Edit News Article' assign='templatetitle']-->
 
@@ -138,19 +140,12 @@
 
         <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 
-        <fieldset class="z-linear">
-            <div class="z-formrow">
-                <label for="news_action"><!--[gt text='Action']--></label>
-                <select id="news_action" name="story[action]">
-                    <option value="update"><!--[gt text='Update']--></option>
-                    <option value="pending"><!--[gt text='Set pending status']--></option>
-                    <option value="delete"><!--[gt text='Delete']--></option>
-                </select>
-            </div>
-        </fieldset>
-
         <div class="z-formbuttons">
-            <a href="javascript:void(0);" onclick="editnews_save();"><!--[pnimg modname='core' src='button_ok.gif' set='icons/small' __alt='OK'  __title='OK']--></a>
+            <a href="javascript:void(0);" onclick="editnews_save('update');"><!--[pnimg modname='core' src='button_ok.gif' set='icons/small' __alt='Update'  __title='Update']--></a>
+            <a href="javascript:void(0);" onclick="editnews_save('pending');"><!--[pnimg modname='core' src='folder_yellow.gif' set='icons/small' __alt='Set pending status'  __title='Set pending status']--></a>
+            <!--[if $mayDelete]-->
+            <a href="javascript:void(0);" onclick="editnews_save('delete');"><!--[pnimg modname='core' src='editdelete.gif' set='icons/small' __alt='Delete'  __title='Delete']--></a>
+            <!--[/if]-->
             <a href="javascript:void(0);" onclick="editnews_cancel();"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel']--></a>
             &nbsp;<img id="news_savenews" src="<!--[$baseurl]-->images/ajax/circle-ball-dark-antialiased.gif" alt="" />
         </div>
