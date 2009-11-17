@@ -106,11 +106,11 @@
                 <td><!--[$newsitem.ihome|pnvarprepfordisplay]--></td>
                 <td>
                     <!--[if $newsitem.published_status eq '2']-->
-                    <!--[gt text='Last modified']--><br />
-                    <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->
+                        <!--[gt text='Last modified']--><br />
+                        <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->
                     <!--[else]-->
-                    <!--[if $newsitem.infuture]--><!--[gt text='Scheduled']--><!--[else]--><!--[gt text='Published']--><!--[/if]--><br />
-                    <!--[$newsitem.from|dateformatHuman:'%x':'2']-->
+                        <!--[if $newsitem.infuture]--><!--[gt text='Scheduled']--><!--[else]--><!--[$newsitem.published_status|news_getstatustext]--><!--[/if]--><br />
+                        <!--[$newsitem.from|dateformatHuman:'%x':'2']-->
                     <!--[/if]-->
                     <!--[if $newsitem.withcomm eq '1']-->
                     <br />
