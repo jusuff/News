@@ -12,7 +12,9 @@
 
 /* News forms */
 .news_preview {
+  background-color: #fafafa;
   margin: 1em 0;
+  padding: 7px;
 }
 
 /* articles styles */
