@@ -73,11 +73,10 @@ function News_user_new($args)
         $item['to'] = time();
         $item['tonolimit'] = 1;
         $item['unlimited'] = 1;
-        $item['published_status'] = 0;
     }
 
     $preview = '';
-    if (isset($item['preview']) && $item['preview'] == 0) {
+    if (isset($item['action']) && $item['action'] == 0) {
         $preview = News_user_preview(array('title' => $item['title'],
                                            'hometext' => $item['hometext'],
                                            'hometextcontenttype' => $item['hometextcontenttype'],
@@ -157,8 +156,7 @@ function News_user_create($args)
     $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
 
     // Create the item array for processing
-    $item = array('preview' => $story['preview'],
-                  'title' => $story['title'],
+    $item = array('title' => $story['title'],
                   'urltitle' => isset($story['urltitle']) ? $story['urltitle'] : '',
                   '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
                   '__ATTRIBUTES__' => isset($story['attributes']) ? $story['attributes'] : null,

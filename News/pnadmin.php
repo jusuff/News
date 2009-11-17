@@ -118,7 +118,7 @@ function News_admin_modify($args)
 
     // Check if we need a preview
     $preview = '';
-    if (isset($item['preview']) && $item['preview'] == 0) {
+    if (isset($item['action']) && $item['action'] == 0) {
         $preview = pnModFunc('News', 'user', 'preview',
                              array('title' => $item['title'],
                                    'hometext' => $item['hometext'],
