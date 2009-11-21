@@ -23,8 +23,10 @@
         <!--[/foreach]-->
         <span class="text_separator">|</span>
         <!--[/if]-->
-        <!--[$preformat.readmore]-->
-        <span class="text_separator">|</span>
+        <!--[if !empty($preformat.readmore)]-->
+          <!--[$preformat.readmore]-->
+          <span class="text_separator">|</span>
+        <!--[/if]-->
         <!--[*
         <!--[recommend modname='News' itemid=$info.sid]-->
         <span class="text_separator">|</span>
