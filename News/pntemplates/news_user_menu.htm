@@ -15,7 +15,7 @@
     <!--[pnservergetvar name='REQUEST_URI' default='/' assign='requesturi']-->
     <!--[assign var='requesturi' value=$requesturi|replace:$baseuri:'']-->
     <!--[if $requesturi neq '/' AND $requesturi neq "/$entrypoint"]-->
-      <!--[pnpagesetvar name='title' __value='Lead page']-->
+      <!--[pnpagesetvar name='title' __value='News index page']-->
     <!--[/if]-->
   <!--[elseif $func eq 'view' AND $catname|default:'' neq '']-->
     <!--[pnpagesetvar name='title' value=$catname]-->
@@ -28,30 +28,30 @@
     <span class="z-menuitem-title">
         [
         <!--[if $func neq 'main']-->
-        <a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[gt text='Lead page']--></a>
+        <a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[gt text='News index page']--></a>
         <!--[/if]-->
 
         <!--[if $enablecategorization AND $func neq 'categorylist']-->
         <!--[if $func neq 'main']--> | <!--[/if]-->
-        <a href="<!--[pnmodurl modname='News' type='user' func='categorylist']-->"><!--[gt text='Categories']--></a>
+        <a href="<!--[pnmodurl modname='News' type='user' func='categorylist']-->"><!--[gt text='News categories']--></a>
         <!--[/if]-->
 
         <!--[if $func neq 'archives']-->
         |
-        <a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[gt text='Archive']--></a>
+        <a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[gt text='News archive']--></a>
         <!--[/if]-->
 
         <!--[nocache]-->
         <!--[if $authcomm AND $func neq 'new']-->
         |
-        <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[gt text='Submit Article']--></a>
+        <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[gt text='Submit an article']--></a>
         <!--[/if]-->
 
         <!--[if $authedit]-->
         <!--[pnmodapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount']-->
         <!--[if $pendingcount gt 0]-->
         |
-        <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount gt 0]--><!--[gt text='%s pending' plural='%s pending' count=$pendingcount tag1=$pendingcount]--><!--[/if]--></a>
+        <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount gt 0]--><!--[gt text='%s pending article' plural='%s pending articles' count=$pendingcount tag1=$pendingcount]--><!--[/if]--></a>
         <!--[/if]-->
         <!--[/if]-->
         <!--[/nocache]-->

@@ -73,15 +73,15 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
         } else {
             // no hour difference
             if ($diff['m'] < 0) {
-                $res = __f('%s mins ago', abs($diff['m']), $dom);
+                $res = __f('%s minutes ago', abs($diff['m']), $dom);
             } elseif ($diff['m'] > 0) {
-                $res = __f('%s mins from now', $diff['m'], $dom);
+                $res = __f('%s minutes from now', $diff['m'], $dom);
             } else {
                 // no min difference
                 if ($diff['s'] < 0) {
-                    $res = __f('%s secs ago', abs($diff['s']), $dom);
+                    $res = __f('%s seconds ago', abs($diff['s']), $dom);
                 } else {
-                    $res = __f('%s secs from now', $diff['s'], $dom);
+                    $res = __f('%s seconds from now', $diff['s'], $dom);
                 }
             }
         }

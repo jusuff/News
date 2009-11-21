@@ -82,7 +82,7 @@ function News_admin_modify($args)
     $dbitem = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
 
     if ($dbitem === false) {
-        return LogUtil::registerError(__('No such article found.', $dom), 404);
+        return LogUtil::registerError(__('Error! No such article found.', $dom), 404);
     }
 
     // Security check
@@ -134,7 +134,7 @@ function News_admin_modify($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
 
@@ -219,7 +219,7 @@ function News_admin_update($args)
     // Get the unedited news article for the permissions check
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $story['sid']));
     if ($item === false) {
-        return LogUtil::registerError(__('No such article found.', $dom), 404);
+        return LogUtil::registerError(__('Error! No such article found.', $dom), 404);
     }
 
     // Security check
@@ -231,11 +231,11 @@ function News_admin_update($args)
     // Validate the input
     $validationerror = false;
     if ($story['action'] != 0 && empty($story['title'])) {
-        $validationerror = __f('Empty %s passed.', __('Title', $dom), $dom);
+        $validationerror = __f('Error! You did not enter a %s.', __('title', $dom), $dom);
     }
     // both text fields can't be empty
     if ($story['action'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
-        $validationerror = __f('Empty %s passed.', __('Article content', $dom), $dom);
+        $validationerror = __f('Error! You did not enter the minimum necessary %s.', __('article content', $dom), $dom);
     }
 
     // Reformat the attributes array
@@ -294,7 +294,7 @@ function News_admin_update($args)
                           'approver' => $story['approver'],
                           'action' => $story['action']))) {
         // Success
-        LogUtil::registerStatus(__('Done! Article updated.', $dom));
+        LogUtil::registerStatus(__('Done! Saved your changes.', $dom));
     }
 
     return pnRedirect(pnModURL('News', 'admin', 'view'));
@@ -329,7 +329,7 @@ function News_admin_delete($args)
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
 
     if ($item == false) {
-        return LogUtil::registerError(__('No such article found.', $dom), 404);
+        return LogUtil::registerError(__('Error! No such article found.', $dom), 404);
     }
 
     // Security check
@@ -361,7 +361,7 @@ function News_admin_delete($args)
     // Delete
     if (pnModAPIFunc('News', 'admin', 'delete', array('sid' => $sid))) {
         // Success
-        LogUtil::registerStatus(__('Done! Article deleted.', $dom));
+        LogUtil::registerStatus(__('Done! Deleted article.', $dom));
     }
 
     return pnRedirect(pnModURL('News', 'admin', 'view'));
@@ -395,9 +395,9 @@ function News_admin_view($args)
 
     if ($purge) {
         if (pnModAPIFunc('News', 'admin', 'purgepermalinks')) {
-            LogUtil::registerStatus(__('Purging of the pemalinks was successful', $dom));
+            LogUtil::registerStatus(__('Done! Purged permalinks.', $dom));
         } else {
-            LogUtil::registerError(__('Purging of the pemalinks has failed', $dom));
+            LogUtil::registerError(__('Error! Could not purge permalinks.', $dom));
         }
         return pnRedirect(strpos(pnServerGetVar('HTTP_REFERER'), 'purge') ? pnModURL('News', 'admin', 'view') : pnServerGetVar('HTTP_REFERER'));
     }
@@ -419,7 +419,7 @@ function News_admin_view($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties = array_keys($catregistry);
@@ -476,7 +476,7 @@ function News_admin_view($args)
         '' => __('All', $dom), 
         0  => __('Published', $dom),
         1  => __('Rejected', $dom),
-        2  => __('Pending Review', $dom),
+        2  => __('Pending', $dom),
         3  => __('Archived', $dom),
         4  => __('Draft', $dom),
         5  => __('Scheduled', $dom)
@@ -549,7 +549,7 @@ function News_admin_view($args)
     $render->assign('news_status', $news_status);
     $render->assign('itemstatus', $itemstatus);
     $render->assign('order', $order);
-    $render->assign('orderoptions', array('from' => __('Article Date/Time', $dom), 
+    $render->assign('orderoptions', array('from' => __('Article date/time', $dom), 
                                           'sid'  => __('Article ID', $dom)));
 
     //$render->assign('monthyear', $monthyear);
@@ -596,7 +596,7 @@ function News_admin_view($args)
                                               array('news_status' => 2,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => __('Pending Review', $dom));
+                            'title' => __('Pending', $dom));
 
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,
@@ -659,7 +659,7 @@ function News_admin_modifyconfig()
     $dom = ZLanguage::getModuleDomain('News');
 
     if (!Loader::loadClass('CategoryRegistryUtil')) {
-        pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+        pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
@@ -720,7 +720,7 @@ function News_admin_updateconfig()
     $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
 
     if (!Loader::loadClass('CategoryRegistryUtil')) {
-        pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+        pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
@@ -739,7 +739,7 @@ function News_admin_updateconfig()
     pnModCallHooks('module','updateconfig','News', array('module' => 'News'));
 
     // the module configuration has been updated successfuly
-    LogUtil::registerStatus(__('Done! Module configuration updated.', $dom));
+    LogUtil::registerStatus(__('Done! Saved module settings.', $dom));
 
     return pnRedirect(pnModURL('News', 'admin', 'main'));
 }

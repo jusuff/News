@@ -34,7 +34,7 @@ function News_pastblock_info()
 
     return array('module'         => 'News',
                  'text_type'      => __('Past articles', $dom),
-                 'text_type_long' => __('Display the past articles', $dom),
+                 'text_type_long' => __('Display past articles', $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -125,7 +125,7 @@ function News_pastblock_display($blockinfo)
 
     if (empty($blockinfo['title'])) {
         //! default past block title
-        $blockinfo['title'] = __('Past news', $dom);
+        $blockinfo['title'] = __('Past articles', $dom);
     }
 
     $blockinfo['content'] = $render->fetch('news_block_past.htm');

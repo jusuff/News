@@ -90,7 +90,7 @@ function News_storiesblock_display($blockinfo)
 
     if (isset($vars['category']) && !empty($vars['category'])) {
         if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryUtil | CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
         }
         $cat = CategoryUtil::getCategoryByID($vars['category']);
         $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
@@ -164,7 +164,7 @@ function News_storiesblock_modify($blockinfo)
 
     // load the categories system
     if (!Loader::loadClass('CategoryRegistryUtil')) {
-        pn_exit(__f('Error! Unable to load class [%s]'), 'CategoryRegistryUtil', $dom);
+        pn_exit(__f('Error! Could not load [%s] class.'), 'CategoryRegistryUtil', $dom);
     }
     $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
     $render->assign('mainCategory', $mainCat);

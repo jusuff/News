@@ -50,12 +50,12 @@ function News_needleapi_news($args)
                 $title = DataUtil::formatForDisplay($obj['title']);
                 $cache[$nid] = '<a href="' . $url . '" title="' . $title . '">' . $title . '</a>';
             } else {
-                $cache[$nid] = '<em>' . __f("Unknown article '%s'", $nid, $dom) . '</em>';
+                $cache[$nid] = '<em>' . __f("Error! Database contains no article with the title '%s'.", $nid, $dom) . '</em>';
             }
         }
         $result = $cache[$nid];
     } else {
-        $result = '<em>' . __('No needle ID passed', $dom) . '</em>';
+        $result = '<em>' . __('Error! No needle ID provided.', $dom) . '</em>';
     }
 
     return $result;

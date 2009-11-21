@@ -1,5 +1,5 @@
 /***********************************************
-* Pausing up-down scroller- © Dynamic Drive (www.dynamicdrive.com)
+* Pausing up-down scroller- ï¿½ Dynamic Drive (www.dynamicdrive.com)
 * This notice MUST stay intact for legal use
 * Visit http://www.dynamicdrive.com/ for this script and 100s more.
 ***********************************************/
@@ -75,7 +75,7 @@ div2.style.top=Math.max(div1.parentNode.offsetHeight, div1.offsetHeight)+"px"
 // -------------------------------------------------------------------
 pausescroller.prototype.setmessage=function(){
 var scrollerinstance=this
-if (this.mouseoverBol==1){ //if mouse is currently over scoller, do nothing (pause it)
+if (this.mouseoverBol==1){ //if mouse is currently over scroller, do nothing (pause it)
 setTimeout(function(){scrollerinstance.setmessage()}, 100)
 }else{
 var i=this.hiddendivpointer

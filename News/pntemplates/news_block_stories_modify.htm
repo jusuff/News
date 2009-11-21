@@ -1,11 +1,11 @@
 <!--[*  $Id: news_block_stories_modify.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 
 <div class="z-formrow">
-    <label for="storiesblock_storiestype"><!--[gt text='News articles to display' domain=$dom]--></label>
+    <label for="storiesblock_storiestype"><!--[gt text='Scope of news article listing' domain=$dom]--></label>
     <select id="storiesblock_storiestype" name="storiestype">
         <option value="2"<!--[if $storiestype eq 2]--> selected="selected"<!--[/if]-->><!--[gt text='Show all news articles' domain=$dom]--></option>
-        <option value="3"<!--[if $storiestype eq 3]--> selected="selected"<!--[/if]-->><!--[gt text='Show only lead page articles' domain=$dom]--></option>
-        <option value="1"<!--[if $storiestype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Show only articles not published on the lead page' domain=$dom]--></option>
+        <option value="3"<!--[if $storiestype eq 3]--> selected="selected"<!--[/if]-->><!--[gt text='Show only articles listed on news index page' domain=$dom]--></option>
+        <option value="1"<!--[if $storiestype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Show only articles not listed on news index page' domain=$dom]--></option>
     </select>
 </div>
 
@@ -13,7 +13,7 @@
 <div class="z-formrow">
     <label for="category"><!--[gt text='Category' domain=$dom]--></label>
     <div>
-        <!--[gt text='Choose Category' domain=$dom assign='lblDef']-->
+        <!--[gt text='Choose category' domain=$dom assign='lblDef']-->
         <!--[nocache]-->
         <!--[selector_category category=$mainCategory name='category' field='id' selectedValue=$category defaultValue='0' defaultText=$lblDef]-->
         <!--[/nocache]-->
@@ -22,6 +22,6 @@
 <!--[/if]-->
 
 <div class="z-formrow">
-    <label for="storiesblock_limit"><!--[gt text='Maximum number of news articles to display' domain=$dom]--></label>
+    <label for="storiesblock_limit"><!--[gt text='Maximum number of articles to display' domain=$dom]--></label>
     <input id="storiesblock_limit" type="text" name="limit" size="2" value="<!--[$limit|pnvarprepfordisplay]-->" />
 </div>

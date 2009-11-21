@@ -32,7 +32,7 @@ function News_adminapi_delete($args)
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
-        return LogUtil::registerError(__('No such article found.', $dom));
+        return LogUtil::registerError(__('Error! No such article found.', $dom));
     }
 
     // Security check
@@ -42,7 +42,7 @@ function News_adminapi_delete($args)
     }
 
     if (!DBUtil::deleteObjectByID('news', $args['sid'], 'sid')) {
-        return LogUtil::registerError(__('Error! Deletion attempt failed.', $dom));
+        return LogUtil::registerError(__('Error! Could not delete article.', $dom));
     }
 
     // Let any hooks know that we have deleted an item
@@ -95,7 +95,7 @@ function News_adminapi_update($args)
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
-        return LogUtil::registerError(__('No such article found.', $dom));
+        return LogUtil::registerError(__('Error! No such article found.', $dom));
     }
 
     // Security check
@@ -154,7 +154,7 @@ function News_adminapi_update($args)
     }
 
     if (!DBUtil::updateObject($args, 'news', '', 'sid')) {
-        return LogUtil::registerError(__('Error! Update attempt failed.', $dom));
+        return LogUtil::registerError(__('Error! Could not save your changes.', $dom));
     }
 
     // Let any hooks know that we have updated an item.
@@ -234,20 +234,20 @@ function news_adminapi_getlinks()
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
         $links[] = array('url'  => pnModURL('News', 'admin', 'view'),
-                         'text' => __('View News Articles list', $dom));
+                         'text' => __('News articles list', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
         $links[] = array('url'  => pnModURL('News', 'admin', 'new'),
-                         'text' =>  __('Create a News Article', $dom));
+                         'text' =>  __('Create new article', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
         SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
         $links[] = array('url'  => pnModURL('News', 'admin', 'view', array('purge' => 1)),
-                         'text' => __('Purge PermaLinks', $dom));
+                         'text' => __('Purge permalinks', $dom));
 
         $links[] = array('url'  => pnModURL('News', 'admin', 'modifyconfig'),
-                         'text' => __('News Publisher Settings', $dom));
+                         'text' => __('Settings', $dom));
     }
 
     return $links;

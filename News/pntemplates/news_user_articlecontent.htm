@@ -2,9 +2,9 @@
 
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = '<!--[gt text="#{chars} chars out of 65536"]-->';
-    var showpublicationoptions = '<!--[gt text="Show Publishing Options"]-->';
-    var hidepublicationoptions = '<!--[gt text="Hide Publishing Options"]-->';
+    var bytesused = '<!--[gt text="#{chars} characters out of 65,536"]-->';
+    var showpublicationoptions = '<!--[gt text="Publishing options"]-->';
+    var hidepublicationoptions = '<!--[gt text="Publishing options"]-->';
     // ]]>
 </script>
 
@@ -27,13 +27,12 @@
 <div id="news_body" class="news_body">
     <div class="news_hometext">
         <!--[$preformat.hometext]-->
-        <div class="news_separator"></div>
     </div>
     <!--[$preformat.bodytext]-->
 </div>
 
 <!--[if $preformat.notes neq '']-->
-<p id="news_notes" class="news_meta"><!--[$preformat.notes]--></p>
+<span id="news_notes" class="news_meta"><!--[$preformat.notes]--></span>
 <!--[/if]-->
 
 <!--[* the next code is to display the pager *]-->

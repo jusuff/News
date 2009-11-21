@@ -119,7 +119,7 @@ Zikula.itemlist = Class.create({
     },
 
     /**
-     * Parses the ID and generate an standar name
+     * Parses the ID and generates a standard name
      */
     getnamefromid: function(id) {
         var chunks = id.split('_');

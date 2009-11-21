@@ -1,6 +1,6 @@
 <!--[*  $Id: news_admin_view.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 <!--[pnajaxheader modname='News' filename='news.js' nobehaviour=true noscriptaculous=true]-->
-<!--[gt text='View News Articles list' assign='templatetitle']-->
+<!--[gt text='News articles list' assign='templatetitle']-->
 
 <!--[include file='news_admin_menu.htm']-->
 
@@ -55,7 +55,7 @@
             <label for="order"><!--[gt text='Order by']--></label>
             <!--[html_options name='order' id='order' options=$orderoptions selected=$order]-->
             &nbsp;&nbsp;
-            <input name="submit" type="submit" value="<!--[gt text='Filter']-->" />
+            <input name="submit" type="submit" value="<!--[gt text='Apply filter']-->" />
             <input name="clear" type="submit" value="<!--[gt text='Reset']-->" />
         </fieldset>
     </form>
@@ -68,7 +68,7 @@
             <!--[/nocache]-->
             <label for="news_status"><!--[gt text='Status']--></label>
             <!--[html_options name='news_status' id='news_status' options=$itemstatus selected=$status]-->
-            <input name="submit" type="submit" value="<!--[gt text='Filter']-->" />
+            <input name="submit" type="submit" value="<!--[gt text='Apply filter']-->" />
             <input name="clear" type="submit" value="<!--[gt text='Reset']-->" />
         </div>
     </form>
@@ -77,13 +77,13 @@
     <table class="z-admintable">
         <thead>
             <tr>
-                <th><!--[gt text='Article ID']--></th>
-                <th><!--[gt text='Article Title']--></th>
-                <th><!--[gt text='Author']--></th>
+                <th><!--[gt text='ID']--></th>
+                <th><!--[gt text='Title']--></th>
+                <th><!--[gt text='Contributor']--></th>
                 <!--[if $enablecategorization]-->
                 <th><!--[gt text='Category']--></th>
                 <!--[/if]-->
-                <th><!--[gt text='Lead Page']--></th>
+                <th><!--[gt text='Index page listing']--></th>
                 <th><!--[gt text='Date']--></th>
                 <th><!--[gt text='Actions']--></th>
             </tr>
@@ -94,7 +94,7 @@
                 <td><!--[$newsitem.sid|pnvarprepfordisplay]--></td>
                 <td>
                     <!--[$newsitem.title|strip_tags|pnvarprepfordisplay]-->
-                    <!--[if $newsitem.published_status eq 2]--><strong><em> - <!--[gt text='Pending Review']--></em></strong><!--[/if]-->
+                    <!--[if $newsitem.published_status eq 2]--><strong><em> - <!--[gt text='Pending']--></em></strong><!--[/if]-->
                     <!--[if $newsitem.published_status eq 4]--><strong><em> - <!--[gt text='Draft']--></em></strong><!--[/if]-->
                 </td>
                 <td><!--[$newsitem.informant|pnvarprepfordisplay]--></td>
@@ -106,15 +106,15 @@
                 <td><!--[$newsitem.ihome|pnvarprepfordisplay]--></td>
                 <td>
                     <!--[if $newsitem.published_status eq '2']-->
-                        <!--[gt text='Last modified']--><br />
-                        <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->
+                        <!--[gt text='Last edited on']--> 
+                        <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->.
                     <!--[else]-->
-                        <!--[if $newsitem.infuture]--><!--[gt text='Scheduled']--><!--[else]--><!--[$newsitem.published_status|news_getstatustext]--><!--[/if]--><br />
-                        <!--[$newsitem.from|dateformatHuman:'%x':'2']-->
+                        <!--[if $newsitem.infuture]--><!--[gt text='Scheduled for']--><!--[else]--><!--[$newsitem.published_status|news_getstatustext]--><!--[/if]--> 
+                        <!--[$newsitem.from|dateformatHuman:'%x':'2']-->.
                     <!--[/if]-->
                     <!--[if $newsitem.withcomm eq '1']-->
                     <br />
-                    <em><!--[gt text='No commenting']--></em>
+                    <!--[gt text='No comments currently posted.']-->
                     <!--[/if]-->
                 </td>
                 <td>
@@ -125,16 +125,16 @@
                 </td>
             </tr>
             <!--[foreachelse]-->
-            <tr class="z-admintableempty"><td colspan="<!--[if $enablecategorization]-->7<!--[else]-->6<!--[/if]-->"><!--[gt text='No articles found.']--></td></tr>
+            <tr class="z-admintableempty"><td colspan="<!--[if $enablecategorization]-->7<!--[else]-->6<!--[/if]-->"><!--[gt text='No articles currently in database.']--></td></tr>
             <!--[/foreach]-->
         </tbody>
     </table>
 
     <form class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='modify']-->" method="post">
         <fieldset>
-            <label for="directsid"><!--[gt text='Access an older article by its ID']-->:</label>
+            <label for="directsid"><!--[gt text='Access a past article via its ID']-->:</label>
             <input type="text" id="directsid" name="sid" value="" size="5" maxlength="8" />
-            <input name="submit" type="submit" value="<!--[gt text='Submit']-->" />
+            <input name="submit" type="submit" value="<!--[gt text='Go retrieve']-->" />
             <input name="reset" type="reset" value="<!--[gt text='Reset']-->" />
         </fieldset>
     </form>

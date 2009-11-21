@@ -196,7 +196,7 @@ function News_userapi_getall($args)
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
     if ($objArray === false) {
-        return LogUtil::registerError(__('Error! Could not load any articles.', $dom));
+        return LogUtil::registerError(__('Error! Could not retrieve any articles.', $dom));
     }
 
     // need to do this here as the category expansion code can't know the
@@ -284,7 +284,7 @@ function News_userapi_get($args)
         static $registeredCats;
         if (!isset($registeredCats)) {
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-                pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+                pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
             }
             $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         }
@@ -730,7 +730,7 @@ function News_userapi_getArticlePreformat($args)
         // Allowed to comment?
         if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
-            $postcomment = '<a href="'.$links['postcomment'].'">'.__('Comments?', $dom).'</a>';
+            $postcomment = '<a href="'.$links['postcomment'].'">'.__('Comments', $dom).'</a>';
             $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
         } else if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
                    SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
@@ -740,7 +740,7 @@ function News_userapi_getArticlePreformat($args)
 
     // Notes, if there are any
     if (isset($info['notes']) && !empty($info['notes'])) {
-        $notes = __f('Foot notes: %s', $info['notes'], $dom);
+        $notes = __f('Footnote: %s', $info['notes'], $dom);
     } else {
         $notes = '';
     }
@@ -904,7 +904,7 @@ function News_userapi_create($args)
     $args['comments'] = 0;
 
     if (!($obj = DBUtil::insertObject($args, 'news', 'sid'))) {
-        return LogUtil::registerError(__('Error! Creation attempt failed.', $dom));
+        return LogUtil::registerError(__('Error! Could not create new article.', $dom));
     }
 
     // update the from field to the same cr_date if it's null
@@ -912,7 +912,7 @@ function News_userapi_create($args)
         $obj = array('sid'  => $obj['sid'], 'from' => $obj['cr_date']);
 
         if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
-            LogUtil::registerError(__('Error! Update attempt failed.', $dom));
+            LogUtil::registerError(__('Error! Could not save your changes.', $dom));
         }
     }
 

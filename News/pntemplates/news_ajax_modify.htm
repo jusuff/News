@@ -2,7 +2,7 @@
 <!--[securityutil_checkpermission component='News::' instance="story[aid]::story[sid]" level='ACCESS_DELETE' assign='mayDelete']-->
 
 
-<!--[gt text='Edit News Article' assign='templatetitle']-->
+<!--[gt text='Edit news article' assign='templatetitle']-->
 
 <h2><!--[$templatetitle]-->: <!--[$title|pnvarprepfordisplay]--></h2>
 
@@ -18,23 +18,23 @@
         <!--[/if]-->
 
         <fieldset>
-            <legend><!--[gt text='Heading Info']--></legend>
+            <legend><!--[gt text='Title']--></legend>
 
             <div class="z-formrow">
-                <label for="news_title"><!--[gt text='Title']--></label>
+                <label for="news_title"><!--[gt text='Title text']--></label>
                 <input id="news_title" class="z-form-text" name="story[title]" type="text" size="32" maxlength="255" value="<!--[$title|pnvarprepfordisplay]-->" />
             </div>
 
             <div class="z-formrow">
-                <label for="news_urltitle"><!--[gt text='PermaLink URL title']--></label>
+                <label for="news_urltitle"><!--[gt text='Permalink URL']--></label>
                 <input id="news_urltitle" class="z-form-text" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
-                <em class="z-sub z-formnote"><!--[gt text='(Blank = auto-generate)']--></em>
+                <em class="z-sub z-formnote"><!--[gt text='(Automatically generated if left blank)']--></em>
             </div>
 
             <!--[if $enablecategorization]-->
             <div class="z-formrow">
                 <label><!--[gt text='Category']--></label>
-                <!--[gt text='Choose Category' assign='lblDef']-->
+                <!--[gt text='Choose category' assign='lblDef']-->
                 <!--[nocache]-->
                 <!--[foreach from=$catregistry key='property' item='category']-->
                 <!--[array_field_isset array=$__CATEGORIES__ field=$property assign='catExists']-->
@@ -52,63 +52,63 @@
             <!--[pnconfiggetvar name='multilingual' assign='multilingual']-->
             <!--[if $multilingual]-->
             <div class="z-formrow">
-                <label for="news_language"><!--[gt text='Language']--></label>
+                <label for="news_language"><!--[gt text='Language(s) for which article should be displayed']--></label>
                 <!--[languagelist id='news_language' name='story[language]' all=true installed=true selected=$language]-->
             </div>
             <!--[/if]-->
         </fieldset>
 
         <fieldset class="z-linear">
-            <legend><!--[gt text='Article Content']--></legend>
+            <legend><!--[gt text='Article']--></legend>
             <!--[if $formattedcontent eq 0]-->
             <div class="z-warningmsg"><!--[gt text='Permitted HTML tags']-->: <!--[allowedhtml]--></div>
             <!--[/if]-->
             <div class="z-formrow">
-                <label for="news_hometext"><!--[gt text='Lead page teaser']--></label>
+                <label for="news_hometext"><!--[gt text='Index page teaser text']--></label>
                 <textarea id="news_hometext" class="z-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-                <span id="news_hometext_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
+                <span id="news_hometext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
             </div>
 
             <!--[if $formattedcontent eq 0]-->
             <div class="z-formrow">
-                <label for="news_hometextcontenttype"><!--[gt text='Content format type']--></label>
+                <label for="news_hometextcontenttype"><!--[gt text='Index page teaser format']--></label>
                 <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
                     <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain text']--></option>
-                    <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted text']--></option>
+                    <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Text formatted with mark-up language']--></option>
                 </select>
             </div>
             <!--[/if]-->
 
             <div class="z-formrow">
-                <label for="news_bodytext"><!--[gt text='Article body']--></label>
+                <label for="news_bodytext"><!--[gt text='Article body text']--></label>
                 <textarea id="news_bodytext" class="z-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-                <span id="news_bodytext_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
+                <span id="news_bodytext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
             </div>
 
             <!--[if $formattedcontent eq 0]-->
             <div class="z-formrow">
-                <label for="news_bodytextcontenttype"><!--[gt text='Content format type']--></label>
+                <label for="news_bodytextcontenttype"><!--[gt text='Article body format']--></label>
                 <select id="news_bodytextcontenttype" name="story[bodytextcontenttype]">
                     <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain text']--></option>
-                    <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted text']--></option>
+                    <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Text formatted with mark-up language']--></option>
                 </select>
             </div>
             <!--[/if]-->
 
             <div class="z-formrow">
-                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Show footnote']--></a></label>
+                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Footnote']--></a></label>
                 <p id="news_notes_details">
                     <textarea id="news_notes" class="z-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-                    <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
+                    <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
                 </p>
             </div>
         </fieldset>
 
         <fieldset>
-            <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[gt text='Show Publishing Options']--></a></legend>
+            <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[gt text='Publishing options']--></a></legend>
             <div id="news_publication_details">
                 <div class="z-formrow">
-                    <label for="news_ihome"><!--[gt text='Publish on news lead page']--></label>
+                    <label for="news_ihome"><!--[gt text='Publish on news index page']--></label>
                     <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" <!--[if $ihome eq 0]-->checked="checked" <!--[/if]-->/>
                 </div>
                 <div class="z-formrow">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="z-formrow">
-                    <label for="news_withcomm"><!--[gt text='Allow commenting for this article']--></label>
+                    <label for="news_withcomm"><!--[gt text='Allow comments on this article']--></label>
                     <input id="news_withcomm" name="story[withcomm]" type="checkbox" value="1" <!--[if $withcomm eq 0]-->checked="checked" <!--[/if]-->/>
                 </div>
             </div>
@@ -141,10 +141,10 @@
         <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 
         <div class="z-formbuttons">
-            <a href="javascript:void(0);" onclick="editnews_save('update');"><!--[pnimg modname='core' src='button_ok.gif' set='icons/small' __alt='Update'  __title='Update']--></a>
-            <a href="javascript:void(0);" onclick="editnews_save('pending');"><!--[pnimg modname='core' src='folder_yellow.gif' set='icons/small' __alt='Set pending status'  __title='Set pending status']--></a>
+            <a href="javascript:void(0);" onclick="editnews_save('update');"><!--[pnimg modname='core' src='button_ok.gif' set='icons/small' __alt='Save'  __title='Save your changes']--></a>
+            <a href="javascript:void(0);" onclick="editnews_save('pending');"><!--[pnimg modname='core' src='folder_green.gif' set='icons/small' __alt='Mark as pending'  __title='Mark this article as pending']--></a>
             <!--[if $mayDelete]-->
-            <a href="javascript:void(0);" onclick="editnews_save('delete');"><!--[pnimg modname='core' src='editdelete.gif' set='icons/small' __alt='Delete'  __title='Delete']--></a>
+            <a href="javascript:void(0);" onclick="editnews_save('delete');"><!--[pnimg modname='core' src='editdelete.gif' set='icons/small' __alt='Delete'  __title='Delete this article']--></a>
             <!--[/if]-->
             <a href="javascript:void(0);" onclick="editnews_cancel();"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel']--></a>
             &nbsp;<img id="news_savenews" src="<!--[$baseurl]-->images/ajax/circle-ball-dark-antialiased.gif" alt="" />

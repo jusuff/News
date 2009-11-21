@@ -98,7 +98,7 @@ function News_user_new($args)
     if ($modvars['enablecategorization']) {
         // load the categories system
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $render->assign('catregistry', $catregistry);
@@ -211,11 +211,11 @@ function News_user_create($args)
     // Validate the input
     $validationerror = false;
     if ($item['action'] != 0 && empty($item['title'])) {
-        $validationerror = __f('Empty %s passed.', __('Title', $dom), $dom);
+        $validationerror = __f('Error! You did not enter a %s.', __('title', $dom), $dom);
     }
     // both text fields can't be empty
     if ($item['action'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
-        $validationerror = __f('Empty %s passed.', __('Article content', $dom), $dom);
+        $validationerror = __f('Error! You did not enter the minimum necessary %s.', __('article content', $dom), $dom);
     }
 
     // if the user has selected to preview the article we then route them back
@@ -246,7 +246,7 @@ function News_user_create($args)
 
     if ($sid != false) {
         // Success
-        LogUtil::registerStatus(__('Done! Article created.', $dom));
+        LogUtil::registerStatus(__('Done! Created new article.', $dom));
 /*
         // Notify the configured addresses of a new Pending Review article
         $pending_notif = pnModGetVar('News', 'pending_notif', false);
@@ -310,7 +310,7 @@ function News_user_view($args = array())
     // check if categorization is enabled
     if ($modvars['enablecategorization']) {
         if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryUtil | CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
         }
         // get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -353,9 +353,9 @@ function News_user_view($args = array())
 
     if ($items == false) {
         if ($modvars['enablecategorization'] && isset($catFilter)) {
-            LogUtil::registerStatus(__f('There are no articles published in the category %s', $catname, $dom));
+            LogUtil::registerStatus(__f('No articles currently published under the \'%s\' category.', $catname, $dom));
         } else {
-            LogUtil::registerStatus(__('No articles found.', $dom));
+            LogUtil::registerStatus(__('No articles currently published.', $dom));
         }
     }
 
@@ -511,7 +511,7 @@ function News_user_display($args)
     }
 
     if ($item === false) {
-        return LogUtil::registerError(__f('No such article found.', $dom), 404);
+        return LogUtil::registerError(__f('Error! No such article found.', $dom), 404);
     }
 
     // Explode the review into an array of seperate pages
@@ -719,7 +719,7 @@ function News_user_categorylist($args)
    
     if ($enablecategorization) {
         if (!Loader::loadClass ('CategoryRegistryUtil') || !Loader::loadClass ('CategoryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil | CategoryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil | CategoryUtil', $dom));
         }
         // Get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');

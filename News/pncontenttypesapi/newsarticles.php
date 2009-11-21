@@ -62,7 +62,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   function getDescription()
   {
       $dom = ZLanguage::getModuleDomain('News');
-      return __('Shows a specific number of news articles from one or all the categories available', $dom);
+      return __('Displays a specific number of news articles from one or all categories available', $dom);
   }
 
   function isTranslatable()
@@ -295,7 +295,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     }
     $catname = implode(' | ',$catnames);
     $output = '<h4>' .  DataUtil::formatForDisplayHTML($this->title) . '</h4>';
-    $output .= '<p>' . __f('News articles list of the <b>"%s"</b> category', $catname, $dom) . '</p>';
+    $output .= '<p>' . __f('News articles listed under the \'%s\' category', $catname, $dom) . '</p>';
     return $output;
   }
 
@@ -317,7 +317,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                  'titlewraptext' => '...',
                  'disphometext' => false,
                  'maxhometextlength' => 300,
-                 'hometextwraptext' => '['.__('read more', $dom).']',
+                 'hometextwraptext' => '['.__('Read more', $dom).']',
                  'dispuname' => false,
                  'dispdate' => true,
                  'dateformat' => '%x',
@@ -344,7 +344,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     if ($enablecategorization) {
         // load the categories system
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Unable to load class [%s]', 'CategoryRegistryUtil', $dom));
+            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
@@ -354,20 +354,20 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
 
     $showoptions = array(
         array('value' => 1, 'text' => __('All', $dom)),
-        array('value' => 2, 'text' => __('Lead page', $dom)),
-        array('value' => 3, 'text' => __('Non lead page', $dom))
+        array('value' => 2, 'text' => __('Index page', $dom)),
+        array('value' => 3, 'text' => __('Inner page', $dom))
     );
 
     $statusoptions = array(
         array('value' => 0, 'text' => __('Published', $dom)),
         array('value' => 1, 'text' => __('Rejected', $dom)),
-        array('value' => 2, 'text' => __('Pending Review', $dom)),
+        array('value' => 2, 'text' => __('Pending', $dom)),
         array('value' => 3, 'text' => __('Archived', $dom))
     );
 
     $orderoptions = array(
-        array('value' => 0, 'text' => __('News module setting', $dom)),
-        array('value' => 1, 'text' => __('Number of reads', $dom))
+        array('value' => 0, 'text' => __('News publisher setting', $dom)),
+        array('value' => 1, 'text' => __('Number of pageviews', $dom))
     );
 
     $render->assign('showoptions', $showoptions);

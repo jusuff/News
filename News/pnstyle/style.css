@@ -12,7 +12,7 @@
 
 /* News forms */
 .news_preview {
-  background-color: #fafafa;
+  background: url(../pnimages/bg_preview.png) #fafafa;
   margin: 1em 0;
   padding: 7px;
 }

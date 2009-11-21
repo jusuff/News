@@ -8,15 +8,15 @@
 <!--[pnpageaddvar name='javascript' value='javascript/ajax/dragdrop.js']-->
 <!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/Zikula.itemlist.js']-->
 <!--[/if]-->
-<!--[gt text='Edit News Article' assign='templatetitle']-->
+<!--[gt text='Edit news article' assign='templatetitle']-->
 
 <!--[include file='news_admin_menu.htm']-->
 
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = '<!--[gt text="#{chars} chars out of 65536"]-->';
-    var showpublicationoptions = '<!--[gt text="Show Publishing Options"]-->';
-    var hidepublicationoptions = '<!--[gt text="Hide Publishing Options"]-->';
+    var bytesused = '<!--[gt text="#{chars} characters out of 65,536"]-->';
+    var showpublicationoptions = '<!--[gt text="Publishing options"]-->';
+    var hidepublicationoptions = '<!--[gt text="Publishing options"]-->';
     <!--[if $enableattribution]-->
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
@@ -27,11 +27,12 @@
 </script>
 
 <div class="z-admincontainer">
-    <div class="z-adminpageicon"><!--[pnimg modname='core' src='edit.gif' set='icons/large' alt=$templatetitle]--></div>
 
     <!--[if $preview neq '']-->
     <div class="news_article news_preview" style="background-image: url(<!--[pnimg modname='News' src='bg_preview.png' retval='src']-->)"><!--[$preview]--></div>
     <!--[/if]-->
+
+    <div class="z-adminpageicon"><!--[pnimg modname='core' src='edit.gif' set='icons/large' alt=$templatetitle]--></div>
 
     <h2><!--[$templatetitle]--></h2>
 
@@ -45,23 +46,23 @@
             <!--[/if]-->
 
             <fieldset>
-                <legend><!--[gt text='Heading Info']--></legend>
+                <legend><!--[gt text='Title']--></legend>
 
                 <div class="z-formrow">
-                    <label for="news_title"><!--[gt text='Title']--></label>
+                    <label for="news_title"><!--[gt text='Title text']--></label>
                     <input id="news_title" name="story[title]" type="text" size="32" maxlength="255" value="<!--[$title|pnvarprepfordisplay]-->" />
                 </div>
 
                 <div class="z-formrow">
-                    <label for="news_urltitle"><!--[gt text='PermaLink URL title']--></label>
+                    <label for="news_urltitle"><!--[gt text='Permalink URL']--></label>
                     <input id="news_urltitle" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
-                    <em class="z-sub z-formnote"><!--[gt text='(Blank = auto-generate)']--></em>
+                    <em class="z-sub z-formnote"><!--[gt text='(Generated automatically if left blank)']--></em>
                 </div>
 
                 <!--[if $enablecategorization]-->
                 <div class="z-formrow">
                     <label><!--[gt text='Category']--></label>
-                    <!--[gt text='Choose Category' assign='lblDef']-->
+                    <!--[gt text='Choose category' assign='lblDef']-->
                     <!--[nocache]-->
                     <!--[foreach from=$catregistry key='property' item='category']-->
                     <!--[array_field_isset array=$__CATEGORIES__ field=$property assign='catExists']-->
@@ -86,58 +87,58 @@
             </fieldset>
 
             <fieldset class="z-linear">
-                <legend><!--[gt text='Article Content']--></legend>
+                <legend><!--[gt text='Article']--></legend>
 
                 <!--[if $formattedcontent eq 0]-->
                 <div class="z-warningmsg"><!--[gt text='Permitted HTML tags']-->: <!--[allowedhtml]--></div>
                 <!--[/if]-->
                 <div class="z-formrow">
-                    <label for="news_hometext"><!--[gt text='Lead page teaser']--></label>
+                    <label for="news_hometext"><!--[gt text='Index page teaser text']--></label>
                     <textarea id="news_hometext" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-                    <span id="news_hometext_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
+                    <span id="news_hometext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
                 </div>
 
                 <!--[if $formattedcontent eq 0]-->
                 <div class="z-formrow">
-                    <label for="news_hometextcontenttype"><!--[gt text='Content format type']--></label>
+                    <label for="news_hometextcontenttype"><!--[gt text='Index page teaser format']--></label>
                     <select id="news_hometextcontenttype" name="story[hometextcontenttype]">
                         <option value="0"<!--[if $hometextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain text']--></option>
-                        <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted text']--></option>
+                        <option value="1"<!--[if $hometextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Text formatted with mark-up language']--></option>
                     </select>
                 </div>
                 <!--[/if]-->
 
                 <div class="z-formrow">
-                    <label for="news_bodytext"><!--[gt text='Article body']--></label>
+                    <label for="news_bodytext"><!--[gt text='Article body text']--></label>
                     <textarea id="news_bodytext" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-                    <span id="news_bodytext_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
+                    <span id="news_bodytext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
                 </div>
 
                 <!--[if $formattedcontent eq 0]-->
                 <div class="z-formrow">
-                    <label for="news_bodytextcontenttype"><!--[gt text='Content format type']--></label>
+                    <label for="news_bodytextcontenttype"><!--[gt text='Article body format']--></label>
                     <select id="news_bodytextcontenttype" name="story[bodytextcontenttype]">
                         <option value="0"<!--[if $bodytextcontenttype eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Plain text']--></option>
-                        <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Formatted text']--></option>
+                        <option value="1"<!--[if $bodytextcontenttype eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Text formatted with mark-up language']--></option>
                     </select>
                 </div>
                 <!--[/if]-->
 
                 <div class="z-formrow">
-                    <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Show footnote']--></a></label>
+                    <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Footnote']--></a></label>
                     <p id="news_notes_details">
                         <textarea id="news_notes" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-                        <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65536 characters)']--></span>
+                        <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
                     </p>
                 </div>
             </fieldset>
 
             <fieldset>
-                <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[gt text='Show Publishing Options']--></a></legend>
+                <legend><a id="news_publication_collapse" href="javascript:void(0);"><!--[gt text='Publishing options']--></a></legend>
 
                 <div id="news_publication_details">
                     <div class="z-formrow">
-                        <label for="news_ihome"><!--[gt text='Publish on news lead page']--></label>
+                        <label for="news_ihome"><!--[gt text='Publish on news index page']--></label>
                         <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" <!--[if $ihome eq 0]-->checked="checked" <!--[/if]-->/>
                     </div>
                     <div class="z-formrow">
@@ -162,7 +163,7 @@
                         </div>
                     </div>
                     <div class="z-formrow">
-                        <label for="news_withcomm"><!--[gt text='Allow commenting for this article']--></label>
+                        <label for="news_withcomm"><!--[gt text='Allow comments on this article']--></label>
                         <input id="news_withcomm" name="story[withcomm]" type="checkbox" value="1" <!--[if $withcomm eq 0]-->checked="checked" <!--[/if]-->/>
                     </div>
                 </div>
@@ -174,7 +175,7 @@
                 <div id="news_attributes_details">
                     <div class="z-formrow">
                         <div class="itemlist_newitemdiv">
-                            <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='New article attribute']--> <!--[gt text='New article attribute']--></a><br />
+                            <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a><br />
                         </div>
                         <ul id="news_attributes" class="itemlist">
                             <!--[if isset($_Attributes__)]-->
@@ -190,7 +191,7 @@
                                     <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
                                 </span>
                                 <span class="itemlistcell width7">
-                                    <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete' ]--></button>
+                                    <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
                                 </span>
                             </li>
                             <!--[/foreach]-->
@@ -208,7 +209,7 @@
                                     <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                                 </span>
                                 <span class="itemlistcell width7">
-                                    <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete' ]--></button>
+                                    <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
                                 </span>
                             </li>
                         </ul>
@@ -218,15 +219,15 @@
             <!--[/if]-->
 
             <fieldset>
-                <legend><a id="news_meta_collapse" href="javascript:void(0);"><!--[gt text='Meta Data']--></a></legend>
+                <legend><a id="news_meta_collapse" href="javascript:void(0);"><!--[gt text='Meta data']--></a></legend>
                 <div id="news_meta_details">
                     <ul>
                         <!--[pnusergetvar name='uname' uid=$cr_uid assign='username']-->
-                        <li><!--[gt text='Created by %s' tag1=$username]--></li>
-                        <li><!--[gt text='Created on %s' tag1=$cr_date|pndate_format]--></li>
+                        <li><!--[gt text='Contributed by %s' tag1=$username]--></li>
+                        <li><!--[gt text='Contributed on %s' tag1=$cr_date|pndate_format]--></li>
                         <!--[pnusergetvar name='uname' uid=$lu_uid assign='username']-->
-                        <li><!--[gt text='Last update by %s' tag1=$username]--></li>
-                        <li><!--[gt text='Updated on %s' tag1=$lu_date|pndate_format]--></li>
+                        <li><!--[gt text='Last edited by %s' tag1=$username]--></li>
+                        <li><!--[gt text='Edited on %s' tag1=$lu_date|pndate_format]--></li>
                     </ul>
                 </div>
             </fieldset>
@@ -234,14 +235,14 @@
             <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 
             <div class="z-formbuttons">
-                <!--[pnbutton name='story[action]' value='0' __alt='Preview' __title='Preview' src='text_block.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='0' __alt='Preview' __title='Preview this article' src='agt_reload.gif' set='icons/small']-->
                 <!--[if $accessadd neq 1]-->
-                <!--[pnbutton name='story[action]' value='1' __alt='Submit' __title='Submit' src='button_ok.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='1' __alt='Save' __title='Save your changes' src='button_ok.gif' set='icons/small']-->
                 <!--[else]-->
-                <!--[pnbutton name='story[action]' value='2' __alt='Publish' __title='Publish' src='button_ok.gif' set='icons/small']-->
-                <!--[pnbutton name='story[action]' value='4' __alt='Pending' __title='Mark as pending' src='folder_yellow.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='2' __alt='Publish' __title='Publish this article' src='button_ok.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='4' __alt='Mark as pending' __title='Mark this article as pending' src='folder_green.gif' set='icons/small']-->
+                <!--[pnbutton name='story[action]' value='5' __alt='Archive' __title='Archive this article' src='folder_yellow.gif' set='icons/small']-->
                 <!--[pnbutton name='story[action]' value='3' __alt='Reject' __title='Reject this article' src='folder_red.gif' set='icons/small']-->
-                <!--[pnbutton name='story[action]' value='5' __alt='Archive' __title='Archive' src='folder_tar.gif' set='icons/small']-->
                 <!--[/if]-->
                 <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel']--></a>
             </div>

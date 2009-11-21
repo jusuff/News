@@ -3,54 +3,54 @@
 <!--[include file='news_admin_menu.htm']-->
 
 <div class="z-admincontainer">
-    <div class="z-adminpageicon"><!--[pnimg modname='core' src='configure.gif' set='icons/large' __alt='News Publisher Settings']--></div>
+    <div class="z-adminpageicon"><!--[pnimg modname='core' src='configure.gif' set='icons/large' __alt='Settings']--></div>
 
-    <h2><!--[gt text='News Publisher Settings']--></h2>
+    <h2><!--[gt text='Settings']--></h2>
 
     <form class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='updateconfig']-->" method="post" enctype="application/x-www-form-urlenpred">
         <div>
             <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
 
             <fieldset>
-                <legend><!--[gt text='Categories']--></legend>
+                <legend><!--[gt text='General settings']--></legend>
                 <div class="z-formrow">
-                    <label for="news_enablecategorization"><!--[gt text='Enable categorization']--></label>
+                    <label for="news_enableattribution"><!--[gt text='Enable article attributes']--></label>
+                    <input id="news_enableattribution" type="checkbox" name="enableattribution"<!--[if $enableattribution]--> checked="checked"<!--[/if]--> />
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend><!--[gt text='Category settings']--></legend>
+                <div class="z-formrow">
+                    <label for="news_enablecategorization"><!--[gt text='Enable categorisation']--></label>
                     <input id="news_enablecategorization" type="checkbox" name="enablecategorization"<!--[if $enablecategorization]--> checked="checked"<!--[/if]--> />
                 </div>
                 <div class="z-formrow">
-                    <label for="topicproperty"><!--[gt text='Category to use for legacy Topic template variables']--></label>
+                    <label for="topicproperty"><!--[gt text='Category to use for legacy \'Topics\' module template variables']--></label>
                     <!--[html_options id='topicproperty' name='topicproperty' options=$properties selected=$property]-->
                 </div>
                 <div class="z-formrow">
                     <label for="settings_catimagepath"><!--[gt text='Category image path']--></label>
                     <input id="settings_catimagepath" type="text" name="catimagepath" value="<!--[$catimagepath|pnvarprepfordisplay]-->" size="40" maxlength="80" />
-                    <div class="z-informationmsg z-formnote"><!--[gt text='Each category used within News can have an image associated with it. This image must be located in the category image path specified above. Within the Category administration panel, you can set the associated image by adding a category attribute "topic_image" with the name of the image.']--></div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend><!--[gt text='Article attributes']--></legend>
-                <div class="z-formrow">
-                    <label for="news_enableattribution"><!--[gt text='Enable attribution']--></label>
-                    <input id="news_enableattribution" type="checkbox" name="enableattribution"<!--[if $enableattribution]--> checked="checked"<!--[/if]--> />
+                    <div class="z-informationmsg z-formnote"><!--[gt text='Notice: You can associate an image with each article category. The image must be located in the category image path entered in \'Category image path\'. You must also go to the Categories manager in the site admin panel and then define the associated image. To do this, add a category attribute named \'topic_image\' to each article category, and then enter the associated image path and name.']--></div>
                 </div>
             </fieldset>
 
             <fieldset>
                 <legend><!--[gt text='Display settings']--></legend>
                 <div class="z-formrow">
-                    <label for="settings_storyorder"><!--[gt text='Order by']--></label>
+                    <label for="settings_storyorder"><!--[gt text='Order article listings by']--></label>
                     <select id="settings_storyorder" name="storyorder" size="1">
                         <option value="0"<!--[if $storyorder eq 0]--> selected="selected"<!--[/if]-->><!--[gt text='Article ID']--></option>
-                        <option value="1"<!--[if $storyorder eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Article Date/Time']--></option>
+                        <option value="1"<!--[if $storyorder eq 1]--> selected="selected"<!--[/if]-->><!--[gt text='Article date/time']--></option>
                     </select>
                 </div>
                 <div class="z-formrow">
-                    <label for="settings_storyhome"><!--[gt text='Number of articles on News lead page']--></label>
+                    <label for="settings_storyhome"><!--[gt text='Number of articles in news index page']--></label>
                     <input id="settings_storyhome" type="text" name="storyhome" value="<!--[$storyhome|pnvarprepfordisplay]-->" size="5" maxlength="5" />
                 </div>
                 <div class="z-formrow">
-                    <label for="news_itemsperpage"><!--[gt text='Number of articles in news index']--></label>
+                    <label for="news_itemsperpage"><!--[gt text='Number of articles in archive page']--></label>
                     <input id="news_itemsperpage" type="text" name="itemsperpage" size="3" value="<!--[$itemsperpage|pnvarprepfordisplay]-->" />
                 </div>
                 <div class="z-formrow">
@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class="z-formrow">
-                    <label for="news_enableajaxedit"><!--[gt text='Enable inline editing of articles with AJAX']--></label>
+                    <label for="news_enableajaxedit"><!--[gt text='Enable in-line editing of articles via JavaScript/Ajax controls']--></label>
                     <input id="news_enableajaxedit" type="checkbox" name="enableajaxedit"<!--[if $enableajaxedit]--> checked="checked"<!--[/if]--> />
                 </div>
             </fieldset>
@@ -71,36 +71,36 @@
             <!--[pnajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true nobehaviour=true noscriptaculous=true]-->
             <fieldset>
                 <legend><!--[gt text='Permalinks']--></legend>
-                <p class="z-informationmsg"><!--[gt text='Select a predefined PermaLink format, or choose your own']--></p>
+                <p class="z-informationmsg"><!--[gt text='You can select a pre-defined permalink format, or define your custom format.']--></p>
                 <input id="news_permalink_customformat" name="customformat" type="hidden"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
                 <div class="z-formrow">
-                    <label><!--[gt text='Date and name-based']--></label>
+                    <label><!--[gt text='Format based on date and name']--></label>
                     <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
-                    <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[gt text='your-story-title']-->/</span>
+                    <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[gt text='your-article-title']-->/</span>
                 </div>
                 <div class="z-formrow">
-                    <label><!--[gt text='Numeric']--></label>
+                    <label><!--[gt text='Numeric format']--></label>
                     <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%"<!--[if $permalinkformat eq '%storyid%']--> checked="checked"<!--[/if]--> />
                     <span><!--[$baseurl]--><!--[pnmodgetinfo modname='News' info='displayname']-->/123</span>
                 </div>
                 <div class="z-formrow">
-                    <label><!--[gt text='Custom']--></label>
+                    <label><!--[gt text='Custom format']--></label>
                     <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" <!--[if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
                 </div>
                 <div class="z-formrow">
-                    <label><!--[gt text='Custom structure']--></label>
+                    <label><!--[gt text='Custom format definition']--></label>
                     <input id="news_permalink_format" onclick="news_permalink_onclick()" name="permalinkstructure" type="text"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
-                    <div><!--[gt text='Reminder: A custom structure must contain either %storyid% or %storytitle%.']--></div>
+                    <div><!--[gt text='Notice: A custom format definition must contain at least either \'%storyid%\' or \'%storytitle%\', in order to be able to identify the article.']--></div>
                 </div>
-                <h4><!--[gt text='Possible values for custom structure']--></h4>
+                <h4><!--[gt text='Acceptable values for use in custom format definition:']--></h4>
                 <ul>
-                    <li>%year% - <!--[gt text='Year (including century)']--></li>
-                    <li>%monthnum% - <!--[gt text='Month number (1-12)']--></li>
-                    <li>%monthname% - <!--[gt text='Month name (jan-dec)']--></li>
+                    <li>%year% - <!--[gt text='Year of publication (including century numerals)']--></li>
+                    <li>%monthnum% - <!--[gt text='Month of publication, as a number (ergo 1 to 12)']--></li>
+                    <li>%monthname% - <!--[gt text='Month of publication as a name (ergo January to December)']--></li>
                     <li>%day% - <!--[gt text='Day']--></li>
-                    <li>%storytitle% - <!--[gt text='Article Title']--></li>
+                    <li>%storytitle% - <!--[gt text='Article title']--></li>
                     <li>%storyid% - <!--[gt text='Article ID']--> </li>
-                    <li>%category% - <!--[gt text='Category']--> </li>
+                    <li>%category% - <!--[gt text='Article category']--> </li>
                 </ul>
             </fieldset>
             <!--[/if]-->
@@ -108,7 +108,7 @@
             <!--[pnmodcallhooks hookobject='module' hookaction='modifyconfig' hookid='News' module='News']-->
 
             <div class="z-formbuttons">
-                <!--[pnbutton src='button_ok.gif' set='icons/small' __alt='OK' __title='OK']-->
+                <!--[pnbutton src='button_ok.gif' set='icons/small' __alt='Save' __title='Save']-->
                 <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel'  __title='Cancel']--></a>
             </div>
         </div>
