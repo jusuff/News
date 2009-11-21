@@ -52,7 +52,7 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
         if ($niceval == 1) {
             $res = __f('%s days ago', abs($diff['d']), $dom);
         } elseif ($niceval < 4 && $diff['d'] == -1) {
-            $res = __('Yesterday', $dom);
+            $res = __('yesterday', $dom);
         } else {
             $res = DateUtil::formatDatetime($string, $format);
         }
@@ -60,7 +60,7 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
         if ($niceval > 2) {
             $res = DateUtil::formatDatetime($string, $format);
         } elseif ($diff['d'] == 1) {
-            $res = __('Tomorrow', $dom);
+            $res = __('tomorrow', $dom);
         } else {
             $res = __f('%s days from now', $diff['d'], $dom);
         }
