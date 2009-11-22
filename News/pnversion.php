@@ -29,4 +29,4 @@ $modversion['official']    = 1;
 $modversion['author']      = 'Mark West, Mateo Tibaquira, Erik Spaan';
 $modversion['contact']     = 'http://code.zikula.org/news';
 
-$modversion['securityschema'] = array('News::' => 'Author ID::Story ID');
+$modversion['securityschema'] = array('News::' => 'Contributor ID::Article ID');
