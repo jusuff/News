@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
 * Zikula Application Framework
 *
@@ -42,6 +42,10 @@ function smarty_modifier_news_getstatustext($status)
 
         case 3:
             $output = __('Archived', $dom);
+            break;
+
+        case 4:
+            $output = __('Draft', $dom);
             break;
     }
 

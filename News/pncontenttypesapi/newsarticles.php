@@ -362,7 +362,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         array('value' => 0, 'text' => __('Published', $dom)),
         array('value' => 1, 'text' => __('Rejected', $dom)),
         array('value' => 2, 'text' => __('Pending', $dom)),
-        array('value' => 3, 'text' => __('Archived', $dom))
+        array('value' => 3, 'text' => __('Archived', $dom)) /*,
+        array('value' => 4, 'text' => __('Draft', $dom)) */
     );
 
     $orderoptions = array(

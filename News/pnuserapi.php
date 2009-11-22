@@ -837,6 +837,7 @@ function News_userapi_create($args)
         case 3: // rejected
         case 4: // pending
         case 5: // archived
+        case 6: // draft
             $args['published_status'] = $args['action']-2;
             break;
     }
