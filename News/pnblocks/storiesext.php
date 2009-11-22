@@ -44,8 +44,7 @@
  * - Topic related properties are now available in the row template with a commented out default use
  * Version 2.6
  * - Ticket #12 fixed, queued articles being displayed wrongfully.
- *
- * @version 2.6 for Zikula 1.1
+ * Version 2.6 is merged into News 2.4
  */
 
 
