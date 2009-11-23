@@ -154,8 +154,8 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'catimagepath', pnConfigGetVar('tipath'));
             pnModSetVar('News', 'enableajaxedit', false);
             // drop old legacy columns
-            DBUtil::dropColumn('stories', $prefix.'_comments');
-            DBUtil::dropColumn('stories', $prefix.'_themeoverride');
+            DBUtil::dropColumn('stories', 'pn_comments');
+            DBUtil::dropColumn('stories', 'pn_themeoverride');
             // clear compiled templates and News cache (see #74)
             pnModAPIFunc('pnRender', 'user', 'clear_compiled');
             pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
