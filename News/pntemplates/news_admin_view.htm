@@ -97,13 +97,13 @@
                     <!--[if $newsitem.published_status eq 2]--><strong><em> - <!--[gt text='Pending']--></em></strong><!--[/if]-->
                     <!--[if $newsitem.published_status eq 4]--><strong><em> - <!--[gt text='Draft']--></em></strong><!--[/if]-->
                 </td>
-                <td><!--[$newsitem.informant|pnvarprepfordisplay]--></td>
+                <td><!--[$newsitem.contributor|pnvarprepfordisplay]--></td>
                 <!--[if $enablecategorization]-->
                 <td>
                     <!--[assignedcategorieslist item=$newsitem]-->
                 </td>
                 <!--[/if]-->
-                <td><!--[$newsitem.ihome|pnvarprepfordisplay]--></td>
+                <td><!--[$newsitem.hideonindex|pnvarprepfordisplay]--></td>
                 <td>
                     <!--[if $newsitem.published_status eq '2']-->
                         <!--[gt text='Last edited on']--> 
@@ -112,7 +112,7 @@
                         <!--[if $newsitem.infuture]--><!--[gt text='Scheduled for']--><!--[else]--><!--[$newsitem.published_status|news_getstatustext]--><!--[/if]--> 
                         <!--[$newsitem.from|dateformatHuman:'%x':'2']-->.
                     <!--[/if]-->
-                    <!--[if $newsitem.withcomm eq '1']-->
+                    <!--[if $newsitem.disallowcomments eq '1']-->
                     <br />
                     <em><!--[gt text='No comments allowed.']--></em>
                     <!--[/if]-->

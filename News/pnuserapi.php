@@ -110,8 +110,8 @@ function News_userapi_getall($args)
         $queryargs[] = "$news_column[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
     }
 
-    if (isset($args['ihome'])) {
-        $queryargs[] = "$news_column[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
+    if (isset($args['hideonindex'])) {
+        $queryargs[] = "$news_column[hideonindex] = '" . DataUtil::formatForStore($args['hideonindex']) . "'";
     }
 
     // Check for specific date interval
@@ -369,8 +369,8 @@ function News_userapi_countitems($args)
         $queryargs[] = "$news_column[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
     }
 
-    if (isset($args['ihome'])) {
-        $queryargs[] = "$news_column[ihome] = '" . DataUtil::formatForStore($args['ihome']) . "'";
+    if (isset($args['hideonindex'])) {
+        $queryargs[] = "$news_column[hideonindex] = '" . DataUtil::formatForStore($args['hideonindex']) . "'";
     }
 
     // Check for specific date interval
@@ -456,7 +456,7 @@ function News_userapi_incrementreadcount($args)
 function News_userapi_getArticleLinks($info)
 {
     // Allowed to comment?
-    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
+    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
         $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
         if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
@@ -503,7 +503,7 @@ function News_userapi_getArticleLinks($info)
         }
     }
 
-    $author = $info['informant'];
+    $author = $info['contributor'];
     $profileModule = pnConfigGetVar('profilemodule', '');
     if (!empty($profileModule) && pnModAvailable($profileModule)) {
         $author = pnModURL($profileModule, 'user', 'view', array('uname' => $author));
@@ -545,11 +545,11 @@ function News_userapi_getArticleInfo($info)
     // Work out name of story submitter
     if ($info['aid'] == 0) {
         $anonymous = pnConfigGetVar('anonymous');
-        if (empty($info['informant'])) {
-            $info['informant'] = $anonymous;
+        if (empty($info['contributor'])) {
+            $info['contributor'] = $anonymous;
         }
     } else {
-        $info['informant'] = pnUserGetVar('uname', $info['aid']);
+        $info['contributor'] = pnUserGetVar('uname', $info['aid']);
     }
 
     // Change the __CATEGORIES__ field to a more usable name
@@ -664,7 +664,7 @@ function News_userapi_getArticleInfo($info)
     unset($info['format_type']);
 
     // Check for comments
-    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
+    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
         $info['commentcount'] = pnModAPIFunc('EZComments', 'user', 'countitems',
                                              array('mod' => 'News',
                                                    'objectid' => $info['sid'],
@@ -719,7 +719,7 @@ function News_userapi_getArticlePreformat($args)
     $postcomment = '';
     $comment = '';
     $commentlink = '';
-    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['withcomm'] == 0) {
+    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
         // Work out how to say 'comment(s)(?)' correctly
         if ($info['commentcount'] == 0) {
             $comment = __('Comments?', $dom);
@@ -864,18 +864,18 @@ function News_userapi_create($args)
         $args['urltitle'] = strtolower(DataUtil::formatPermalink($args['title']));
     }
 
-    // The ihome table is inverted from what would seem logical
-    if (!isset($args['ihome']) || $args['ihome'] == 1) {
-        $args['ihome'] = 0;
+    // The hideonindex table is inverted from what would seem logical
+    if (!isset($args['hideonindex']) || $args['hideonindex'] == 1) {
+        $args['hideonindex'] = 0;
     } else {
-        $args['ihome'] = 1;
+        $args['hideonindex'] = 1;
     }
 
-    // Invert the value of withcomm, 1 in db means no comments allowed
-    if (!isset($args['withcomm']) || $args['withcomm'] == 1) {
-        $args['withcomm'] = 0;
+    // Invert the value of disallowcomments, 1 in db means no comments allowed
+    if (!isset($args['disallowcomments']) || $args['disallowcomments'] == 1) {
+        $args['disallowcomments'] = 0;
     } else {
-        $args['withcomm'] = 1;
+        $args['disallowcomments'] = 1;
     }
 
     // check the publishing date options
@@ -892,10 +892,10 @@ function News_userapi_create($args)
 
     // Work out name of story submitter and approver
     $args['approver'] = 0;
-    if (!pnUserLoggedIn() && empty($args['informant'])) {
-        $args['informant'] = pnConfigGetVar('anonymous');
+    if (!pnUserLoggedIn() && empty($args['contributor'])) {
+        $args['contributor'] = pnConfigGetVar('anonymous');
     } else {
-        $args['informant'] = pnUserGetVar('uname');
+        $args['contributor'] = pnUserGetVar('uname');
         if ($args['published_status'] == 0) {
             $args['approver'] = SessionUtil::getVar('uid');
         }

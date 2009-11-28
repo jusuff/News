@@ -194,7 +194,7 @@ function News_admin_modify($args)
  * @param int 'extendedtextcontenttype' the content type of the body text
  * @param string 'notes' any administrator notes
  * @param int 'published_status' the published status of the item
- * @param int 'ihome' publish the article in the homepage
+ * @param int 'hideonindex' hide the article on the index page
  * @author Mark West
  * @return bool true
  */
@@ -286,8 +286,8 @@ function News_admin_update($args)
                           'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
                           'bodytextcontenttype' => $story['bodytextcontenttype'],
                           'notes' => $story['notes'],
-                          'ihome' => isset($story['ihome']) ? $story['ihome'] : 0,
-                          'withcomm' => isset($story['withcomm']) ? $story['withcomm'] : 0,
+                          'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
+                          'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                           'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
                           'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
@@ -525,10 +525,10 @@ function News_admin_view($args)
             $item['status'] = __('Unknown', $dom);
         }
 
-        if ($item['ihome'] == 0) {
-            $item['ihome'] = __('Yes', $dom);
+        if ($item['hideonindex'] == 0) {
+            $item['hideonindex'] = __('Yes', $dom);
         } else {
-            $item['ihome'] = __('No', $dom);
+            $item['hideonindex'] = __('No', $dom);
         }
 
         $item['infuture'] = DateUtil::getDatetimeDiff_AsField($item['from'], DateUtil::getDatetime(), 6) < 0;

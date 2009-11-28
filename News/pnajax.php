@@ -102,7 +102,7 @@ function News_ajax_modify()
  * @param int 'extendedtextcontenttype' the content type of the body text
  * @param string 'notes' any administrator notes
  * @param int 'published_status' the published status of the item
- * @param int 'ihome' publish the article in the homepage
+ * @param int 'hideonindex' hide the article on the index page
  * @param string 'action' the action to perform, either 'update', 'delete' or 'pending'
  * @author Mark West
  * @author Frank Schummertz
@@ -145,8 +145,8 @@ function News_ajax_update()
                                   'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
                                   'bodytextcontenttype' => $story['bodytextcontenttype'],
                                   'notes' => DataUtil::convertFromUTF8($story['notes']),
-                                  'ihome' => isset($story['ihome']) ? $story['ihome'] : 1,
-                                  'withcomm' => isset($story['withcomm']) ? $story['withcomm'] : 0,
+                                  'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
+                                  'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                                   'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
                                   'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,

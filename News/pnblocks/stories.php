@@ -74,14 +74,14 @@ function News_storiesblock_display($blockinfo)
     switch ($vars['storiestype'])
     {
         case 1:
-            // non lead page
-            $apiargs['ihome'] = 1;
+            // non index page articles
+            $apiargs['hideonindex'] = 1;
             break;
         case 3:
-            // lead page articles
-            $apiargs['ihome'] = 0;
+            // index page articles
+            $apiargs['hideonindex'] = 0;
             break;
-            // all - doesn't need ihome
+            // all - doesn't need hideonindex
     }
 
     $apiargs['numitems'] = $vars['limit'];

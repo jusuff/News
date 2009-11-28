@@ -21,7 +21,7 @@
 function News_user_main()
 {
     $args = array(
-        'ihome' => 0,
+        'hideonindex' => 0,
         'itemsperpage' => pnModGetVar('News', 'storyhome', 10)
     );
     return News_user_view($args);
@@ -66,9 +66,9 @@ function News_user_new($args)
         $item['bodytext'] = '';
         $item['bodytextcontenttype'] = '';
         $item['notes'] = '';
-        $item['ihome'] = 1;
+        $item['hideonindex'] = 1;
         $item['language'] = '';
-        $item['withcomm'] = 1;
+        $item['disallowcomments'] = 1;
         $item['from'] = time();
         $item['to'] = time();
         $item['tonolimit'] = 1;
@@ -145,7 +145,7 @@ function News_user_new($args)
  * @param int 'bodytextcontenttype' the content type of the body text
  * @param string 'notes' any administrator notes
  * @param int 'published_status' the published status of the item
- * @param int 'ihome' publish the article in the homepage
+ * @param int 'hideonindex' hide the article on the index page
  * @return bool true
  */
 function News_user_create($args)
@@ -166,8 +166,8 @@ function News_user_create($args)
                   'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
                   'bodytextcontenttype' => $story['bodytextcontenttype'],
                   'notes' => $story['notes'],
-                  'ihome' => isset($story['ihome']) ? $story['ihome'] : 0,
-                  'withcomm' => isset($story['withcomm']) ? $story['withcomm'] : 0,
+                  'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
+                  'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                   'from' => isset($story['fromHour']) ? mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']) : null,
                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                   'to' => isset($story['toHour']) ? mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']) : null,
@@ -178,8 +178,8 @@ function News_user_create($args)
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD))) {
         $item['notes'] = '';
-        $item['ihome'] = 0;
-        $item['withcomm'] = 0;
+        $item['hideonindex'] = 0;
+        $item['disallowcomments'] = 0;
         $item['from'] = null;
         $item['tonolimit'] = true;
         $item['to'] = null;
@@ -302,8 +302,8 @@ function News_user_view($args = array())
     // work out page size from page number
     $startnum = (($page - 1) * $itemsperpage) + 1;
 
-    // default ihome argument
-    $args['ihome'] = isset($args['ihome']) ? (int)$args['ihome'] : null;
+    // default hideonindex argument
+    $args['hideonindex'] = isset($args['hideonindex']) ? (int)$args['hideonindex'] : null;
 
     $lang = ZLanguage::getLanguageCode();
 
@@ -346,7 +346,7 @@ function News_user_view($args = array())
                           array('startnum' => $startnum,
                                 'numitems' => $itemsperpage,
                                 'status' => 0,
-                                'ihome' => $args['ihome'],
+                                'hideonindex' => $args['hideonindex'],
                                 'filterbydate' => true,
                                 'category' => isset($catFilter) ? $catFilter : null,
                                 'catregistry' => isset($catregistry) ? $catregistry : null));
@@ -377,9 +377,9 @@ function News_user_view($args = array())
     // Loop through each item and display it
     foreach ($items as $item)
     {
-        // display if it's published and the ihome match (if set)
+        // display if it's published and the hideonindex match (if set)
         if (($item['published_status'] == 0) &&
-           (!isset($args['ihome']) || $item['ihome'] == $args['ihome'])) {
+           (!isset($args['hideonindex']) || $item['hideonindex'] == $args['hideonindex'])) {
 
             // $info is array holding raw information.
             // Used below and also passed to the theme - jgm
@@ -417,7 +417,7 @@ function News_user_view($args = array())
     $render->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', 
                                                               array('status' => 0,
                                                                     'filterbydate' => true,
-                                                                    'ihome' => isset($args['ihome']) ? $args['ihome'] : null,
+                                                                    'hideonindex' => isset($args['hideonindex']) ? $args['hideonindex'] : null,
                                                                     'category' => isset($catFilter) ? $catFilter : null)),
                                    'itemsperpage' => $itemsperpage));
 

@@ -73,7 +73,7 @@ function News_bigblock_display($blockinfo)
     // call the API
     $articles = pnModAPIFunc('News', 'user', 'getall',
                              array('tdate' => $tdate,
-                                   'ihome' => 0,
+                                   'hideonindex' => 0,
                                    'order' => 'counter',
                                    'status' => 0,
                                    'numitems' => 1));

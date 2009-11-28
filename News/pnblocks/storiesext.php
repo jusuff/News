@@ -206,13 +206,13 @@ height:50px;
     $apiargs = array();
     switch ($vars['show'])
     {
-        case 3: // non lead page articles
-            $apiargs['ihome'] = 1;
+        case 3: // non index page articles
+            $apiargs['hideonindex'] = 1;
             break;
-        case 2: // lead page articles
-            $apiargs['ihome'] = 0;
+        case 2: // index page articles
+            $apiargs['hideonindex'] = 0;
             break;
-        // all - doesn't need ihome 
+        // all - doesn't need hideonindex 
     }
     $apiargs['numitems'] = $vars['limit']; // Nr of articles to obtain
     $apiargs['status'] = $vars['status']; // Published status

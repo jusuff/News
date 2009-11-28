@@ -70,7 +70,7 @@ function News_pastblock_display($blockinfo)
 
     // call the API
     $articles = pnModAPIFunc('News', 'user', 'getall',
-                             array('ihome'    => 0,
+                             array('hideonindex'    => 0,
                                    'order'    => 'from',
                                    'status'   => 0,
                                    'startnum' => $storyhome,

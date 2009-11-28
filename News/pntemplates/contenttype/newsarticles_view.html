@@ -44,7 +44,7 @@
 <p><!--[gt text='No articles published recently.']--></p>
 <!--[/if]-->
 
-<!--[securityutil_checkpermission component='Stories::Story' instance='::' level=ACCESS_COMMENT assign='submitauth']-->
+<!--[securityutil_checkpermission component='News::' instance='::' level=ACCESS_COMMENT assign='submitauth']-->
 <!--[if $linktosubmit && $submitauth]-->
 <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[pnimg modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit an article']--><!--[gt text='Submit an article']--></a>
 <!--[/if]-->

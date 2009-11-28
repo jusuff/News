@@ -40,7 +40,7 @@
         <div>
             <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
             <!--[if $accessadd neq 1]-->
-            <input type="hidden" name="story[ihome]" value="1" />
+            <input type="hidden" name="story[hideonindex]" value="1" />
             <input type="hidden" name="story[notes]" value="" />
             <!--[/if]-->
             <!--[if $formattedcontent eq 1]-->
@@ -139,8 +139,8 @@
 
                 <div id="news_publication_details">
                     <div class="z-formrow">
-                        <label for="news_ihome"><!--[gt text='Publish on news index page']--></label>
-                        <input id="news_ihome" name="story[ihome]" type="checkbox" value="1" <!--[if $ihome eq 1]-->checked="checked" <!--[/if]-->/>
+                        <label for="news_hideonindex"><!--[gt text='Publish on news index page']--></label>
+                        <input id="news_hideonindex" name="story[hideonindex]" type="checkbox" value="1" <!--[if $hideonindex eq 1]-->checked="checked" <!--[/if]-->/>
                     </div>
                     <div class="z-formrow">
                         <label for="news_unlimited"><!--[gt text='No time limit']--></label>
@@ -164,8 +164,8 @@
                         </div>
                     </div>
                     <div class="z-formrow">
-                        <label for="news_withcomm"><!--[gt text='Allow comments on this article']--></label>
-                        <input id="news_withcomm" name="story[withcomm]" type="checkbox" value="1" <!--[if $withcomm eq 1]-->checked="checked" <!--[/if]-->/>
+                        <label for="news_disallowcomments"><!--[gt text='Allow comments on this article']--></label>
+                        <input id="news_disallowcomments" name="story[disallowcomments]" type="checkbox" value="1" <!--[if $disallowcomments eq 1]-->checked="checked" <!--[/if]-->/>
                     </div>
                 </div>
             </fieldset>
@@ -225,17 +225,39 @@
             <!--[/if]-->
 
             <div class="z-formbuttons">
-                <!--[pnbutton name='story[action]' value='0' __alt='Preview' __title='Preview this article' src='agt_reload.gif' set='icons/small']-->
+            <div id="news-buttons">
+                <button type="submit" name="story[action]" value="0" __title="Preview this article"><!--[pnimg src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview'  __title='Preview this article']--><!--[gt text='Preview']--></button>
+                <!--[* pnbutton name='story[action]' value='0' __alt='Preview' __title='Preview this article' src='agt_reload.gif' set='icons/small' *]-->
+
                 <!--[if $accessadd neq 1]-->
-                <!--[pnbutton name='story[action]' value='1' __alt='Submit' __title='Submit this article' src='button_ok.gif' set='icons/small']-->
+
+                <button class="positive" type="submit" name="story[action]" value="1" __title="Submit this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit'  __title='Submit this article' ]--><!--[gt text='Submit']--></button>
+                <!--[* pnbutton name='story[action]' value='1' __alt='Submit' __title='Submit this article' src='button_ok.gif' set='icons/small' *]-->
+
                 <!--[else]-->
-                <!--[pnbutton name='story[action]' value='6' __alt='Save as Draft' __title='Save as draft article' src='folder_txt.gif' set='icons/small']-->
-                <!--[pnbutton name='story[action]' value='2' __alt='Publish' __title='Publish this article' src='button_ok.gif' set='icons/small']-->
-                <!--[pnbutton name='story[action]' value='4' __alt='Pending' __title='Mark this article as pending' src='folder_green.gif' set='icons/small']-->
-                <!--[pnbutton name='story[action]' value='5' __alt='Archive' __title='Archive this article' src='folder_yellow.gif' set='icons/small']-->
-                <!--[pnbutton name='story[action]' value='3' __alt='Reject' __title='Reject this article' src='fileclose.gif' set='icons/small']-->
+
+                <button type="submit" name="story[action]" value="6" __title="Save this article as draft"><!--[pnimg src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as Draft'  __title='Save this article as draft']--><!--[gt text='Save as draft']--></button>
+                <!--[* pnbutton name='story[action]' value='6' __alt='Save as Draft' __title='Save as draft article' src='folder_txt.gif' set='icons/small' *]-->
+
+                <button class="positive" type="submit" name="story[action]" value="2" __title="Publish this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' ]--><!--[gt text='Publish']--></button>
+                <!--[* pnbutton name='story[action]' value='2' __alt='Publish' __title='Publish this article' src='button_ok.gif' set='icons/small' *]-->
                 <!--[/if]-->
-                <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/small' __alt='Cancel' __title='Cancel']--></a>
+                <a href="<!--[pnmodurl modname='News' type='admin' func='view']-->" class="negative"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>
+            </div>
+            </div>
+            <div class="z-formbuttons">
+            <div id="news-buttons">
+                <!--[if $accessadd eq 1]-->
+                <button type="submit" name="story[action]" value="4" __title="Mark this article as pending"><!--[pnimg src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending'  __title='Mark this article as pending' ]--><!--[gt text='Pending']--></button>
+                <!--[* pnbutton name='story[action]' value='4' __alt='Pending' __title='Mark this article as pending' src='folder_green.gif' set='icons/small' *]-->
+
+                <button type="submit" name="story[action]" value="5" __title="Archive this article"><!--[pnimg src='folder_yellow.gif' modname='core' set='icons/extrasmall' __alt='Archive'  __title='Archive this article' ]--><!--[gt text='Archive']--></button>
+                <!--[* pnbutton name='story[action]' value='5' __alt='Archive' __title='Archive this article' src='folder_yellow.gif' set='icons/small' *]-->
+
+                <button class="negative" type="submit" name="story[action]" value="3" __title="Reject this article"><!--[pnimg src='locked.gif' modname='core' set='icons/extrasmall' __alt='Reject'  __title='Reject this article' ]--><!--[gt text='Reject']--></button>
+                <!--[* pnbutton name='story[action]' value='3' __alt='Reject' __title='Reject this article' src='locked.gif' set='icons/small' *]-->
+                <!--[/if]-->
+            </div>
             </div>
         </div>
     </form>

@@ -67,7 +67,7 @@ function News_adminapi_delete($args)
  * @param int $args['bodytextcontenttype'] the content type of the body text
  * @param string $args['notes'] any administrator notes
  * @param int $args['published_status'] the published status of the item
- * @param int $args['ihome'] publish the article in the homepage
+ * @param int $args['hideonindex'] hide the article on the index page
  * @return bool true on update success, false on failiure
  */
 function News_adminapi_update($args)
@@ -128,18 +128,18 @@ function News_adminapi_update($args)
         $args['urltitle'] = strtolower(DataUtil::formatPermalink($args['title']));
     }
 
-    // The ihome table is inverted from what would seem logical
-    if (!isset($args['ihome']) || $args['ihome'] == 1) {
-        $args['ihome'] = 0;
+    // The hideonindex table is inverted from what would seem logical
+    if (!isset($args['hideonindex']) || $args['hideonindex'] == 1) {
+        $args['hideonindex'] = 0;
     } else {
-        $args['ihome'] = 1;
+        $args['hideonindex'] = 1;
     }
 
-    // Invert the value of withcomm, 1 in db means no comments allowed
-    if (!isset($args['withcomm']) || $args['withcomm'] == 1) {
-        $args['withcomm'] = 0;
+    // Invert the value of disallowcomments, 1 in db means no comments allowed
+    if (!isset($args['disallowcomments']) || $args['disallowcomments'] == 1) {
+        $args['disallowcomments'] = 0;
     } else {
-        $args['withcomm'] = 1;
+        $args['disallowcomments'] = 1;
     }
 
     // check the publishing date options

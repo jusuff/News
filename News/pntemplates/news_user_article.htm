@@ -11,7 +11,7 @@
 <!--[pnmodurl modname='News' func='display' sid=$info.sid assign='returnurl']-->
 <!--[pnmodcallhooks hookobject='item' hookaction='display' hookid=$info.sid module='News' returnurl=$returnurl owneruid=$info.cr_uid implode=false]-->
 <!--[foreach from=$hooks key='hookname' item='hook']-->
-<!--[if $hookname neq 'EZComments' or $info.withcomm eq 0]-->
+<!--[if $hookname neq 'EZComments' or $info.disallowcomments eq 0]-->
 <!--[$hook]-->
 <!--[/if]-->
 <!--[/foreach]-->

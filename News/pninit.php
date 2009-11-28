@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Zikula Application Framework
  *
@@ -70,6 +70,7 @@ function News_upgrade($oldversion)
             $tables = pnDBGetTables();
             $shorturlsep = pnConfigGetVar('shorturlsseparator');
             // move the data from the author uid to creator and updator uid
+            $sqls = array();
             $sqls[] = "UPDATE $tables[stories] SET pn_cr_uid = pn_aid";
             $sqls[] = "UPDATE $tables[stories] SET pn_lu_uid = pn_aid";
             // move the data from the time field to the creation and update datestamp
@@ -138,11 +139,11 @@ function News_upgrade($oldversion)
 
         case '2.3':
             $prefix = pnConfigGetVar('prefix');
-            $tables = pnDBGetTables();
             // when from is not set, put it to the creation date
-            $sqls[] = "UPDATE $tables[stories] SET pn_from = pn_cr_date WHERE pn_from IS NULL";
+            $sqls = array();
+            $sqls[] = "UPDATE {$prefix}_stories SET pn_from = pn_cr_date WHERE pn_from IS NULL";
             // make sure we dont have an NULL hometext, since the tables permitted this before 2.4
-            $sqls[] = "UPDATE $tables[stories] SET pn_hometext = '' WHERE pn_hometext IS NULL";
+            $sqls[] = "UPDATE {$prefix}_stories SET pn_hometext = '' WHERE pn_hometext IS NULL";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
                     LogUtil::registerError(__('Error! Could not update table.', $dom));
@@ -166,16 +167,30 @@ function News_upgrade($oldversion)
             $tables = pnDBGetTables();
             // rename the database table from stories to news
             if (!DBUtil::renameTable('stories', 'news')) {
-                LogUtil::registerError(__('Error! Could not rename table.', $dom));
+                LogUtil::registerError(__('Error! Could not rename table.', $dom));             
                 return '2.4.1';
             }
-            // upgrade table
+            // rename several columns, tables holds the old names for backwards compatibility still
+            if (!DBUtil::renameColumn('news', 'pn_withcomm', 'disallowcomments')) {
+                LogUtil::registerError(__('Error! Could not rename column.', $dom));             
+                return '2.4.1';
+            }
+            if (!DBUtil::renameColumn('news', 'pn_informant', 'contributor')) {
+                LogUtil::registerError(__('Error! Could not rename column.', $dom));             
+                return '2.4.1';
+            }
+            if (!DBUtil::renameColumn('news', 'pn_ihome', 'hideonindex')) {
+                LogUtil::registerError(__('Error! Could not rename column.', $dom));             
+                return '2.4.1';
+            }
+            // update table for missing fields etc
             if (!DBUtil::changeTable('news')) {
                 return '2.4.1';
             }
             // update permissions with new scheme News::
             $group_perms_table  = $tables['group_perms'];
             $group_perms_column = $tables['group_perms_column'];
+            $sqls = array();
             $sqls[] = 'UPDATE ' . $group_perms_table . ' SET ' . $group_perms_column['component'] . '=\'News::\' WHERE ' . $group_perms_column['component'] . '=\'Stories::Story\'';
             // update categories_mapobj and categories_registry with new tablename (categories tables not in $tables ?)
             $categories_mapobj_table  = $prefix . '_categories_mapobj';
@@ -188,6 +203,9 @@ function News_upgrade($oldversion)
                     return '2.4.1';
                 }
             }
+            // clear compiled templates and News cache
+            pnModAPIFunc('pnRender', 'user', 'clear_compiled');
+            pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
 
         case '2.5':
             // migration routines
