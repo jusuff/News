@@ -45,10 +45,10 @@ function News_ajax_modify()
 
     // Set the publishing date options.
     if (!isset($item['to'])) {
-        if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0) {
+        if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0 && is_null($item['to'])) {
             $item['unlimited'] = 1;
-            $item['tonolimit'] = 0;
-        } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0) {
+            $item['tonolimit'] = 1;
+        } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0 && is_null($item['to'])) {
             $item['unlimited'] = 0;
             $item['tonolimit'] = 1;
         }

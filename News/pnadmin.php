@@ -103,7 +103,7 @@ function News_admin_modify($args)
     if (!$inpreview) {
         if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0 && is_null($item['to'])) {
             $item['unlimited'] = 1;
-            $item['tonolimit'] = 0;
+            $item['tonolimit'] = 1;
         } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0 && is_null($item['to'])) {
             $item['unlimited'] = 0;
             $item['tonolimit'] = 1;
