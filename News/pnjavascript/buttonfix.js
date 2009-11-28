@@ -1,0 +1,30 @@
+﻿/*
+ *  $Id:  $ 
+ */
+
+/**
+ * function that fixes button submits by IE6
+ */
+function buttonfix() {
+    var buttons = document.getElementsByTagName('button');
+    for (var i=0; i<buttons.length; i++) {
+        if(buttons[i].onclick) continue;
+        
+        buttons[i].onclick = function () {
+            for(j=0; j<this.form.elements.length; j++)
+                if( this.form.elements[j].tagName == 'BUTTON' )
+                    this.form.elements[j].disabled = true;
+            this.disabled=false;
+            this.value = this.attributes.getNamedItem("value").nodeValue ;
+        }
+    }
+}
+
+/**
+ * onload event handler for window
+ *
+ */
+Event.observe(window, 
+              'load', 
+              buttonfix,
+              false);
