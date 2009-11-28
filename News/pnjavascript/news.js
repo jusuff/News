@@ -242,6 +242,11 @@ function news_expiration_init()
 function news_unlimited_onchange()
 {
     switchdisplaystate('news_expiration_details');
+    if ($('news_expiration_details').style.display != "none") {
+        $('news_button_text_publish').update(string_publish);
+    } else {
+        $('news_button_text_publish').update(string_schedule);
+    }
 }
 
 function news_tonolimit_onchange()
@@ -254,7 +259,7 @@ function news_publication_init()
 {
     Event.observe('news_publication_collapse', 'click', news_publication_click);
     $('news_publication_collapse').addClassName('pn-toggle-link');
-    // show  the publication details  when unlimited is not set
+    // show the publication details when unlimited is not set
     if ($('news_unlimited').checked == true) {
         $('news_publication_details').parentNode.addClassName('pn-collapsed');
         $('news_publication_details').hide();
@@ -262,8 +267,8 @@ function news_publication_init()
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
         $('news_publication_details').parentNode.removeClassName('pn-collapsed');
         $('news_publication_details').show();
+        $('news_button_text_publish').update(string_schedule);
     }
-//    news_publication_click();
 }
 
 function news_publication_click()
@@ -271,11 +276,11 @@ function news_publication_click()
     if ($('news_publication_details').style.display != "none") {
         Element.addClassName.delay(0.9, $('news_publication_details').parentNode, 'pn-collapsed');
         Element.removeClassName.delay(0.9, $('news_publication_collapse'), 'pn-toggle-link-open');
-//        $('news_publication_collapse').update(showpublicationoptions); // Change the button text
+        $('news_publication_showhide').update(string_show);
     } else {
         Element.removeClassName($('news_publication_details').parentNode, 'pn-collapsed');
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
-//        $('news_publication_collapse').update(hidepublicationoptions); // Change the button text
+        $('news_publication_showhide').update(string_hide);
     }
     switchdisplaystate('news_publication_details');
 }
