@@ -101,10 +101,10 @@ function News_admin_modify($args)
 
     // Set the publishing date options.
     if (!$inpreview) {
-        if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) >= 0 && is_null($item['to'])) {
+        if (DateUtil::getDatetimeDiff_AsField($item['from'], $item['cr_date'], 6) >= 0 && is_null($item['to'])) {
             $item['unlimited'] = 1;
             $item['tonolimit'] = 1;
-        } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['time'], 6) < 0 && is_null($item['to'])) {
+        } elseif (DateUtil::getDatetimeDiff_AsField($item['from'], $item['cr_date'], 6) < 0 && is_null($item['to'])) {
             $item['unlimited'] = 0;
             $item['tonolimit'] = 1;
         } else  {
@@ -114,6 +114,17 @@ function News_admin_modify($args)
     } else {
         $item['unlimited'] = isset($item['unlimited']) ? 1 : 0;
         $item['tonolimit'] = isset($item['tonolimit']) ? 1 : 0;
+    }
+
+    // if article is pending than set the publishing 'from' date to now
+    if ($item['published_status'] == 2) {
+        $nowts = time();
+        $now = DateUtil::getDatetime($nowts);
+        // adjust to, since it is now before the new from
+        if (!is_null($item['to']) && DateUtil::getDatetimeDiff_AsField($now, $item['to'], 6) < 0) {
+            $item['to'] = DateUtil::getDatetime($nowts + DateUtil::getDatetimeDiff_AsField($item['from'], $item['to']));
+        }
+        $item['from'] = $now;
     }
 
     // Check if we need a preview
@@ -268,8 +279,8 @@ function News_admin_update($args)
         SessionUtil::delVar('newsitem');
     }
 
-    // Check if the article goes from not published to published
-    if ($item['published_status'] != 0 && $story['published_status'] == 0) {
+    // Check if the article goes from pending to published
+    if ($item['published_status'] == 2 && $story['published_status'] == 0) {
         $story['approver'] = SessionUtil::getVar('uid');
     }
 
