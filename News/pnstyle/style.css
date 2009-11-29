@@ -93,6 +93,7 @@ div.news_index {
 }
 
 /* Button styles */
+/* http://particletree.com/features/rediscovering-the-button-element/ */
 #news-buttons a, #news-buttons button {
   display:block;
   float:left;
