@@ -224,11 +224,14 @@
                 <div id="news_meta_details">
                     <ul>
                         <!--[pnusergetvar name='uname' uid=$cr_uid assign='username']-->
-                        <li><!--[gt text='Contributed by %s' tag1=$username]--></li>
-                        <li><!--[gt text='Contributed on %s' tag1=$cr_date|pndate_format]--></li>
+                        <li><!--[gt text='Contributed by %s on %s' tag1=$username tag2=$cr_date|pndate_format]--></li>
                         <!--[pnusergetvar name='uname' uid=$lu_uid assign='username']-->
-                        <li><!--[gt text='Last edited by %s' tag1=$username]--></li>
-                        <li><!--[gt text='Edited on %s' tag1=$lu_date|pndate_format]--></li>
+                        <li><!--[gt text='Last edited by %s on %s' tag1=$username tag2=$lu_date|pndate_format]--></li>
+                        <!--[if $published_status eq 0]-->
+                          <!--[pnusergetvar name='uname' uid=$approver|pnvarprepfordisplay assign='approvername']-->
+                          <li><!--[gt text='Approved by %s' tag1=$approvername]--></li>
+                        <!--[/if]-->
+                        <li><!--[gt text='Status %s' tag1=$published_status|news_getstatustext]--></li>
                     </ul>
                 </div>
             </fieldset>
@@ -241,15 +244,25 @@
                   <button id="news_button_submit" class="positive" type="submit" name="story[action]" value="1" __title="Submit this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit'  __title='Submit this article' ]--><!--[gt text='Submit']--></button>
                 <!--[else]-->
                   <button id="news_button_draft" type="submit" name="story[action]" value="6" __title="Save this article as draft"><!--[pnimg src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as Draft'  __title='Save this article as draft']--><!--[gt text='Save as draft']--></button>
-                  <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" __title="Publish this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' ]--><span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
+                  <!--[if $published_status eq 2]-->
+                    <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" __title="Approve and publish this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Approve and Publish'  __title='Approve and publish this article' ]--><!--[gt text='Approve and']--> <span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
+                  <!--[else]-->
+                    <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" __title="Publish this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' ]--><span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
+                  <!--[/if]-->
                 <!--[/if]-->
                 <a id="news_button_cancel" href="<!--[pnmodurl modname='News' type='admin' func='view']-->" class="negative"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>
             </div></div>
             <!--[if $accessadd eq 1]-->
             <div class="z-formbuttons"><div id="news-buttons">
-                <button id="news_button_pending" type="submit" name="story[action]" value="4" __title="Mark this article as pending"><!--[pnimg src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending'  __title='Mark this article as pending' ]--><!--[gt text='Pending']--></button>
-                <button id="news_button_archive" type="submit" name="story[action]" value="5" __title="Archive this article"><!--[pnimg src='folder_yellow.gif' modname='core' set='icons/extrasmall' __alt='Archive'  __title='Archive this article' ]--><!--[gt text='Archive']--></button>
-                <button id="news_button_reject" class="negative" type="submit" name="story[action]" value="3" __title="Reject this article"><!--[pnimg src='locked.gif' modname='core' set='icons/extrasmall' __alt='Reject'  __title='Reject this article' ]--><!--[gt text='Reject']--></button>
+                <!--[if $published_status neq 2]-->
+                  <button id="news_button_pending" type="submit" name="story[action]" value="4" __title="Mark this article as pending"><!--[pnimg src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending'  __title='Mark this article as pending' ]--><!--[gt text='Pending']--></button>
+                <!--[/if]-->
+                <!--[if $published_status neq 3]-->
+                  <button id="news_button_archive" type="submit" name="story[action]" value="5" __title="Archive this article"><!--[pnimg src='folder_yellow.gif' modname='core' set='icons/extrasmall' __alt='Archive'  __title='Archive this article' ]--><!--[gt text='Archive']--></button>
+                <!--[/if]-->
+                <!--[if $published_status eq 2]-->
+                  <button id="news_button_reject" class="negative" type="submit" name="story[action]" value="3" __title="Reject this article"><!--[pnimg src='locked.gif' modname='core' set='icons/extrasmall' __alt='Reject'  __title='Reject this article' ]--><!--[gt text='Reject']--></button>
+                <!--[/if]-->
             </div></div>
             <!--[/if]-->
         </div>
