@@ -50,7 +50,7 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
     $diff = DateUtil::getDatetimeDiff($now, $string);
     if ($diff['d'] < 0) {
         if ($niceval == 1) {
-            $res = __f('%s days ago', abs($diff['d']), $dom);
+            $res = _fn('%s day ago', '%s days ago', abs($diff['d']), abs($diff['d']), $dom);
         } elseif ($niceval < 4 && $diff['d'] == -1) {
             $res = __('yesterday', $dom);
         } else {
@@ -62,26 +62,26 @@ function smarty_modifier_dateformatHuman($string, $format='%x', $niceval=2)
         } elseif ($diff['d'] == 1) {
             $res = __('tomorrow', $dom);
         } else {
-            $res = __f('%s days from now', $diff['d'], $dom);
+            $res = _fn('%s day from now', '%s days from now', $diff['d'], $diff['d'], $dom);
         }
     } else {
         // no day difference
         if ($diff['h'] < 0) {
-            $res = __f('%s hours ago', abs($diff['h']), $dom);
+            $res = _fn('%s hour ago', '%s hours ago', abs($diff['h']), abs($diff['h']), $dom);
         } elseif ($diff['h'] > 0) {
-            $res = __f('%s hours from now', $diff['h'], $dom);
+            $res = _fn('%s hour from now', '%s hours from now', $diff['h'], $diff['h'], $dom);
         } else {
             // no hour difference
             if ($diff['m'] < 0) {
-                $res = __f('%s minutes ago', abs($diff['m']), $dom);
+                $res = _fn('%s minute ago', '%s minutes ago', abs($diff['m']), abs($diff['m']), $dom);
             } elseif ($diff['m'] > 0) {
-                $res = __f('%s minutes from now', $diff['m'], $dom);
+                $res = _fn('%s minute from now', '%s minutes from now', $diff['m'], $diff['m'], $dom);
             } else {
                 // no min difference
                 if ($diff['s'] < 0) {
-                    $res = __f('%s seconds ago', abs($diff['s']), $dom);
+                    $res = _fn('%s second ago', '%s seconds ago', abs($diff['s']), abs($diff['s']), $dom);
                 } else {
-                    $res = __f('%s seconds from now', $diff['s'], $dom);
+                    $res = _fn('%s second from now', '%s seconds from now', $diff['s'], $diff['s'], $dom);
                 }
             }
         }
