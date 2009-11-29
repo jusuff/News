@@ -233,8 +233,11 @@ function news_expiration_init()
 {
     if ($('news_tonolimit').checked == true) 
         switchdisplaystate('news_expiration_date');
-    if ($('news_unlimited').checked == true) 
+    if ($('news_unlimited').checked == true) {
         switchdisplaystate('news_expiration_details');
+    } else {
+        $('news_button_text_publish').update(string_schedule);
+    }
     Event.observe('news_unlimited', 'change', news_unlimited_onchange);
     Event.observe('news_tonolimit', 'change', news_tonolimit_onchange);
 }
@@ -259,14 +262,18 @@ function news_publication_init()
 {
     Event.observe('news_publication_collapse', 'click', news_publication_click);
     $('news_publication_collapse').addClassName('pn-toggle-link');
-    // show the publication details when unlimited is not set
-    if ($('news_unlimited').checked == true) {
+    // show the publication details when a variable is not set to default
+    if ($('news_unlimited').checked == true && $('news_hideonindex').checked == true && $('news_disallowcomments').checked == true) {
         $('news_publication_details').parentNode.addClassName('pn-collapsed');
+        $('news_publication_collapse').removeClassName('pn-toggle-link-open');
+        $('news_publication_showhide').update(string_show);
         $('news_publication_details').hide();
     } else {
         $('news_publication_collapse').addClassName('pn-toggle-link-open');
         $('news_publication_details').parentNode.removeClassName('pn-collapsed');
-        $('news_publication_details').show();
+        $('news_publication_showhide').update(string_hide);
+    }
+    if ($('news_unlimited').checked == false) {
         $('news_button_text_publish').update(string_schedule);
     }
 }
