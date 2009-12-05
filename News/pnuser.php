@@ -343,13 +343,13 @@ function News_user_view($args = array())
 
     // Get matching news stories
     $items = pnModAPIFunc('News', 'user', 'getall',
-                          array('startnum' => $startnum,
-                                'numitems' => $itemsperpage,
-                                'status' => 0,
-                                'hideonindex' => $args['hideonindex'],
+                          array('startnum'     => $startnum,
+                                'numitems'     => $itemsperpage,
+                                'status'       => 0,
+                                'hideonindex'  => $args['hideonindex'],
                                 'filterbydate' => true,
-                                'category' => isset($catFilter) ? $catFilter : null,
-                                'catregistry' => isset($catregistry) ? $catregistry : null));
+                                'category'     => isset($catFilter) ? $catFilter : null,
+                                'catregistry'  => isset($catregistry) ? $catregistry : null));
 
     if ($items == false) {
         if ($modvars['enablecategorization'] && isset($catFilter)) {

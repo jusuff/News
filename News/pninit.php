@@ -170,22 +170,24 @@ function News_upgrade($oldversion)
                 LogUtil::registerError(__('Error! Could not rename table.', $dom));             
                 return '2.4.1';
             }
+        case '2.4.2':
             // rename several columns, tables holds the old names for backwards compatibility still
             if (!DBUtil::renameColumn('news', 'pn_withcomm', 'disallowcomments')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
-                return '2.4.1';
+                return '2.4.2';
             }
             if (!DBUtil::renameColumn('news', 'pn_informant', 'contributor')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
-                return '2.4.1';
+                return '2.4.2';
             }
             if (!DBUtil::renameColumn('news', 'pn_ihome', 'hideonindex')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
-                return '2.4.1';
+                return '2.4.2';
             }
+        case '2.4.3':
             // update table for missing fields etc
             if (!DBUtil::changeTable('news')) {
-                return '2.4.1';
+                return '2.4.3';
             }
             // update permissions with new scheme News::
             $group_perms_table  = $tables['group_perms'];
@@ -200,7 +202,7 @@ function News_upgrade($oldversion)
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
                     LogUtil::registerError(__('Error! Could not update table.', $dom));
-                    return '2.4.1';
+                    return '2.4.3';
                 }
             }
             // clear compiled templates and News cache
