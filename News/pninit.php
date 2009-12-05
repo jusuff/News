@@ -163,24 +163,23 @@ function News_upgrade($oldversion)
 
         case '2.4':
         case '2.4.1':
-            $prefix = pnConfigGetVar('prefix');
-            $tables = pnDBGetTables();
             // rename the database table from stories to news
             if (!DBUtil::renameTable('stories', 'news')) {
                 LogUtil::registerError(__('Error! Could not rename table.', $dom));             
                 return '2.4.1';
             }
         case '2.4.2':
+            $columns = array_keys(DBUtil::metaColumns('news', true));
             // rename several columns, tables holds the old names for backwards compatibility still
-            if (!DBUtil::renameColumn('news', 'pn_withcomm', 'disallowcomments')) {
+            if (in_array('PN_WITHCOMM', $columns) && !DBUtil::renameColumn('news', 'pn_withcomm', 'disallowcomments')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
                 return '2.4.2';
             }
-            if (!DBUtil::renameColumn('news', 'pn_informant', 'contributor')) {
+            if (in_array('PN_INFORMANT', $columns) && !DBUtil::renameColumn('news', 'pn_informant', 'contributor')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
                 return '2.4.2';
             }
-            if (!DBUtil::renameColumn('news', 'pn_ihome', 'hideonindex')) {
+            if (in_array('PN_IHOME', $columns) && !DBUtil::renameColumn('news', 'pn_ihome', 'hideonindex')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
                 return '2.4.2';
             }
@@ -190,15 +189,15 @@ function News_upgrade($oldversion)
                 return '2.4.3';
             }
             // update permissions with new scheme News::
-            $group_perms_table  = $tables['group_perms'];
-            $group_perms_column = $tables['group_perms_column'];
-            $sqls = array();
-            $sqls[] = 'UPDATE ' . $group_perms_table . ' SET ' . $group_perms_column['component'] . '=\'News::\' WHERE ' . $group_perms_column['component'] . '=\'Stories::Story\'';
+            pnMOdDBInfoLoad('Categories');
+            $tables  = pnDBGetTables();
+            $grperms = $tables['group_perms_column'];
+
+            $sqls   = array();
+            $sqls[] = "UPDATE $tables[group_perms] SET $grperms[component] = 'News::' WHERE $grperms[component] = 'Stories::Story'";
             // update categories_mapobj and categories_registry with new tablename (categories tables not in $tables ?)
-            $categories_mapobj_table  = $prefix . '_categories_mapobj';
-            $sqls[] = 'UPDATE ' . $categories_mapobj_table . ' SET cmo_table=\'news\' WHERE cmo_table=\'stories\'';
-            $categories_registry_table  = $prefix . '_categories_registry';
-            $sqls[] = 'UPDATE ' . $categories_registry_table . ' SET crg_table=\'news\' WHERE crg_table=\'stories\'';
+            $sqls[] = "UPDATE $tables[categories_mapobj] SET cmo_table='news' WHERE cmo_table='stories'";
+            $sqls[] = "UPDATE $tables[categories_registry] SET crg_table='news' WHERE crg_table='stories'";
             foreach ($sqls as $sql) {
                 if (!DBUtil::executeSQL($sql)) {
                     LogUtil::registerError(__('Error! Could not update table.', $dom));
