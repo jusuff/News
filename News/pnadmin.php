@@ -520,7 +520,7 @@ function News_admin_view($args)
             SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
             if ($item['published_status'] == 2) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
-                                   'image' => 'signature.gif',
+                                   'image' => 'editcut.gif',
                                    'title' => __('Review', $dom));
             } else {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
