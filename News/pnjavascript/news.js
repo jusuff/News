@@ -98,8 +98,10 @@ function editnews_init(req)
     news_init_check();
     
     // Manual start of the Xinha editor
-    //editors = Xinha.makeEditors(xinha_editorsarray, xinha_config, xinha_plugins);
-    //Xinha.startEditors(editors);
+    if (Xinha && xinha_editorsarray) {
+        editors = Xinha.makeEditors(xinha_editorsarray, xinha_config, xinha_plugins);
+        Xinha.startEditors(editors);
+    }
     
     return;
 }
@@ -133,7 +135,7 @@ function editnews_save(action)
         Element.show('news_savenews');
 
         // A manual onsubmit for xinha to update the textarea data again.
-        //$('news_ajax_modifyform').onsubmit();
+        $('news_ajax_modifyform').onsubmit();
         
         var pars = 'module=News&func=update&action='+ action +'&' + Form.serialize('news_ajax_modifyform');
         var myAjax = new Ajax.Request(
