@@ -488,7 +488,7 @@ function News_admin_view($args)
         '' => __('All', $dom), 
         0  => __('Published', $dom),
         1  => __('Rejected', $dom),
-        2  => __('Pending', $dom),
+        2  => __('Pending Review', $dom),
         3  => __('Archived', $dom),
         4  => __('Draft', $dom),
         5  => __('Scheduled', $dom)
@@ -513,16 +513,23 @@ function News_admin_view($args)
     {
         $options = array();
         $options[] = array('url'   => pnModURL('News', 'user', 'display', array('sid' => $item['sid'])),
-                           'image' => 'demo.gif',
+                           'image' => '14_layer_visible.gif',
                            'title' => __('View', $dom));
 
         if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_EDIT) ||
             SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
-            $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
-                               'image' => 'xedit.gif',
-                               'title' => __('Edit', $dom));
+            if ($item['published_status'] == 2) {
+                $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
+                                   'image' => 'signature.gif',
+                                   'title' => __('Review', $dom));
+            } else {
+                $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
+                                   'image' => 'xedit.gif',
+                                   'title' => __('Edit', $dom));
+            }
 
-            if (SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+            if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
+                SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'delete', array('sid' => $item['sid'])),
                                    'image' => '14_layer_deletelayer.gif',
                                    'title' => __('Delete', $dom));
@@ -608,7 +615,7 @@ function News_admin_view($args)
                                               array('news_status' => 2,
                                                     'news_property' => $property,
                                                     'news_'.$property.'_category' => isset($category) ? $category : null)),
-                            'title' => __('Pending', $dom));
+                            'title' => __('Pending Review', $dom));
 
     $statuslinks[] = array('count' => pnModAPIFunc('News', 'user', 'countitems',
                                                     array('category' => isset($catFilter) ? $catFilter : null,

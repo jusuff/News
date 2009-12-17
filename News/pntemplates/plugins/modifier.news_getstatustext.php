@@ -37,7 +37,7 @@ function smarty_modifier_news_getstatustext($status)
             break;
 
         case 2:
-            $output = __('Pending', $dom);
+            $output = __('Pending Review', $dom);
             break;
 
         case 3:
