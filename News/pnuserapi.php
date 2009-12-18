@@ -711,6 +711,7 @@ function News_userapi_getArticlePreformat($args)
         SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
         $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
         $print = '<a class="news_printlink" href="'.$links['print'].'">'.__('Print', $dom).' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
+        $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
     } else {
         $title = $info['title'];
         $print = '';
@@ -767,6 +768,7 @@ function News_userapi_getArticlePreformat($args)
                        'hometext'    => $hometext,
                        'notes'       => $notes,
                        'print'       => $print,
+                       'printicon'   => $printicon,
                        'readmore'    => $readmore,
                        'title'       => $title,
                        'version'     => 1);
