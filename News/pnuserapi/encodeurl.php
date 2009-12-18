@@ -32,8 +32,8 @@ function News_userapi_encodeurl($args)
     // create an empty string ready for population
     $vars = '';
 
-    // for the display function use the dfined permalink structure
-    if ($args['func'] == 'display') {
+    // for the display function use the defined permalink structure
+    if ($args['func'] == 'display' || $args['func'] == 'displaypdf') {
         // check for the generic object id parameter
         if (isset($args['args']['objectid'])) {
             $args['args']['sid'] = $args['args']['objectid'];

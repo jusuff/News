@@ -26,7 +26,7 @@ function News_userapi_decodeurl($args)
     }
 
     // define the available user functions
-    $funcs = array('main', 'new', 'create', 'view', 'archives', 'display', 'categorylist');
+    $funcs = array('main', 'new', 'create', 'view', 'archives', 'display', 'categorylist', 'displaypdf');
     // set the correct function name based on our input
     if (empty($args['vars'][2])) {
         pnQueryStringSetVar('func', 'main');
@@ -69,7 +69,7 @@ function News_userapi_decodeurl($args)
     }
 
     // identify the correct parameter to identify the news article
-    if ($func == 'display') {
+    if ($func == 'display' || $func == 'displaypdf') {
         // check the permalink structure and obtain any missing vars
         $permalinkkeys = array_flip(explode('/', pnModGetVar('News', 'permalinkformat')));
         // get rid of unused vars
