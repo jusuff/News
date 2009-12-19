@@ -341,7 +341,7 @@ function News_user_view($args = array())
         }
     }
 
-    // Get matching news stories
+    // get matching news articles
     $items = pnModAPIFunc('News', 'user', 'getall',
                           array('startnum'     => $startnum,
                                 'numitems'     => $itemsperpage,
@@ -618,7 +618,7 @@ function News_user_archives($args)
         $render->assign('month', $monthnames[$month-1]);
 
     } else {
-        // get all matching news stories
+        // get all matching news articles
         $monthsyears = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
 
         foreach ($monthsyears as $monthyear) {
