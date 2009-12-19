@@ -28,7 +28,7 @@ function News_init()
 
     // create our default category
     if (!_news_createdefaultcategory()) {
-        return LogUtil::registerError(__('Error! Could not create default category.', $dom));
+        LogUtil::registerStatus(__('Warning! Could not create the default News category tree. If you want to use categorisation with News, register at least one property for the module in the Category Registry.', $dom)); 
     }
 
     // Set up config variables
@@ -233,9 +233,8 @@ function News_delete()
 
     // Delete entries from category registry
     pnModDBInfoLoad ('Categories');
-    Loader::loadArrayClassFromModule('Categories', 'CategoryRegistry');
-    $registry = new PNCategoryRegistryArray();
-    $registry->deleteWhere ('crg_modname=\'News\'');
+    DBUtil::deleteWhere('categories_registry', "crg_modname='News'");
+    DBUtil::deleteWhere('categories_mapobj', "cmo_modname='News'");
 
     // Deletion successful
     return true;
@@ -246,6 +245,8 @@ function News_delete()
  */
 function _news_migratecategories()
 {
+    $dom = ZLanguage::getModuleDomain('News');
+
     // load the admin language file
     // pull all data from the old tables
     $tables = pnDBGetTables();
@@ -333,7 +334,7 @@ function _news_migratecategories()
     }
     foreach ($pages as $page) {
         if (!DBUtil::updateObject($page, 'stories', '', 'sid')) {
-            return LogUtil::registerError(__('Error! Could not update article.', $dom));
+            return LogUtil::registerError(__('Error! Could not update the article categories.', $dom));
         }
     }
 
