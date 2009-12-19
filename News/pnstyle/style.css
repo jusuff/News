@@ -1,7 +1,7 @@
 
 /* Admin panel styles */
 #news_filter {
-  margin-bottom: 1em;
+  margin-bottom: 0;
 }
 #news_category_selectors {
   display: inline;
@@ -11,6 +11,9 @@
 }
 
 /* News forms */
+#news_user_modifyform div.z-formbuttons {
+  margin-left: 15%;
+}
 .news_preview {
   background: url(../pnimages/bg_preview.png) #fafafa;
   margin: 1em 0;
@@ -94,7 +97,7 @@ div.news_index {
 
 /* Button styles */
 /* http://particletree.com/features/rediscovering-the-button-element/ */
-#news-buttons a, #news-buttons button {
+#news_buttons a, #news_buttons button {
   display:block;
   float:left;
   margin:0 7px 0 0;
@@ -112,13 +115,13 @@ div.news_index {
   padding:5px 10px 6px 7px; /* Links */
 }
 
-#news-buttons button {
+#news_buttons button {
   width:auto;
   overflow:visible;
   padding:4px 10px 3px 7px; /* IE6 */
 }
 
-#news-buttons button[type] {
+#news_buttons button[type] {
   padding:5px 10px 5px 7px; /* Firefox */
   line-height:17px; /* Safari */
 }
@@ -127,7 +130,7 @@ div.news_index {
   padding:4px 10px 3px 7px; /* IE7 */
 }
 
-#news-buttons button img, #news-buttons a img {
+#news_buttons button img, #news_buttons a img {
 /*  margin:0 3px -3px 0 !important; */
   margin:0 3px 0 0 !important;
   padding:0;
@@ -137,47 +140,47 @@ div.news_index {
 }
 
 /* Standard button */
-#news-buttons button:hover, #news-buttons a:hover {
+#news_buttons button:hover, #news_buttons a:hover {
   background-color:#dff4ff;
   border:1px solid #c2e1ef;
   color:#336699;
 }
 
-#news-buttons a:active {
+#news_buttons a:active {
   background-color:#6299c5;
   border:1px solid #6299c5;
   color:#fff;
 }
 
 /* Positive green button */
-#news-buttons button.positive, #news-buttons a.positive {
+#news_buttons button.positive, #news_buttons a.positive {
   color:#529214;
 }
 
-#news-buttons a.positive:hover, #news-buttons button.positive:hover {
+#news_buttons a.positive:hover, #news_buttons button.positive:hover {
   background-color:#E6EFC2;
   border:1px solid #C6D880;
   color:#529214;
 }
 
-#news-buttons a.positive:active {
+#news_buttons a.positive:active {
   background-color:#529214;
   border:1px solid #529214;
   color:#fff;
 }
 
 /* Negative red button */
-#news-buttons a.negative, #news-buttons button.negative {
+#news_buttons a.negative, #news_buttons button.negative {
   color:#d12f19;
 }
 
-#news-buttons a.negative:hover, #news-buttons button.negative:hover {
+#news_buttons a.negative:hover, #news_buttons button.negative:hover {
   background:#fbe3e4;
   border:1px solid #fbc2c4;
   color:#d12f19;
 }
 
-#news-buttons a.negative:active {
+#news_buttons a.negative:active {
   background-color:#d12f19;
   border:1px solid #d12f19;
   color:#fff;

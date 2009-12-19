@@ -225,13 +225,13 @@
 
         <!--[pnmodcallhooks hookobject='item' hookaction='new' module='News']-->
 
-        <div class="z-formbuttons"><div id="news-buttons">
-            <button id="news_button_preview" type="submit" name="story[action]" value="0" __title="Preview this article"><!--[pnimg src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview'  __title='Preview this article']--><!--[gt text='Preview']--></button>
+        <div class="z-formbuttons"><div id="news_buttons">
+            <button id="news_button_preview" type="submit" name="story[action]" value="0" title="<!--[gt name='Preview this article']-->"><!--[pnimg src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview' __title='Preview this article']--><!--[gt text='Preview']--></button>
             <!--[if $accessadd neq 1]-->
-              <button id="news_button_submit" class="positive" type="submit" name="story[action]" value="1" __title="Submit this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit'  __title='Submit this article' ]--><!--[gt text='Submit']--></button>
+              <button id="news_button_submit" class="positive" type="submit" name="story[action]" value="1" title="<!--[gt name='Submit this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article' ]--><!--[gt text='Submit']--></button>
             <!--[else]-->
-              <button id="news_button_draft" type="submit" name="story[action]" value="6" __title="Save this article as draft"><!--[pnimg src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as Draft'  __title='Save this article as draft']--><!--[gt text='Save as draft']--></button>
-              <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" __title="Publish this article"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' ]--><span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
+              <button id="news_button_draft" type="submit" name="story[action]" value="6" title="<!--[gt name='Save this article as draft']-->"><!--[pnimg src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as Draft'  __title='Save this article as draft']--><!--[gt text='Save as draft']--></button>
+              <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="<!--[gt name='Publish this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish' __title='Publish this article' ]--><span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
             <!--[/if]-->
             <a id="news_button_cancel" href="<!--[pnmodurl modname='News' type='admin' func='view']-->" class="negative"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>
         </div></div>
