@@ -884,8 +884,8 @@ function News_user_displaypdf($args)
     //set some language-dependent strings
     $pdf->setLanguageArray($l); 
 
-    // set font
-    $pdf->SetFont('freeserif', '', 10);
+    // set font, freeserif is big !
+    //$pdf->SetFont('freeserif', '', 10);
 
     // add a page
     $pdf->AddPage();
