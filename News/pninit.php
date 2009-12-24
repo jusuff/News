@@ -42,6 +42,9 @@ function News_init()
     pnModSetVar('News', 'catimagepath', 'images/categories/');
     pnModSetVar('News', 'enableajaxedit', false);
 
+    // create the default data for the News module
+    News_defaultdata();
+
     // Initialisation successful
     return true;
 }
@@ -169,8 +172,9 @@ function News_upgrade($oldversion)
                 return '2.4.1';
             }
         case '2.4.2':
-            $columns = array_keys(DBUtil::metaColumns('news', true));
             // rename several columns, tables holds the old names for backwards compatibility still
+            $columns = array_keys(DBUtil::metaColumns('news', true));
+            
             if (in_array('PN_WITHCOMM', $columns) && !DBUtil::renameColumn('news', 'pn_withcomm', 'disallowcomments')) {
                 LogUtil::registerError(__('Error! Could not rename column.', $dom));             
                 return '2.4.2';
@@ -238,6 +242,51 @@ function News_delete()
 
     // Deletion successful
     return true;
+}
+
+/**
+ * create the default data for the News module
+ *
+ * This function is only ever called once during the lifetime of a particular
+ * module instance
+ *
+ * @author       Erik Spaan
+ * @return       bool       false
+ */
+function News_defaultdata() 
+{
+    $dom = ZLanguage::getModuleDomain('News');
+
+    // Short URL seperator
+    $shorturlsep = pnConfigGetVar('shorturlsseparator');
+    $now = DateUtil::getDatetime();
+    $uname = pnUserGetVar('uname');
+    // set creation date and from to the time set in autonews
+    $article = array('title'            => __('News introduction article', $dom),
+                     'urltitle'         => __('news_introduction_article', $dom),
+                     'hometext'         => __('A News article is divided into this index page teaser text and a bodytext. In the index page teaser text you can write a small introduction to the article. Click on the article title for more information.', $dom),
+                     'bodytext'         => __('The full article contains the main part of your News message. News can make use of permissions in Zikula to control who has access to what parts. A moderator group can be created that can Add, Edit and Delete articles for instance. <br />You can edit or delete this first introduction article by clicking on the correct link.', $dom),
+                     'counter'          => 0,
+                     'contributor'      => $uname,
+                     'approver'         => $uname,
+                     'notes'            => '',
+                     'hideonindex'      => 0,
+                     'language'         => '',
+                     'disallowcomments' => 1,
+                     'format_type'      => 0,
+                     'published_status' => 0,
+                     'from'             => $now,
+                     'weight'           => 0,
+                     'cr_date'          => $now);
+
+    // Insert the default article and preserve the standard fields
+    if (!($obj = DBUtil::insertObject($article, 'news', 'sid'))) {
+        LogUtil::registerStatus(__('Warning! Could not create the default News introduction article.', $dom)); 
+    }
+    $obj = array('sid'  => $obj['sid'], 'from' => $obj['cr_date']);
+    if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
+        LogUtil::registerStatus(__('Warning! Could not update the default News introduction article.', $dom)); 
+    }
 }
 
 /**

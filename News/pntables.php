@@ -49,7 +49,8 @@ function News_pntables()
         'format_type'      => 'pn_format_type',
         'published_status' => 'pn_published_status',
         'from'             => 'pn_from',
-        'to'               => 'pn_to'
+        'to'               => 'pn_to',
+        'weight'           => 'pn_weight'
     );
     $tables['news_column_def'] = array(
         'sid'              => 'I NOTNULL AUTO PRIMARY',
@@ -67,7 +68,8 @@ function News_pntables()
         'format_type'      => "I1 NOTNULL DEFAULT '0'",
         'published_status' => "I1 DEFAULT '0'",
         'from'             => 'T DEFAULT NULL',
-        'to'               => 'T DEFAULT NULL'
+        'to'               => 'T DEFAULT NULL',
+        'weight'           => "I1 DEFAULT '0'",
     );
 
     // Enable categorization services
