@@ -544,7 +544,11 @@ function News_user_display($args)
                                     'links' => $links));
 
     // set the page title
-    PageUtil::setVar('title', $info['title']);
+    if ($numpages <= 1) {
+        PageUtil::setVar('title', $info['title']);
+    } else {
+        PageUtil::setVar('title', $info['title'] . __f(' :: page %s', $page, $dom));
+    }
 
     // Assign the story info arrays
     $render->assign(array('info'      => $info,
