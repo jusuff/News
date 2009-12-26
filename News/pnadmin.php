@@ -304,6 +304,7 @@ function News_admin_update($args)
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                           'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
                           'approver' => $story['approver'],
+                          'weight' => $story['weight'],
                           'action' => $story['action']))) {
         // Success
         LogUtil::registerStatus(__('Done! Saved your changes.', $dom));
@@ -568,8 +569,9 @@ function News_admin_view($args)
     $render->assign('news_status', $news_status);
     $render->assign('itemstatus', $itemstatus);
     $render->assign('order', $order);
-    $render->assign('orderoptions', array('from' => __('Article date/time', $dom), 
-                                          'sid'  => __('Article ID', $dom)));
+    $render->assign('orderoptions', array('from'   => __('Article date/time', $dom),
+                                          'sid'    => __('Article ID', $dom),
+                                          'weight' => __('Article weight', $dom)));
 
     //$render->assign('monthyear', $monthyear);
     //$render->assign('newsmonths', $newsmonths);

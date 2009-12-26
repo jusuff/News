@@ -151,6 +151,7 @@ function News_ajax_update()
                                   'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
                                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                                   'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
+                                  'weight' => $story['weight'],
                                   'published_status' => $story['published_status']))) {
 
                 // Success

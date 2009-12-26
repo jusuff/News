@@ -238,6 +238,9 @@ height:50px;
     // Handle the sorting order
     switch ($vars['order'])
     {
+        case 2:
+            $apiargs['order'] = 'weight';
+            break;
         case 1:
             $apiargs['order'] = 'counter';
             break;

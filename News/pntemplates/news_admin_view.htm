@@ -83,9 +83,9 @@
                 <!--[if $enablecategorization]-->
                 <th><!--[gt text='Category']--></th>
                 <!--[/if]-->
-                <th><!--[gt text='Index page listing']--></th>
+                <th><!--[gt text='Index page<br />listing / Weight']--></th>
                 <th><!--[gt text='Date']--></th>
-                <th><!--[gt text='Actions']--></th>
+                <th width="10%"><!--[gt text='Actions']--></th>
             </tr>
         </thead>
         <tbody>
@@ -103,7 +103,7 @@
                     <!--[assignedcategorieslist item=$newsitem]-->
                 </td>
                 <!--[/if]-->
-                <td><!--[$newsitem.hideonindex|pnvarprepfordisplay]--></td>
+                <td><!--[$newsitem.hideonindex|pnvarprepfordisplay]--> / <!--[$newsitem.weight|pnvarprepfordisplay]--></td>
                 <td>
                     <!--[if $newsitem.published_status eq '2']-->
                         <!--[gt text='Last edited on']--> 

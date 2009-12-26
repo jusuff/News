@@ -165,14 +165,16 @@ function News_userapi_getall($args)
     }
 
     $orderby = '';
-    // Handle the sort order
+    // Handle the sort order, if nothing requested use admin setting
     if (!isset($args['order'])) {
         $args['order'] = pnModGetVar('News', 'storyorder');
-
         switch ($args['order'])
         {
             case 0:
                 $order = 'sid';
+                break;
+            case 2:
+                $order = 'weight';
                 break;
             case 1:
             default:
@@ -182,6 +184,7 @@ function News_userapi_getall($args)
         $order = $args['order'];
     }
 
+    // if ordering is used also set the order direction, ascending/descending
     if (!empty($order)) {
         if (isset($args['orderdir']) && in_array(strtoupper($args['orderdir'], array('ASC', 'DESC')))) {
             $orderby = $news_column[$order].' '.strtoupper($args['orderdir']);

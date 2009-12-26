@@ -33,7 +33,7 @@ function News_init()
 
     // Set up config variables
     pnModSetVar('News', 'storyhome', 10);
-    pnModSetVar('News', 'storyorder', 1);
+    pnModSetVar('News', 'storyorder', 1); // publication datetime
     pnModSetVar('News', 'itemsperpage', 25);
     pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
     pnModSetVar('News', 'enablecategorization', true);
@@ -264,8 +264,8 @@ function News_defaultdata()
     // set creation date and from to the time set in autonews
     $article = array('title'            => __('News introduction article', $dom),
                      'urltitle'         => __('news_introduction_article', $dom),
-                     'hometext'         => __('A News article is divided into this index page teaser text and a bodytext. In the index page teaser text you can write a small introduction to the article. Click on the article title for more information.', $dom),
-                     'bodytext'         => __('The full article contains the main part of your News message. News can make use of permissions in Zikula to control who has access to what parts. A moderator group can be created that can Add, Edit and Delete articles for instance. <br />You can edit or delete this first introduction article by clicking on the correct link.', $dom),
+                     'hometext'         => __('A News article is divided into this index page teaser text and a bodytext. In the index page teaser text you can write a small introduction to the article. Click on the article title for more News publisher information.', $dom),
+                     'bodytext'         => __f('<h3>What is News about</h3><p>This full article display shows the whole News article. The article can contain for example url links, images and text markup. The <a href="http://code.zikula.org/news/wiki#Documentation">News Wiki Documentation</a> contains more information on News.</p><h3>Some more details</h3><p><img src="modules/News/pnimages/admin.gif" width="48" height="48" float="left" alt="News publisher admin image"/>Make sure that you enable the HTML elements you want to use in the <a href="index.php?module=SecurityCenter&type=admin&func=allowedhtml">Security Center</a>. News can make use of permissions in Zikula to control who has access to what areas of News. A moderator group can be created that can Add, Edit and Delete articles for instance. <br />You can edit or delete this first introduction article by clicking on the correct link next to the article title or go to the <a href="index.php?module=%s&type=admin&func=view">News admin pages</a>.</p>', __('News', $dom), $dom),
                      'counter'          => 0,
                      'contributor'      => $uname,
                      'approver'         => $uname,

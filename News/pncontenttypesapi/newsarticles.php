@@ -139,6 +139,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     // Handle the sorting order
     switch ($this->order)
     {
+        case 2:
+            $apiargs['order'] = 'weight';
+            break;
         case 1:
             $apiargs['order'] = 'counter';
             break;
@@ -368,7 +371,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
 
     $orderoptions = array(
         array('value' => 0, 'text' => __('News publisher setting', $dom)),
-        array('value' => 1, 'text' => __('Number of pageviews', $dom))
+        array('value' => 1, 'text' => __('Number of pageviews', $dom)),
+        array('value' => 2, 'text' => __('Article weight', $dom))
     );
 
     $render->assign('showoptions', $showoptions);
