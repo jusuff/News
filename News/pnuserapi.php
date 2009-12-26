@@ -183,7 +183,7 @@ function News_userapi_getall($args)
     } elseif (isset($news_column[$args['order']])) {
         $order = $args['order'];
     }
-
+    
     // if ordering is used also set the order direction, ascending/descending
     if (!empty($order)) {
         if (isset($args['orderdir']) && in_array(strtoupper($args['orderdir'], array('ASC', 'DESC')))) {
@@ -191,6 +191,11 @@ function News_userapi_getall($args)
         } else {
             $orderby = $news_column[$order].' DESC';
         }
+    }
+    
+    // if sorted by weight add second ordering "from", since weight is not unique
+    if ($order == 'weight') {
+        $orderby .= ', ' . $news_column['from'] . ' DESC';
     }
 
     $permChecker = new news_result_checker();
