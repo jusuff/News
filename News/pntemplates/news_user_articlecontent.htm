@@ -6,7 +6,12 @@
     // ]]>
 </script>
 
-<span class="news_category"><!--[$preformat.category]--></span>
+<span class="news_category">
+<!--[foreach name='categorylinks' from=$preformat.categories item='categorylink']-->
+<!--[$categorylink]-->
+<!--[if $smarty.foreach.categorylinks.last neq true]--><span class="text_separator"> | </span><!--[/if]-->
+<!--[/foreach]-->
+</span>
 <h3 class="news_title"><!--[$info.catandtitle]--></h3>
 
 <!--[nocache]-->
