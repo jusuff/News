@@ -23,6 +23,13 @@ function News_accountapi_getall($args)
 
     $items = array();
 
+    $uname = (isset($args['uname'])) ? $args['uname'] : pnUserGetVar('uname');
+    // does this user exist?
+    if(pnUserGetIDFromName($uname)==false) {
+        // user does not exist
+        return $items;
+    }
+
     // Create an array of links to return
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
         $items[] = array('url'     => pnModURL('News', 'user', 'new'),
