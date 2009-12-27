@@ -156,7 +156,7 @@ function News_userapi_getall($args)
 
     // check for a specific author
     if (isset($args['uid']) && is_int($args['uid'])) {
-        $queryargs[] = "$news_column[aid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+        $queryargs[] = "$news_column[cr_uid] = '" . DataUtil::formatForStore($args['uid']) . "'";
     }
 
     $where = '';
