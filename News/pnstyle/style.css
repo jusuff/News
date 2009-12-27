@@ -200,16 +200,20 @@ div.news_index {
 }
 
 /* style for LI elements in general (excludes an LI that contains sub lists) */
+#news-archive {
+  margin:0;
+}
+
 .news_treeview li {
-  background: white url(../pnimages/list.gif) no-repeat left center;
+  background: white url(../pnimages/arrow.gif) no-repeat left center;
   list-style-type: none;
   padding-left: 22px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 /* style for LI that contains sub lists (other ULs). */
 .news_treeview li.submenu {
-  background: white url(../pnimages/closed.gif) no-repeat left 1px;
+  background: white url(../pnimages/expand.gif) no-repeat left 1px;
   cursor: hand !important;
   cursor: pointer !important;
 }

@@ -4,15 +4,18 @@
 
 <!--[include file='news_user_menu.htm']-->
 
+<!--[* Check if overview display is needed or detail display for a month *]-->
 <!--[if $archiveitems eq '']-->
 <!--[* assign page title *]-->
 <!--[gt text='News archive' assign='NewsArchiveTitle']-->
 <!--[pnpagesetvar name='title' value=$NewsArchiveTitle]-->
 
 <h3><!--[gt text='News archive']--></h3>
+<p><a href="javascript:ddtreemenu.flatten('news-archive', 'expand')"><!--[gt text='Expand all']--></a> | <a href="javascript:ddtreemenu.flatten('news-archive', 'contract')"><!--[gt text='Contract all']--></a></p>
 
+<ul id="news-archive" class="news_treeview">
 <!--[foreach from=$archivemonths key='year' item='years']-->
-<h4><!--[$year]--></h4>
+<li><h4><!--[$year]--></h4>
 <ul>
     <!--[foreach from=$years item='month']-->
     <li>
@@ -21,7 +24,17 @@
     </li>
     <!--[/foreach]-->
 </ul>
+</li>
 <!--[/foreach]-->
+</ul>
+
+<script type="text/javascript">
+//ddtreemenu.createTree(treeid, enablepersist, opt_persist_in_days (default is 1))
+ddtreemenu.closefolder = "../../../modules/News/pnimages/expand.gif"; //set image path to "closed" folder image
+ddtreemenu.openfolder = "../../../modules/News/pnimages/contract.gif"; //set image path to "open" folder image
+ddtreemenu.createTree("news-archive", true);
+ddtreemenu.flatten('news-archive', 'expand');
+</script>
 
 <!--[else]-->
 <!--[* assign page title *]-->
@@ -38,7 +51,7 @@
             <th><!--[gt text='Category']--></th>
             <!--[/if]-->
             <th><!--[gt text='Pageviews']--></th>
-            <th><!--[gt text='Date posted']--></th>
+            <th><!--[gt text='Posted']--></th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +65,7 @@
             </td>
             <!--[/if]-->
             <td><!--[$archiveitems[items].counter|pnvarprepfordisplay]--></td>
-            <td><!--[$archiveitems[items].from|pndate_format|pnvarprepfordisplay]--></td>
+            <td><!--[gt text='on %1$s by %2$s' tag1=$archiveitems[items].from|pndate_format|pnvarprepfordisplay tag2=$archiveitems[items].contributor|pnvarprepfordisplay]--></td>
         </tr>
         <!--[/section]-->
     </tbody>
