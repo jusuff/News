@@ -37,7 +37,7 @@
         <!--[/if]-->
 
         <!--[if $func neq 'archives']-->
-        |
+        <!--[if $func neq 'main' OR $enablecategorization AND $func neq 'categorylist']--> | <!--[/if]-->
         <a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[gt text='News archive']--></a>
         <!--[/if]-->
 
