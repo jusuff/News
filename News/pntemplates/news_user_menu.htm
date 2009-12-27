@@ -3,6 +3,7 @@
 <!--[nocache]-->
 <!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
 <!--[formutil_getpassedvalue name='theme' default='' noprocess=true assign='theme']-->
+<!--[securityutil_checkpermission component='News::' instance='::' level='ACCESS_OVERVIEW' assign='authoverview']-->
 <!--[securityutil_checkpermission component='News::' instance='::' level='ACCESS_COMMENT' assign='authcomm']-->
 <!--[securityutil_checkpermission component='News::' instance='::' level='ACCESS_EDIT' assign='authedit']-->
 <!--[/nocache]-->
@@ -23,7 +24,7 @@
 <!--[/if]-->
 
 <h2><!--[gt text='News']--><!--[if $catname|default:'' neq '']--> &raquo; <!--[$catname]--><!--[/if]--></h2>
-<!--[if $theme neq 'Printer']-->
+<!--[if $theme neq 'Printer' AND $authoverview]-->
 <div class="z-menu">
     <span class="z-menuitem-title">
         [
