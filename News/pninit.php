@@ -264,8 +264,8 @@ function News_defaultdata()
     // set creation date and from to the time set in autonews
     $article = array('title'            => __('News introduction article', $dom),
                      'urltitle'         => __('news_introduction_article', $dom),
-                     'hometext'         => __('A News article is divided into this index page teaser text and a bodytext. In the index page teaser text you can write a small introduction to the article. Click on the article title for more News publisher information.', $dom),
-                     'bodytext'         => __f('<h3>What is News about</h3><p>This full article display shows the whole News article. The article can contain for example url links, images and text markup. The <a href="http://code.zikula.org/news/wiki#Documentation">News Wiki Documentation</a> contains more information on News.</p><h3>Some more details</h3><p><img src="modules/News/pnimages/admin.gif" width="48" height="48" float="left" alt="News publisher admin image"/>Make sure that you enable the HTML elements you want to use in the <a href="index.php?module=SecurityCenter&type=admin&func=allowedhtml">Security Center</a>. News can make use of permissions in Zikula to control who has access to what areas of News. A moderator group can be created that can Add, Edit and Delete articles for instance. <br />You can edit or delete this first introduction article by clicking on the correct link next to the article title or go to the <a href="index.php?module=%s&type=admin&func=view">News admin pages</a>.</p>', __('News', $dom), $dom),
+                     'hometext'         => __('A news article is divided into an article teaser text (which is the lead-in text you are reading now) and an article body text (which you can view by clicking on the article\'s title or the \'Read more\' link). The teaser will generally be a short introduction to the article, but if you plan to publish only very short bulletins, the teaser can contain the full draft and the article body can be left empty. Click on the article title for more information about Zikula\'s News publisher module.', $dom),
+                     'bodytext'         => __f('<h3>More about the News module</h3><p>You are now reading the body text of the article (starting as from the \'More about the News module\' title above). Both the article teaser and the article body can contain URL links, images, mark-up (HTML tags and, if you have the additional necessary add-ons installed, other mark-up languages such as BBCode) You can learn more about the News module by reading the <a href="http://code.zikula.org/news/wiki#Documentation">News Wiki Documentation</a>.</p><h3>Some more details</h3><p><img src="modules/News/pnimages/admin.gif" width="48" height="48" float="left" alt="News publisher admin image"/>To control what HTML tags can be included in an article to format and enhance it, the site administrator should set the desired tags to enabled status by visiting the <a href="index.php?module=SecurityCenter&type=admin&func=allowedhtml">Security centre</a>. With the News module, you can take advantage of Zikula\'s permissions system to control who gets what access to which parts of the News module. A moderator group can be created, containing registered site users who can add, edit and delete articles. This is just a simple example: the Zikula permissions system is sufficiently flexible to let you implement practically any organisation you want.</p><p>You can edit or delete this introductory article by clicking on the link beside the article title, or you can visit to the <a href="index.php?module=%s&type=admin&func=view">News admin pages</a>.</p>', __('News', $dom), $dom),
                      'counter'          => 0,
                      'contributor'      => $uname,
                      'approver'         => $uname,
@@ -281,11 +281,11 @@ function News_defaultdata()
 
     // Insert the default article and preserve the standard fields
     if (!($obj = DBUtil::insertObject($article, 'news', 'sid'))) {
-        LogUtil::registerStatus(__('Warning! Could not create the default News introduction article.', $dom)); 
+        LogUtil::registerStatus(__('Warning! Could not create the default News introductory article.', $dom)); 
     }
     $obj = array('sid'  => $obj['sid'], 'from' => $obj['cr_date']);
     if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
-        LogUtil::registerStatus(__('Warning! Could not update the default News introduction article.', $dom)); 
+        LogUtil::registerStatus(__('Warning! Could not update the default News introductory article.', $dom)); 
     }
 }
 
