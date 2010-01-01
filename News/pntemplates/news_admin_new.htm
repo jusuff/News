@@ -184,9 +184,9 @@
                             <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a>
                         </div>
                         <ul id="news_attributes" class="itemlist">
-                            <!--[if isset($_Attributes__)]-->
+                            <!--[if isset($__ATTRIBUTES__)]-->
                             <!--[counter name='news_attributes' reset=true print=false start=0]-->
-                            <!--[foreach from=$_Attributes__ key='name' item='value']-->
+                            <!--[foreach from=$__ATTRIBUTES__ key='name' item='value']-->
                             <!--[counter name='news_attributes' print=false assign='attrnum']-->
                             <li id="listitem_news_attributes_<!--[$attrnum]-->" class="sortable z-clearfix <!--[cycle values='z-odd,z-even']-->">
                                 <span class="itemlistcell width4">&nbsp;</span>
