@@ -102,6 +102,10 @@ function News_user_new($args)
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $render->assign('catregistry', $catregistry);
+        
+        if ($modvars['enablemorearticlesincat']) {
+            $item['__ATTRIBUTES__']['morearticlesincat'] = 0;
+        }
     }
 
     $render->assign($modvars);
@@ -556,17 +560,17 @@ function News_user_display($args)
                           'preformat' => $preformat,
                           'page'      => $page));
 
-    $render->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
-    $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
-    $render->assign('enableajaxedit', pnModGetVar('News', 'enableajaxedit'));
+    $modvars = pnModGetVar('News');
+    $render->assign('enablecategorization', $modvars['enablecategorization']);
+    $render->assign('catimagepath', $modvars['catimagepath']);
+    $render->assign('enableajaxedit', $modvars['enableajaxedit']);
     
     // get more articletitles in the categories of this article
-    $modvars = pnModGetVar('News');
     if ($modvars['enablecategorization'] && $modvars['enablemorearticlesincat']) {
         // check how many articles to display
         if ($modvars['morearticlesincat'] > 0) {
             $morearticlesincat = $modvars['morearticlesincat'];
-        } elseif ($modvars['morearticlesincat'] == 0 && $info['attributes']['morearticlesincat'] > 0) {
+        } elseif ($modvars['morearticlesincat'] == 0 && array_key_exists('morearticlesincat', $info['attributes'])) {
             $morearticlesincat = $info['attributes']['morearticlesincat'];
         } else {
             $morearticlesincat = 0;

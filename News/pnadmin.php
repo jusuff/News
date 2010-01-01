@@ -120,7 +120,7 @@ function News_admin_modify($args)
     if ($item['published_status'] == 2) {
         $nowts = time();
         $now = DateUtil::getDatetime($nowts);
-        // adjust to, since it is now before the new from
+        // adjust 'to', since it is before the new 'from' set above
         if (!is_null($item['to']) && DateUtil::getDatetimeDiff_AsField($now, $item['to'], 6) < 0) {
             $item['to'] = DateUtil::getDatetime($nowts + DateUtil::getDatetimeDiff_AsField($item['from'], $item['to']));
         }
@@ -157,6 +157,12 @@ function News_admin_modify($args)
                 }
             }
         }
+        
+        // Add article attribute morearticlesincat when not existing yet and functionality is enabled.
+        if ($modvars['enablemorearticlesincat'] && !array_key_exists('morearticlesincat', $info['__ATTRIBUTES__'])) {
+            $item['__ATTRIBUTES__']['morearticlesincat'] = 0;
+        }
+        
     }
 
     // Create output object
