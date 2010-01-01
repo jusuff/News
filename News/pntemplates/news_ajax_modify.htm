@@ -27,7 +27,7 @@
             <div class="z-formrow">
                 <label for="news_urltitle"><!--[gt text='Permalink URL']--></label>
                 <input id="news_urltitle" class="z-form-text" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
-                <em class="z-sub z-formnote"><!--[gt text='(Automatically generated if left blank)']--></em>
+                <em class="z-sub z-formnote"><!--[gt text='(Generated automatically if left blank)']--></em>
             </div>
 
             <!--[if $enablecategorization]-->
@@ -59,6 +59,7 @@
 
         <fieldset class="z-linear">
             <legend><!--[gt text='Article']--></legend>
+            
             <!--[if $formattedcontent eq 0]-->
             <div class="z-warningmsg"><!--[gt text='Permitted HTML tags']-->: <!--[allowedhtml]--></div>
             <!--[/if]-->
@@ -118,6 +119,7 @@
                     <label for="news_unlimited"><!--[gt text='No time limit']--></label>
                     <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" <!--[if $unlimited eq 1]-->checked="checked" <!--[/if]-->/>
                 </div>
+                
                 <div id="news_expiration_details">
                     <div class="z-formrow">
                         <label><!--[gt text='Start date']--></label>
@@ -140,6 +142,55 @@
                 </div>
             </div>
         </fieldset>
+
+        <!--[* CHECK FOR JS if $enableattribution]-->
+        <fieldset>
+            <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[gt text='Article attributes']--></a></legend>
+            <div id="news_attributes_details">
+                <div class="z-formrow">
+                    <div class="itemlist_newitemdiv">
+                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a><br />
+                    </div>
+                    <ul id="news_attributes" class="itemlist">
+                        <!--[if isset($__ATTRIBUTES__)]-->
+                        <!--[counter name='news_attributes' reset=true print=false start=0]-->
+                        <!--[foreach from=$__ATTRIBUTES__ key='name' item='value']-->
+                        <!--[counter name='news_attributes' print=false assign='attrnum']-->
+                        <li id="listitem_news_attributes_<!--[$attrnum]-->" class="sortable z-clearfix <!--[cycle values='z-odd,z-even']-->">
+                            <span class="itemlistcell width4">&nbsp;</span>
+                            <span class="itemlistcell width44">
+                                <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_name" name="story[attributes][<!--[$attrnum]-->][name]" size="25" maxlength="255" value="<!--[$name]-->" />
+                            </span>
+                            <span class="itemlistcell width44">
+                                <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
+                            </span>
+                            <span class="itemlistcell width7">
+                                <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
+                            </span>
+                        </li>
+                        <!--[/foreach]-->
+                        <!--[else]-->
+                        <li>&nbsp;</li>
+                        <!--[/if]-->
+                    </ul>
+                    <ul style="display: none">
+                        <li id="news_attributes_emptyitem" class="sortable z-clearfix">
+                            <span class="itemlistcell width4">&nbsp;</span>
+                            <span class="itemlistcell width44">
+                                <input class="iteminput" type="text" id="story_attributes_X_name" name="dummy[]" size="25" maxlength="255" value="" />
+                            </span>
+                            <span class="itemlistcell width44">
+                                <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
+                            </span>
+                            <span class="itemlistcell width7">
+                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </fieldset>
+        <!--[/if *]-->
 
         <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 
