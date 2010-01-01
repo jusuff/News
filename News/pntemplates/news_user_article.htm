@@ -13,6 +13,20 @@
 </div>
 <div id="news_modify">&nbsp;</div>
 
+<!--[if !empty($morearticlesincat)]-->
+<div id="news_morearticlesincat">
+<h4><!--[gt text='More articles in ']-->
+<!--[foreach name='categorynames' from=$preformat.categorynames item='categoryname']-->
+<!--[$categoryname]--><!--[if $smarty.foreach.categorynames.last neq true]-->&nbsp;&amp;&nbsp;<!--[/if]-->
+<!--[/foreach]-->:</h4>
+<ul>
+    <!--[foreach from=$morearticlesincat item='morearticle']-->
+    <li><a href="<!--[pnmodurl modname='News' func='display' sid=$morearticle.sid]-->"><!--[$morearticle.title|pnvarprephtmldisplay]--></a> (<!--[gt text='by %1$s on %2$s' tag1=$morearticle.contributor tag2=$morearticle.from|pndate_format:'datebrief']-->)</li>
+    <!--[/foreach]-->
+</ul>
+</div>
+<!--[/if]-->
+
 <!--[* the next code is to display any hooks (e.g. comments, ratings). All hooks are stored in $hooks and called individually. EZComments is not called when Commenting is not allowed *]-->
 <!--[pnmodurl modname='News' func='display' sid=$info.sid assign='returnurl']-->
 <!--[pnmodcallhooks hookobject='item' hookaction='display' hookid=$info.sid module='News' returnurl=$returnurl owneruid=$info.cr_uid implode=false]-->

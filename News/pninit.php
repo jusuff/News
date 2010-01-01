@@ -41,6 +41,9 @@ function News_init()
     pnModSetVar('News', 'enableattribution', false);
     pnModSetVar('News', 'catimagepath', 'images/categories/');
     pnModSetVar('News', 'enableajaxedit', false);
+    pnModSetVar('News', 'enablemorearticlesincat', false);
+    pnModSetVar('News', 'morearticlesincat', 0);
+    
 
     // create the default data for the News module
     News_defaultdata();
@@ -208,6 +211,10 @@ function News_upgrade($oldversion)
                     return '2.4.3';
                 }
             }
+            // Add new variable(s)
+            pnModSetVar('News', 'enablemorearticlesincat', false);
+            pnModSetVar('News', 'morearticlesincat', 0);
+
             // clear compiled templates and News cache
             pnModAPIFunc('pnRender', 'user', 'clear_compiled');
             pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));

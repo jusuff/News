@@ -1,4 +1,5 @@
 <!--[*  $Id: news_admin_modifyconfig.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
+<!--[pnajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true nobehaviour=true noscriptaculous=true]-->
 
 <!--[include file='news_admin_menu.htm']-->
 
@@ -64,13 +65,25 @@
                 <div class="z-formrow">
                     <label for="news_enableajaxedit"><!--[gt text='Enable in-line editing of articles via JavaScript/Ajax controls']--></label>
                     <input id="news_enableajaxedit" type="checkbox" name="enableajaxedit"<!--[if $enableajaxedit]--> checked="checked"<!--[/if]--> />
+                </div>
+                <div id="news_ajaxedit_details">
                     <div class="z-informationmsg z-formnote"><!--[gt text='When Scribite! is being used for editing, the <strong>display</strong> function needs to be added to the list of module functions that Scribite! uses for the News Publisher module.']--></div>
+                </div>
+                <div class="z-formrow">
+                    <label for="news_enablemorearticlesincat"><!--[gt text='Enable \'More articles in category\' when displaying an article']--></label>
+                    <input id="news_enablemorearticlesincat" type="checkbox" name="enablemorearticlesincat"<!--[if $enablemorearticlesincat]--> checked="checked"<!--[/if]--> />
+                </div>
+                <div id="news_morearticles_details">
+                    <div class="z-formrow">
+                        <label for="news_morearticlesincat"><!--[gt text='Number of \'More articles in category\' for every article']--></label>
+                        <input id="news_morearticlesincat" type="text" name="morearticlesincat" size="3" value="<!--[$morearticlesincat|pnvarprepfordisplay]-->" />
+                        <div class="z-informationmsg z-formnote"><!--[gt text='When displaying an article, a number of additional articletitles in the same category can be shown. To show the additional articletitles for every article set the value above to a number larger than 0. When the value is set to 0, the number of additional articletitles can be set per article by means of the article attribute \'morearticlesincat\'. When the article attribute is set to 0 no additional titles will be shown (and also not extracted from the database).']--></div>
+                    </div>
                 </div>
             </fieldset>
 
             <!--[pnconfiggetvar name='shorturls' assign='shorturls']-->
             <!--[if $shorturls eq true]-->
-            <!--[pnajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true nobehaviour=true noscriptaculous=true]-->
             <fieldset>
                 <legend><!--[gt text='Permalinks']--></legend>
                 <p class="z-informationmsg"><!--[gt text='You can select a pre-defined permalink format, or define your custom format.']--></p>

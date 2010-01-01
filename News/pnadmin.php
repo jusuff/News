@@ -739,6 +739,8 @@ function News_admin_updateconfig()
     }
     $modvars['catimagepath'] = $catimagepath;
     $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
+    $modvars['enablemorearticlesincat'] = (bool)FormUtil::getPassedValue('enablemorearticlesincat', false, 'POST');
+    $modvars['morearticlesincat'] = (int)FormUtil::getPassedValue('morearticlesincat', 0, 'POST');
 
     if (!Loader::loadClass('CategoryRegistryUtil')) {
         pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));

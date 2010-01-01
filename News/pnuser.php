@@ -340,7 +340,7 @@ function News_user_view($args = array())
             }
         }
     }
-
+    
     // get matching news articles
     $items = pnModAPIFunc('News', 'user', 'getall',
                           array('startnum'     => $startnum,
@@ -383,21 +383,21 @@ function News_user_view($args = array())
 
             // $info is array holding raw information.
             // Used below and also passed to the theme - jgm
-            $item = pnModAPIFunc('News', 'user', 'getArticleInfo', $item);
+            $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $item);
 
             // $links is an array holding pure URLs to
             // specific functions for this article.
             // Used below and also passed to the theme - jgm
-            $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $item);
+            $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
 
             // $preformat is an array holding chunks of
             // preformatted text for this article.
             // Used below and also passed to the theme - jgm
             $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat',
-                                       array('info' => $item,
+                                       array('info' => $info,
                                              'links' => $links));
 
-            $render->assign(array('info' => $item,
+            $render->assign(array('info' => $info,
                                   'links' => $links,
                                   'preformat' => $preformat));
 
@@ -559,6 +559,38 @@ function News_user_display($args)
     $render->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
     $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
     $render->assign('enableajaxedit', pnModGetVar('News', 'enableajaxedit'));
+    
+    // get more articletitles in the categories of this article
+    $modvars = pnModGetVar('News');
+    if ($modvars['enablecategorization'] && $modvars['enablemorearticlesincat']) {
+        // check how many articles to display
+        if ($modvars['morearticlesincat'] > 0) {
+            $morearticlesincat = $modvars['morearticlesincat'];
+        } elseif ($modvars['morearticlesincat'] == 0 && $info['attributes']['morearticlesincat'] > 0) {
+            $morearticlesincat = $info['attributes']['morearticlesincat'];
+        } else {
+            $morearticlesincat = 0;
+        }
+        if ($morearticlesincat > 0) {
+            if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
+                pn_exit(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
+            }
+            // get the categories registered for News
+            $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
+            foreach (array_keys($catregistry) as $property) {
+                $catFilter[$property] = $info['categories'][$property]['id'];
+            }
+            // get matching news articles
+            $morearticlesincat = pnModAPIFunc('News', 'user', 'getall',
+                                  array('numitems'     => $morearticlesincat,
+                                        'status'       => 0,
+                                        'filterbydate' => true,
+                                        'category'     => $catFilter,
+                                        'catregistry'  => $catregistry,
+                                        'query'        => array('sid', '!=', $sid)));
+            $render->assign('morearticlesincat', $morearticlesincat);
+        }
+    }
 
     // Now lets assign the informatation to create a pager for the review
     $render->assign('pager', array('numitems'     => $numpages,

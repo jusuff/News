@@ -455,86 +455,6 @@ function News_userapi_incrementreadcount($args)
 }
 
 /**
- * Generate an array of links for a given article
- * Requires info to have previously gone through
- * genArticleInfo() and meet the prerequisites
- * for it
- * @author unknown
- */
-function News_userapi_getArticleLinks($info)
-{
-    // Allowed to comment?
-    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-        $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
-        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
-            $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
-        }
-    } else {
-        $comment     = '';
-        $postcomment = '';
-    }
-
-    // Allowed to read full article?
-    if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
-        $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
-    } else {
-        $fullarticle = '';
-    }
-
-    // Link to topic if there is a topic
-    if (!empty($info['topicpath'])) {
-        $topicField = _News_getTopicField();
-        // check which variable to use for the topic
-        if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
-            $searchtopic = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
-        } else {
-            $searchtopic = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['tid'])));
-        }
-    } else {
-        $searchtopic = '';
-    }
-
-    // Link to all the categories
-    $categories = array();
-    if (!empty($info['categories']) && is_array($info['categories']) && pnModGetVar('News', 'enablecategorization')) {
-        // check which variable to use for the category
-        if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
-            $field = 'path_relative';
-        } else {
-            $field = 'id';
-        }
-        $properties = array_keys($info['categories']);
-        foreach ($properties as $prop) {
-            $categories[$prop] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $prop, 'cat' => $info['categories'][$prop][$field])));
-        }
-    }
-
-    $author = $info['contributor'];
-    $profileModule = pnConfigGetVar('profilemodule', '');
-    if (!empty($profileModule) && pnModAvailable($profileModule)) {
-        $author = pnModURL($profileModule, 'user', 'view', array('uname' => $author));
-    }
-
-    // Set up the array itself
-    $links = array ('category'        => DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
-                    'categories'      => $categories,
-                    'permalink'       => DataUtil::formatForDisplayHTML(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
-                    'postcomment'     => $postcomment,
-                    'comment'         => $comment,
-                    'fullarticle'     => $fullarticle,
-                    'searchtopic'     => $searchtopic,
-                    'print'           => DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
-                    'commentrssfeed'  => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'commentatomfeed' => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'author'          => DataUtil::formatForDisplay($author),
-                    'version'         => 1);
-
-    return $links;
-}
-
-/**
  * Generate raw information for a given article
  * Requires row to have previously gone through
  * getArticles() and meet the prerequisites
@@ -683,6 +603,86 @@ function News_userapi_getArticleInfo($info)
 }
 
 /**
+ * Generate an array of links for a given article
+ * Requires info to have previously gone through
+ * genArticleInfo() and meet the prerequisites
+ * for it
+ * @author unknown
+ */
+function News_userapi_getArticleLinks($info)
+{
+    // Allowed to comment?
+    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+        $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
+            $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
+        }
+    } else {
+        $comment     = '';
+        $postcomment = '';
+    }
+
+    // Allowed to read full article?
+    if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+        $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
+    } else {
+        $fullarticle = '';
+    }
+
+    // Link to topic if there is a topic
+    if (!empty($info['topicpath'])) {
+        $topicField = _News_getTopicField();
+        // check which variable to use for the topic
+        if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
+            $searchtopic = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
+        } else {
+            $searchtopic = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['tid'])));
+        }
+    } else {
+        $searchtopic = '';
+    }
+
+    // Link to all the categories
+    $categories = array();
+    if (!empty($info['categories']) && is_array($info['categories']) && pnModGetVar('News', 'enablecategorization')) {
+        // check which variable to use for the category
+        if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
+            $field = 'path_relative';
+        } else {
+            $field = 'id';
+        }
+        $properties = array_keys($info['categories']);
+        foreach ($properties as $prop) {
+            $categories[$prop] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $prop, 'cat' => $info['categories'][$prop][$field])));
+        }
+    }
+
+    $author = $info['contributor'];
+    $profileModule = pnConfigGetVar('profilemodule', '');
+    if (!empty($profileModule) && pnModAvailable($profileModule)) {
+        $author = pnModURL($profileModule, 'user', 'view', array('uname' => $author));
+    }
+
+    // Set up the array itself
+    $links = array ('category'        => DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
+                    'categories'      => $categories,
+                    'permalink'       => DataUtil::formatForDisplayHTML(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
+                    'postcomment'     => $postcomment,
+                    'comment'         => $comment,
+                    'fullarticle'     => $fullarticle,
+                    'searchtopic'     => $searchtopic,
+                    'print'           => DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
+                    'commentrssfeed'  => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'commentatomfeed' => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'author'          => DataUtil::formatForDisplay($author),
+                    'version'         => 1);
+
+    return $links;
+}
+
+/**
  * Generate an array of preformatted HTML bites for a given article
  * Requires info to have previously gone through
  * genArticleInfo() and meet the prerequisites for it
@@ -762,24 +762,26 @@ function News_userapi_getArticlePreformat($args)
         foreach ($properties as $prop) {
             $catname = isset($info['categories'][$prop]['display_name'][$lang]) ? $info['categories'][$prop]['display_name'][$lang] : $info['categories'][$prop]['name'];
             $categories[$prop] = '<a href="'.$links['categories'][$prop].'">'.$catname.'</a>';
+            $categorynames[$prop] = $catname;
         }
     }
 
     // Set up the array itself
-    $preformat = array('bodytext'    => $bodytext,
-                       'bytesmore'   => $bytesmorelink,
-                       'category'    => '<a href="'.$links['category'].'" title="'.$info['cattitle'].'">'.$info['cattitle'].'</a>',
-                       'categories'  => $categories,
-                       'postcomment' => $postcomment,
-                       'comment'     => $comment,
-                       'commentlink' => $commentlink,
-                       'hometext'    => $hometext,
-                       'notes'       => $notes,
-                       'print'       => $print,
-                       'printicon'   => $printicon,
-                       'readmore'    => $readmore,
-                       'title'       => $title,
-                       'version'     => 1);
+    $preformat = array('bodytext'      => $bodytext,
+                       'bytesmore'     => $bytesmorelink,
+                       'category'      => '<a href="'.$links['category'].'" title="'.$info['cattitle'].'">'.$info['cattitle'].'</a>',
+                       'categories'    => $categories,
+                       'categorynames' => $categorynames,
+                       'postcomment'   => $postcomment,
+                       'comment'       => $comment,
+                       'commentlink'   => $commentlink,
+                       'hometext'      => $hometext,
+                       'notes'         => $notes,
+                       'print'         => $print,
+                       'printicon'     => $printicon,
+                       'readmore'      => $readmore,
+                       'title'         => $title,
+                       'version'       => 1);
 
     if (!empty($info['topicimage'])) {
         $catimagepath = pnModGetVar('News', 'catimagepath');
