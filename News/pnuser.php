@@ -104,7 +104,8 @@ function News_user_new($args)
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $render->assign('catregistry', $catregistry);
         
-        if ($modvars['enablemorearticlesincat']) {
+        // add article attribute if morearticles is enabled and general setting is zero 
+        if ($modvars['enablemorearticlesincat'] && $modvars['morearticlesincat'] == 0) {
             $item['__ATTRIBUTES__']['morearticlesincat'] = 0;
         }
     }
