@@ -73,6 +73,7 @@ function News_user_new($args)
         $item['to'] = time();
         $item['tonolimit'] = 1;
         $item['unlimited'] = 1;
+        $item['weight'] = 0;
     }
 
     $preview = '';
