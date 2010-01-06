@@ -147,6 +147,10 @@
                     <input id="news_hideonindex" name="story[hideonindex]" type="checkbox" value="1" <!--[if $hideonindex eq 1]-->checked="checked" <!--[/if]-->/>
                 </div>
                 <div class="z-formrow">
+                    <label for="news_weight"><!--[gt text='Article weight']--></label>
+                    <input id="news_weight" name="story[weight]" type="text" size="5" value="<!--[$weight|pnvarprepfordisplay]-->" />
+                </div>
+                <div class="z-formrow">
                     <label for="news_unlimited"><!--[gt text='No time limit']--></label>
                     <input id="news_unlimited" name="story[unlimited]" type="checkbox" value="1" <!--[if $unlimited eq 1]-->checked="checked" <!--[/if]-->/>
                 </div>
