@@ -68,6 +68,8 @@ function smarty_function_articleadminlinks($params, &$smarty)
             require_once $smarty->_get_plugin_filepath('function', 'pnajaxheader');
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'news.js'), $smarty);
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'sizecheck.js'), $smarty);
+            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'calendar_date_select.js'), $smarty);
+            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'format_iso_date.js'), $smarty);
             $articlelinks .= '<img id="news_loadnews" src="'.pnGetBaseURL().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
         } else {
             $articlelinks .= '<span class="' . $params['class'] . '"> ' . $params['start'] . ' <a href="' . DataUtil::formatForDisplayHTML(pnModURL('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . __('Edit', $dom) . '</a>';
