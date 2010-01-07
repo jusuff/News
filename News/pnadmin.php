@@ -86,8 +86,8 @@ function News_admin_modify($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$dbitem[aid]::$sid", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$dbitem[aid]::$sid", ACCESS_EDIT))) {
+    if (!(SecurityUtil::checkPermission('News::', "$dbitem[cr_uid]::$sid", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$dbitem[cr_uid]::$sid", ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -241,8 +241,8 @@ function News_admin_update($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT))) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -306,9 +306,9 @@ function News_admin_update($args)
                           'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
                           'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                           'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
-                          'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
+                          'from' => $story['from'],
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-                          'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
+                          'to' => $story['to'],
                           'approver' => $story['approver'],
                           'weight' => $story['weight'],
                           'action' => $story['action']))) {
@@ -352,8 +352,8 @@ function News_admin_delete($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE))) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -523,8 +523,8 @@ function News_admin_view($args)
                            'image' => '14_layer_visible.gif',
                            'title' => __('View', $dom));
 
-        if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_EDIT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_EDIT)) {
+        if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_EDIT)) {
             if ($item['published_status'] == 2) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
                                    'image' => 'editcut.gif',
@@ -535,8 +535,8 @@ function News_admin_view($args)
                                    'title' => __('Edit', $dom));
             }
 
-            if (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
-                SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE)) {
+            if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
+                SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE)) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'delete', array('sid' => $item['sid'])),
                                    'image' => '14_layer_deletelayer.gif',
                                    'title' => __('Delete', $dom));

@@ -1,5 +1,5 @@
 <!--[*  $Id: news_ajax_modify.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
-<!--[securityutil_checkpermission component='News::' instance="story[aid]::story[sid]" level='ACCESS_DELETE' assign='mayDelete']-->
+<!--[securityutil_checkpermission component='News::' instance="story[cr_uid]::story[sid]" level='ACCESS_DELETE' assign='mayDelete']-->
 
 <!--[gt text='Edit news article' assign='templatetitle']-->
 
@@ -64,9 +64,9 @@
             <div class="z-warningmsg"><!--[gt text='Permitted HTML tags']-->: <!--[allowedhtml]--></div>
             <!--[/if]-->
             <div class="z-formrow">
-                <label for="news_hometext"><!--[gt text='Index page teaser text']--></label>
+                <label for="news_hometext"><strong><!--[gt text='Index page teaser text']--></strong></label>
                 <textarea id="news_hometext" class="z-form-text" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-                <span id="news_hometext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
+                <span id="news_hometext_remaining" class="z-formnote z-sub"><!--[gt text='(Limit: 65,536 characters)']--></span>
             </div>
 
             <!--[if $formattedcontent eq 0]-->
@@ -80,9 +80,9 @@
             <!--[/if]-->
 
             <div class="z-formrow">
-                <label for="news_bodytext"><!--[gt text='Article body text']--></label>
+                <label for="news_bodytext"><strong><!--[gt text='Article body text']--></strong></label>
                 <textarea id="news_bodytext" class="z-form-text" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-                <span id="news_bodytext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
+                <span id="news_bodytext_remaining" class="z-formnote z-sub"><!--[gt text='(Limit: 65,536 characters)']--></span>
             </div>
 
             <!--[if $formattedcontent eq 0]-->
@@ -96,10 +96,10 @@
             <!--[/if]-->
 
             <div class="z-formrow">
-                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Footnote']--></a></label>
+                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><span id="news_notes_showhide"><!--[gt text='Show']--></span> <!--[gt text='Footnote']--></a></label>
                 <p id="news_notes_details">
                     <textarea id="news_notes" class="z-form-text" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-                    <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
+                    <span id="news_notes_remaining" class="z-formnote z-sub"><!--[gt text='(Limit: 65,536 characters)']--></span>
                 </p>
             </div>
         </fieldset>
@@ -123,7 +123,8 @@
                 <div id="news_expiration_details">
                     <div class="z-formrow">
                         <label><!--[gt text='Start date']--></label>
-                        <div><!--[html_select_date prefix='from' start_year='-2' end_year='+4' time=$from field_array='story']-->&nbsp;<!--[html_select_time prefix='from' use_24_hours=true display_seconds=false minute_interval='5' time=$from field_array='story']--></div>
+                        <input id="news_from" name="story[from]" type="text" size="18" value="<!--[$from]-->">
+                        <img onclick="new CalendarDateSelect('news_from', {time:true, minute_interval:10, year_range:4, time_12hr:false});" src="<!--[$baseurl]-->modules/News/pnimages/calendar.gif" />
                     </div>
                     <div class="z-formrow">
                         <label for="news_tonolimit"><!--[gt text='No end date']--></label>
@@ -132,7 +133,8 @@
                     <div id="news_expiration_date">
                         <div class="z-formrow">
                             <label><!--[gt text='End date']--></label>
-                            <div><!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds=false minute_interval='5' time=$to field_array='story']--></div>
+                            <input id="news_to" name="story[to]" type="text" size="18" value="<!--[$to]-->">
+                            <img onclick="new CalendarDateSelect('news_to', {time:true, minute_interval:10, year_range:4, time_12hr:false});" src="<!--[$baseurl]-->modules/News/pnimages/calendar.gif" />
                         </div>
                     </div>
                 </div>
@@ -143,13 +145,13 @@
             </div>
         </fieldset>
 
-        <!--[* CHECK FOR JS if $enableattribution]-->
+        <!--[if $enableattribution]-->
         <fieldset>
-            <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[gt text='Article attributes']--></a></legend>
+            <legend><a id="news_attributes_collapse" href="javascript:void(0);"><span id="news_attributes_showhide"><!--[gt text='Show']--></span> <!--[gt text='Article attributes']--></a></legend>
             <div id="news_attributes_details">
                 <div class="z-formrow">
                     <div class="itemlist_newitemdiv">
-                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a><br />
+                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a>
                     </div>
                     <ul id="news_attributes" class="itemlist">
                         <!--[if isset($__ATTRIBUTES__)]-->
@@ -168,12 +170,14 @@
                                 <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
                             </span>
                         </li>
+                        <!--[foreachelse]-->
+                        <li>&nbsp;</li>
                         <!--[/foreach]-->
                         <!--[else]-->
                         <li>&nbsp;</li>
                         <!--[/if]-->
                     </ul>
-                    <ul style="display: none">
+                    <ul style="display:none">
                         <li id="news_attributes_emptyitem" class="sortable z-clearfix">
                             <span class="itemlistcell width4">&nbsp;</span>
                             <span class="itemlistcell width44">
@@ -190,7 +194,7 @@
                 </div>
             </div>
         </fieldset>
-        <!--[/if *]-->
+        <!--[/if]-->
 
         <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 

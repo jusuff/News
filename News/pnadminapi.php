@@ -36,8 +36,8 @@ function News_adminapi_delete($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_DELETE) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_DELETE))) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -99,8 +99,8 @@ function News_adminapi_update($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$args[sid]", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$args[sid]", ACCESS_EDIT))) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$args[sid]", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$args[sid]", ACCESS_EDIT))) {
         return LogUtil::registerPermissionError();
     }
 
@@ -147,11 +147,11 @@ function News_adminapi_update($args)
         $args['from'] = $item['cr_date'];
         $args['to'] = null;
     } elseif (!empty($args['tonolimit'])) {
-        $args['from'] = DateUtil::getDatetime($args['from']);
+        $args['from'] = DateUtil::formatDatetime($args['from']);
         $args['to'] = null;
     } else {
-        $args['from'] = DateUtil::getDatetime($args['from']);
-        $args['to'] = DateUtil::getDatetime($args['to']);
+        $args['from'] = DateUtil::formatDatetime($args['from']);
+        $args['to'] = DateUtil::formatDatetime($args['to']);
     }
 
     if (!DBUtil::updateObject($args, 'news', '', 'sid')) {

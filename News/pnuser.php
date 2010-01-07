@@ -69,13 +69,13 @@ function News_user_new($args)
         $item['hideonindex'] = 1;
         $item['language'] = '';
         $item['disallowcomments'] = 1;
-        $item['from'] = time();
-        $item['to'] = time();
+        $item['from'] = DateUtil::getDatetime(null, '%Y-%m-%d %H:%M');
+        $item['to'] = DateUtil::getDatetime(null, '%Y-%m-%d %H:%M');
         $item['tonolimit'] = 1;
         $item['unlimited'] = 1;
         $item['weight'] = 0;
     }
-
+    
     $preview = '';
     if (isset($item['action']) && $item['action'] == 0) {
         $preview = News_user_preview(array('title' => $item['title'],
@@ -174,9 +174,9 @@ function News_user_create($args)
                   'notes' => $story['notes'],
                   'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
                   'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
-                  'from' => isset($story['fromHour']) ? mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']) : null,
+                  'from' => isset($story['from']) ? $story['from'] : null,
                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-                  'to' => isset($story['toHour']) ? mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']) : null,
+                  'to' => isset($story['to']) ? $story['to'] : null,
                   'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
                   'action' => isset($story['action']) ? $story['action'] : 0);
 
@@ -190,6 +190,7 @@ function News_user_create($args)
         $item['tonolimit'] = true;
         $item['to'] = null;
         $item['unlimited'] = true;
+        $item['weigth'] = 0;
         if ($item['action'] > 1) {
             $item['action'] = 0;
         }
@@ -255,19 +256,21 @@ function News_user_create($args)
         LogUtil::registerStatus(__('Done! Created new article.', $dom));
 /*
         // Notify the configured addresses of a new Pending Review article
-        $pending_notif = pnModGetVar('News', 'pending_notif', false);
-        if ($pending_notif && $item['published_status'] == 2) {
-            $fromname    = pnModGetVar('News', 'pending_notif_fromname', pnConfigGetVar('sitename'));
-            $fromaddress = pnModGetVar('News', 'pending_notif_fromaddress', pnConfigGetVar('adminmail'));
-            $toname      = pnModGetVar('News', 'pending_notif_toname', pnConfigGetVar('sitename'));
-            $toaddress   = pnModGetVar('News', 'pending_notif_toaddress', pnConfigGetVar('adminmail'));
-            $subject     = pnModGetVar('News', 'pending_notif_subject');
+        $notifyonpending = pnModGetVar('News', 'notifyonpending', false);
+        if ($notifyonpending && $item['published_status'] == 2) {
+            $fromname    = pnModGetVar('News', 'notifyonpending_fromname', pnConfigGetVar('sitename'));
+            $fromaddress = pnModGetVar('News', 'notifyonpending_fromaddress', pnConfigGetVar('adminmail'));
+            $toname      = pnModGetVar('News', 'notifyonpending_toname', pnConfigGetVar('sitename'));
+            $toaddress   = pnModGetVar('News', 'notifyonpending_toaddress', pnConfigGetVar('adminmail'));
+            $subject     = pnModGetVar('News', 'notifyonpending_subject');
             $body        = 'To Be Filled in';
-            $html        = pnModGetVar('News', 'pending_notif_html');
-            $sent        = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toaddress'  => $toaddress,
+            $html        = pnModGetVar('News', 'notifyonpending_html');
+            $sent        = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
+                                                                               'toaddress'  => $toaddress,
+                                                                               'fromname'   => $fromname,
                                                                                'fromaddress'=> $fromaddress,
                                                                                'subject'    => $subject,
-                                                                               'body'       => $message,
+                                                                               'body'       => $body,
                                                                                'html'       => $html));
         }
 */        
@@ -587,6 +590,7 @@ function News_user_display($args)
                 $catFilter[$property] = $info['categories'][$property]['id'];
             }
             // get matching news articles
+            // TODO exclude current article, query does not work yet :-(
             $morearticlesincat = pnModAPIFunc('News', 'user', 'getall',
                                   array('numitems'     => $morearticlesincat,
                                         'status'       => 0,

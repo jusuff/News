@@ -29,8 +29,8 @@ class news_result_checker
     // A return value of true means "keep result" - false means "discard".
     function checkResult(&$item)
     {
-        $ok = (SecurityUtil::checkPermission('News::', "$item[aid]::$item[sid]", ACCESS_OVERVIEW) || 
-               SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$item[sid]", ACCESS_OVERVIEW));
+        $ok = (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_OVERVIEW) || 
+               SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_OVERVIEW));
 
         if ($this->enablecategorization)
         {
@@ -263,7 +263,7 @@ function News_userapi_get($args)
                           'component_left'   => 'News',
                           'component_middle' => '',
                           'component_right'  => '',
-                          'instance_left'    => 'aid',
+                          'instance_left'    => 'cr_uid',
                           'instance_middle'  => '',
                           'instance_right'   => 'sid',
                           'level'            => ACCESS_READ);
@@ -471,13 +471,13 @@ function News_userapi_getArticleInfo($info)
     $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], 'datebrief');
 
     // Work out name of story submitter
-    if ($info['aid'] == 0) {
+    if ($info['cr_uid'] == 0) {
         $anonymous = pnConfigGetVar('anonymous');
         if (empty($info['contributor'])) {
             $info['contributor'] = $anonymous;
         }
     } else {
-        $info['contributor'] = pnUserGetVar('uname', $info['aid']);
+        $info['contributor'] = pnUserGetVar('uname', $info['cr_uid']);
     }
 
     // Change the __CATEGORIES__ field to a more usable name
@@ -614,8 +614,8 @@ function News_userapi_getArticleLinks($info)
     // Allowed to comment?
     if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
         $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
-        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
             $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
         }
     } else {
@@ -624,8 +624,8 @@ function News_userapi_getArticleLinks($info)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
         $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
     } else {
         $fullarticle = '';
@@ -706,8 +706,8 @@ function News_userapi_getArticlePreformat($args)
     $readmore = '';
     $bytesmorelink = '';
     if ($bytesmore > 0) {
-        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $title =  __('Read more', $dom);
             $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
@@ -715,8 +715,8 @@ function News_userapi_getArticlePreformat($args)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
+        SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
         $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
         $print = '<a class="news_printlink" href="'.$links['print'].'">'.__('Print', $dom).' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
         $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
@@ -737,12 +737,12 @@ function News_userapi_getArticlePreformat($args)
         }
 
         // Allowed to comment?
-        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_COMMENT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_COMMENT)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
             $postcomment = '<a href="'.$links['postcomment'].'">'.__('Comments', $dom).'</a>';
             $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
-        } else if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
-                   SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+        } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
+                   SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $commentlink = $comment;
         }
     }
@@ -895,11 +895,11 @@ function News_userapi_create($args)
         $args['from'] = null;
         $args['to'] = null;
     } elseif (isset($args['from']) && (isset($args['tonolimit']) && !empty($args['tonolimit']))) {
-        $args['from'] = DateUtil::getDatetime($args['from']);
+        $args['from'] = DateUtil::formatDatetime($args['from']);
         $args['to'] = null;
     } else {
-        $args['from'] = DateUtil::getDatetime($args['from']);
-        $args['to'] = DateUtil::getDatetime($args['to']);
+        $args['from'] = DateUtil::formatDatetime($args['from']);
+        $args['to'] = DateUtil::formatDatetime($args['to']);
     }
 
     // Work out name of story submitter and approver
@@ -923,7 +923,6 @@ function News_userapi_create($args)
     // update the from field to the same cr_date if it's null
     if (is_null($args['from'])) {
         $obj = array('sid'  => $obj['sid'], 'from' => $obj['cr_date']);
-
         if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
             LogUtil::registerError(__('Error! Could not save your changes.', $dom));
         }

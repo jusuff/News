@@ -279,7 +279,9 @@ iframe.ie6_blocker {
   font-weight: bold;
 }
 
-.calendar_date_select select { font-size:11px;}
+.calendar_date_select select { 
+  font-size:11px;
+}
 
 .calendar_date_select .cds_header a:hover {
   color: white;
@@ -324,6 +326,7 @@ iframe.ie6_blocker {
   vertical-align: middle;
   background-color: #fff;
 }
+
 .calendar_date_select td.weekend {
   background-color: #eee;
   border-left:1px solid #ddd;

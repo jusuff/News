@@ -8,6 +8,8 @@
 <!--[pnpageaddvar name='javascript' value='javascript/ajax/dragdrop.js']-->
 <!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/Zikula.itemlist.js']-->
 <!--[/if]-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/calendar_date_select.js']-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/format_iso_date.js']-->
 
 <!--[literal]--> 
 <!--[if lt IE 7]>
@@ -25,6 +27,10 @@
     var string_hide = '<!--[gt text="Hide"]-->';
     var string_publish = '<!--[gt text="Publish"]-->';
     var string_schedule = '<!--[gt text="Schedule"]-->';
+    var string_saveasdraft = '<!--[gt text="Save as draft"]-->';
+    var string_updatedraft = '<!--[gt text="Update draft"]-->';
+    var string_savingdraft = '<!--[gt text="Saving draft..."]-->';
+    var string_emptytitle = '<!--[gt text="<strong>Title is empty, draft not saved!</strong>"]-->';
     <!--[if $enableattribution]-->
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
@@ -96,9 +102,9 @@
             <div class="z-warningmsg"><!--[gt text='Permitted HTML tags']-->: <!--[allowedhtml]--></div>
             <!--[/if]-->
             <div class="z-formrow">
-                <label for="news_hometext"><!--[gt text='Index page teaser text']--></label>
+                <label for="news_hometext"><strong><!--[gt text='Index page teaser text']--></strong></label>
                 <textarea id="news_hometext" name="story[hometext]" cols="40" rows="10"><!--[$hometext|pnvarprepfordisplay]--></textarea>
-                <span id="news_hometext_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
+                <span id="news_hometext_remaining" class="z-formnote z-sub"><!--[gt text='(Limit: 65,536 characters)']--></span>
             </div>
 
             <!--[if $formattedcontent eq 0]-->
@@ -112,9 +118,9 @@
             <!--[/if]-->
 
             <div class="z-formrow">
-                <label for="news_bodytext"><!--[gt text='Article body text']--></label>
+                <label for="news_bodytext"><strong><!--[gt text='Article body text']--></strong></label>
                 <textarea id="news_bodytext" name="story[bodytext]" cols="40" rows="10"><!--[$bodytext|pnvarprepfordisplay]--></textarea>
-                <span id="news_bodytext_remaining" class="z-formnote"><!--[gt text='#{chars} characters out of 65,536']--></span>
+                <span id="news_bodytext_remaining" class="z-formnote z-sub"><!--[gt text='#{chars} characters out of 65,536']--></span>
             </div>
 
             <!--[if $formattedcontent eq 0]-->
@@ -129,10 +135,10 @@
 
             <!--[if $accessadd eq 1]-->
             <div class="z-formrow">
-                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><!--[gt text='Footnote']--></a></label>
+                <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><span id="news_notes_showhide"><!--[gt text='Show']--></span> <!--[gt text='Footnote']--></a></label>
                 <p id="news_notes_details">
                     <textarea id="news_notes" name="story[notes]" cols="40" rows="10"><!--[$notes|pnvarprepfordisplay]--></textarea>
-                    <span id="news_notes_remaining" class="z-formnote"><!--[gt text='(Limit: 65,536 characters)']--></span>
+                    <span id="news_notes_remaining" class="z-formnote z-sub"><!--[gt text='(Limit: 65,536 characters)']--></span>
                 </p>
             </div>
             <!--[/if]-->
@@ -157,7 +163,8 @@
                 <div id="news_expiration_details">
                     <div class="z-formrow">
                         <label><!--[gt text='Start date']--></label>
-                        <div><!--[html_select_date prefix='from' start_year='-2' end_year='+4' time=$from field_array='story']-->&nbsp;<!--[html_select_time prefix='from' use_24_hours=true display_seconds=false minute_interval='5' time=$from field_array='story']--></div>
+                        <input id="news_from" name="story[from]" type="text" size="18" value="<!--[$from]-->">
+                        <img onclick="new CalendarDateSelect('news_from', {time:true, minute_interval:10, year_range:4, time_12hr:false});" src="modules/News/pnimages/calendar.gif" />
                     </div>
                     <div class="z-formrow">
                         <label for="news_tonolimit"><!--[gt text='No end date']--></label>
@@ -166,7 +173,8 @@
                     <div id ="news_expiration_date">
                         <div class="z-formrow">
                             <label><!--[gt text='End date']--></label>
-                            <div><!--[html_select_date prefix='to' start_year='-2' end_year='+4' time=$to field_array='story']-->&nbsp;<!--[html_select_time prefix='to' use_24_hours=true display_seconds=false minute_interval='5' time=$to field_array='story']--></div>
+                            <input id="news_to" name="story[to]" type="text" size="18" value="<!--[$to]-->">
+                            <img onclick="new CalendarDateSelect('news_to', {time:true, minute_interval:10, year_range:4, time_12hr:false});" src="modules/News/pnimages/calendar.gif" />
                         </div>
                     </div>
                 </div>
@@ -179,11 +187,11 @@
 
         <!--[if $enableattribution]-->
         <fieldset>
-            <legend><a id="news_attributes_collapse" href="javascript:void(0);"><!--[gt text='Article attributes']--></a></legend>
+            <legend><a id="news_attributes_collapse" href="javascript:void(0);"><span id="news_attributes_showhide"><!--[gt text='Show']--></span> <!--[gt text='Article attributes']--></a></legend>
             <div id="news_attributes_details">
                 <div class="z-formrow">
                     <div class="itemlist_newitemdiv">
-                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a><br />
+                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a>
                     </div>
                     <ul id="news_attributes" class="itemlist">
                         <!--[if isset($__ATTRIBUTES__)]-->
@@ -205,9 +213,11 @@
                         <!--[foreachelse]-->
                         <li>&nbsp;</li>
                         <!--[/foreach]-->
+                        <!--[else]-->
+                        <li>&nbsp;</li>
                         <!--[/if]-->
                     </ul>
-                    <ul style="display: none">
+                    <ul style="display:none">
                         <li id="news_attributes_emptyitem" class="sortable z-clearfix">
                             <span class="itemlistcell width4">&nbsp;</span>
                             <span class="itemlistcell width44">
@@ -217,7 +227,7 @@
                                 <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                             </span>
                             <span class="itemlistcell width7">
-                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete' __title='Delete this attribute' ]--></button>
+                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
                             </span>
                         </li>
                     </ul>
@@ -234,7 +244,7 @@
             <!--[if $accessadd neq 1]-->
               <button id="news_button_submit" class="positive" type="submit" name="story[action]" value="1" title="<!--[gt name='Submit this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article' ]--><!--[gt text='Submit']--></button>
             <!--[else]-->
-              <button id="news_button_draft" type="submit" name="story[action]" value="6" title="<!--[gt name='Save this article as draft']-->"><!--[pnimg src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as Draft'  __title='Save this article as draft']--><!--[gt text='Save as draft']--></button>
+              <button id="news_button_draft" type="submit" name="story[action]" value="6" title="<!--[gt name='Save this article as draft']-->"><!--[pnimg src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft'  __title='Save this article as draft']--><!--[gt text='Save as draft']--></button>
               <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="<!--[gt name='Publish this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish' __title='Publish this article' ]--><span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
             <!--[/if]-->
             <a id="news_button_cancel" href="<!--[pnmodurl modname='News' type='admin' func='view']-->" class="negative"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>

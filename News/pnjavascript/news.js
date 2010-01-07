@@ -3,6 +3,7 @@
  */
  
 var editing = false;
+var draftsaved = false;
 
 /**
  * create the onload function to enable the respective functions
@@ -18,17 +19,22 @@ function news_init_check()
     if ($('news_loadnews')) {
         Element.hide('news_loadnews');
     }
-    if ($('news_editlinks')) {
+    // if Javascript is on remove regular links
+    if ($('news_editlinks') && $('news_editlinks_ajax')) {
         Element.remove('news_editlinks');
     }
     if ($('news_editlinks_ajax')) {
         Element.removeClassName($('news_editlinks_ajax'), 'hidelink'); 
     }
-/*
-    if ($('news_sample_urltitle')) {
+    if ($('news_button_savedraft_nonajax')) {
+        Element.remove('news_button_savedraft_nonajax');
+    }
+    if ($('news_button_savedraft_ajax')) {
+        Element.removeClassName($('news_button_savedraft_ajax'), 'hidelink'); 
+    }
+    if ($('news_status_info')) {
         news_title_init();
     }
-*/    
     if ($('news_meta_collapse')) {
         news_meta_init();
     }
@@ -199,20 +205,188 @@ function editnews_saveresponse(req)
 }
 
 
+/* Taken from Dizkus edittopicsubject TOBEDONE !
+function permalinkedit(topicid)
+{
+    if(subjectstatus == false) {
+        subjectstatus = true;
+        var pars = "module=Dizkus&func=edittopicsubject&topic=" + topicid;
+        Ajax.Responders.register(dzk_globalhandlers);
+        var myAjax = new Ajax.Request(
+            document.location.pnbaseURL+"ajax.php",
+            {
+                method: 'post',
+                parameters: pars,
+                onComplete: permalinkeditinit
+            });
+    }
+}
+
+function permalinkeditinit(originalRequest)
+{
+    // show error if necessary
+    if( originalRequest.status != 200 ) {
+        dzk_showajaxerror(originalRequest.responseText);
+        subjectstatus = false;
+        return;
+    }
+
+    var result = dejsonize(originalRequest.responseText);
+
+    var topicsubjectID = 'topicsubject_' + result.topic_id;
+
+    Element.hide(topicsubjectID);
+    updateAuthid(result.authid);
+
+    new Insertion.After($(topicsubjectID), result.data);
+}
+
+function permalinkeditcancel(topicid)
+{
+    var topicsubjectID = 'topicsubject_' + topicid;
+
+    Element.remove(topicsubjectID + '_editor');
+    Element.show(topicsubjectID);
+    subjectstatus = false;
+}
+
+function permalinkeditsave(topicid)
+{
+    var topicsubjectID = 'topicsubject_' + topicid;
+    var editID = topicsubjectID + '_edit';
+    var authID = topicsubjectID + '_authid';
+    if($F(editID) == '') {
+        // no text
+        return;
+    }
+
+    var pars = "module=Dizkus&func=updatetopicsubject" +
+               "&topic=" + topicid +
+               "&subject=" + encodeURIComponent($F(editID)) +
+               "&authid=" + $F(authID);
+    Ajax.Responders.register(dzk_globalhandlers);
+    var myAjax = new Ajax.Request(
+                    document.location.pnbaseURL+"ajax.php",
+                    {
+                        method: 'post',
+                        parameters: pars,
+                        onComplete: permalinkeditsave_response
+                    }
+                    );
+
+}
+
+function permalinkeditsave_response(originalRequest)
+{
+    // show error if necessary
+    if( originalRequest.status != 200 ) {
+        dzk_showajaxerror(originalRequest.responseText);
+        subjectstatus = false;
+        return;
+    }
+
+    var result = dejsonize(originalRequest.responseText);
+    var topicsubjectID = 'topicsubject_' + result.topic_id;
+
+    Element.remove(topicsubjectID + '_editor');
+    updateAuthid(result.authid);
+
+    Element.update(topicsubjectID + '_content', result.topic_title);
+    Element.show(topicsubjectID);
+
+    subjectstatus = false;
+}
+*/
+
+
+/**
+ * Start the saving draft process by calling the appropriate Ajax function
+ *
+ *@return none;
+ *@author Erik Spaan
+ */
+function savedraft()
+{
+    // Obtain the title and sid (if present) from the form
+    var title = $F('news_title');
+    if (title == "") {
+        $('news_status_info').show();
+        $('news_saving_draft').hide();
+        $('news_status_text').update(string_emptytitle);
+        Form.Element.focus('news_title');
+        return;
+    }
+    var sid = $F('news_sid');
+    if (sid) {
+        // Update the current draft
+        // A manual onsubmit for xinha to update the textarea data again.
+        $('news_admin_newform').onsubmit();
+        var pars = 'module=News&func=savedraft&title=' + title + '&sid=' + sid + '&' + Form.serialize('news_admin_newform');
+    } else {
+        // Create a new draft article with a new sid
+        var pars = 'module=News&func=savedraft&title=' + title;
+    }
+    $('news_status_info').show();
+    $('news_saving_draft').show();
+    $('news_status_text').update(string_savingdraft);
+    $('news_button_text_draft').update(string_savingdraft);
+    var myAjax = new Ajax.Request(
+        document.location.pnbaseURL+'ajax.php', 
+        {
+            method: 'post', 
+            parameters: pars, 
+            onComplete: savedraft_update
+        });
+}
+
+function savedraft_update(req) 
+{
+//    alert('savedraft_update: ' + req.responseText);
+    if (req.status != 200 ) {
+        pnshowajaxerror(req.responseText);
+        return;
+    }
+    draftsaved = true;
+    $('news_saving_draft').hide();
+    $('news_button_text_draft').update(string_updatedraft);
+    var json = pndejsonize(req.responseText);
+    $('news_status_text').update(json.result);
+    $('news_urltitle').value = json.slug;
+//    $('news_sample_urltitle').update(json.fullpermalink);
+//    $('news_urltitle_details').show();
+//    if (json.showslugedit) {
+//        $('news_sample_urltitle_edit').show();
+//    }
+    // make preview button "active" again
+    $('news_button_preview').setStyle({color: '#565656'});
+    $('news_button_preview').setOpacity(1.0);
+    $('news_button_preview').disabled = false;    
+    $('news_sid').value = json.sid;
+//    pnsetselectoption('news_published_status',4);
+//    $('news_published_status').selectedIndex = 4;
+    return;
+}
+
+
 /**
  * Admin panel functions
  * Functions to enable watching for changes in  the optional divs and show and hide these divs 
  * with the switchdisplaystate funtion of javascript/ajax/pnajax.js. This function uses BlindDown and BlindUp
  * when scriptaculous Effects is loaded and otherwise show and hide of prototype.
  */
-/*
 function news_title_init()
 {
 //    Event.observe('news_title', 'change', savedraft);
-    $('news_sample_urltitle_edit').hide();
+//    $('news_urltitle_details').hide();
     $('news_status_info').hide();
+    // dim the preview button until a draft is saved
+    $('news_button_preview').setStyle({color: '#aaa'});
+    $('news_button_preview').setOpacity(0.7);
+    $('news_button_preview').disabled = true;
+  
+    // not the correct location but for reference later on:
+    //new PeriodicalExecuter(savedraft, 30);
 }
-*/
 
 function news_filter_init()
 {
@@ -263,16 +437,16 @@ function news_tonolimit_onchange()
 function news_publication_init()
 {
     Event.observe('news_publication_collapse', 'click', news_publication_click);
-    $('news_publication_collapse').addClassName('pn-toggle-link');
+    $('news_publication_collapse').addClassName('z-toggle-link');
     // show the publication details when a variable is not set to default
     if ($('news_unlimited').checked == true && $('news_hideonindex').checked == true && $('news_disallowcomments').checked == true) {
-        $('news_publication_details').parentNode.addClassName('pn-collapsed');
-        $('news_publication_collapse').removeClassName('pn-toggle-link-open');
+//        $('news_publication_details').parentNode.addClassName('z-collapsed');
+        $('news_publication_collapse').removeClassName('z-toggle-link-open');
         $('news_publication_showhide').update(string_show);
         $('news_publication_details').hide();
     } else {
-        $('news_publication_collapse').addClassName('pn-toggle-link-open');
-        $('news_publication_details').parentNode.removeClassName('pn-collapsed');
+        $('news_publication_collapse').addClassName('z-toggle-link-open');
+//        $('news_publication_details').parentNode.removeClassName('z-collapsed');
         $('news_publication_showhide').update(string_hide);
     }
     if ($('news_unlimited').checked == false) {
@@ -283,12 +457,12 @@ function news_publication_init()
 function news_publication_click()
 {
     if ($('news_publication_details').style.display != "none") {
-        Element.addClassName.delay(0.9, $('news_publication_details').parentNode, 'pn-collapsed');
-        Element.removeClassName.delay(0.9, $('news_publication_collapse'), 'pn-toggle-link-open');
+//        Element.addClassName.delay(0.9, $('news_publication_details').parentNode, 'z-collapsed');
+        Element.removeClassName.delay(0.9, $('news_publication_collapse'), 'z-toggle-link-open');
         $('news_publication_showhide').update(string_show);
     } else {
-        Element.removeClassName($('news_publication_details').parentNode, 'pn-collapsed');
-        $('news_publication_collapse').addClassName('pn-toggle-link-open');
+//        Element.removeClassName($('news_publication_details').parentNode, 'z-collapsed');
+        $('news_publication_collapse').addClassName('z-toggle-link-open');
         $('news_publication_showhide').update(string_hide);
     }
     switchdisplaystate('news_publication_details');
@@ -298,18 +472,28 @@ function news_publication_click()
 function news_attributes_init()
 {
     Event.observe('news_attributes_collapse', 'click', news_attributes_click);
-    $('news_attributes_collapse').addClassName('pn-toggle-link');
-    $('news_attributes_collapse').addClassName('pn-toggle-link-open');
+    $('news_attributes_collapse').addClassName('z-toggle-link');
+    // show attributes when there are any
+    if ($('listitem_news_attributes_1')) {
+        $('news_attributes_collapse').addClassName('z-toggle-link-open');
+        $('news_attributes_showhide').update(string_hide);
+    } else {
+        $('news_attributes_collapse').removeClassName('z-toggle-link-open');
+        $('news_attributes_showhide').update(string_show);
+        $('news_attributes_details').hide();
+    }
 }
 
 function news_attributes_click()
 {
     if ($('news_attributes_details').style.display != "none") {
-        Element.addClassName.delay(0.9, $('news_attributes_details').parentNode, 'pn-collapsed');
-        Element.removeClassName.delay(0.9, $('news_attributes_collapse'), 'pn-toggle-link-open');
+//        Element.addClassName.delay(0.9, $('news_attributes_details').parentNode, 'z-collapsed');
+        Element.removeClassName.delay(0.9, $('news_attributes_collapse'), 'z-toggle-link-open');
+        $('news_attributes_showhide').update(string_show);
     } else {
-        Element.removeClassName($('news_attributes_details').parentNode, 'pn-collapsed');
-        $('news_attributes_collapse').addClassName('pn-toggle-link-open');
+//        Element.removeClassName($('news_attributes_details').parentNode, 'z-collapsed');
+        $('news_attributes_collapse').addClassName('z-toggle-link-open');
+        $('news_attributes_showhide').update(string_hide);
     }
     switchdisplaystate('news_attributes_details');
 }
@@ -318,16 +502,18 @@ function news_attributes_click()
 function news_notes_init()
 {
     Event.observe('news_notes_collapse', 'click', news_notes_click);
-    $('news_notes_collapse').addClassName('pn-toggle-link');
+    $('news_notes_collapse').addClassName('z-toggle-link');
     news_notes_click();
 }
 
 function news_notes_click()
 {
     if ($('news_notes_details').style.display != "none") {
-        Element.removeClassName.delay(0.9, $('news_notes_collapse'), 'pn-toggle-link-open');
+        Element.removeClassName.delay(0.9, $('news_notes_collapse'), 'z-toggle-link-open');
+        $('news_notes_showhide').update(string_show);
     } else {
-        $('news_notes_collapse').addClassName('pn-toggle-link-open');
+        $('news_notes_collapse').addClassName('z-toggle-link-open');
+        $('news_notes_showhide').update(string_hide);
     }
     switchdisplaystate('news_notes_details');
 }
@@ -336,18 +522,18 @@ function news_notes_click()
 function news_meta_init()
 {
     Event.observe('news_meta_collapse', 'click', news_meta_click);
-    $('news_meta_collapse').addClassName('pn-toggle-link');
+    $('news_meta_collapse').addClassName('z-toggle-link');
     news_meta_click();
 }
 
 function news_meta_click()
 {
     if ($('news_meta_details').style.display != "none") {
-        Element.addClassName.delay(0.9, $('news_meta_details').parentNode, 'pn-collapsed');
-        Element.removeClassName.delay(0.9, $('news_meta_collapse'), 'pn-toggle-link-open');
+//        Element.addClassName.delay(0.9, $('news_meta_details').parentNode, 'z-collapsed');
+        Element.removeClassName.delay(0.9, $('news_meta_collapse'), 'z-toggle-link-open');
     } else {
-        Element.removeClassName($('news_meta_details').parentNode, 'pn-collapsed');
-        $('news_meta_collapse').addClassName('pn-toggle-link-open');
+//        Element.removeClassName($('news_meta_details').parentNode, 'z-collapsed');
+        $('news_meta_collapse').addClassName('z-toggle-link-open');
     }
     switchdisplaystate('news_meta_details');
 }

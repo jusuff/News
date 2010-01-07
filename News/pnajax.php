@@ -34,8 +34,8 @@ function News_ajax_modify()
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$sid", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$sid", ACCESS_EDIT))) {
+    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT) ||
+          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$sid", ACCESS_EDIT))) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! You do not have authorisation for this page.', $dom)));
     }
 
@@ -69,7 +69,6 @@ function News_ajax_modify()
             pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
-
         $render->assign('catregistry', $catregistry);
     }
 
@@ -119,7 +118,7 @@ function News_ajax_update()
     // Get the current news article
     $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $story['sid']));
     if ($item == false || !$action) {
-        AjaxUtil::error(DataUtil::formatForDisplayHTML(__f('Error! No such article found.', $dom)));
+        AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Error! No such article found.', $dom)));
     }
 
     if (!SecurityUtil::confirmAuthKey()) {
@@ -148,9 +147,9 @@ function News_ajax_update()
                                   'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
                                   'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                                   'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
-                                  'from' => mktime($story['fromHour'], $story['fromMinute'], 0, $story['fromMonth'], $story['fromDay'], $story['fromYear']),
+                                  'from' => isset($story['from']) ? $story['from'] : null,
                                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-                                  'to' => mktime($story['toHour'], $story['toMinute'], 0, $story['toMonth'], $story['toDay'], $story['toYear']),
+                                  'to' => isset($story['to']) ? $story['to'] : null,
                                   'weight' => $story['weight'],
                                   'published_status' => $story['published_status']))) {
 
@@ -219,8 +218,8 @@ function News_ajax_update()
 
         case 'pending':
             // Security check
-            if (!(SecurityUtil::checkPermission('News::', "$item[aid]::$story[sid]", ACCESS_EDIT) ||
-                  SecurityUtil::checkPermission('Stories::Story', "$item[aid]::$story[sid]", ACCESS_EDIT))) {
+            if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$story[sid]", ACCESS_EDIT) ||
+                  SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$story[sid]", ACCESS_EDIT))) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! You do not have authorisation for this page.', $dom)));
             }
             // set published_status to 2 to make the story a pending story
@@ -255,4 +254,137 @@ function News_ajax_update()
     return array('result' => $output,
                  'action' => $action,
                  'reloadurl' => $reloadurl);
+}
+
+
+/**
+ * This is the Ajax function that is called with the results of the
+ * form supplied by news_<user/admin>_new() to create a new draft item
+ * The following parameters are received in an array 'story'!
+ *
+ * @param string 'title' the title of the news item
+ *
+ * @author Erik Spaan
+ * @return array(output, etc) with output being a rendered template or a simple text and action the performed action
+ */
+function News_ajax_savedraft()
+{
+    $title = FormUtil::getPassedValue('title', null, 'POST');
+    $sid   = FormUtil::getPassedValue('sid', null, 'POST');
+    $story = FormUtil::getPassedValue('story', null, 'POST');
+
+    $dom = ZLanguage::getModuleDomain('News');
+
+    $output = $title;
+    $slug = '';
+    $fullpermalink = '';
+    $showslugedit = false;
+    // Permalink display length, only needed for 2 column layout later.
+    //$permalinkmaxdisplay = 40;
+
+    // Check  if the article is already saved as draft
+    if ($sid > 0) {
+        // Get the current news article
+        $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
+        if ($item == false) {
+            AjaxUtil::error(DataUtil::formatForDisplayHTML(__f('Error! No such article found.', $dom)));
+        }
+        // Security check
+        if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT) ||
+              SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$sid", ACCESS_EDIT))) {
+            AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! You do not have authorisation for this page.', $dom)));
+        }
+        
+       if (!pnModAPIFunc('News', 'admin', 'update',
+                        array('sid' => $sid,
+                              'title' => DataUtil::convertFromUTF8($story['title']),
+                              'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
+                              '__CATEGORIES__' => $story['__CATEGORIES__'],
+                              'language' => isset($story['language']) ? $story['language'] : '',
+                              'hometext' => DataUtil::convertFromUTF8($story['hometext']),
+                              'hometextcontenttype' => $story['hometextcontenttype'],
+                              'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
+                              'bodytextcontenttype' => $story['bodytextcontenttype'],
+                              'notes' => DataUtil::convertFromUTF8($story['notes']),
+                              'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
+                              'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+                              'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
+                              'from' => $story['from'],
+                              'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+                              'to' => $story['to'],
+                              'weight' => $story['weight'] ))) {
+
+            $output = DataUtil::formatForDisplayHTML(__('Error! Could not save your changes.', $dom));
+        } else {
+            $output = __f('Draft updated at %s', DateUtil::getDatetime_Time('', '%H:%M'), $dom);
+            // Return the permalink (domain shortened) and the slug of the permalink
+            $slug = $item['urltitle'];
+            $fullpermalink = DataUtil::formatForDisplayHTML(pnModURL('News', 'user', 'display', array('sid' => $sid)));
+            // limit the display length of the permalink
+            //if (strlen($fullpermalink) > $permalinkmaxdisplay) {
+            //    $fullpermalink = '...' . substr($fullpermalink, strlen($fullpermalink) - $permalinkmaxdisplay, $permalinkmaxdisplay);
+            //}
+            // Only show "edit the slug" if the shorturls are active
+            $showslugedit = (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0);
+        }
+    } else {
+        // Create a first draft version of the story
+        if ($sid = pnModAPIFunc('News', 'user', 'create',
+                        array('title' => DataUtil::convertFromUTF8($title),
+                              'hometext' => '',
+                              'hometextcontenttype' => 0,
+                              'bodytext' => '',
+                              'bodytextcontenttype' => 0,
+                              'notes' => '',
+                              'published_status' => 4))) {
+            // Success and now reload the news story
+            $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
+            if ($item == false) {
+                AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Error! No such article found.', $dom)));
+            } else {
+                // Return the Draft creation date
+                $output = __f('Draft saved at %s', DateUtil::getDatetime_Time($item['cr_date'], '%H:%M'), $dom);
+                // Return the permalink (domain shortened) and the slug of the permalink
+                $slug = $item['urltitle'];
+                $fullpermalink = DataUtil::formatForDisplayHTML(pnModURL('News', 'user', 'display', array('sid' => $sid)));
+                // limit the display length of the permalink
+                //if (strlen($fullpermalink) > $permalinkmaxdisplay) {
+                //    $fullpermalink = '...' . substr($fullpermalink, strlen($fullpermalink) - $permalinkmaxdisplay, $permalinkmaxdisplay);
+                //}
+                // Only show "edit the slug" if the shorturls are active
+                $showslugedit = (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0);
+            }
+        } else {
+            $output = DataUtil::formatForDisplayHTML(__('Error! Could not save your changes.', $dom));
+        }
+    }
+    return array('result' => $output,
+                 'sid' => $sid,
+                 'slug' => $slug,
+                 'fullpermalink' => $fullpermalink,
+                 'showslugedit' => $showslugedit);
+
+}
+
+
+/**
+ * make the permalink from the title
+ *
+ * @author Erik Spaan
+ * @param 'title'   int the story id
+ * @return string HTML string
+ */
+function News_ajax_updatepermalink()
+{
+    $title = FormUtil::getPassedValue('title', '');
+
+    // define the lowercase permalink, using the title as slug, if not present
+//    if (!isset($args['urltitle']) || empty($args['urltitle'])) {
+//        $args['urltitle'] = strtolower(DataUtil::formatPermalink($args['title']));
+//    }
+
+    // Construct the lowercase permalink, using the title as slug
+    $permalink = strtolower(DataUtil::formatPermalink($title));
+    
+    return array('result' => $permalink);
 }
