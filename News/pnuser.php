@@ -503,24 +503,41 @@ function News_user_display($args)
     }
 
     // Get the news story
-    if (isset($sid)) {
-        $item = pnModAPIFunc('News', 'user', 'get', 
-                             array('sid'       => $sid, 
-                                   'status'    => 0));
+    if (!(SecurityUtil::checkPermission('News::', "::$sid", ACCESS_ADD) ||
+          SecurityUtil::checkPermission('Stories::Story', "::$sid", ACCESS_ADD))) {
+        if (isset($sid)) {
+            $item = pnModAPIFunc('News', 'user', 'get', 
+                                 array('sid'       => $sid, 
+                                       'status'    => 0));
+        } else {
+            $item = pnModAPIFunc('News', 'user', 'get', 
+                                 array('title'     => $title,
+                                       'year'      => $year,
+                                       'monthname' => $monthname,
+                                       'monthnum'  => $monthnum,
+                                       'day'       => $day,
+                                       'status'    => 0));
+            $sid = $item['sid'];
+            pnQueryStringSetVar('sid', $sid);
+        }
     } else {
-        $item = pnModAPIFunc('News', 'user', 'get', 
-                             array('title'     => $title,
-                                   'year'      => $year,
-                                   'monthname' => $monthname,
-                                   'monthnum'  => $monthnum,
-                                   'day'       => $day,
-                                   'status'    => 0));
-        $sid = $item['sid'];
-        pnQueryStringSetVar('sid', $sid);
+        if (isset($sid)) {
+            $item = pnModAPIFunc('News', 'user', 'get', 
+                                 array('sid'       => $sid));
+        } else {
+            $item = pnModAPIFunc('News', 'user', 'get', 
+                                 array('title'     => $title,
+                                       'year'      => $year,
+                                       'monthname' => $monthname,
+                                       'monthnum'  => $monthnum,
+                                       'day'       => $day));
+            $sid = $item['sid'];
+            pnQueryStringSetVar('sid', $sid);
+        }
     }
 
     if ($item === false) {
-        return LogUtil::registerError(__f('Error! No such article found.', $dom), 404);
+        return LogUtil::registerError(__('Error! No such article found.', $dom), 404);
     }
 
     // Explode the review into an array of seperate pages
