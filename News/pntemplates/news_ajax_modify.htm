@@ -1,5 +1,5 @@
 <!--[*  $Id: news_ajax_modify.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
-<!--[securityutil_checkpermission component='News::' instance="story[cr_uid]::story[sid]" level='ACCESS_DELETE' assign='mayDelete']-->
+<!--[securityutil_checkpermission component='News::' instance="$cr_uid::$sid" level='ACCESS_DELETE' assign='mayDelete']-->
 
 <!--[gt text='Edit news article' assign='templatetitle']-->
 
@@ -199,12 +199,12 @@
         <!--[pnmodcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News']-->
 
         <div class="z-formbuttons"><div id="news_buttons">
-            <a href="javascript:void(0);" onclick="editnews_save('update');"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Save' __title='Save your changes' ]--><!--[gt text='Save']--></a>
+            <a href="javascript:void(0);" onclick="editnews_save('update');" class="positive"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Save' __title='Save your changes' ]--><!--[gt text='Save']--></a>
             <a href="javascript:void(0);" onclick="editnews_save('pending');"><!--[pnimg modname='core' src='queue.gif' set='icons/extrasmall' __alt='Mark as pending' __title='Mark this article as pending']--><!--[gt text='Mark as pending']--></a>
             <!--[if $mayDelete]-->
-              <a href="javascript:void(0);" onclick="editnews_save('delete');"><!--[pnimg modname='core' src='editdelete.gif' set='icons/extrasmall' __alt='Delete' __title='Delete this article']--><!--[gt text='Delete']--></a>
+              <a href="javascript:void(0);" onclick="editnews_save('delete');" class="negative"><!--[pnimg modname='core' src='editdelete.gif' set='icons/extrasmall' __alt='Delete' __title='Delete this article']--><!--[gt text='Delete']--></a>
             <!--[/if]-->
-            <a href="javascript:void(0);" onclick="editnews_cancel();"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>
+            <a href="javascript:void(0);" onclick="editnews_cancel();" class="negative"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>
             &nbsp;<img id="news_savenews" src="<!--[$baseurl]-->images/ajax/circle-ball-dark-antialiased.gif" alt="" />
         </div></div>
     </div>

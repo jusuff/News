@@ -159,7 +159,7 @@ function News_admin_modify($args)
         }
         
         // Add article attribute morearticlesincat when not existing yet and functionality is enabled.
-        if ($modvars['enablemorearticlesincat'] && !array_key_exists('morearticlesincat', $info['__ATTRIBUTES__'])) {
+        if ($modvars['enablemorearticlesincat'] && $modvars['morearticlesincat'] == 0 && !array_key_exists('morearticlesincat', $info['__ATTRIBUTES__'])) {
             $item['__ATTRIBUTES__']['morearticlesincat'] = 0;
         }
         
@@ -535,8 +535,10 @@ function News_admin_view($args)
                                    'title' => __('Edit', $dom));
             }
 
-            if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
-                SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE)) {
+            if (($item['published_status'] != 2 && 
+                 (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
+                  SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) ||
+                SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_ADMIN)) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'delete', array('sid' => $item['sid'])),
                                    'image' => '14_layer_deletelayer.gif',
                                    'title' => __('Delete', $dom));

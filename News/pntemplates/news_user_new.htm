@@ -53,6 +53,7 @@
         <input type="hidden" name="story[hideonindex]" value="1" />
         <input type="hidden" name="story[notes]" value="" />
         <input type="hidden" name="story[disallowcomments]" value="1" />
+        <input type="hidden" name="story[urltitle]" value="" />
         <!--[/if]-->
         <!--[if $formattedcontent eq 1]-->
         <input type="hidden" name="story[hometextcontenttype]" value="1" />
@@ -67,11 +68,13 @@
                 <input id="news_title" name="story[title]" type="text" size="32" maxlength="255" value="<!--[$title|pnvarprepfordisplay]-->" />
             </div>
 
+            <!--[if $accessadd eq 1]-->
             <div class="z-formrow">
                 <label for="news_urltitle"><!--[gt text='Permalink URL']--></label>
                 <input id="news_urltitle" name="story[urltitle]" type="text" size="32" maxlength="255" value="<!--[$urltitle|pnvarprepfordisplay]-->" />
                 <em class="z-sub z-formnote"><!--[gt text='(Generated automatically if left blank)']--></em>
             </div>
+            <!--[/if]-->
 
             <!--[if $enablecategorization]-->
             <div class="z-formrow">

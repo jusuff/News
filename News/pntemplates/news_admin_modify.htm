@@ -12,6 +12,9 @@
 <!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/format_iso_date.js']-->
 <!--[gt text='Edit news article' assign='templatetitle']-->
 
+<!--[* Add editing / deleting of own (draft) articles *]-->
+<!--[securityutil_checkpermission component='News::' instance="$cr_uid::$sid" level='ACCESS_DELETE' assign='mayDelete']-->
+
 <!--[include file='news_admin_menu.htm']-->
 
 <script type="text/javascript">
@@ -276,6 +279,9 @@
                   <!--[if $published_status eq 2]-->
                     <button id="news_button_reject" class="negative" type="submit" name="story[action]" value="3" title="<!--[gt text='Reject this article']-->"><!--[pnimg src='locked.gif' modname='core' set='icons/extrasmall' __alt='Reject'  __title='Reject this article' ]--><!--[gt text='Reject']--></button>
                   <!--[/if]-->
+                <!--[/if]-->
+                <!--[if $mayDelete]-->
+                  <a id="news_button_delete" href="<!--[pnmodurl modname='News' type='admin' func='delete' sid=$sid]-->" class="negative"><!--[pnimg modname='core' src='editdelete.gif' set='icons/extrasmall' __alt='Delete' __title='Delete this article']--><!--[gt text='Delete']--></a>
                 <!--[/if]-->
                 <a id="news_button_cancel" href="<!--[pnmodurl modname='News' type='admin' func='view']-->" class="negative"><!--[pnimg modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel']--><!--[gt text='Cancel']--></a>
             </div></div>
