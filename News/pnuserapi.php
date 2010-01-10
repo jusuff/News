@@ -708,7 +708,7 @@ function News_userapi_getArticlePreformat($args)
     if ($bytesmore > 0) {
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
-            $title =  __('Read more', $dom);
+            $title =  __('Read more...', $dom);
             $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
         $bytesmorelink = __f('%s bytes more', $bytesmore, $dom);
