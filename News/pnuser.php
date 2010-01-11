@@ -254,26 +254,41 @@ function News_user_create($args)
     if ($sid != false) {
         // Success
         LogUtil::registerStatus(__('Done! Created new article.', $dom));
-/*
-        // Notify the configured addresses of a new Pending Review article
+
+        // notify the configured addresses of a new Pending Review article
         $notifyonpending = pnModGetVar('News', 'notifyonpending', false);
-        if ($notifyonpending && $item['published_status'] == 2) {
-            $fromname    = pnModGetVar('News', 'notifyonpending_fromname', pnConfigGetVar('sitename'));
-            $fromaddress = pnModGetVar('News', 'notifyonpending_fromaddress', pnConfigGetVar('adminmail'));
-            $toname      = pnModGetVar('News', 'notifyonpending_toname', pnConfigGetVar('sitename'));
-            $toaddress   = pnModGetVar('News', 'notifyonpending_toaddress', pnConfigGetVar('adminmail'));
-            $subject     = pnModGetVar('News', 'notifyonpending_subject');
-            $body        = 'To Be Filled in';
-            $html        = pnModGetVar('News', 'notifyonpending_html');
-            $sent        = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
-                                                                               'toaddress'  => $toaddress,
-                                                                               'fromname'   => $fromname,
-                                                                               'fromaddress'=> $fromaddress,
-                                                                               'subject'    => $subject,
-                                                                               'body'       => $body,
-                                                                               'html'       => $html));
+        if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
+            $sitename = pnConfigGetVar('sitename');
+            $adminmail = pnConfigGetVar('adminmail');
+            $fromname    = pnModGetVar('News', 'notifyonpending_fromname', $sitename);
+            $fromaddress = pnModGetVar('News', 'notifyonpending_fromaddress', $adminmail);
+            $toname      = pnModGetVar('News', 'notifyonpending_toname', $sitename);
+            $toaddress   = pnModGetVar('News', 'notifyonpending_toaddress', $adminmail);
+            $subject     = pnModGetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
+            $html        = pnModGetVar('News', 'notifyonpending_html', true);
+            if (!pnUserLoggedIn()) {
+                $contributor = pnConfigGetVar('anonymous');
+            } else {
+                $contributor = pnUserGetVar('uname');
+            }
+            if ($html) {
+                $body = __f('<br />A News Publisher article <strong>%s</strong> has been submitted by %s for review on website %s.<br />Index page teaser text of the article:<br /><hr />%s<hr /><br /><br />Go to the <a href="%s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+            } else {
+                $body = __f('\nA News Publisher article \'%s\' has been submitted by %s for review on website %s.\nIndex page teaser text of the article:\n--------\n%s\n--------\n\nGo to the <a href="%s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).\n\nRegards,\n%s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+            }
+            $sent = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
+                                                                        'toaddress'  => $toaddress,
+                                                                        'fromname'   => $fromname,
+                                                                        'fromaddress'=> $fromaddress,
+                                                                        'subject'    => $subject,
+                                                                        'body'       => $body,
+                                                                        'html'       => $html));
+            if ($sent) {
+                LogUtil::registerStatus(__('Done! E-mail about new pending article is sent.', $dom));
+            } else {
+                LogUtil::registerStatus(__('Warning! E-mail about new pending article could not be sent.', $dom));
+            }
         }
-*/        
     }
 
     return pnRedirect(pnModURL('News', $referertype, 'view'));

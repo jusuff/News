@@ -43,7 +43,14 @@ function News_init()
     pnModSetVar('News', 'enableajaxedit', false);
     pnModSetVar('News', 'enablemorearticlesincat', false);
     pnModSetVar('News', 'morearticlesincat', 0);
-    
+
+    pnModSetVar('News', 'notifyonpending', false);
+    pnModSetVar('News', 'notifyonpending_fromname', '');
+    pnModSetVar('News', 'notifyonpending_fromaddress', '');
+    pnModSetVar('News', 'notifyonpending_toname', '');
+    pnModSetVar('News', 'notifyonpending_toaddress', ''); // can be comma seperated list
+    pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
+    pnModSetVar('News', 'notifyonpending_html', true);
 
     // create the default data for the News module
     News_defaultdata();
@@ -214,7 +221,14 @@ function News_upgrade($oldversion)
             // Add new variable(s)
             pnModSetVar('News', 'enablemorearticlesincat', false);
             pnModSetVar('News', 'morearticlesincat', 0);
-
+            pnModSetVar('News', 'notifyonpending', false);
+            pnModSetVar('News', 'notifyonpending_fromname', '');
+            pnModSetVar('News', 'notifyonpending_fromaddress', '');
+            pnModSetVar('News', 'notifyonpending_toname', '');
+            pnModSetVar('News', 'notifyonpending_toaddress', '');
+            pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
+            pnModSetVar('News', 'notifyonpending_html', true);
+            
             // clear compiled templates and News cache
             pnModAPIFunc('pnRender', 'user', 'clear_compiled');
             pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));

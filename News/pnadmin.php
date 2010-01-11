@@ -749,6 +749,13 @@ function News_admin_updateconfig()
     $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
     $modvars['enablemorearticlesincat'] = (bool)FormUtil::getPassedValue('enablemorearticlesincat', false, 'POST');
     $modvars['morearticlesincat'] = (int)FormUtil::getPassedValue('morearticlesincat', 0, 'POST');
+    $modvars['notifyonpending'] = (bool)FormUtil::getPassedValue('notifyonpending', false, 'POST');
+    $modvars['notifyonpending_fromname'] = FormUtil::getPassedValue('notifyonpending_fromname', '', 'POST');
+    $modvars['notifyonpending_fromaddress'] = FormUtil::getPassedValue('notifyonpending_fromaddress', '', 'POST');
+    $modvars['notifyonpending_toname'] = FormUtil::getPassedValue('notifyonpending_toname', '', 'POST');
+    $modvars['notifyonpending_toaddress'] = FormUtil::getPassedValue('notifyonpending_toaddress', '', 'POST');
+    $modvars['notifyonpending_subject'] = FormUtil::getPassedValue('notifyonpending_subject', '', 'POST');
+    $modvars['notifyonpending_html'] = (bool)FormUtil::getPassedValue('notifyonpending_html', true, 'POST');
 
     if (!Loader::loadClass('CategoryRegistryUtil')) {
         pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));

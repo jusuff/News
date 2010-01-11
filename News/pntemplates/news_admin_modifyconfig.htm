@@ -80,6 +80,37 @@
                         <div class="z-informationmsg z-formnote"><!--[gt text='When displaying an article, a number of additional articletitles in the same category can be shown.<br />To show the additional articletitles for every article set the value above to a number larger than 0. When the value is set to 0, the number of additional articletitles can be set per article by means of the article attribute \'morearticlesincat\'. You need to enable \'article attributes\' yourself. <br />When the setting above or the article attribute is set to 0, no titles will be extracted from the database.']--></div>
                     </div>
                 </div>
+                <div class="z-formrow">
+                    <label for="news_notifyonpending"><!--[gt text='Notify moderators when a new pending article is submitted for review']--></label>
+                    <input id="news_notifyonpending" type="checkbox" name="notifyonpending"<!--[if $notifyonpending]--> checked="checked"<!--[/if]--> />
+                    <div class="z-informationmsg z-formnote"><!--[gt text='Whenever a new article is submitted as Pending Review, the admin or a list of E-mail addresses can be informed of this event with a notification E-mail.']--></div>
+                </div>
+                <div id="news_notifyonpending_details">
+                    <div class="z-formrow">
+                        <label for="news_notifyonpending_fromname"><!--[gt text='From name (leave empty for sitename)']--></label>
+                        <input id="news_notifyonpending_fromname" type="text" name="notifyonpending_fromname" value="<!--[$notifyonpending_fromname|pnvarprepfordisplay]-->" />
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_notifyonpending_fromaddress"><!--[gt text='From address (leave empty for admin E-mail address)']--></label>
+                        <input id="news_notifyonpending_fromaddress" type="text" name="notifyonpending_fromaddress" value="<!--[$notifyonpending_fromaddress|pnvarprepfordisplay]-->" />
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_notifyonpending_toname"><!--[gt text='To name (leave empty for sitename)']--></label>
+                        <input id="news_notifyonpending_toname" type="text" name="notifyonpending_toname" value="<!--[$notifyonpending_toname|pnvarprepfordisplay]-->" />
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_notifyonpending_toaddress"><!--[gt text='To address (comma seperated list of E-Mail addresses, leave empty for admin E-mail address)']--></label>
+                        <input id="news_notifyonpending_toaddress" type="text" name="notifyonpending_toaddress" value="<!--[$notifyonpending_toaddress|pnvarprepfordisplay]-->" />
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_notifyonpending_subject"><!--[gt text='E-mail subject']--></label>
+                        <input id="news_notifyonpending_subject" type="text" name="notifyonpending_subject" value="<!--[$notifyonpending_subject|pnvarprepfordisplay]-->" />
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_notifyonpending_html"><!--[gt text='Send E-mail as HTML ']--></label>
+                        <input id="news_notifyonpending_html" type="checkbox" name="notifyonpending_html"<!--[if $notifyonpending_html]--> checked="checked"<!--[/if]--> />
+                    </div>
+                </div>
             </fieldset>
 
             <!--[pnconfiggetvar name='shorturls' assign='shorturls']-->

@@ -22,6 +22,9 @@ function news_modifyconfig_init_check()
     if ($('news_ajaxedit_details')) {
         news_ajaxedit_init();
     }
+    if ($('news_notifyonpending_details')) {
+        news_notifyonpending_init();
+    }
 }
 
 function news_ajaxedit_init()
@@ -37,6 +40,7 @@ function news_ajaxedit_onchange()
     switchdisplaystate('news_ajaxedit_details');
 }
 
+
 function news_morearticles_init()
 {
     if ($('news_enablemorearticlesincat').checked == false) {
@@ -49,6 +53,21 @@ function news_morearticles_onchange()
 {
     switchdisplaystate('news_morearticles_details');
 }
+
+
+function news_notifyonpending_init()
+{
+    if ($('news_notifyonpending').checked == false) {
+        $('news_notifyonpending_details').hide();
+    }
+    Event.observe('news_notifyonpending', 'change', news_notifyonpending_onchange);
+}
+
+function news_notifyonpending_onchange()
+{
+    switchdisplaystate('news_notifyonpending_details');
+}
+
 
 function news_permalink_onclick()
 {
