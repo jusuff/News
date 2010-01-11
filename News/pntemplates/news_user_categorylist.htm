@@ -31,6 +31,11 @@
             <!--[assign var='categoryid' value=$category.category.id]-->
             <!--[securityutil_checkpermission component='Categories::category' instance="ID::$category.category.id" level='ACCESS_EDIT' assign='authcatedit']-->
             <li>
+                <!--[* Remove this line to enable category image display
+                <!--[if !empty($category.category.catimage)]-->
+                    <img src="<!--[$catimagepath]--><!--[$category.category.catimage]-->" alt="<!--[$categoryname]-->" />
+                <!--[/if]-->
+                Remove this line to enable category image display *]--> 
                 <!--[if $shorturls and $shorturlstype eq 0]-->
                 <a href="<!--[pnmodurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.path|replace:$property.category.path:'' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed']--></a>
                 <!--[else]-->
