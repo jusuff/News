@@ -184,8 +184,8 @@ function News_user_create($args)
     if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD))) {
         $item['notes'] = '';
-        $item['hideonindex'] = 0;
-        $item['disallowcomments'] = 0;
+        $item['hideonindex'] = 1;
+        $item['disallowcomments'] = 1;
         $item['from'] = null;
         $item['tonolimit'] = true;
         $item['to'] = null;
