@@ -503,7 +503,11 @@ function news_notes_init()
 {
     Event.observe('news_notes_collapse', 'click', news_notes_click);
     $('news_notes_collapse').addClassName('z-toggle-link');
-    news_notes_click();
+    if ($('news_notes_details').style.display != "none") {
+        $('news_notes_collapse').removeClassName('z-toggle-link-open');
+        $('news_notes_showhide').update(string_show);
+        $('news_notes_details').hide();
+    }
 }
 
 function news_notes_click()
@@ -523,7 +527,10 @@ function news_meta_init()
 {
     Event.observe('news_meta_collapse', 'click', news_meta_click);
     $('news_meta_collapse').addClassName('z-toggle-link');
-    news_meta_click();
+    if ($('news_meta_details').style.display != "none") {
+        $('news_meta_collapse').removeClassName('z-toggle-link-open');
+        $('news_meta_details').hide();
+    }
 }
 
 function news_meta_click()
