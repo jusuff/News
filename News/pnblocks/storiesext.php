@@ -241,6 +241,9 @@ height:50px;
         case 2:
             $apiargs['order'] = 'weight';
             break;
+        case 3:
+            $apiargs['order'] = 'random';
+            break;
         case 1:
             $apiargs['order'] = 'counter';
             break;

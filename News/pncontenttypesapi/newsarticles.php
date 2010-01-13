@@ -142,6 +142,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         case 2:
             $apiargs['order'] = 'weight';
             break;
+        case 3:
+            $apiargs['order'] = 'random';
+            break;
         case 1:
             $apiargs['order'] = 'counter';
             break;
@@ -356,9 +359,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $render->assign('enablecategorization', $enablecategorization);
 
     $showoptions = array(
-        array('value' => 1, 'text' => __('All', $dom)),
-        array('value' => 2, 'text' => __('Index page', $dom)),
-        array('value' => 3, 'text' => __('Inner page', $dom))
+        array('value' => 1, 'text' => __('All news articles', $dom)),
+        array('value' => 2, 'text' => __('Only articles set for index page listing', $dom)),
+        array('value' => 3, 'text' => __('Only articles not set for index page listing', $dom))
     );
 
     $statusoptions = array(
@@ -372,7 +375,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $orderoptions = array(
         array('value' => 0, 'text' => __('News publisher setting', $dom)),
         array('value' => 1, 'text' => __('Number of pageviews', $dom)),
-        array('value' => 2, 'text' => __('Article weight', $dom))
+        array('value' => 2, 'text' => __('Article weight', $dom)),
+        array('value' => 3, 'text' => __('Random', $dom))
     );
 
     $render->assign('showoptions', $showoptions);
@@ -391,7 +395,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
       $this->videoId = $data['videoId'] = $matches[1];
       return true;
     }
-    $message = _NEWS_CONTENTTYPE_NEWSARTICLESNOTVALIDURL;
+    $message = __('Invalid input', $dom);
     return false;*/
     return true;
   }

@@ -191,6 +191,8 @@ function News_userapi_getall($args)
         } else {
             $orderby = $news_column[$order].' DESC';
         }
+    } elseif ($args['order'] == 'random') {
+        $orderby = 'RAND()';
     }
     
     // if sorted by weight add second ordering "from", since weight is not unique
