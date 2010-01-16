@@ -1,12 +1,10 @@
 <!--[*  $Id: news_user_menu.htm 75 2009-02-24 04:51:52Z mateo $  *]-->
 
-<!--[* nocache *]-->
 <!--[formutil_getpassedvalue name='func' default='main' noprocess=true assign='func']-->
 <!--[formutil_getpassedvalue name='theme' default='' noprocess=true assign='theme']-->
 <!--[securityutil_checkpermission component='News::' instance='::' level='ACCESS_OVERVIEW' assign='authoverview']-->
 <!--[securityutil_checkpermission component='News::' instance='::' level='ACCESS_COMMENT' assign='authcomm']-->
 <!--[securityutil_checkpermission component='News::' instance='::' level='ACCESS_EDIT' assign='authedit']-->
-<!--[* /nocache *]-->
 
 <!--[* assign the page title if News is the current module *]-->
 <!--[pnmodgetname assign='module']-->
@@ -42,7 +40,6 @@
         <a href="<!--[pnmodurl modname='News' type='user' func='archives']-->"><!--[gt text='News archive']--></a>
         <!--[/if]-->
 
-        <!--[* nocache *]-->
         <!--[if $authcomm AND $func neq 'new']-->
         |
         <a href="<!--[pnmodurl modname='News' type='user' func='new']-->"><!--[gt text='Submit an article']--></a>
@@ -55,7 +52,6 @@
         <a href="<!--[pnmodurl modname='News' type='admin' func='view' news_status='2']-->"><!--[if $pendingcount gt 0]--><!--[gt text='%s pending article' plural='%s pending articles' count=$pendingcount tag1=$pendingcount]--><!--[/if]--></a>
         <!--[/if]-->
         <!--[/if]-->
-        <!--[* /nocache *]-->
         ]
     </span>
 </div>
