@@ -8,8 +8,11 @@
 <!--[pnpageaddvar name='javascript' value='javascript/ajax/dragdrop.js']-->
 <!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/Zikula.itemlist.js']-->
 <!--[/if]-->
-<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/calendar_date_select.js']-->
-<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/format_iso_date.js']-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/prototype-base-extensions.js']-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/prototype-date-extensions.js']-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/datepicker.js']-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/datepicker-locale.js']-->
+<!--[pnpageaddvar name='stylesheet' value='modules/News/pnstyle/datepicker.css']-->
 <!--[gt text='Edit news article' assign='templatetitle']-->
 
 <!--[* Add editing / deleting of own (draft) articles *]-->
@@ -162,8 +165,7 @@
                     <div id="news_expiration_details">
                         <div class="z-formrow">
                             <label><!--[gt text='Start date']--></label>
-                            <input id="news_from" name="story[from]" type="text" size="18" value="<!--[$from]-->">
-                            <img onclick="new CalendarDateSelect('news_from', {time:true, minute_interval:10, year_range:4, time_12hr:false});" src="<!--[$baseurl]-->modules/News/pnimages/calendar.gif" />
+                            <input id="news_from" class="datepicker" name="story[from]" type="text" size="18" value="<!--[$from]-->">                            
                         </div>
                         <div class="z-formrow">
                             <label for="news_tonolimit"><!--[gt text='No end date']--></label>
@@ -172,8 +174,7 @@
                         <div id="news_expiration_date">
                             <div class="z-formrow">
                                 <label><!--[gt text='End date']--></label>
-                                <input id="news_to" name="story[to]" type="text" size="18" value="<!--[$to]-->">
-                                <img onclick="new CalendarDateSelect('news_to', {time:true, minute_interval:10, year_range:4, time_12hr:false});" src="<!--[$baseurl]-->modules/News/pnimages/calendar.gif" />
+                                <input id="news_to" class="datepicker" name="story[to]" type="text" size="18" value="<!--[$to]-->">                            
                             </div>
                         </div>
                     </div>
@@ -183,6 +184,21 @@
                     </div>
                 </div>
             </fieldset>
+            <script type="text/javascript">
+                // <![CDATA[
+                lang = '<!--[$lang]-->';
+                if (Control.DatePicker.Language[lang]) {
+                    if (!Control.DatePicker.Locale[lang+'_iso8601']) {
+                        with (Control.DatePicker) Locale[lang+'_iso8601'] = i18n.createLocale('iso8601', lang);
+                    }
+                    new Control.DatePicker('news_from', {locale: lang+'_iso8601', use24hrs: true, icon: '<!--[$baseurl]-->modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
+                    new Control.DatePicker('news_to', {locale: lang+'_iso8601', use24hrs: true, icon: '<!--[$baseurl]-->modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
+                } else {
+                    new Control.DatePicker('news_from', {locale: 'en_iso8601', use24hrs: true, icon: '<!--[$baseurl]-->modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
+                    new Control.DatePicker('news_to', {locale: 'en_iso8601', use24hrs: true, icon: '<!--[$baseurl]-->modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
+                }
+                // ]]>
+            </script>
 
             <!--[if $enableattribution]-->
             <fieldset>

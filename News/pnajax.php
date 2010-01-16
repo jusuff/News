@@ -78,6 +78,9 @@ function News_ajax_modify()
     // Assign the current page
     $render->assign('page', $page);
 
+    // Assign the default languagecode
+    $render->assign('lang', ZLanguage::getLanguageCode());
+
     // Assign the content format
     $formattedcontent = pnModAPIFunc('News', 'user', 'isformatted', array('func' => 'modify'));
     $render->assign('formattedcontent', $formattedcontent);

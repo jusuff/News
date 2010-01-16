@@ -179,6 +179,9 @@ function News_admin_modify($args)
         $render->assign('catregistry', $catregistry);
     }
 
+    // Assign the default languagecode
+    $render->assign('lang', ZLanguage::getLanguageCode());
+
     // Pass the module configuration to the template
     $render->assign($modvars);
 

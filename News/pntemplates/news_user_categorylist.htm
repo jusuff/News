@@ -25,9 +25,9 @@
         <ul class="news_categorylist">
         <!--[foreach from=$category.subcategories item='category']-->
             <!--[* get the category name and description avoiding EAll errors *]-->
-            <!--[array_field_isset assign='categoryname' array=$category.category.display_name field=$language returnValue=1]-->
+            <!--[array_field_isset assign='categoryname' array=$category.category.display_name field=$lang returnValue=1]-->
             <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$category.category.name]--><!--[/if]-->
-            <!--[array_field_isset assign='categorydesc' array=$category.category.display_desc field=$language returnValue=1]-->
+            <!--[array_field_isset assign='categorydesc' array=$category.category.display_desc field=$lang returnValue=1]-->
             <!--[assign var='categoryid' value=$category.category.id]-->
             <!--[securityutil_checkpermission component='Categories::category' instance="ID::$category.category.id" level='ACCESS_EDIT' assign='authcatedit']-->
             <li>
@@ -68,9 +68,9 @@
                 <!--[if !empty($category.subcategories)]-->
                 <ul style="margin-bottom: 0">
                 <!--[foreach from=$category.subcategories item='subcat']-->
-                    <!--[array_field_isset assign='categoryname' array=$subcat.category.display_name field=$language returnValue=1]-->
+                    <!--[array_field_isset assign='categoryname' array=$subcat.category.display_name field=$lang returnValue=1]-->
                     <!--[if $categoryname eq '']--><!--[assign var='categoryname' value=$subcat.category.name]--><!--[/if]-->
-                    <!--[array_field_isset assign='categorydesc' array=$subcat.category.display_desc field=$language returnValue=1]-->
+                    <!--[array_field_isset assign='categorydesc' array=$subcat.category.display_desc field=$lang returnValue=1]-->
                     <!--[assign var='categoryid' value=$subcat.category.id]-->
                     <!--[securityutil_checkpermission component='Categories::category' instance="ID::$subcat.category.id" level='ACCESS_EDIT' assign='authcatedit']-->
                     <li>
