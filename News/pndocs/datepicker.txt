@@ -1,0 +1,5 @@
+﻿Datepicker taken from:
+http://home.jongsma.org/software/js/datepicker
+Gnu Public License
+
+or all his JS http://home.jongsma.org/software/js/
