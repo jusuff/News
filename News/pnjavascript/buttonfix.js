@@ -4,6 +4,7 @@
 
 /**
  * function that fixes button submits by IE6
+ * http://www.kopz.org/public/documents/css/multiple_buttons_ie_workaround.html
  */
 function buttonfix() {
     var buttons = document.getElementsByTagName('button');
