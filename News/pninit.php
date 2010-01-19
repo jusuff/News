@@ -52,6 +52,12 @@ function News_init()
     pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
     pnModSetVar('News', 'notifyonpending_html', true);
 
+    pnModSetVar('News', 'pdflink', false);
+    pnModSetVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
+    pnModSetVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
+    pnModSetVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
+    pnModSetVar('News', 'pdflink_headerlogo_width', '30');
+
     // create the default data for the News module
     News_defaultdata();
 
@@ -228,6 +234,11 @@ function News_upgrade($oldversion)
             pnModSetVar('News', 'notifyonpending_toaddress', '');
             pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
             pnModSetVar('News', 'notifyonpending_html', true);
+            pnModSetVar('News', 'pdflink', false);
+            pnModSetVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
+            pnModSetVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
+            pnModSetVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
+            pnModSetVar('News', 'pdflink_headerlogo_width', '30');
             
             // clear compiled templates and News cache
             pnModAPIFunc('pnRender', 'user', 'clear_compiled');

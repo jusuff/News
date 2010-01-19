@@ -294,7 +294,7 @@ function News_userapi_get($args)
         static $registeredCats;
         if (!isset($registeredCats)) {
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-                pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+                return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
             }
             $registeredCats  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         }

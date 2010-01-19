@@ -99,7 +99,7 @@ function News_user_new($args)
     if ($modvars['enablecategorization']) {
         // load the categories system
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $render->assign('catregistry', $catregistry);
@@ -334,7 +334,7 @@ function News_user_view($args = array())
     // check if categorization is enabled
     if ($modvars['enablecategorization']) {
         if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
         }
         // get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -615,7 +615,7 @@ function News_user_display($args)
         }
         if ($morearticlesincat > 0) {
             if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-                pn_exit(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
+                return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
             }
             // get the categories registered for News
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -796,7 +796,7 @@ function News_user_categorylist($args)
    
     if ($enablecategorization) {
         if (!Loader::loadClass ('CategoryRegistryUtil') || !Loader::loadClass ('CategoryUtil')) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil | CategoryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
         }
         // Get the categories registered for News
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -857,6 +857,9 @@ function News_user_displaypdf($args)
 
     $dom = ZLanguage::getModuleDomain('News');
 
+    // get all module vars for later use
+    $modvars = pnModGetVar('News');
+
     // At this stage we check to see if we have been passed $objectid, the
     // generic item identifier
     if ($objectid) {
@@ -870,6 +873,10 @@ function News_user_displaypdf($args)
     if (!empty($title)) {
         unset($sid);
     }
+
+    // Include the TCPDF class from the configured path
+    require_once($modvars['pdflink_tcpdfpath']);
+    require_once($modvars['pdflink_tcpdflang']);
 
     // Create output object
     $render = & pnRender::getInstance('News');
@@ -890,9 +897,8 @@ function News_user_displaypdf($args)
         $sid = $item['sid'];
         pnQueryStringSetVar('sid', $sid);
     }
-
     if ($item === false) {
-        return LogUtil::registerError(__f('Error! No such article found.', $dom), 404);
+        return LogUtil::registerError(__('Error! No such article found.', $dom), 404);
     }
 
     // Explode the review into an array of seperate pages
@@ -920,17 +926,13 @@ function News_user_displaypdf($args)
                           'links'     => $links,
                           'preformat' => $preformat));
 
-    $render->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
-    $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
+    $render->assign('enablecategorization', $modvars['enablecategorization']);
+    $render->assign('catimagepath', $modvars['catimagepath']);
+    $render->assign('pdflink', $modvars['pdflink']);
 
     // Store output in variable
     $articlehtml = $render->fetch('news_user_articlepdf.htm');
     
-    // Include the TCPDF class from config/classes
-    // TODO make these configurable in the admin section
-    require_once('config/classes/tcpdf/config/lang/eng.php');
-    require_once('config/classes/tcpdf/tcpdf.php');
-
     // create new PDF document
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
 
@@ -945,9 +947,9 @@ function News_user_displaypdf($args)
     //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
     $sitename = pnConfigGetVar('sitename');
     $pdf->SetHeaderData(
-                PDF_HEADER_LOGO, 
-                PDF_HEADER_LOGO_WIDTH, 
-                $info['title'] . __(' by ', $dom) . $info['contributor'],
+                $modvars['pdflink_headerlogo'],
+                $modvars['pdflink_headerlogo_width'],
+                __f('Article %s by %s', array($info['title'], $info['contributor']), $dom),
                 $sitename . ' :: ' . __('News publisher', $dom));
     // set header and footer fonts
     $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));

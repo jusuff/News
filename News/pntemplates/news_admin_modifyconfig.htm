@@ -83,10 +83,10 @@
                 <div class="z-formrow">
                     <label for="news_notifyonpending"><!--[gt text='Notify moderators when a new pending article is submitted for review']--></label>
                     <input id="news_notifyonpending" type="checkbox" name="notifyonpending"<!--[if $notifyonpending]--> checked="checked"<!--[/if]--> />
-                    <div class="z-informationmsg z-formnote"><!--[gt text='Whenever a new article is submitted as Pending Review, the admin or a list of E-mail addresses can be informed of this event with a notification E-mail.']--></div>
                 </div>
                 <div id="news_notifyonpending_details">
                     <div class="z-formrow">
+                    <div class="z-informationmsg z-formnote"><!--[gt text='Whenever a new article is submitted as Pending Review, the admin or a list of E-mail addresses can be informed of this event with a notification E-mail.']--></div>
                         <label for="news_notifyonpending_fromname"><!--[gt text='From name (leave empty for sitename)']--></label>
                         <input id="news_notifyonpending_fromname" type="text" name="notifyonpending_fromname" value="<!--[$notifyonpending_fromname|pnvarprepfordisplay]-->" />
                     </div>
@@ -109,6 +109,30 @@
                     <div class="z-formrow">
                         <label for="news_notifyonpending_html"><!--[gt text='Send E-mail as HTML ']--></label>
                         <input id="news_notifyonpending_html" type="checkbox" name="notifyonpending_html"<!--[if $notifyonpending_html]--> checked="checked"<!--[/if]--> />
+                    </div>
+                </div>
+                <div class="z-formrow">
+                    <label for="news_pdflink"><!--[gt text='Display a PDF link for the articles in the index page']--></label>
+                    <input id="news_pdflink" type="checkbox" name="pdflink"<!--[if $pdflink]--> checked="checked"<!--[/if]--> />
+                </div>
+                <div id="news_pdflink_details">
+                    <div class="z-formrow">
+                        <label for="news_pdflink_tcpdfpath"><!--[gt text='Path to the TCPDF main file']--></label>
+                        <input id="news_pdflink_tcpdfpath" type="text" name="pdflink_tcpdfpath" value="<!--[$pdflink_tcpdfpath|pnvarprepfordisplay]-->" />
+                        <div class="z-informationmsg z-formnote"><!--[gt text='The PDF link is based on <a href="http://www.tcpdf.org">TCPDF</a>. You have to install the files yourself into the path specified above, when you want to use the pdflink. Download TCPDF from the link and place the \'tcpdf\' folder into the correct location.']--></div>
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_pdflink_tcpdflang"><!--[gt text='TCPDF language file']--></label>
+                        <input id="news_pdflink_tcpdflang" type="text" name="pdflink_tcpdflang" value="<!--[$pdflink_tcpdflang|pnvarprepfordisplay]-->" />
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_pdflink_headerlogo"><!--[gt text='TCPDF Header logo image (absolute path or relative to tcpdf)']--></label>
+                        <input id="news_pdflink_headerlogo" type="text" name="pdflink_headerlogo" value="<!--[$pdflink_headerlogo|pnvarprepfordisplay]-->" />
+                        <div class="z-informationmsg z-formnote"><!--[gt text='Default Header logo is defined by TCPDF and in PathToTCPDF/images folder. tcpdf_logo.jpg with a width of 30']--></div>
+                    </div>
+                    <div class="z-formrow">
+                        <label for="news_pdflink_headerlogo_width"><!--[gt text='TCPDF header logo width in mm']--></label>
+                        <input id="news_pdflink_headerlogo_width" type="text" name="pdflink_headerlogo_width" value="<!--[$pdflink_headerlogo_width|pnvarprepfordisplay]-->" />
                     </div>
                 </div>
             </fieldset>

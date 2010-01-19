@@ -145,7 +145,7 @@ function News_admin_modify($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
 
@@ -441,7 +441,7 @@ function News_admin_view($args)
     if ($modvars['enablecategorization']) {
         // load the category registry util
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties = array_keys($catregistry);
@@ -691,7 +691,7 @@ function News_admin_modifyconfig()
     $dom = ZLanguage::getModuleDomain('News');
 
     if (!Loader::loadClass('CategoryRegistryUtil')) {
-        pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+        return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);
@@ -759,9 +759,14 @@ function News_admin_updateconfig()
     $modvars['notifyonpending_toaddress'] = FormUtil::getPassedValue('notifyonpending_toaddress', '', 'POST');
     $modvars['notifyonpending_subject'] = FormUtil::getPassedValue('notifyonpending_subject', '', 'POST');
     $modvars['notifyonpending_html'] = (bool)FormUtil::getPassedValue('notifyonpending_html', true, 'POST');
+    $modvars['pdflink'] = (bool)FormUtil::getPassedValue('pdflink', false, 'POST');
+    $modvars['pdflink_tcpdfpath'] = FormUtil::getPassedValue('pdflink_tcpdfpath', '', 'POST');
+    $modvars['pdflink_tcpdflang'] = FormUtil::getPassedValue('pdflink_tcpdflang', '', 'POST');
+    $modvars['pdflink_headerlogo'] = FormUtil::getPassedValue('pdflink_headerlogo', '', 'POST');
+    $modvars['pdflink_headerlogo_width'] = FormUtil::getPassedValue('pdflink_headerlogo_width', '', 'POST');
 
     if (!Loader::loadClass('CategoryRegistryUtil')) {
-        pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+        return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
     }
     $catregistry   = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
     $properties    = array_keys($catregistry);

@@ -66,7 +66,7 @@ function News_ajax_modify()
     if ($modvars['enablecategorization']) {
         // load the categories system
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $render->assign('catregistry', $catregistry);

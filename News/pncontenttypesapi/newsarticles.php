@@ -350,7 +350,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     if ($enablecategorization) {
         // load the categories system
         if (!Loader::loadClass('CategoryRegistryUtil')) {
-            pn_exit(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
         }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
