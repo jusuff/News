@@ -875,8 +875,8 @@ function News_user_displaypdf($args)
     }
 
     // Include the TCPDF class from the configured path
-    require_once($modvars['pdflink_tcpdfpath']);
-    require_once($modvars['pdflink_tcpdflang']);
+    Loader::includeOnce($modvars['pdflink_tcpdfpath']);
+    Loader::includeOnce($modvars['pdflink_tcpdflang']);
 
     // Create output object
     $render = & pnRender::getInstance('News');
