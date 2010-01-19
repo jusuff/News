@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zikula 1.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-17 17:32+0000\n"
+"POT-Creation-Date: 2010-01-19 12:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: pnadmin.php:85 pnadmin.php:243 pnadmin.php:354 pnajax.php:33 pnajax.php:124
-#: pnajax.php:164 pnajax.php:293 pnajax.php:346 pnuser.php:555 pnuser.php:895
+#: pnajax.php:164 pnajax.php:293 pnajax.php:346 pnuser.php:555 pnuser.php:901
 #: pnadminapi.php:35 pnadminapi.php:98
 msgid "Error! No such article found."
 msgstr ""
 
-#: pnadmin.php:148 pnadmin.php:444 pnadmin.php:694 pnadmin.php:764
+#: pnadmin.php:148 pnadmin.php:444 pnadmin.php:694 pnadmin.php:769
 #: pnajax.php:69 pnuserapi.php:297 pnblocks/stories.php:93
 #: pnblocks/stories.php:167 pnblocks/storiesext.php:224
 #: pnblocks/storiesext.php:524 pncontenttypesapi/newsarticles.php:353
@@ -154,7 +154,7 @@ msgstr ""
 
 #: pnadmin.php:584 pntemplates/news_admin_new.htm:199
 #: pntemplates/news_admin_modifyconfig.htm:45
-#: pntemplates/news_admin_modifyconfig.htm:148
+#: pntemplates/news_admin_modifyconfig.htm:172
 msgid "Article ID"
 msgstr ""
 
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Article weight"
 msgstr ""
 
-#: pnadmin.php:783
+#: pnadmin.php:788
 msgid "Done! Saved module settings."
 msgstr ""
 
@@ -222,12 +222,12 @@ msgstr ""
 msgid "No News publisher articles since last newsletter on %s."
 msgstr ""
 
-#: pnversion.php:20 pnuser.php:951 pninit.php:445
+#: pnversion.php:20 pnuser.php:953 pninit.php:456
 #: pntemplates/news_admin_menu.htm:5
 msgid "News publisher"
 msgstr ""
 
-#: pnversion.php:21 pninit.php:446
+#: pnversion.php:21 pninit.php:457
 msgid ""
 "Provides the ability to publish and manage news articles contributed by site "
 "users, with support for news categories and various associated blocks."
@@ -460,7 +460,7 @@ msgstr ""
 msgid "Done! Created new article."
 msgstr ""
 
-#: pnuser.php:267 pninit.php:52 pninit.php:229
+#: pnuser.php:267 pninit.php:52 pninit.php:235
 msgid "A News Publisher article has been submitted for review"
 msgstr ""
 
@@ -515,8 +515,9 @@ msgid ""
 "December"
 msgstr ""
 
-#: pnuser.php:950
-msgid " by "
+#: pnuser.php:952
+#, php-format
+msgid "Article %s by %s"
 msgstr ""
 
 #: pnaccountapi.php:37 pntemplates/news_user_menu.htm:45
@@ -550,44 +551,44 @@ msgid ""
 "the Category Registry."
 msgstr ""
 
-#: pninit.php:95 pninit.php:162 pninit.php:217 pninit.php:573 pninit.php:622
+#: pninit.php:101 pninit.php:168 pninit.php:223 pninit.php:584 pninit.php:633
 msgid "Error! Could not update table."
 msgstr ""
 
-#: pninit.php:107
+#: pninit.php:113
 msgid "Error! Could not update articles."
 msgstr ""
 
-#: pninit.php:114
+#: pninit.php:120
 #, php-format
 msgid "Error! The '%s' module is not installed."
 msgstr ""
 
-#: pninit.php:121 pninit.php:130 pninit.php:134
+#: pninit.php:127 pninit.php:136 pninit.php:140
 msgid "Error! Could not delete table."
 msgstr ""
 
-#: pninit.php:146
+#: pninit.php:152
 msgid "Error! Could not migrate categories."
 msgstr ""
 
-#: pninit.php:181
+#: pninit.php:187
 msgid "Error! Could not rename table."
 msgstr ""
 
-#: pninit.php:189 pninit.php:193 pninit.php:197
+#: pninit.php:195 pninit.php:199 pninit.php:203
 msgid "Error! Could not rename column."
 msgstr ""
 
-#: pninit.php:286
+#: pninit.php:297
 msgid "News introduction article"
 msgstr ""
 
-#: pninit.php:287
+#: pninit.php:298
 msgid "news_introduction_article"
 msgstr ""
 
-#: pninit.php:288
+#: pninit.php:299
 msgid ""
 "A news article is divided into an article teaser text (which is the lead-in "
 "text you are reading now) and an article body text (which you can view by "
@@ -598,11 +599,11 @@ msgid ""
 "information about Zikula's News publisher module."
 msgstr ""
 
-#: pninit.php:289 pntemplates/news_user_menu.htm:24
+#: pninit.php:300 pntemplates/news_user_menu.htm:24
 msgid "News"
 msgstr ""
 
-#: pninit.php:289
+#: pninit.php:300
 #, php-format
 msgid ""
 "<h3>More about the News module</h3><p>You are now reading the body text of "
@@ -628,23 +629,23 @@ msgid ""
 "s&type=admin&func=view\">News admin pages</a>.</p>"
 msgstr ""
 
-#: pninit.php:305
+#: pninit.php:316
 msgid "Warning! Could not create the default News introductory article."
 msgstr ""
 
-#: pninit.php:309
+#: pninit.php:320
 msgid "Warning! Could not update the default News introductory article."
 msgstr ""
 
-#: pninit.php:407
+#: pninit.php:418
 msgid "Error! Could not update the article categories."
 msgstr ""
 
-#: pninit.php:493
+#: pninit.php:504
 msgid "Topics"
 msgstr ""
 
-#: pninit.php:494
+#: pninit.php:505
 msgid "Display and manage topics"
 msgstr ""
 
@@ -1051,7 +1052,7 @@ msgid "(Number from 1 to 10)"
 msgstr ""
 
 #: pntemplates/news_user_index.htm:17
-msgid "Filed under"
+msgid "Filed under:"
 msgstr ""
 
 #: pntemplates/news_user_categorylist.htm:18
@@ -1306,7 +1307,7 @@ msgstr ""
 
 #: pntemplates/news_admin_new.htm:283 pntemplates/news_user_new.htm:269
 #: pntemplates/news_admin_modify.htm:302 pntemplates/news_ajax_modify.htm:220
-#: pntemplates/news_admin_modifyconfig.htm:158
+#: pntemplates/news_admin_modifyconfig.htm:182
 #: pntemplates/news_admin_delete.htm:18
 msgid "Cancel"
 msgstr ""
@@ -1529,7 +1530,7 @@ msgid "Delete this article"
 msgstr ""
 
 #: pntemplates/news_ajax_modify.htm:215
-#: pntemplates/news_admin_modifyconfig.htm:157
+#: pntemplates/news_admin_modifyconfig.htm:181
 msgid "Save"
 msgstr ""
 
@@ -1634,7 +1635,7 @@ msgstr ""
 msgid "Notify moderators when a new pending article is submitted for review"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:86
+#: pntemplates/news_admin_modifyconfig.htm:89
 msgid ""
 "Whenever a new article is submitted as Pending Review, the admin or a list "
 "of E-mail addresses can be informed of this event with a notification E-mail."
@@ -1666,66 +1667,100 @@ msgstr ""
 msgid "Send E-mail as HTML "
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:119
-msgid "Permalinks"
+#: pntemplates/news_admin_modifyconfig.htm:115
+msgid "Display a PDF link for the articles in the index page"
 msgstr ""
 
 #: pntemplates/news_admin_modifyconfig.htm:120
+msgid "Path to the TCPDF main file"
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:122
+msgid ""
+"The PDF link is based on <a href=\"http://www.tcpdf.org\">TCPDF</a>. You "
+"have to install the files yourself into the path specified above, when you "
+"want to use the pdflink. Download TCPDF from the link and place the 'tcpdf' "
+"folder into the correct location."
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:125
+msgid "TCPDF language file"
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:129
+msgid "TCPDF Header logo image (absolute path or relative to tcpdf)"
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:131
+msgid ""
+"Default Header logo is defined by TCPDF and in PathToTCPDF/images folder. "
+"tcpdf_logo.jpg with a width of 30"
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:134
+msgid "TCPDF header logo width in mm"
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:143
+msgid "Permalinks"
+msgstr ""
+
+#: pntemplates/news_admin_modifyconfig.htm:144
 msgid ""
 "You can select a pre-defined permalink format, or define your custom format."
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:123
+#: pntemplates/news_admin_modifyconfig.htm:147
 msgid "Format based on date and name"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:125
+#: pntemplates/news_admin_modifyconfig.htm:149
 msgid "your-article-title"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:128
+#: pntemplates/news_admin_modifyconfig.htm:152
 msgid "Numeric format"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:133
+#: pntemplates/news_admin_modifyconfig.htm:157
 msgid "Custom format"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:137
+#: pntemplates/news_admin_modifyconfig.htm:161
 msgid "Custom format definition"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:139
+#: pntemplates/news_admin_modifyconfig.htm:163
 msgid ""
 "Notice: A custom format definition must contain at least either '%storyid%' "
 "or '%storytitle%', in order to be able to identify the article."
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:141
+#: pntemplates/news_admin_modifyconfig.htm:165
 msgid "Acceptable values for use in custom format definition:"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:143
+#: pntemplates/news_admin_modifyconfig.htm:167
 msgid "Year of publication (including century numerals)"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:144
+#: pntemplates/news_admin_modifyconfig.htm:168
 msgid "Month of publication, as a number (ergo 1 to 12)"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:145
+#: pntemplates/news_admin_modifyconfig.htm:169
 msgid "Month of publication as a name (ergo January to December)"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:146
+#: pntemplates/news_admin_modifyconfig.htm:170
 msgid "Day"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:147
+#: pntemplates/news_admin_modifyconfig.htm:171
 msgid "Article title"
 msgstr ""
 
-#: pntemplates/news_admin_modifyconfig.htm:149
+#: pntemplates/news_admin_modifyconfig.htm:173
 msgid "Article category"
 msgstr ""
 
