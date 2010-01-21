@@ -15,7 +15,7 @@
         <!--[if $dispinfo]-->(<!--[if $dispuname]--><!--[gt text='Contributed by %s' tag1=$story.aid_uname|userprofilelink]-->
         <!--[if $dispdate]--> <!--[gt text='on %s' tag1=$story.from|pndate_format:$dateformat]--> <!--[elseif $dispreads||$dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
         <!--[if $dispreads]--><!--[if $story.counter gt 0]--><!--[gt text='%s pageview' plural='%s pageviews' count=$story.counter tag1=$story.counter]--><!--[/if]--><!--[if $dispcomments]--><!--[$dispsplitchar]--> <!--[/if]--><!--[/if]-->
-        <!--[if $dispcomments]--><!--[if $story.comments eq 1]--><!--[gt text='1 comment']--><!--[else]--><!--[gt text='%s comments' tag1=$story.comments]--><!--[/if]--><!--[/if]-->)
+        <!--[if $dispcomments]--><!--[gt text='%s comment' plural='%s comments' count=$story.comments tag1=$story.comments]--><!--[/if]-->)
         <!--[/if]--><br />
 
         <!--[* Optional hometext display *]-->
