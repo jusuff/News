@@ -256,9 +256,9 @@
                 <div id="news_meta_details">
                     <ul>
                         <!--[pnusergetvar name='uname' uid=$cr_uid assign='username']-->
-                        <li><!--[gt text='Contributed by %s on %s' tag1=$username tag2=$cr_date|pndate_format]--></li>
+                        <li><!--[gt text='Contributed by %1$s on %2$s' tag1=$username tag2=$cr_date|pndate_format]--></li>
                         <!--[pnusergetvar name='uname' uid=$lu_uid assign='username']-->
-                        <li><!--[gt text='Last edited by %s on %s' tag1=$username tag2=$lu_date|pndate_format]--></li>
+                        <li><!--[gt text='Last edited by %1$s on %2$s' tag1=$username tag2=$lu_date|pndate_format]--></li>
                         <!--[if $published_status eq 0]-->
                           <!--[pnusergetvar name='uname' uid=$approver|pnvarprepfordisplay assign='approvername']-->
                           <li><!--[gt text='Approved by %s' tag1=$approvername]--></li>

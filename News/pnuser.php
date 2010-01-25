@@ -272,9 +272,9 @@ function News_user_create($args)
                 $contributor = pnUserGetVar('uname');
             }
             if ($html) {
-                $body = __f('<br />A News Publisher article <strong>%s</strong> has been submitted by %s for review on website %s.<br />Index page teaser text of the article:<br /><hr />%s<hr /><br /><br />Go to the <a href="%s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+                $body = __f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
             } else {
-                $body = __f('\nA News Publisher article \'%s\' has been submitted by %s for review on website %s.\nIndex page teaser text of the article:\n--------\n%s\n--------\n\nGo to the <a href="%s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).\n\nRegards,\n%s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+                $body = __f('\nA News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.\nIndex page teaser text of the article:\n--------\n%4$s\n--------\n\nGo to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).\n\nRegards,\n%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
             }
             $sent = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
                                                                         'toaddress'  => $toaddress,
@@ -949,7 +949,7 @@ function News_user_displaypdf($args)
     $pdf->SetHeaderData(
                 $modvars['pdflink_headerlogo'],
                 $modvars['pdflink_headerlogo_width'],
-                __f('Article %s by %s', array($info['title'], $info['contributor']), $dom),
+                __f('Article %1$s by %2$s', array($info['title'], $info['contributor']), $dom),
                 $sitename . ' :: ' . __('News publisher', $dom));
     // set header and footer fonts
     $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
