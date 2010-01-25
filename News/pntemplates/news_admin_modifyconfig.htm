@@ -86,7 +86,7 @@
                 </div>
                 <div id="news_notifyonpending_details">
                     <div class="z-formrow">
-                    <div class="z-informationmsg z-formnote"><!--[gt text='Whenever a new article is submitted as Pending Review, the admin or a list of E-mail addresses can be informed of this event with a notification E-mail.']--></div>
+                        <div class="z-informationmsg z-formnote"><!--[gt text='Whenever a new article is submitted as Pending Review, the admin or a list of E-mail addresses can be informed of this event with a notification E-mail.']--></div>
                         <label for="news_notifyonpending_fromname"><!--[gt text='From name (leave empty for sitename)']--></label>
                         <input id="news_notifyonpending_fromname" type="text" name="notifyonpending_fromname" value="<!--[$notifyonpending_fromname|pnvarprepfordisplay]-->" />
                     </div>
@@ -144,23 +144,27 @@
                 <p class="z-informationmsg"><!--[gt text='You can select a pre-defined permalink format, or define your custom format.']--></p>
                 <input id="news_permalink_customformat" name="customformat" type="hidden"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
                 <div class="z-formrow">
-                    <label><!--[gt text='Format based on date and name']--></label>
-                    <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
-                    <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[gt text='your-article-title']-->/</span>
+                    <label for="news_permalink_datename"><!--[gt text='Format based on date and name']--></label>
+                    <div>
+                        <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
+                        <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[gt text='your-article-title']-->/</span>
+                    </div>
                 </div>
                 <div class="z-formrow">
-                    <label><!--[gt text='Numeric format']--></label>
-                    <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%"<!--[if $permalinkformat eq '%storyid%']--> checked="checked"<!--[/if]--> />
-                    <span><!--[$baseurl]--><!--[pnmodgetinfo modname='News' info='displayname']-->/123</span>
+                    <label for="news_permalink_numeric"><!--[gt text='Numeric format']--></label>
+                    <div>
+                        <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%"<!--[if $permalinkformat eq '%storyid%']--> checked="checked"<!--[/if]--> />
+                        <span><!--[$baseurl]--><!--[pnmodgetinfo modname='News' info='displayname']-->/123</span>
+                    </div>
                 </div>
                 <div class="z-formrow">
-                    <label><!--[gt text='Custom format']--></label>
+                    <label for="news_permalink_custom"><!--[gt text='Custom format']--></label>
                     <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" <!--[if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
                 </div>
                 <div class="z-formrow">
-                    <label><!--[gt text='Custom format definition']--></label>
+                    <label for="news_permalink_format"><!--[gt text='Custom format definition']--></label>
                     <input id="news_permalink_format" onclick="news_permalink_onclick()" name="permalinkstructure" type="text"  value="<!--[$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/']-->" size="50" />
-                    <div><!--[gt text='Notice: A custom format definition must contain at least either \'%storyid%\' or \'%storytitle%\', in order to be able to identify the article.']--></div>
+                    <em class="z-sub z-formnote"><!--[gt text='Notice: A custom format definition must contain at least either \'%storyid%\' or \'%storytitle%\', in order to be able to identify the article.']--></em>
                 </div>
                 <h4><!--[gt text='Acceptable values for use in custom format definition:']--></h4>
                 <ul>
