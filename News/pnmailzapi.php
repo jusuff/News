@@ -63,7 +63,6 @@ function News_mailzapi_getContent($args)
                     $output.="\n";
                     foreach ($items as $item) {
                         $counter++;
-                        $from = DateUtil
                         $output .= $counter . '. ' . $item['title'] . " (" . __f('by %1$s on %2$s', array($item['contributor'], DateUtil::formatDatetime($item['from'],'datebrief')), $dom) . ")\n";
                     }
                 } else {
