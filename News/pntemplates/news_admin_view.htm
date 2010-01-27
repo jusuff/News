@@ -85,7 +85,7 @@
                 <!--[/if]-->
                 <th><!--[gt text='Index page<br />listing / Weight']--></th>
                 <th><!--[gt text='Date']--></th>
-                <th width="10%"><!--[gt text='Actions']--></th>
+                <th><!--[gt text='Actions']--></th>
             </tr>
         </thead>
         <tbody>
@@ -106,11 +106,11 @@
                 <td><!--[$newsitem.hideonindex|pnvarprepfordisplay]--> / <!--[$newsitem.weight|pnvarprepfordisplay]--></td>
                 <td>
                     <!--[if $newsitem.published_status eq '2']-->
-                        <!--[gt text='Last edited on']--> 
-                        <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->.
+                    <!--[gt text='Last edited on']-->
+                    <!--[$newsitem.lu_date|dateformatHuman:'%x':'3']-->.
                     <!--[else]-->
-                        <!--[if $newsitem.infuture]--><!--[gt text='Scheduled for']--><!--[else]--><!--[$newsitem.published_status|news_getstatustext]--><!--[/if]--> 
-                        <!--[$newsitem.from|dateformatHuman:'%x':'2']-->.
+                    <!--[if $newsitem.infuture]--><!--[gt text='Scheduled for']--><!--[else]--><!--[$newsitem.published_status|news_getstatustext]--><!--[/if]-->
+                    <!--[$newsitem.from|dateformatHuman:'%x':'2']-->.
                     <!--[/if]-->
                     <!--[if $newsitem.disallowcomments eq '1']-->
                     <br />
