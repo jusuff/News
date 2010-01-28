@@ -16,26 +16,26 @@
 <p><a href="javascript:ddtreemenu.flatten('news-archive', 'expand')"><!--[gt text='Expand all']--></a> | <a href="javascript:ddtreemenu.flatten('news-archive', 'contract')"><!--[gt text='Contract all']--></a></p>
 
 <ul id="news-archive" class="news_treeview">
-<!--[foreach from=$archivemonths key='year' item='years']-->
-<li><h4><!--[$year]--></h4>
-<ul>
-    <!--[foreach from=$years item='month']-->
-    <li>
-        <a href="<!--[$month.url|pnvarprepfordisplay]-->"><!--[$month.title|pnvarprepfordisplay]--></a>
-        <span class="z-sub">(<!--[if $month.nrofarticles gt 0]--><!--[gt text='%s article' plural='%s articles' count=$month.nrofarticles tag1=$month.nrofarticles]--><!--[/if]-->)</span>
+    <!--[foreach from=$archivemonths key='year' item='years']-->
+    <li><h4><!--[$year]--></h4>
+        <ul>
+            <!--[foreach from=$years item='month']-->
+            <li>
+                <a href="<!--[$month.url|pnvarprepfordisplay]-->"><!--[$month.title|pnvarprepfordisplay]--></a>
+                <span class="z-sub">(<!--[if $month.nrofarticles gt 0]--><!--[gt text='%s article' plural='%s articles' count=$month.nrofarticles tag1=$month.nrofarticles]--><!--[/if]-->)</span>
+            </li>
+            <!--[/foreach]-->
+        </ul>
     </li>
     <!--[/foreach]-->
 </ul>
-</li>
-<!--[/foreach]-->
-</ul>
 
 <script type="text/javascript">
-//ddtreemenu.createTree(treeid, enablepersist, opt_persist_in_days (default is 1))
-ddtreemenu.closefolder = "<!--[$baseurl]-->modules/News/pnimages/expand.gif"; //set image path to "closed" folder image
-ddtreemenu.openfolder = "<!--[$baseurl]-->modules/News/pnimages/contract.gif"; //set image path to "open" folder image
-ddtreemenu.createTree("news-archive", true);
-ddtreemenu.flatten('news-archive', 'expand');
+    //ddtreemenu.createTree(treeid, enablepersist, opt_persist_in_days (default is 1))
+    ddtreemenu.closefolder = "<!--[$baseurl]-->modules/News/pnimages/expand.gif"; //set image path to "closed" folder image
+    ddtreemenu.openfolder = "<!--[$baseurl]-->modules/News/pnimages/contract.gif"; //set image path to "open" folder image
+    ddtreemenu.createTree("news-archive", true);
+    ddtreemenu.flatten('news-archive', 'expand');
 </script>
 
 <!--[else]-->

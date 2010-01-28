@@ -159,7 +159,9 @@
                 </div>
                 <div class="z-formrow">
                     <label for="news_weight"><!--[gt text='Article weight']--></label>
-                    <input id="news_weight" name="story[weight]" type="text" size="5" value="<!--[$weight|pnvarprepfordisplay]-->" />
+                    <div>
+                        <input id="news_weight" name="story[weight]" type="text" size="5" value="<!--[$weight|pnvarprepfordisplay]-->" />
+                    </div>
                 </div>
                 <div class="z-formrow">
                     <label for="news_unlimited"><!--[gt text='No time limit']--></label>
@@ -168,7 +170,9 @@
                 <div id="news_expiration_details">
                     <div class="z-formrow">
                         <label><!--[gt text='Start date']--></label>
-                        <input id="news_from" class="datepicker" name="story[from]" type="text" size="18" value="<!--[$from]-->" />
+                        <div>
+                            <input id="news_from" class="datepicker" name="story[from]" type="text" size="18" value="<!--[$from]-->" />
+                        </div>
                     </div>
                     <div class="z-formrow">
                         <label for="news_tonolimit"><!--[gt text='No end date']--></label>
@@ -177,7 +181,9 @@
                     <div id ="news_expiration_date">
                         <div class="z-formrow">
                             <label><!--[gt text='End date']--></label>
-                            <input id="news_to" class="datepicker" name="story[to]" type="text" size="18" value="<!--[$to]-->" />
+                            <div>
+                                <input id="news_to" class="datepicker" name="story[to]" type="text" size="18" value="<!--[$to]-->" />
+                            </div>
                         </div>
                     </div>
                 </div>
