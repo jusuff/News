@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zikula 1.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-25 15:03+0000\n"
+"POT-Creation-Date: 2010-01-28 11:47+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -118,16 +118,16 @@ msgstr ""
 #: pnadmin.php:538 pntemplates/plugins/function.articleadminlinks.php:76
 #: pntemplates/plugins/function.articleadminlinks.php:78
 #: pntemplates/news_user_categorylist.htm:47
-#: pntemplates/news_user_categorylist.htm:90 pntemplates/news_admin_new.htm:74
+#: pntemplates/news_user_categorylist.htm:90 pntemplates/news_admin_new.htm:73
 msgid "Edit"
 msgstr ""
 
 #: pnadmin.php:547 pntemplates/plugins/function.articleadminlinks.php:81
-#: pntemplates/news_admin_new.htm:241 pntemplates/news_admin_new.htm:261
-#: pntemplates/news_user_new.htm:229 pntemplates/news_user_new.htm:249
-#: pntemplates/news_admin_modify.htm:225 pntemplates/news_admin_modify.htm:245
-#: pntemplates/news_admin_modify.htm:300 pntemplates/news_ajax_modify.htm:183
-#: pntemplates/news_ajax_modify.htm:203 pntemplates/news_ajax_modify.htm:218
+#: pntemplates/news_admin_new.htm:246 pntemplates/news_admin_new.htm:266
+#: pntemplates/news_user_new.htm:234 pntemplates/news_user_new.htm:254
+#: pntemplates/news_admin_modify.htm:231 pntemplates/news_admin_modify.htm:251
+#: pntemplates/news_admin_modify.htm:306 pntemplates/news_ajax_modify.htm:189
+#: pntemplates/news_ajax_modify.htm:209 pntemplates/news_ajax_modify.htm:224
 #: pntemplates/news_admin_delete.htm:17
 msgid "Delete"
 msgstr ""
@@ -152,7 +152,7 @@ msgstr ""
 msgid "Article date/time"
 msgstr ""
 
-#: pnadmin.php:584 pntemplates/news_admin_new.htm:197
+#: pnadmin.php:584 pntemplates/news_admin_new.htm:202
 #: pntemplates/news_admin_modifyconfig.htm:45
 #: pntemplates/news_admin_modifyconfig.htm:176
 msgid "Article ID"
@@ -160,7 +160,7 @@ msgstr ""
 
 #: pnadmin.php:585 pncontenttypesapi/newsarticles.php:378
 #: pntemplates/news_block_storiesext_modify.htm:46
-#: pntemplates/news_admin_new.htm:168 pntemplates/news_user_new.htm:162
+#: pntemplates/news_admin_new.htm:167 pntemplates/news_user_new.htm:161
 #: pntemplates/news_admin_modify.htm:157 pntemplates/news_ajax_modify.htm:115
 #: pntemplates/news_admin_modifyconfig.htm:47
 msgid "Article weight"
@@ -210,14 +210,14 @@ msgid ""
 "Show a list of News publisher articles published since the last newsletter."
 msgstr ""
 
-#: pnmailzapi.php:67 pntemplates/news_user_article.htm:25
+#: pnmailzapi.php:66 pntemplates/news_user_article.htm:25
 #: pntemplates/news_mailz_listarticles.htm:5
 #: pntemplates/news_mailz_listarticles.htm:7
 #, php-format
 msgid "by %1$s on %2$s"
 msgstr ""
 
-#: pnmailzapi.php:76
+#: pnmailzapi.php:75
 #, php-format
 msgid "No News publisher articles since last newsletter on %s."
 msgstr ""
@@ -522,7 +522,7 @@ msgid "Article %1$s by %2$s"
 msgstr ""
 
 #: pnaccountapi.php:37 pntemplates/news_user_menu.htm:45
-#: pntemplates/news_user_new.htm:21
+#: pntemplates/news_user_new.htm:20
 #: pntemplates/contenttype/newsarticles_view.html:49
 msgid "Submit an article"
 msgstr ""
@@ -531,7 +531,7 @@ msgstr ""
 msgid "News articles list"
 msgstr ""
 
-#: pnadminapi.php:243 pntemplates/news_admin_new.htm:17
+#: pnadminapi.php:243 pntemplates/news_admin_new.htm:16
 #: pntemplates/contenttype/newsarticles_view.html:10
 msgid "Create new article"
 msgstr ""
@@ -615,8 +615,8 @@ msgid ""
 "the News module by reading the <a href=\"http://code.zikula.org/news/"
 "wiki#Documentation\">News Wiki Documentation</a>.</p><h3>Some more details</"
 "h3><p><img src=\"modules/News/pnimages/admin.gif\" width=\"48\" height=\"48"
-"\" float=\"left\" alt=\"News publisher admin image\"/>To control what HTML "
-"tags can be included in an article to format and enhance it, the site "
+"\" class=\"z-floatleft\" alt=\"News publisher admin image\"/>To control what "
+"HTML tags can be included in an article to format and enhance it, the site "
 "administrator should set the desired tags to enabled status by visiting the "
 "<a href=\"index.php?module=SecurityCenter&type=admin&func=allowedhtml"
 "\">Security centre</a>. With the News module, you can take advantage of "
@@ -677,7 +677,7 @@ msgstr ""
 
 #: pntemplates/news_block_stories_modify.htm:14
 #: pntemplates/news_admin_view.htm:23 pntemplates/news_admin_view.htm:84
-#: pntemplates/news_admin_new.htm:86 pntemplates/news_user_new.htm:84
+#: pntemplates/news_admin_new.htm:85 pntemplates/news_user_new.htm:83
 #: pntemplates/contenttype/newsarticles_edit.html:13
 #: pntemplates/news_user_archives.htm:53 pntemplates/news_admin_modify.htm:77
 #: pntemplates/news_ajax_modify.htm:35
@@ -685,8 +685,8 @@ msgid "Category"
 msgstr ""
 
 #: pntemplates/news_block_stories_modify.htm:16
-#: pntemplates/news_admin_new.htm:87 pntemplates/news_admin_modify.htm:78
-#: pntemplates/news_ajax_modify.htm:36
+#: pntemplates/news_admin_new.htm:86 pntemplates/news_user_new.htm:84
+#: pntemplates/news_admin_modify.htm:78 pntemplates/news_ajax_modify.htm:36
 msgid "Choose category"
 msgstr ""
 
@@ -695,7 +695,7 @@ msgid "Maximum number of articles to display"
 msgstr ""
 
 #: pntemplates/news_admin_view.htm:47 pntemplates/news_admin_view.htm:65
-#: pntemplates/news_admin_new.htm:100 pntemplates/news_user_new.htm:98
+#: pntemplates/news_admin_new.htm:99 pntemplates/news_user_new.htm:97
 msgid "Language"
 msgstr ""
 
@@ -722,8 +722,8 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: pntemplates/news_admin_view.htm:81 pntemplates/news_admin_new.htm:65
-#: pntemplates/news_user_new.htm:67 pntemplates/news_user_archives.htm:51
+#: pntemplates/news_admin_view.htm:81 pntemplates/news_admin_new.htm:64
+#: pntemplates/news_user_new.htm:66 pntemplates/news_user_archives.htm:51
 #: pntemplates/news_admin_modify.htm:62 pntemplates/news_ajax_modify.htm:20
 msgid "Title"
 msgstr ""
@@ -788,19 +788,19 @@ msgid_plural "%s pending articles"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pntemplates/news_user_article.htm:5 pntemplates/news_admin_new.htm:23
-#: pntemplates/news_admin_new.htm:150 pntemplates/news_admin_new.htm:161
-#: pntemplates/news_admin_new.htm:221 pntemplates/news_user_new.htm:29
-#: pntemplates/news_user_new.htm:144 pntemplates/news_user_new.htm:155
-#: pntemplates/news_user_new.htm:209 pntemplates/news_admin_modify.htm:26
+#: pntemplates/news_user_article.htm:5 pntemplates/news_admin_new.htm:22
+#: pntemplates/news_admin_new.htm:149 pntemplates/news_admin_new.htm:160
+#: pntemplates/news_admin_new.htm:226 pntemplates/news_user_new.htm:28
+#: pntemplates/news_user_new.htm:143 pntemplates/news_user_new.htm:154
+#: pntemplates/news_user_new.htm:214 pntemplates/news_admin_modify.htm:26
 #: pntemplates/news_admin_modify.htm:141 pntemplates/news_admin_modify.htm:150
-#: pntemplates/news_admin_modify.htm:205 pntemplates/news_ajax_modify.htm:99
-#: pntemplates/news_ajax_modify.htm:108 pntemplates/news_ajax_modify.htm:163
+#: pntemplates/news_admin_modify.htm:211 pntemplates/news_ajax_modify.htm:99
+#: pntemplates/news_ajax_modify.htm:108 pntemplates/news_ajax_modify.htm:169
 msgid "Show"
 msgstr ""
 
-#: pntemplates/news_user_article.htm:6 pntemplates/news_admin_new.htm:24
-#: pntemplates/news_user_new.htm:30 pntemplates/news_admin_modify.htm:27
+#: pntemplates/news_user_article.htm:6 pntemplates/news_admin_new.htm:23
+#: pntemplates/news_user_new.htm:29 pntemplates/news_admin_modify.htm:27
 msgid "Hide"
 msgstr ""
 
@@ -1102,206 +1102,206 @@ msgstr ""
 msgid "Today's most-read article is:"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:22 pntemplates/news_user_new.htm:28
-#: pntemplates/news_user_new.htm:129 pntemplates/news_admin_modify.htm:25
+#: pntemplates/news_admin_new.htm:21 pntemplates/news_user_new.htm:27
+#: pntemplates/news_user_new.htm:128 pntemplates/news_admin_modify.htm:25
 #: pntemplates/news_user_articlecontent.htm:5
 msgid "#{chars} characters out of 65,536"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:25 pntemplates/news_admin_new.htm:280
-#: pntemplates/news_user_new.htm:31 pntemplates/news_user_new.htm:267
-#: pntemplates/news_admin_modify.htm:28 pntemplates/news_admin_modify.htm:288
-#: pntemplates/news_admin_modify.htm:290
+#: pntemplates/news_admin_new.htm:24 pntemplates/news_admin_new.htm:285
+#: pntemplates/news_user_new.htm:30 pntemplates/news_user_new.htm:272
+#: pntemplates/news_admin_modify.htm:28 pntemplates/news_admin_modify.htm:294
+#: pntemplates/news_admin_modify.htm:296
 msgid "Publish"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:26 pntemplates/news_user_new.htm:32
+#: pntemplates/news_admin_new.htm:25 pntemplates/news_user_new.htm:31
 #: pntemplates/news_admin_modify.htm:29
 msgid "Schedule"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:27 pntemplates/news_admin_new.htm:278
-#: pntemplates/news_admin_new.htm:279 pntemplates/news_user_new.htm:33
-#: pntemplates/news_user_new.htm:266 pntemplates/news_admin_modify.htm:30
-#: pntemplates/news_admin_modify.htm:282
+#: pntemplates/news_admin_new.htm:26 pntemplates/news_admin_new.htm:283
+#: pntemplates/news_admin_new.htm:284 pntemplates/news_user_new.htm:32
+#: pntemplates/news_user_new.htm:271 pntemplates/news_admin_modify.htm:30
+#: pntemplates/news_admin_modify.htm:288
 msgid "Save as draft"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:28 pntemplates/news_user_new.htm:34
-#: pntemplates/news_admin_modify.htm:31 pntemplates/news_admin_modify.htm:280
+#: pntemplates/news_admin_new.htm:27 pntemplates/news_user_new.htm:33
+#: pntemplates/news_admin_modify.htm:31 pntemplates/news_admin_modify.htm:286
 msgid "Update draft"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:29 pntemplates/news_user_new.htm:35
+#: pntemplates/news_admin_new.htm:28 pntemplates/news_user_new.htm:34
 #: pntemplates/news_admin_modify.htm:32
 msgid "Saving draft..."
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:30 pntemplates/news_user_new.htm:36
+#: pntemplates/news_admin_new.htm:29 pntemplates/news_user_new.htm:35
 msgid "<strong>Title is empty, draft not saved!</strong>"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:68 pntemplates/news_user_new.htm:70
+#: pntemplates/news_admin_new.htm:67 pntemplates/news_user_new.htm:69
 #: pntemplates/news_admin_modify.htm:65 pntemplates/news_ajax_modify.htm:23
 msgid "Title text"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:73
+#: pntemplates/news_admin_new.htm:72
 msgid "Permalink"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:79 pntemplates/news_user_new.htm:76
+#: pntemplates/news_admin_new.htm:78 pntemplates/news_user_new.htm:75
 #: pntemplates/news_admin_modify.htm:70 pntemplates/news_ajax_modify.htm:28
 msgid "Permalink URL"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:81 pntemplates/news_user_new.htm:78
+#: pntemplates/news_admin_new.htm:80 pntemplates/news_user_new.htm:77
 #: pntemplates/news_admin_modify.htm:72 pntemplates/news_ajax_modify.htm:30
 msgid "(Generated automatically if left blank)"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:111 pntemplates/news_user_new.htm:105
+#: pntemplates/news_admin_new.htm:110 pntemplates/news_user_new.htm:104
 #: pntemplates/news_admin_modify.htm:103 pntemplates/news_ajax_modify.htm:61
 msgid "Article"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:114 pntemplates/news_user_new.htm:108
+#: pntemplates/news_admin_new.htm:113 pntemplates/news_user_new.htm:107
 #: pntemplates/news_admin_modify.htm:106 pntemplates/news_ajax_modify.htm:64
 msgid "Permitted HTML tags"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:117 pntemplates/news_user_new.htm:111
+#: pntemplates/news_admin_new.htm:116 pntemplates/news_user_new.htm:110
 #: pntemplates/news_admin_modify.htm:109 pntemplates/news_ajax_modify.htm:67
 msgid "Index page teaser text"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:119 pntemplates/news_admin_new.htm:135
-#: pntemplates/news_admin_new.htm:153 pntemplates/news_user_new.htm:113
-#: pntemplates/news_user_new.htm:147 pntemplates/news_admin_modify.htm:111
+#: pntemplates/news_admin_new.htm:118 pntemplates/news_admin_new.htm:134
+#: pntemplates/news_admin_new.htm:152 pntemplates/news_user_new.htm:112
+#: pntemplates/news_user_new.htm:146 pntemplates/news_admin_modify.htm:111
 #: pntemplates/news_admin_modify.htm:127 pntemplates/news_admin_modify.htm:144
 #: pntemplates/news_ajax_modify.htm:69 pntemplates/news_ajax_modify.htm:85
 #: pntemplates/news_ajax_modify.htm:102
 msgid "(Limit: 65,536 characters)"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:124 pntemplates/news_user_new.htm:118
+#: pntemplates/news_admin_new.htm:123 pntemplates/news_user_new.htm:117
 #: pntemplates/news_admin_modify.htm:116 pntemplates/news_ajax_modify.htm:74
 msgid "Index page teaser format"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:126 pntemplates/news_admin_new.htm:142
-#: pntemplates/news_user_new.htm:120 pntemplates/news_user_new.htm:136
+#: pntemplates/news_admin_new.htm:125 pntemplates/news_admin_new.htm:141
+#: pntemplates/news_user_new.htm:119 pntemplates/news_user_new.htm:135
 #: pntemplates/news_admin_modify.htm:118 pntemplates/news_admin_modify.htm:134
 #: pntemplates/news_ajax_modify.htm:76 pntemplates/news_ajax_modify.htm:92
 msgid "Plain text"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:127 pntemplates/news_admin_new.htm:143
-#: pntemplates/news_user_new.htm:121 pntemplates/news_user_new.htm:137
+#: pntemplates/news_admin_new.htm:126 pntemplates/news_admin_new.htm:142
+#: pntemplates/news_user_new.htm:120 pntemplates/news_user_new.htm:136
 #: pntemplates/news_admin_modify.htm:119 pntemplates/news_admin_modify.htm:135
 #: pntemplates/news_ajax_modify.htm:77 pntemplates/news_ajax_modify.htm:93
 msgid "Text formatted with mark-up language"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:133 pntemplates/news_user_new.htm:127
+#: pntemplates/news_admin_new.htm:132 pntemplates/news_user_new.htm:126
 #: pntemplates/news_admin_modify.htm:125 pntemplates/news_ajax_modify.htm:83
 msgid "Article body text"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:140 pntemplates/news_user_new.htm:134
+#: pntemplates/news_admin_new.htm:139 pntemplates/news_user_new.htm:133
 #: pntemplates/news_admin_modify.htm:132 pntemplates/news_ajax_modify.htm:90
 msgid "Article body format"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:150 pntemplates/news_user_new.htm:144
+#: pntemplates/news_admin_new.htm:149 pntemplates/news_user_new.htm:143
 #: pntemplates/news_admin_modify.htm:141 pntemplates/news_ajax_modify.htm:99
 msgid "Footnote"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:161 pntemplates/news_user_new.htm:155
+#: pntemplates/news_admin_new.htm:160 pntemplates/news_user_new.htm:154
 #: pntemplates/news_admin_modify.htm:150 pntemplates/news_ajax_modify.htm:108
 msgid "Publishing options"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:164 pntemplates/news_user_new.htm:158
+#: pntemplates/news_admin_new.htm:163 pntemplates/news_user_new.htm:157
 #: pntemplates/news_admin_modify.htm:153 pntemplates/news_ajax_modify.htm:111
 msgid "Publish on news index page"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:172 pntemplates/news_user_new.htm:166
-#: pntemplates/news_admin_modify.htm:161 pntemplates/news_ajax_modify.htm:119
+#: pntemplates/news_admin_new.htm:173 pntemplates/news_user_new.htm:167
+#: pntemplates/news_admin_modify.htm:163 pntemplates/news_ajax_modify.htm:121
 msgid "No time limit"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:178 pntemplates/news_user_new.htm:171
-#: pntemplates/news_admin_modify.htm:167 pntemplates/news_ajax_modify.htm:125
+#: pntemplates/news_admin_new.htm:179 pntemplates/news_user_new.htm:172
+#: pntemplates/news_admin_modify.htm:169 pntemplates/news_ajax_modify.htm:127
 msgid "Start date"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:182 pntemplates/news_user_new.htm:175
-#: pntemplates/news_admin_modify.htm:171 pntemplates/news_ajax_modify.htm:129
+#: pntemplates/news_admin_new.htm:185 pntemplates/news_user_new.htm:178
+#: pntemplates/news_admin_modify.htm:175 pntemplates/news_ajax_modify.htm:133
 msgid "No end date"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:187 pntemplates/news_user_new.htm:180
-#: pntemplates/news_admin_modify.htm:176 pntemplates/news_ajax_modify.htm:134
+#: pntemplates/news_admin_new.htm:190 pntemplates/news_user_new.htm:183
+#: pntemplates/news_admin_modify.htm:180 pntemplates/news_ajax_modify.htm:138
 msgid "End date"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:193 pntemplates/news_user_new.htm:186
-#: pntemplates/news_admin_modify.htm:182 pntemplates/news_ajax_modify.htm:140
+#: pntemplates/news_admin_new.htm:198 pntemplates/news_user_new.htm:191
+#: pntemplates/news_admin_modify.htm:188 pntemplates/news_ajax_modify.htm:146
 msgid "Allow comments on this article"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:221 pntemplates/news_user_new.htm:209
-#: pntemplates/news_admin_modify.htm:205 pntemplates/news_ajax_modify.htm:163
+#: pntemplates/news_admin_new.htm:226 pntemplates/news_user_new.htm:214
+#: pntemplates/news_admin_modify.htm:211 pntemplates/news_ajax_modify.htm:169
 msgid "Article attributes"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:225 pntemplates/news_user_new.htm:213
-#: pntemplates/news_admin_modify.htm:209 pntemplates/news_ajax_modify.htm:167
+#: pntemplates/news_admin_new.htm:230 pntemplates/news_user_new.htm:218
+#: pntemplates/news_admin_modify.htm:215 pntemplates/news_ajax_modify.htm:173
 msgid "Create new attribute"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:241 pntemplates/news_admin_new.htm:261
-#: pntemplates/news_user_new.htm:229 pntemplates/news_user_new.htm:249
-#: pntemplates/news_admin_modify.htm:225 pntemplates/news_admin_modify.htm:245
-#: pntemplates/news_ajax_modify.htm:183 pntemplates/news_ajax_modify.htm:203
+#: pntemplates/news_admin_new.htm:246 pntemplates/news_admin_new.htm:266
+#: pntemplates/news_user_new.htm:234 pntemplates/news_user_new.htm:254
+#: pntemplates/news_admin_modify.htm:231 pntemplates/news_admin_modify.htm:251
+#: pntemplates/news_ajax_modify.htm:189 pntemplates/news_ajax_modify.htm:209
 msgid "Delete this attribute"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:274 pntemplates/news_user_new.htm:262
-#: pntemplates/news_admin_modify.htm:275
+#: pntemplates/news_admin_new.htm:279 pntemplates/news_user_new.htm:267
+#: pntemplates/news_admin_modify.htm:281
 msgid "Preview"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:274 pntemplates/news_user_new.htm:262
-#: pntemplates/news_admin_modify.htm:275
+#: pntemplates/news_admin_new.htm:279 pntemplates/news_user_new.htm:267
+#: pntemplates/news_admin_modify.htm:281
 msgid "Preview this article"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:276 pntemplates/news_user_new.htm:264
-#: pntemplates/news_admin_modify.htm:277
+#: pntemplates/news_admin_new.htm:281 pntemplates/news_user_new.htm:269
+#: pntemplates/news_admin_modify.htm:283
 msgid "Submit"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:276 pntemplates/news_user_new.htm:264
-#: pntemplates/news_admin_modify.htm:277
+#: pntemplates/news_admin_new.htm:281 pntemplates/news_user_new.htm:269
+#: pntemplates/news_admin_modify.htm:283
 msgid "Submit this article"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:278 pntemplates/news_admin_new.htm:279
-#: pntemplates/news_user_new.htm:266 pntemplates/news_admin_modify.htm:282
+#: pntemplates/news_admin_new.htm:283 pntemplates/news_admin_new.htm:284
+#: pntemplates/news_user_new.htm:271 pntemplates/news_admin_modify.htm:288
 msgid "Save this article as draft"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:280 pntemplates/news_user_new.htm:267
-#: pntemplates/news_admin_modify.htm:290
+#: pntemplates/news_admin_new.htm:285 pntemplates/news_user_new.htm:272
+#: pntemplates/news_admin_modify.htm:296
 msgid "Publish this article"
 msgstr ""
 
-#: pntemplates/news_admin_new.htm:282 pntemplates/news_user_new.htm:269
-#: pntemplates/news_admin_modify.htm:302 pntemplates/news_ajax_modify.htm:220
+#: pntemplates/news_admin_new.htm:287 pntemplates/news_user_new.htm:274
+#: pntemplates/news_admin_modify.htm:308 pntemplates/news_ajax_modify.htm:226
 #: pntemplates/news_admin_modifyconfig.htm:186
 #: pntemplates/news_admin_delete.htm:18
 msgid "Cancel"
@@ -1446,85 +1446,85 @@ msgstr ""
 msgid "Language(s) for which article should be displayed"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:255
+#: pntemplates/news_admin_modify.htm:261
 msgid "Meta data"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:259
+#: pntemplates/news_admin_modify.htm:265
 #, php-format
 msgid "Contributed by %1$s on %2$s"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:261
+#: pntemplates/news_admin_modify.htm:267
 #, php-format
 msgid "Last edited by %1$s on %2$s"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:264
+#: pntemplates/news_admin_modify.htm:270
 #, php-format
 msgid "Approved by %s"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:266
+#: pntemplates/news_admin_modify.htm:272
 #, php-format
 msgid "Status %s"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:267
+#: pntemplates/news_admin_modify.htm:273
 #, php-format
 msgid "Article ID: %s"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:285 pntemplates/news_ajax_modify.htm:216
+#: pntemplates/news_admin_modify.htm:291 pntemplates/news_ajax_modify.htm:222
 msgid "Mark this article as pending"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:285
+#: pntemplates/news_admin_modify.htm:291
 msgid "Pending"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:288
+#: pntemplates/news_admin_modify.htm:294
 msgid "Approve and publish this article"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:288
+#: pntemplates/news_admin_modify.htm:294
 msgid "Approve and Publish"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:288
+#: pntemplates/news_admin_modify.htm:294
 msgid "Approve and"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:293
+#: pntemplates/news_admin_modify.htm:299
 msgid "Archive this article"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:293
+#: pntemplates/news_admin_modify.htm:299
 msgid "Archive"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:296
+#: pntemplates/news_admin_modify.htm:302
 msgid "Reject this article"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:296
+#: pntemplates/news_admin_modify.htm:302
 msgid "Reject"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:300 pntemplates/news_ajax_modify.htm:218
+#: pntemplates/news_admin_modify.htm:306 pntemplates/news_ajax_modify.htm:224
 msgid "Delete this article"
 msgstr ""
 
-#: pntemplates/news_ajax_modify.htm:215
+#: pntemplates/news_ajax_modify.htm:221
 #: pntemplates/news_admin_modifyconfig.htm:185
 msgid "Save"
 msgstr ""
 
-#: pntemplates/news_ajax_modify.htm:215
+#: pntemplates/news_ajax_modify.htm:221
 msgid "Save your changes"
 msgstr ""
 
-#: pntemplates/news_ajax_modify.htm:216
+#: pntemplates/news_ajax_modify.htm:222
 msgid "Mark as pending"
 msgstr ""
 
