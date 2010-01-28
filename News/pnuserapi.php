@@ -206,7 +206,7 @@ function News_userapi_getall($args)
     // Check for an error with the database code, and if so set an appropriate
     // error message and return
     if ($objArray === false) {
-        return LogUtil::registerError(__('Error! Could not retrieve any articles.', $dom));
+        return LogUtil::registerError(__('Error! Could not load any articles.', $dom));
     }
 
     // need to do this here as the category expansion code can't know the
@@ -616,13 +616,8 @@ function News_userapi_getArticleLinks($info)
     // Allowed to comment?
     if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
         $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
-        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
-            $postcomment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'commentform'));
-        }
     } else {
         $comment     = '';
-        $postcomment = '';
     }
 
     // Allowed to read full article?
@@ -671,7 +666,6 @@ function News_userapi_getArticleLinks($info)
     $links = array ('category'        => DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
                     'categories'      => $categories,
                     'permalink'       => DataUtil::formatForDisplayHTML(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
-                    'postcomment'     => $postcomment,
                     'comment'         => $comment,
                     'fullarticle'     => $fullarticle,
                     'searchtopic'     => $searchtopic,
@@ -727,7 +721,6 @@ function News_userapi_getArticlePreformat($args)
         $print = '';
     }
 
-    $postcomment = '';
     $comment = '';
     $commentlink = '';
     if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
@@ -741,7 +734,6 @@ function News_userapi_getArticlePreformat($args)
         // Allowed to comment?
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT) ||
             SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
-            $postcomment = '<a href="'.$links['postcomment'].'">'.__('Comments', $dom).'</a>';
             $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
         } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
                    SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
@@ -774,7 +766,6 @@ function News_userapi_getArticlePreformat($args)
                        'category'      => '<a href="'.$links['category'].'" title="'.$info['cattitle'].'">'.$info['cattitle'].'</a>',
                        'categories'    => $categories,
                        'categorynames' => $categorynames,
-                       'postcomment'   => $postcomment,
                        'comment'       => $comment,
                        'commentlink'   => $commentlink,
                        'hometext'      => $hometext,

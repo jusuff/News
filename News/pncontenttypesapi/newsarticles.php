@@ -323,7 +323,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                  'titlewraptext' => '...',
                  'disphometext' => false,
                  'maxhometextlength' => 300,
-                 'hometextwraptext' => '['.__('Read more', $dom).']',
+                 'hometextwraptext' => '['.__('Read more...', $dom).']',
                  'dispuname' => false,
                  'dispdate' => true,
                  'dateformat' => '%x',
@@ -359,9 +359,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $render->assign('enablecategorization', $enablecategorization);
 
     $showoptions = array(
-        array('value' => 1, 'text' => __('All news articles', $dom)),
-        array('value' => 2, 'text' => __('Only articles set for index page listing', $dom)),
-        array('value' => 3, 'text' => __('Only articles not set for index page listing', $dom))
+        array('value' => 1, 'text' => __('Show all news articles', $dom)),
+        array('value' => 2, 'text' => __('Show only articles set for index page listing', $dom)),
+        array('value' => 3, 'text' => __('Show only articles not set for index page listing', $dom))
     );
 
     $statusoptions = array(

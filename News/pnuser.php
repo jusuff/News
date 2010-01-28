@@ -274,7 +274,17 @@ function News_user_create($args)
             if ($html) {
                 $body = __f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
             } else {
-                $body = __f('\nA News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.\nIndex page teaser text of the article:\n--------\n%4$s\n--------\n\nGo to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).\n\nRegards,\n%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+                $body = __f('
+A News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.
+Index page teaser text of the article:
+--------
+%4$s
+--------
+
+Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).
+
+Regards,
+%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
             }
             $sent = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
                                                                         'toaddress'  => $toaddress,

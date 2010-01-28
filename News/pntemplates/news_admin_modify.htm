@@ -211,24 +211,24 @@
                 <legend><a id="news_attributes_collapse" href="javascript:void(0);"><span id="news_attributes_showhide"><!--[gt text='Show']--></span> <!--[gt text='Article attributes']--></a></legend>
                 <div id="news_attributes_details">
                     <div class="z-formrow">
-                        <div class="itemlist_newitemdiv">
+                        <div class="z-itemlist_newitemdiv">
                             <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);"><!--[pnimg src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute']--> <!--[gt text='Create new attribute']--></a>
                         </div>
-                        <ul id="news_attributes" class="itemlist">
+                        <ul id="news_attributes" class="z-itemlist">
                             <!--[if isset($__ATTRIBUTES__)]-->
                             <!--[counter name='news_attributes' reset=true print=false start=0]-->
                             <!--[foreach from=$__ATTRIBUTES__ key='name' item='value']-->
                             <!--[counter name='news_attributes' print=false assign='attrnum']-->
                             <li id="listitem_news_attributes_<!--[$attrnum]-->" class="sortable z-clearfix <!--[cycle values='z-odd,z-even']-->">
-                                <span class="itemlistcell width4">&nbsp;</span>
-                                <span class="itemlistcell width44">
-                                    <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_name" name="story[attributes][<!--[$attrnum]-->][name]" size="25" maxlength="255" value="<!--[$name]-->" />
+                                <span class="z-itemcell z-w04">&nbsp;</span>
+                                <span class="z-itemcell z-w40">
+                                    <input type="text" id="story_attributes_<!--[$attrnum]-->_name" name="story[attributes][<!--[$attrnum]-->][name]" size="25" maxlength="255" value="<!--[$name]-->" />
                                 </span>
-                                <span class="itemlistcell width44">
-                                    <input class="iteminput" type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
+                                <span class="z-itemcell z-w40">
+                                    <input type="text" id="story_attributes_<!--[$attrnum]-->_value" name="story[attributes][<!--[$attrnum]-->][value]" size="25" maxlength="255" value="<!--[$value]-->" />
                                 </span>
-                                <span class="itemlistcell width7">
-                                    <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
+                                <span class="z-itemcell z-w07">
+                                    <button type="button" id="buttondelete_news_attributes_<!--[$attrnum]-->" class="buttondelete"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
                                 </span>
                             </li>
                             <!--[foreachelse]-->
@@ -240,15 +240,15 @@
                         </ul>
                         <ul style="display:none">
                             <li id="news_attributes_emptyitem" class="sortable z-clearfix">
-                                <span class="itemlistcell width4">&nbsp;</span>
-                                <span class="itemlistcell width44">
-                                    <input class="iteminput" type="text" id="story_attributes_X_name" name="dummy[]" size="25" maxlength="255" value="" />
+                                <span class="z-itemcell z-w04">&nbsp;</span>
+                                <span class="z-itemcell z-w40">
+                                    <input type="text" id="story_attributes_X_name" name="dummy[]" size="25" maxlength="255" value="" />
                                 </span>
-                                <span class="itemlistcell width44">
-                                    <input class="iteminput" type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
+                                <span class="z-itemcell z-w40">
+                                    <input type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                                 </span>
-                                <span class="itemlistcell width7">
-                                    <button type="button" id="buttondelete_news_attributes_X" class="buttondelete imagebutton-nofloat"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
+                                <span class="z-itemcell z-w07">
+                                    <button type="button" id="buttondelete_news_attributes_X" class="buttondelete"><!--[pnimg src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' ]--></button>
                                 </span>
                             </li>
                         </ul>
@@ -262,9 +262,9 @@
                 <div id="news_meta_details">
                     <ul>
                         <!--[pnusergetvar name='uname' uid=$cr_uid assign='username']-->
-                        <li><!--[gt text='Contributed by %1$s on %2$s' tag1=$username tag2=$cr_date|pndate_format]--></li>
+                        <li><!--[gt text='Contributed']--> <!--[gt text='by %1$s on %2$s' tag1=$username tag2=$cr_date|pndate_format]--></li>
                         <!--[pnusergetvar name='uname' uid=$lu_uid assign='username']-->
-                        <li><!--[gt text='Last edited by %1$s on %2$s' tag1=$username tag2=$lu_date|pndate_format]--></li>
+                        <li><!--[gt text='Last edited']--> <!--[gt text='by %1$s on %2$s' tag1=$username tag2=$lu_date|pndate_format]--></li>
                         <!--[if $published_status eq 0]-->
                         <!--[pnusergetvar name='uname' uid=$approver|pnvarprepfordisplay assign='approvername']-->
                         <li><!--[gt text='Approved by %s' tag1=$approvername]--></li>
