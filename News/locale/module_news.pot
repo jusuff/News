@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zikula 1.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-28 11:47+0000\n"
+"POT-Creation-Date: 2010-01-29 12:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: pnadmin.php:85 pnadmin.php:243 pnadmin.php:354 pnajax.php:33 pnajax.php:124
-#: pnajax.php:164 pnajax.php:293 pnajax.php:346 pnuser.php:555 pnuser.php:901
+#: pnajax.php:164 pnajax.php:293 pnajax.php:346 pnuser.php:565 pnuser.php:911
 #: pnadminapi.php:35 pnadminapi.php:98
 msgid "Error! No such article found."
 msgstr ""
@@ -26,7 +26,7 @@ msgstr ""
 #: pnajax.php:69 pnuserapi.php:297 pnblocks/stories.php:93
 #: pnblocks/stories.php:167 pnblocks/storiesext.php:224
 #: pnblocks/storiesext.php:524 pncontenttypesapi/newsarticles.php:353
-#: pnuser.php:102 pnuser.php:337 pnuser.php:618 pnuser.php:799
+#: pnuser.php:102 pnuser.php:347 pnuser.php:628 pnuser.php:809
 #, php-format
 msgid "Error! Could not load [%s] class."
 msgstr ""
@@ -115,19 +115,19 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-#: pnadmin.php:538 pntemplates/plugins/function.articleadminlinks.php:76
-#: pntemplates/plugins/function.articleadminlinks.php:78
+#: pnadmin.php:538 pntemplates/plugins/function.articleadminlinks.php:79
+#: pntemplates/plugins/function.articleadminlinks.php:81
 #: pntemplates/news_user_categorylist.htm:47
 #: pntemplates/news_user_categorylist.htm:90 pntemplates/news_admin_new.htm:73
 msgid "Edit"
 msgstr ""
 
-#: pnadmin.php:547 pntemplates/plugins/function.articleadminlinks.php:81
+#: pnadmin.php:547 pntemplates/plugins/function.articleadminlinks.php:84
 #: pntemplates/news_admin_new.htm:246 pntemplates/news_admin_new.htm:266
 #: pntemplates/news_user_new.htm:234 pntemplates/news_user_new.htm:254
 #: pntemplates/news_admin_modify.htm:231 pntemplates/news_admin_modify.htm:251
 #: pntemplates/news_admin_modify.htm:306 pntemplates/news_ajax_modify.htm:189
-#: pntemplates/news_ajax_modify.htm:209 pntemplates/news_ajax_modify.htm:224
+#: pntemplates/news_ajax_modify.htm:209 pntemplates/news_ajax_modify.htm:229
 #: pntemplates/news_admin_delete.htm:17
 msgid "Delete"
 msgstr ""
@@ -183,7 +183,7 @@ msgid ""
 msgstr ""
 
 #: pnajax.php:218 pnajax.php:233 pnajax.php:320 pnajax.php:361
-#: pnuserapi.php:929 pnadminapi.php:158
+#: pnuserapi.php:920 pnadminapi.php:158
 msgid "Error! Could not save your changes."
 msgstr ""
 
@@ -210,9 +210,13 @@ msgid ""
 "Show a list of News publisher articles published since the last newsletter."
 msgstr ""
 
-#: pnmailzapi.php:66 pntemplates/news_user_article.htm:25
+#: pnmailzapi.php:66 pntemplates/news_user_articlepdf.htm:3
+#: pntemplates/news_user_article.htm:25 pntemplates/news_user_index.htm:5
+#: pntemplates/news_user_archives.htm:70 pntemplates/news_admin_modify.htm:265
+#: pntemplates/news_admin_modify.htm:267
 #: pntemplates/news_mailz_listarticles.htm:5
 #: pntemplates/news_mailz_listarticles.htm:7
+#: pntemplates/news_user_articlecontent.htm:24
 #, php-format
 msgid "by %1$s on %2$s"
 msgstr ""
@@ -222,7 +226,7 @@ msgstr ""
 msgid "No News publisher articles since last newsletter on %s."
 msgstr ""
 
-#: pnversion.php:20 pnuser.php:953 pninit.php:456
+#: pnversion.php:20 pnuser.php:963 pninit.php:456
 #: pntemplates/news_admin_menu.htm:5
 msgid "News publisher"
 msgstr ""
@@ -306,40 +310,36 @@ msgid_plural "%s seconds from now"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pnsearchapi.php:94
+#: pnsearchapi.php:94 pnuserapi.php:209
 msgid "Error! Could not load any articles."
-msgstr ""
-
-#: pnuserapi.php:209
-msgid "Error! Could not retrieve any articles."
 msgstr ""
 
 #: pnuserapi.php:251
 msgid "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
 msgstr ""
 
-#: pnuserapi.php:713
+#: pnuserapi.php:707 pncontenttypesapi/newsarticles.php:326
 msgid "Read more..."
 msgstr ""
 
-#: pnuserapi.php:716
+#: pnuserapi.php:710
 #, php-format
 msgid "%s bytes more"
 msgstr ""
 
-#: pnuserapi.php:723
+#: pnuserapi.php:717
 msgid "Print"
 msgstr ""
 
-#: pnuserapi.php:723 pnuserapi.php:724
+#: pnuserapi.php:717 pnuserapi.php:718
 msgid "Printer-friendly page"
 msgstr ""
 
-#: pnuserapi.php:736
+#: pnuserapi.php:729
 msgid "Comments?"
 msgstr ""
 
-#: pnuserapi.php:738 pntemplates/contenttype/newsarticles_view.html:18
+#: pnuserapi.php:731 pntemplates/contenttype/newsarticles_view.html:18
 #: pntemplates/news_block_storiesext_row.htm:11
 #, php-format
 msgid "%s comment"
@@ -347,21 +347,17 @@ msgid_plural "%s comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pnuserapi.php:744
-msgid "Comments"
-msgstr ""
-
-#: pnuserapi.php:745
+#: pnuserapi.php:737
 #, php-format
 msgid "%1$s about %2$s"
 msgstr ""
 
-#: pnuserapi.php:754
+#: pnuserapi.php:746
 #, php-format
 msgid "Footnote: %s"
 msgstr ""
 
-#: pnuserapi.php:922
+#: pnuserapi.php:913
 msgid "Error! Could not create new article."
 msgstr ""
 
@@ -426,20 +422,22 @@ msgstr ""
 msgid "News articles listed under the '%s' category"
 msgstr ""
 
-#: pncontenttypesapi/newsarticles.php:326
-msgid "Read more"
-msgstr ""
-
 #: pncontenttypesapi/newsarticles.php:362
-msgid "All news articles"
+#: pntemplates/news_block_stories_modify.htm:6
+#: pntemplates/news_block_storiesext_modify.htm:9
+msgid "Show all news articles"
 msgstr ""
 
 #: pncontenttypesapi/newsarticles.php:363
-msgid "Only articles set for index page listing"
+#: pntemplates/news_block_stories_modify.htm:7
+#: pntemplates/news_block_storiesext_modify.htm:10
+msgid "Show only articles set for index page listing"
 msgstr ""
 
 #: pncontenttypesapi/newsarticles.php:364
-msgid "Only articles not set for index page listing"
+#: pntemplates/news_block_stories_modify.htm:8
+#: pntemplates/news_block_storiesext_modify.htm:11
+msgid "Show only articles not set for index page listing"
 msgstr ""
 
 #: pncontenttypesapi/newsarticles.php:376
@@ -478,45 +476,54 @@ msgstr ""
 #: pnuser.php:277
 #, php-format
 msgid ""
-"\\nA News Publisher article '%1$s' has been submitted by %2$s for review on "
-"website %3$s.\\nIndex page teaser text of the article:\\n--------\\n%4$s"
-"\\n--------\\n\\nGo to the <a href=\"%5$s\">news publisher admin</a> pages "
-"to review and publish the 'Pending Review' article(s).\\n\\nRegards,\\n%6$s"
+"\n"
+"A News Publisher article '%1$s' has been submitted by %2$s for review on "
+"website %3$s.\n"
+"Index page teaser text of the article:\n"
+"--------\n"
+"%4$s\n"
+"--------\n"
+"\n"
+"Go to the <a href=\"%5$s\">news publisher admin</a> pages to review and "
+"publish the 'Pending Review' article(s).\n"
+"\n"
+"Regards,\n"
+"%6$s"
 msgstr ""
 
-#: pnuser.php:287
+#: pnuser.php:297
 msgid "Done! E-mail about new pending article is sent."
 msgstr ""
 
-#: pnuser.php:289
+#: pnuser.php:299
 msgid "Warning! E-mail about new pending article could not be sent."
 msgstr ""
 
-#: pnuser.php:363
+#: pnuser.php:373
 msgid "Error! Invalid category passed."
 msgstr ""
 
-#: pnuser.php:380
+#: pnuser.php:390
 #, php-format
 msgid "No articles currently published under the '%s' category."
 msgstr ""
 
-#: pnuser.php:382
+#: pnuser.php:392
 msgid "No articles currently published."
 msgstr ""
 
-#: pnuser.php:591
+#: pnuser.php:601
 #, php-format
 msgid " :: page %s"
 msgstr ""
 
-#: pnuser.php:680
+#: pnuser.php:690
 msgid ""
 "January February March April May June July August September October November "
 "December"
 msgstr ""
 
-#: pnuser.php:952
+#: pnuser.php:962
 #, php-format
 msgid "Article %1$s by %2$s"
 msgstr ""
@@ -651,28 +658,13 @@ msgid "Display and manage topics"
 msgstr ""
 
 #: pntemplates/news_user_articlepdf.htm:3 pntemplates/news_user_index.htm:5
+#: pntemplates/news_user_archives.htm:56 pntemplates/news_admin_modify.htm:265
 #: pntemplates/news_user_articlecontent.htm:24
-#, php-format
-msgid "Posted by %1$s on %2$s"
+msgid "Contributed"
 msgstr ""
 
 #: pntemplates/news_block_stories_modify.htm:4
 msgid "Scope of news article listing"
-msgstr ""
-
-#: pntemplates/news_block_stories_modify.htm:6
-#: pntemplates/news_block_storiesext_modify.htm:9
-msgid "Show all news articles"
-msgstr ""
-
-#: pntemplates/news_block_stories_modify.htm:7
-#: pntemplates/news_block_storiesext_modify.htm:10
-msgid "Show only articles set for index page listing"
-msgstr ""
-
-#: pntemplates/news_block_stories_modify.htm:8
-#: pntemplates/news_block_storiesext_modify.htm:11
-msgid "Show only articles not set for index page listing"
 msgstr ""
 
 #: pntemplates/news_block_stories_modify.htm:14
@@ -706,7 +698,9 @@ msgid "Status"
 msgstr ""
 
 #: pntemplates/news_admin_view.htm:55
-msgid "Order by"
+#: pntemplates/news_block_storiesext_modify.htm:42
+#: pntemplates/contenttype/newsarticles_edit.html:44
+msgid "Order articles by"
 msgstr ""
 
 #: pntemplates/news_admin_view.htm:58 pntemplates/news_admin_view.htm:71
@@ -840,10 +834,6 @@ msgstr ""
 #: pntemplates/news_block_storiesext_modify.htm:30
 #: pntemplates/news_block_past_modify.htm:4
 msgid "Maximum number of news articles to display"
-msgstr ""
-
-#: pntemplates/news_block_storiesext_modify.htm:42
-msgid "Order articles by"
 msgstr ""
 
 #: pntemplates/news_block_storiesext_modify.htm:51
@@ -1301,7 +1291,7 @@ msgid "Publish this article"
 msgstr ""
 
 #: pntemplates/news_admin_new.htm:287 pntemplates/news_user_new.htm:274
-#: pntemplates/news_admin_modify.htm:308 pntemplates/news_ajax_modify.htm:226
+#: pntemplates/news_admin_modify.htm:308 pntemplates/news_ajax_modify.htm:231
 #: pntemplates/news_admin_modifyconfig.htm:186
 #: pntemplates/news_admin_delete.htm:18
 msgid "Cancel"
@@ -1348,10 +1338,6 @@ msgstr ""
 
 #: pntemplates/contenttype/newsarticles_edit.html:38
 msgid "Limit of backward reach"
-msgstr ""
-
-#: pntemplates/contenttype/newsarticles_edit.html:44
-msgid "Articles sorted by"
 msgstr ""
 
 #: pntemplates/contenttype/newsarticles_edit.html:49
@@ -1429,15 +1415,6 @@ msgstr ""
 msgid "Pageviews"
 msgstr ""
 
-#: pntemplates/news_user_archives.htm:56
-msgid "Posted"
-msgstr ""
-
-#: pntemplates/news_user_archives.htm:70
-#, php-format
-msgid "on %1$s by %2$s"
-msgstr ""
-
 #: pntemplates/news_admin_modify.htm:16 pntemplates/news_ajax_modify.htm:4
 msgid "Edit news article"
 msgstr ""
@@ -1450,14 +1427,8 @@ msgstr ""
 msgid "Meta data"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:265
-#, php-format
-msgid "Contributed by %1$s on %2$s"
-msgstr ""
-
 #: pntemplates/news_admin_modify.htm:267
-#, php-format
-msgid "Last edited by %1$s on %2$s"
+msgid "Last edited"
 msgstr ""
 
 #: pntemplates/news_admin_modify.htm:270
@@ -1475,7 +1446,7 @@ msgstr ""
 msgid "Article ID: %s"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:291 pntemplates/news_ajax_modify.htm:222
+#: pntemplates/news_admin_modify.htm:291 pntemplates/news_ajax_modify.htm:227
 msgid "Mark this article as pending"
 msgstr ""
 
@@ -1511,20 +1482,20 @@ msgstr ""
 msgid "Reject"
 msgstr ""
 
-#: pntemplates/news_admin_modify.htm:306 pntemplates/news_ajax_modify.htm:224
+#: pntemplates/news_admin_modify.htm:306 pntemplates/news_ajax_modify.htm:229
 msgid "Delete this article"
 msgstr ""
 
-#: pntemplates/news_ajax_modify.htm:221
+#: pntemplates/news_ajax_modify.htm:226
 #: pntemplates/news_admin_modifyconfig.htm:185
 msgid "Save"
 msgstr ""
 
-#: pntemplates/news_ajax_modify.htm:221
+#: pntemplates/news_ajax_modify.htm:226
 msgid "Save your changes"
 msgstr ""
 
-#: pntemplates/news_ajax_modify.htm:222
+#: pntemplates/news_ajax_modify.htm:227
 msgid "Mark as pending"
 msgstr ""
 
