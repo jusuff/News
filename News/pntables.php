@@ -59,7 +59,7 @@ function News_pntables()
         'hometext'         => 'X NOTNULL',
         'bodytext'         => 'X NOTNULL',
         'counter'          => 'I DEFAULT NULL',
-        'contributor'      => "C(20) NOTNULL DEFAULT ''",
+        'contributor'      => "C(25) NOTNULL DEFAULT ''",
         'approver'         => "I NOTNULL DEFAULT '0'",
         'notes'            => "X NOTNULL",
         'hideonindex'      => "I1 NOTNULL DEFAULT '0'",
