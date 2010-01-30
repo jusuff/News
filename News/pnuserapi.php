@@ -478,7 +478,7 @@ function News_userapi_getArticleInfo($info)
         if (empty($info['contributor'])) {
             $info['contributor'] = $anonymous;
         }
-    } else {
+    } elseif (empty($info['contributor'])) {
         $info['contributor'] = pnUserGetVar('uname', $info['cr_uid']);
     }
 
