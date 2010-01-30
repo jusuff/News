@@ -245,6 +245,11 @@ function News_upgrade($oldversion)
             pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
 
         case '2.5':
+            // update table
+            if (!DBUtil::changeTable('news')) {
+                return '2.5';
+            }
+        case '2.5.1':
             // migration routines
     }
 
