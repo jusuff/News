@@ -5,7 +5,7 @@
 
 <h2><!--[$templatetitle]-->: <!--[$title|pnvarprepfordisplay]--></h2>
 
-<form id="news_ajax_modifyform" class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" method="post" enctype="application/x-www-form-urlencoded">
+<form id="news_ajax_modifyform" class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" onsubmit="return true;" method="post" enctype="application/x-www-form-urlencoded">
     <div >
         <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
         <input type="hidden" name="page" value="<!--[$page|pnvarprepfordisplay]-->" />
