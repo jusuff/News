@@ -74,7 +74,7 @@
     </form>
     <!--[/if]-->
 
-    <table class="z-admintable">
+    <table id="news_admintable" class="z-admintable">
         <thead>
             <tr>
                 <th><!--[gt text='ID']--></th>
@@ -99,7 +99,7 @@
                 </td>
                 <td><!--[$newsitem.contributor|pnvarprepfordisplay]--></td>
                 <!--[if $enablecategorization]-->
-                <td>
+                <td class="news_categorieslist">
                     <!--[assignedcategorieslist item=$newsitem]-->
                 </td>
                 <!--[/if]-->

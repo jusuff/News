@@ -34,7 +34,7 @@ function News_bigblock_info()
 
     return array('module'         => 'News',
                  'text_type'      => __('Most-read article', $dom),
-                 'text_type_long' => __("Today's most-read article", $dom),
+                 'text_type_long' => __('Today's most-read article', $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,

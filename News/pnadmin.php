@@ -725,6 +725,8 @@ function News_admin_updateconfig()
           SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
         return LogUtil::registerPermissionError();
     }
+    
+    $dom = ZLanguage::getModuleDomain('News');
 
     // Confirm authorisation code
     if (!SecurityUtil::confirmAuthKey()) {
