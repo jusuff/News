@@ -89,8 +89,8 @@ function News_pastblock_display($blockinfo)
     {
         $info  = pnModAPIFunc('News', 'user', 'getArticleInfo', $article);
         $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
-        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_READ) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $preformat['title'] = "<a href=\"$links[fullarticle]\">$info[title]</a>";
         } else {
             $preformat['title'] = $info['title'];

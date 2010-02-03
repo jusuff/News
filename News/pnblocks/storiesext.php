@@ -327,11 +327,11 @@ height:50px;
         }
         if ($vars['dispuname']) {
             // Get the user information from the author id
-            if ($item['aid'] == 0) {
+            if ($item['cr_uid'] == 0) {
                 $render->assign('aid_uname', $anonymous);
                 $render->assign('aid_name', $anonymous);
             } else {
-                $user = UserUtil::getPNUser($item['aid']);
+                $user = UserUtil::getPNUser($item['cr_uid']);
                 $render->assign('aid_uname', $user['uname']);
                 $render->assign('aid_name', $user['name']);
             }

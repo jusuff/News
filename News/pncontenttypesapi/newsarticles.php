@@ -231,11 +231,11 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
             }
             // Get the user information from the author id
             if ($this->dispuname) {
-                if ($items[$k]['aid'] == 0) {
+                if ($items[$k]['cr_uid'] == 0) {
                     $items[$k]['aid_uname'] = $anonymous;
                     $items[$k]['aid_name'] = $anonymous;
                 } else {
-                    $user = UserUtil::getPNUser($items[$k]['aid']);
+                    $user = UserUtil::getPNUser($items[$k]['cr_uid']);
                     $items[$k]['aid_uname'] = $user['uname'];
                     $items[$k]['aid_name'] = $user['name'];
                 }
@@ -250,8 +250,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                     $items[$k]['hometextwrapped'] = true;
                 }
             }
-            $items[$k]['readperm']  = (SecurityUtil::checkPermission('News::', "$items[$k][aid]::$items[$k][sid]", ACCESS_READ) ||
-                                       SecurityUtil::checkPermission('Stories::Story', "$items[$k][aid]::$items[$k][sid]", ACCESS_READ));
+            $items[$k]['readperm']  = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ) ||
+                                       SecurityUtil::checkPermission('Stories::Story', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
         }
         if ($this->dispuname||$this->dispdate||$this->dispreads||$this->dispcomments) {
             $render->assign('dispinfo', true);

@@ -34,7 +34,7 @@ function News_bigblock_info()
 
     return array('module'         => 'News',
                  'text_type'      => __('Most-read article', $dom),
-                 'text_type_long' => __('Today's most-read article', $dom),
+                 'text_type_long' => __('Today\'s most-read article', $dom),
                  'allow_multiple' => true,
                  'form_content'   => false,
                  'form_refresh'   => false,
@@ -82,8 +82,8 @@ function News_bigblock_display($blockinfo)
         return;
     } else {
         $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $row = $articles[0]);
-        if (SecurityUtil::checkPermission('News::', "$info[aid]::$info[sid]", ACCESS_OVERVIEW) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[aid]::$info[sid]", ACCESS_OVERVIEW)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_OVERVIEW) ||
+            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_OVERVIEW)) {
             $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
             $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat', array('info' => $info, 'links' => $links));
         } else {
@@ -92,7 +92,7 @@ function News_bigblock_display($blockinfo)
     }
 
     if (empty($blockinfo['title'])) {
-        $blockinfo['title'] = __("Today's most-read article", $dom);
+        $blockinfo['title'] = __('Today\'s most-read article', $dom);
     }
 
     $render = & pnRender::getInstance('News');
