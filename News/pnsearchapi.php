@@ -49,19 +49,21 @@ function news_searchapi_search($args)
     }
 
     pnModDBInfoLoad('Search');
-    $pntable = pnDBGetTables();
-    $storiestable  = $pntable['news'];
-    $storiescolumn = $pntable['news_column'];
-    $searchTable   = $pntable['search_result'];
-    $searchColumn  = $pntable['search_result_column'];
+    $tables = pnDBGetTables();
+    $newsTable  = $tables['news'];
+    $newsColumn = $tables['news_column'];
+    $searchTable   = $tables['search_result'];
+    $searchColumn  = $tables['search_result_column'];
 
     $where = search_construct_where($args, 
-                                    array($storiescolumn['title'], 
-                                          $storiescolumn['hometext'], 
-                                          $storiescolumn['bodytext']), 
-                                          $storiescolumn['language']);
-    // Only search in published articles
-    $where .= "AND ($storiescolumn[published_status] = '0')";
+                                    array($newsColumn['title'], 
+                                          $newsColumn['hometext'], 
+                                          $newsColumn['bodytext']), 
+                                          $newsColumn['language']);
+    // Only search in published articles that are currently visible
+    $where .= " AND ($newsColumn[published_status] = '0')";
+    $date = DateUtil::getDatetime();
+    $where .= " AND ('$date' >= $newsColumn[from] AND ($newsColumn[to] IS NULL OR '$date' <= $newsColumn[to]))";
 
     $sessionId = session_id();
 
@@ -78,16 +80,16 @@ VALUES ";
     pnModAPILoad('News', 'user');
 
     $permChecker = new news_result_checker();
-    $stories = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
+    $articles = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
 
-    foreach ($stories as $story)
+    foreach ($articles as $article)
     {
           $sql = $insertSql . '(' 
-                 . '\'' . DataUtil::formatForStore($story['title']) . '\', '
-                 . '\'' . DataUtil::formatForStore($story['hometext']) . '\', '
-                 . '\'' . DataUtil::formatForStore($story['sid']) . '\', '
+                 . '\'' . DataUtil::formatForStore($article['title']) . '\', '
+                 . '\'' . DataUtil::formatForStore($article['hometext']) . '\', '
+                 . '\'' . DataUtil::formatForStore($article['sid']) . '\', '
                  . '\'' . 'News' . '\', '
-                 . '\'' . DataUtil::formatForStore($story['from']) . '\', '
+                 . '\'' . DataUtil::formatForStore($article['from']) . '\', '
                  . '\'' . DataUtil::formatForStore($sessionId) . '\')';
           $insertResult = DBUtil::executeSQL($sql);
           if (!$insertResult) {
