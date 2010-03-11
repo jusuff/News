@@ -250,6 +250,7 @@ function News_upgrade($oldversion)
                 return '2.5';
             }
         case '2.5.1':
+        case '2.5.2':
             // migration routines
     }
 
