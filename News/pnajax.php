@@ -334,12 +334,21 @@ function News_ajax_savedraft()
         // Create a first draft version of the story
         if ($sid = pnModAPIFunc('News', 'user', 'create',
                         array('title' => DataUtil::convertFromUTF8($title),
-                              'hometext' => '',
-                              'hometextcontenttype' => 0,
-                              'bodytext' => '',
-                              'bodytextcontenttype' => 0,
-                              'notes' => '',
-                              'published_status' => 4))) {
+                              '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
+                              'language' => isset($story['language']) ? $story['language'] : '',
+                              'hometext' => isset($story['hometext']) ? DataUtil::convertFromUTF8($story['hometext']) : '',
+                              'hometextcontenttype' => isset($story['hometextcontenttype']) ? $story['hometextcontenttype'] : 0,
+                              'bodytext' => isset($story['bodytext']) ? DataUtil::convertFromUTF8($story['bodytext']) : '',
+                              'bodytextcontenttype' => isset($story['bodytextcontenttype']) ? $story['bodytextcontenttype'] : 0,
+                              'notes' => isset($story['notes']) ? DataUtil::convertFromUTF8($story['notes']) : '',
+                              'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
+                              'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+                              'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
+                              'from' => isset($story['from']) ? $story['from'] : null,
+                              'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+                              'to' => isset($story['to']) ? $story['to'] : null,
+                              'weight' => isset($story['weight']) ? $story['weight'] : 0,
+                              'published_status' => 4 ))) {
             // Success and now reload the news story
             $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));
             if ($item == false) {

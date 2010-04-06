@@ -319,14 +319,16 @@ function savedraft()
         return;
     }
     var sid = $F('news_sid');
-    if (sid) {
-        // Update the current draft
-        // A manual onsubmit for xinha to update the textarea data again.
+    // Re-fill the original textareas if Scribite Xinha is used, manual onsubmit needed
+    if (typeof Xinha != "undefined") {
         $('news_admin_newform').onsubmit();
+    }
+    if (sid) {
+        // Update the current draft with the stored sid
         var pars = 'module=News&func=savedraft&title=' + title + '&sid=' + sid + '&' + Form.serialize('news_admin_newform');
     } else {
         // Create a new draft article with a new sid
-        var pars = 'module=News&func=savedraft&title=' + title;
+        var pars = 'module=News&func=savedraft&title=' + title + '&' + Form.serialize('news_admin_newform');
     }
     $('news_status_info').show();
     $('news_saving_draft').show();
@@ -343,7 +345,6 @@ function savedraft()
 
 function savedraft_update(req) 
 {
-//    alert('savedraft_update: ' + req.responseText);
     if (req.status != 200 ) {
         pnshowajaxerror(req.responseText);
         return;
@@ -416,8 +417,8 @@ function news_expiration_init()
     } else if ($('news_button_text_publish')) {
         $('news_button_text_publish').update(string_schedule);
     }
-    Event.observe('news_unlimited', 'change', news_unlimited_onchange);
-    Event.observe('news_tonolimit', 'change', news_tonolimit_onchange);
+    Event.observe('news_unlimited', 'click', news_unlimited_onchange);
+    Event.observe('news_tonolimit', 'click', news_tonolimit_onchange);
 }
 
 function news_unlimited_onchange()
