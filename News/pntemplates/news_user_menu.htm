@@ -28,6 +28,8 @@
         [
         <!--[if $func neq 'main']-->
         <a href="<!--[pnmodurl modname='News' type='user' func='main']-->"><!--[gt text='News index page']--></a>
+        <!--[else]-->
+        <a href="<!--[pnmodurl modname='News' type='user' func='view' theme='rss']-->"><!--[pnimg modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed']--></a> |
         <!--[/if]-->
 
         <!--[if $enablecategorization AND $func neq 'categorylist']-->
