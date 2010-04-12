@@ -719,6 +719,7 @@ function News_userapi_getArticlePreformat($args)
     } else {
         $title = $info['title'];
         $print = '';
+        $printicon = '';
     }
 
     $comment = '';
@@ -750,6 +751,7 @@ function News_userapi_getArticlePreformat($args)
 
     // Build the categories preformated content
     $categories = array();
+    $categorynames = array();
     if (!empty($links['categories']) && is_array($links['categories']) && pnModGetVar('News', 'enablecategorization')) {
         $lang = ZLanguage::getLanguageCode();
         $properties = array_keys($links['categories']);
