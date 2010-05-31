@@ -125,6 +125,7 @@ function News_admin_modify($args)
             $item['to'] = DateUtil::getDatetime($nowts + DateUtil::getDatetimeDiff_AsField($item['from'], $item['to']));
         }
         $item['from'] = $now;
+        $item['unlimited'] = 0;
     }
 
     // Check if we need a preview
