@@ -294,6 +294,8 @@
                 <!--[/if]-->
                 <!--[if $published_status eq 2]-->
                 <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="<!--[gt text='Approve and publish this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Approve and Publish'  __title='Approve and publish this article' ]--><!--[gt text='Approve and']--> <span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
+                <!--[elseif $published_status eq 0]-->
+                <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="<!--[gt text='Update this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Update'  __title='Update this article' ]--><!--[gt text='Update']--></button>
                 <!--[else]-->
                 <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="<!--[gt text='Publish this article']-->"><!--[pnimg src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' ]--><span id="news_button_text_publish"><!--[gt text='Publish']--></span></button>
                 <!--[/if]-->
