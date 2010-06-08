@@ -251,6 +251,15 @@ function News_upgrade($oldversion)
             }
         case '2.5.1':
         case '2.5.2':
+            // add the new picture column
+            if (!DBUtil::addColumn('news', array(array('pn_picture')))) {
+                return '2.5.2';
+            }
+            // update table
+            if (!DBUtil::changeTable('news')) {
+                return '2.5.2';
+            }
+        case '2.5.3':
             // migration routines
     }
 

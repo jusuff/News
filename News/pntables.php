@@ -45,7 +45,8 @@ function News_pntables()
         'published_status' => 'pn_published_status',
         'from'             => 'pn_from',
         'to'               => 'pn_to',
-        'weight'           => 'pn_weight'
+        'weight'           => 'pn_weight',
+        'picture'          => 'pn_picture'
     );
     $tables['news_column_def'] = array(
         'sid'              => 'I NOTNULL AUTO PRIMARY',
@@ -53,18 +54,19 @@ function News_pntables()
         'urltitle'         => 'C(255) DEFAULT NULL',
         'hometext'         => 'X NOTNULL',
         'bodytext'         => 'X NOTNULL',
-        'counter'          => 'I DEFAULT NULL',
+        'counter'          => 'I DEFAULT 0',
         'contributor'      => "C(25) NOTNULL DEFAULT ''",
-        'approver'         => "I NOTNULL DEFAULT '0'",
-        'notes'            => "X NOTNULL",
-        'hideonindex'      => "I1 NOTNULL DEFAULT '0'",
+        'approver'         => 'I DEFAULT 0',
+        'notes'            => 'X NOTNULL',
+        'hideonindex'      => 'I1 NOTNULL DEFAULT 0',
         'language'         => "C(30) NOTNULL DEFAULT ''",
-        'disallowcomments' => "I1 NOTNULL DEFAULT '0'",
-        'format_type'      => "I1 NOTNULL DEFAULT '0'",
-        'published_status' => "I1 DEFAULT '0'",
+        'disallowcomments' => 'I1 NOTNULL DEFAULT 0',
+        'format_type'      => 'I1 NOTNULL DEFAULT 0',
+        'published_status' => 'I1 DEFAULT 0',
         'from'             => 'T DEFAULT NULL',
         'to'               => 'T DEFAULT NULL',
-        'weight'           => "I1 DEFAULT '0'",
+        'weight'           => 'I1 DEFAULT 0',
+        'picture'          => 'C(255) DEFAULT NULL'
     );
 
     // Enable categorization services
