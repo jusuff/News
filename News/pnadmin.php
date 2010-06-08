@@ -306,7 +306,7 @@ function News_admin_update($args)
                           'hometextcontenttype' => $story['hometextcontenttype'],
                           'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
                           'bodytextcontenttype' => $story['bodytextcontenttype'],
-                          'notes' => $story['notes'],
+                          'notes' => isset($story['notes']) ? $story['notes'] : '',
                           'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
                           'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                           'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
@@ -314,7 +314,7 @@ function News_admin_update($args)
                           'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                           'to' => $story['to'],
                           'approver' => $story['approver'],
-                          'weight' => $story['weight'],
+                          'weight' => isset($story['weight']) ? $story['weight'] : 0,
                           'action' => $story['action']))) {
         // Success
         LogUtil::registerStatus(__('Done! Saved your changes.', $dom));
