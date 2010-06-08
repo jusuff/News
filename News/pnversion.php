@@ -19,7 +19,7 @@ $dom = ZLanguage::getModuleDomain('News');
 $modversion['name']        = 'News';
 $modversion['displayname'] = __('News publisher', $dom);
 $modversion['description'] = __('Provides the ability to publish and manage news articles contributed by site users, with support for news categories and various associated blocks.', $dom);
-$modversion['version']     = '2.5.2';
+$modversion['version']     = '2.5.3';
 //! this defines the module's url
 $modversion['url']            = __('news', $dom);
 
