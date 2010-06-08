@@ -92,6 +92,10 @@ function News_userapi_getall($args)
             $args['catFilter'][$property] = $args['category'];
         }
         $args['catFilter']['__META__'] = array('module' => 'News');
+        // set catfilter operator  if specified
+        if (isset($args['catoperator']) && in_array(strtolower($args['catoperator']), array('and', 'or'))) {
+            $args['catFilter']['__META__']['operator'] = strtoupper($args['catoperator']);
+        }
     }
 
     // populate an array with each part of the where clause and then implode the array if there is a need.
