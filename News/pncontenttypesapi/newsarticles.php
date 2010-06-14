@@ -250,8 +250,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                     $items[$k]['hometextwrapped'] = true;
                 }
             }
-            $items[$k]['readperm']  = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ) ||
-                                       SecurityUtil::checkPermission('Stories::Story', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
+            $items[$k]['readperm']  = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
         }
         if ($this->dispuname||$this->dispdate||$this->dispreads||$this->dispcomments) {
             $render->assign('dispinfo', true);

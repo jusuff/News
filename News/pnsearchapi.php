@@ -26,8 +26,7 @@ function news_searchapi_info()
  **/
 function news_searchapi_options($args)
 {
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
         // Create output object - this object will store all of our output so that
         // we can return it easily when required
         $render = & pnRender::getInstance('News');
@@ -43,8 +42,7 @@ function news_searchapi_options($args)
  **/
 function news_searchapi_search($args)
 {
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
         return true;
     }
 

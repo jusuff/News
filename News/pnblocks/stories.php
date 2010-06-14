@@ -117,8 +117,7 @@ function News_storiesblock_display($blockinfo)
     $storiesoutput = array();
     foreach ($items as $item) {
         $storyreadperm = false;
-        if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ) ||
-            SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ)) {
             $storyreadperm = true;
         }
 

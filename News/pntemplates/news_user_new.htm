@@ -46,6 +46,7 @@
 
 <h3><!--[$templatetitle]--></h3>
 
+<!--[* <form id="news_user_newform" class="z-form" action="<!--[pnmodurl modname='News' type='user' func='create']-->" method="post" enctype="multipart/form-data"> *]-->
 <form id="news_user_newform" class="z-form" action="<!--[pnmodurl modname='News' type='user' func='create']-->" method="post" enctype="application/x-www-form-urlencoded">
     <div>
         <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
@@ -145,6 +146,12 @@
                 </p>
             </div>
             <!--[/if]-->
+
+            <!--[* Picture upload commented out
+            <div class="z-formrow">
+                <label for="news_picture"><strong><!--[gt text='Article picture']--></strong></label>
+                <input id="news_picture" name="news_picture" type="file" size="50"> 
+            </div> *]-->
         </fieldset>
 
         <!--[if $accessadd eq 1]-->

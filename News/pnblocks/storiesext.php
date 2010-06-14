@@ -348,7 +348,7 @@ height:50px;
         if ($vars['dispuname']||$vars['dispdate']||$vars['dispreads']||$vars['dispcomments']) {
             $render->assign('dispinfo', true);
         }
-        $render->assign('readperm',(bool)(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ) || SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_READ)));
+        $render->assign('readperm',(bool)SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ));
         $render->assign($vars);
         $render->assign($item);
         // Get the cached output per row

@@ -36,8 +36,7 @@ function News_adminapi_delete($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) {
+    if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -99,8 +98,7 @@ function News_adminapi_update($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$args[sid]", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$args[sid]", ACCESS_EDIT))) {
+    if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$args[sid]", ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -178,8 +176,7 @@ function News_adminapi_update($args)
 function News_adminapi_purgepermalinks($args)
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -232,18 +229,15 @@ function news_adminapi_getlinks()
 
     $links = array();
 
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
         $links[] = array('url'  => pnModURL('News', 'admin', 'view'),
                          'text' => __('News articles list', $dom));
     }
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
-        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
         $links[] = array('url'  => pnModURL('News', 'admin', 'new'),
                          'text' =>  __('Create new article', $dom));
     }
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
-        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
         $links[] = array('url'  => pnModURL('News', 'admin', 'view', array('purge' => 1)),
                          'text' => __('Purge permalinks', $dom));
 

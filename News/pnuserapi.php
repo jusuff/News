@@ -29,8 +29,7 @@ class news_result_checker
     // A return value of true means "keep result" - false means "discard".
     function checkResult(&$item)
     {
-        $ok = (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_OVERVIEW) || 
-               SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_OVERVIEW));
+        $ok = (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_OVERVIEW));
 
         if ($this->enablecategorization)
         {
@@ -76,8 +75,7 @@ function News_userapi_getall($args)
     $items = array();
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
         return $items;
     }
 
@@ -263,7 +261,6 @@ function News_userapi_get($args)
          $timestring = DateUtil::getDatetime(mktime(0, 0, 0, $args['monthnum'], $args['day'], $args['year']), '%Y-%m-%d');
     }
 
-    // define the permissions filter to apply, switched to News:: permission scheme, no fallback for Stories::Story ATM
     $permFilter = array();
     $permFilter[] = array('realm' => 0,
                           'component_left'   => 'News',
@@ -319,8 +316,7 @@ function News_userapi_get($args)
 function News_userapi_getMonthsWithNews($args)
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
         return false;
     }
 
@@ -625,8 +621,7 @@ function News_userapi_getArticleLinks($info)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
         $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
     } else {
         $fullarticle = '';
@@ -706,8 +701,7 @@ function News_userapi_getArticlePreformat($args)
     $readmore = '';
     $bytesmorelink = '';
     if ($bytesmore > 0) {
-        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $title =  __('Read more...', $dom);
             $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
         }
@@ -715,8 +709,7 @@ function News_userapi_getArticlePreformat($args)
     }
 
     // Allowed to read full article?
-    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
-        SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
         $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
         $print = '<a class="news_printlink" href="'.$links['print'].'">'.__('Print', $dom).' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
         $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
@@ -737,11 +730,9 @@ function News_userapi_getArticlePreformat($args)
         }
 
         // Allowed to comment?
-        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
+        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
             $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
-        } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ) ||
-                   SecurityUtil::checkPermission('Stories::Story', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+        } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $commentlink = $comment;
         }
     }
@@ -854,12 +845,10 @@ function News_userapi_create($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
         return LogUtil::registerPermissionError();
 
-    } elseif (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
-              SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    } elseif (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
         if (!isset($args['published_status'])) {
             $args['published_status'] = 0;
         }

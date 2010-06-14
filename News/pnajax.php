@@ -34,8 +34,7 @@ function News_ajax_modify()
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$sid", ACCESS_EDIT))) {
+    if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT)) {
         AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! You do not have authorisation for this page.', $dom)));
     }
 
@@ -221,8 +220,7 @@ function News_ajax_update()
 
         case 'pending':
             // Security check
-            if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$story[sid]", ACCESS_EDIT) ||
-                  SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$story[sid]", ACCESS_EDIT))) {
+            if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$story[sid]", ACCESS_EDIT)) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! You do not have authorisation for this page.', $dom)));
             }
             // set published_status to 2 to make the story a pending story
@@ -293,8 +291,7 @@ function News_ajax_savedraft()
             AjaxUtil::error(DataUtil::formatForDisplayHTML(__f('Error! No such article found.', $dom)));
         }
         // Security check
-        if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT) ||
-              SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$sid", ACCESS_EDIT))) {
+        if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT)) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML(__('Sorry! You do not have authorisation for this page.', $dom)));
         }
         

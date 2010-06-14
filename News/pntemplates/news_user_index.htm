@@ -5,6 +5,13 @@
     <span class="news_meta z-sub"><!--[gt text='Contributed']--> <!--[gt text='by %1$s on %2$s' tag1=$info.contributor tag2=$info.briefdatetime]--></span>
 
     <div class="news_body">
+        <!--[* Picture upload
+        <!--[if !empty($info.picture)]-->
+        <div style="float:left;margin:5px">
+            <img src="modules/News/pnimages/pictureupload/sid<!--[$info.sid]-->_ansvaridea_logo_thumb.gif" alt=""/>
+        </div>
+        <!--[/if]--> 
+        *]-->
         <!--[$preformat.hometext|pnvarprephtmldisplay]-->
     </div>
 

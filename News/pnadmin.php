@@ -21,8 +21,7 @@
 function News_admin_main()
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -86,8 +85,7 @@ function News_admin_modify($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$dbitem[cr_uid]::$sid", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$dbitem[cr_uid]::$sid", ACCESS_EDIT))) {
+    if (!SecurityUtil::checkPermission('News::', "$dbitem[cr_uid]::$sid", ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -169,8 +167,7 @@ function News_admin_modify($args)
     // Create output object
     $render = & pnRender::getInstance('News', false);
 
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
-        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
         $render->assign('accessadd', 1);
     } else {
         $render->assign('accessadd', 0);
@@ -245,8 +242,7 @@ function News_admin_update($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_EDIT))) {
+    if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -356,8 +352,7 @@ function News_admin_delete($args)
     }
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
-          SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) {
+    if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -399,8 +394,7 @@ function News_admin_delete($args)
 function News_admin_view($args)
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_EDIT))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -527,8 +521,7 @@ function News_admin_view($args)
                            'image' => '14_layer_visible.gif',
                            'title' => __('View', $dom));
 
-        if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT) ||
-            SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_EDIT)) {
+        if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT)) {
             if ($item['published_status'] == 2) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'modify', array('sid' => $item['sid'])),
                                    'image' => 'editcut.gif',
@@ -540,8 +533,7 @@ function News_admin_view($args)
             }
 
             if (($item['published_status'] != 2 && 
-                 (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE) ||
-                  SecurityUtil::checkPermission('Stories::Story', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) ||
+                 (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE))) ||
                 SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_ADMIN)) {
                 $options[] = array('url'   => pnModURL('News', 'admin', 'delete', array('sid' => $item['sid'])),
                                    'image' => '14_layer_deletelayer.gif',
@@ -684,8 +676,7 @@ function News_admin_view($args)
 function News_admin_modifyconfig()
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -722,8 +713,7 @@ function News_admin_modifyconfig()
 function News_admin_updateconfig()
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADMIN))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
         return LogUtil::registerPermissionError();
     }
     

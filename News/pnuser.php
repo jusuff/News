@@ -36,8 +36,7 @@ function News_user_main()
 function News_user_new($args)
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_COMMENT))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -123,8 +122,7 @@ function News_user_new($args)
     $render->assign('formattedcontent', $formattedcontent);
 
     $render->assign('accessadd', 0);
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
-        SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD)) {
+    if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
         $render->assign('accessadd', 1);
     }
 
@@ -181,8 +179,7 @@ function News_user_create($args)
                   'action' => isset($story['action']) ? $story['action'] : 0);
 
     // Disable the non accessible fields for non editors
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_ADD) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_ADD))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
         $item['notes'] = '';
         $item['hideonindex'] = 1;
         $item['disallowcomments'] = 1;
@@ -246,26 +243,56 @@ function News_user_create($args)
         SessionUtil::delVar('newsitem');
     }
 
-    // Notable by its absence there is no security check here
+    // Process the uploaded picture and copy to the upload directory
+    /*
+    if (true) {
+        $item['picture'] = $_FILES['news_picture']['name'];
+    } else {
+        $item['picture'] = '';
+    }
+    */
 
+    // Notable by its absence there is no security check here
+    
     // Create the news story
     $sid = pnModAPIFunc('News', 'user', 'create', $item);
+
 
     if ($sid != false) {
         // Success
         LogUtil::registerStatus(__('Done! Created new article.', $dom));
+
+        // Process the uploaded picture and copy to the upload directory
+        //    if (true) { TEST for enabling of picture upload etc etc
+        /*
+        if (true) {
+            $fileNewName = 'sid' . $sid . '_' . $item['picture'];
+            if (!FileUtil::uploadFile('news_picture', 'modules/News/pnimages/pictureupload', $fileNewName)) {
+                LogUtil::registerError(__f('Picture upload %s not succeeded', $item['picture'], $dom));
+            } else {
+                // include the phpthumb library for thumbnail generation
+                require_once ('pnincludes/PhpThumb/ThumbLib.inc.php');
+                $thumb = PhpThumbFactory::create('modules/News/pnimages/pictureupload/' . $fileNewName);
+                $thumbName = FileUtil::stripExtension($fileNewName) . '_thumb' . FileUtil::getExtension($fileNewName, true);
+                $thumb->resize(100,75)->save('modules/News/pnimages/pictureupload/' . $thumbName);
+            }
+        } else {
+            $item['picture'] = '';
+        }
+        */
 
         // notify the configured addresses of a new Pending Review article
         $notifyonpending = pnModGetVar('News', 'notifyonpending', false);
         if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
             $sitename = pnConfigGetVar('sitename');
             $adminmail = pnConfigGetVar('adminmail');
-            $fromname    = pnModGetVar('News', 'notifyonpending_fromname', $sitename);
-            $fromaddress = pnModGetVar('News', 'notifyonpending_fromaddress', $adminmail);
-            $toname      = pnModGetVar('News', 'notifyonpending_toname', $sitename);
-            $toaddress   = pnModGetVar('News', 'notifyonpending_toaddress', $adminmail);
-            $subject     = pnModGetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
-            $html        = pnModGetVar('News', 'notifyonpending_html', true);
+            $modvars = pnModGetVar('News');
+            $fromname    = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
+            $fromaddress = !empty($modvars['notifyonpending_fromaddress']) ? $modvars['notifyonpending_fromaddress'] : $adminmail;
+            $toname    = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
+            $toaddress = !empty($modvars['notifyonpending_toaddress']) ? $modvars['notifyonpending_toaddress'] : $adminmail;
+            $subject     = $modvars['notifyonpending_subject'];
+            $html        = $modvars['notifyonpending_html'];
             if (!pnUserLoggedIn()) {
                 $contributor = pnConfigGetVar('anonymous');
             } else {
@@ -314,8 +341,7 @@ Regards,
 function News_user_view($args = array())
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -528,8 +554,7 @@ function News_user_display($args)
     }
 
     // Get the news story
-    if (!(SecurityUtil::checkPermission('News::', "::$sid", ACCESS_ADD) ||
-          SecurityUtil::checkPermission('Stories::Story', "::$sid", ACCESS_ADD))) {
+    if (!SecurityUtil::checkPermission('News::', "::$sid", ACCESS_ADD)) {
         if (isset($sid)) {
             $item = pnModAPIFunc('News', 'user', 'get', 
                                  array('sid'       => $sid, 
@@ -668,8 +693,7 @@ function News_user_archives($args)
     $day   = '31';
 
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
         return LogUtil::registerPermissionError();
     }
 
@@ -787,8 +811,7 @@ function News_user_preview($args)
 function News_user_categorylist($args)
 {
     // Security check
-    if (!(SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW) ||
-          SecurityUtil::checkPermission('Stories::Story', '::', ACCESS_OVERVIEW))) {
+    if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
         return LogUtil::registerPermissionError();
     }
     
@@ -947,7 +970,7 @@ function News_user_displaypdf($args)
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
 
     // set pdf document information
-    $pdf->SetCreator(PDF_CREATOR);
+    $pdf->SetCreator(pnConfigGetVar('sitename'));
     $pdf->SetAuthor($info['contributor']);
     $pdf->SetTitle($info['title']);
     $pdf->SetSubject($info['cattitle']);
@@ -956,11 +979,16 @@ function News_user_displaypdf($args)
     // set default header data
     //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
     $sitename = pnConfigGetVar('sitename');
-    $pdf->SetHeaderData(
+/*    $pdf->SetHeaderData(
                 $modvars['pdflink_headerlogo'],
                 $modvars['pdflink_headerlogo_width'],
                 __f('Article %1$s by %2$s', array($info['title'], $info['contributor']), $dom),
-                $sitename . ' :: ' . __('News publisher', $dom));
+                $sitename . ' :: ' . __('News publisher', $dom));*/
+    $pdf->SetHeaderData(
+                $modvars['pdflink_headerlogo'],
+                $modvars['pdflink_headerlogo_width'], 
+                '', 
+                $sitename . ' :: ' . $info['cattitle']. ' :: ' . $info['topicname']);
     // set header and footer fonts
     $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
     $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
@@ -979,6 +1007,8 @@ function News_user_displaypdf($args)
 
     // set font, freeserif is big !
     //$pdf->SetFont('freeserif', '', 10);
+    // For Unicode data put dejavusans in tcpdf_config.php
+    $pdf->SetFont(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN);
 
     // add a page
     $pdf->AddPage();
