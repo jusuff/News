@@ -58,6 +58,31 @@ function News_init()
     pnModSetVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
     pnModSetVar('News', 'pdflink_headerlogo_width', '30');
 
+/*
+    // image uploading
+    pnModSetVar('News', 'imgupload_enable', false);
+    pnModSetVar('News', 'imgupload_allowext', 'jpg, gif, png');
+    pnModSetVar('News', 'imgupload_floatindex', 'left');
+    pnModSetVar('News', 'imgupload_floatarticle', 'right');
+    pnModSetVar('News', 'imgupload_thumbextension', '_thumb');
+    pnModSetVar('News', 'imgupload_maxfilesize', '1000000');
+    pnModSetVar('News', 'imgupload_thumbmaxwidth', '150');
+    pnModSetVar('News', 'imgupload_thumbmaxheight', '150');
+    pnModSetVar('News', 'imgupload_uploaddir', '');
+
+    // TODO MOVE TO admin file and use when enabling pic upload
+    // upload dir creation if the temp dir is not outside the root (relative path)
+    $tempdir = CacheUtil::getLocalDir();
+    $newsuploaddir   = $tempdir.'/News';
+    if (StringUtil::left($tempdir, 1) <> '/') {
+        if (CacheUtil::createLocalDir('News', 777)) {
+            LogUtil::registerStatus(__f('News publisher created the image upload directory successfully at [%s]. Make sure that this folder is accessible via the web and writable by the webserver.', $newsuploaddir, $dom));
+        }
+    } else {
+        LogUtil::registerStatus(__f('News publisher could not create the image upload directory [%s]. Please create an image upload directory manually, accessible via the web and writable by the webserver.', $newsuploaddir, $dom));
+    }
+*/    
+    
     // create the default data for the News module
     News_defaultdata();
 
@@ -251,11 +276,7 @@ function News_upgrade($oldversion)
             }
         case '2.5.1':
         case '2.5.2':
-            // add the new picture column
-            if (!DBUtil::addColumn('news', array(array('pn_picture')))) {
-                return '2.5.2';
-            }
-            // update table
+            // add the new picture column and update the table
             if (!DBUtil::changeTable('news')) {
                 return '2.5.2';
             }
