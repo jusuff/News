@@ -362,7 +362,6 @@ function News_admin_update($args)
                 $story['pictures']++;
             }
         }
-        LogUtil::registerStatus(__('Images updated.', $dom));
     }
     
     // Update the story
