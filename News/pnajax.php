@@ -135,8 +135,8 @@ function News_ajax_update()
         case 'update':
             // Update the story, security check inside of the API func
 
-/*            // delete and add images (credit msshams)
             $modvars = pnModGetVar('News');
+/*            // delete and add images (credit msshams)
             if ($modvars['picupload_enabled']) {
                 //  include the phpthumb library
                 require_once ('pnincludes/phpthumb/ThumbLib.inc.php');
