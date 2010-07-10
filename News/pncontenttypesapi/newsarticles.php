@@ -134,7 +134,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         // all - doesn't need hideonindex 
     }
     $apiargs['numitems'] = $this->limit; // Nr of articles to obtain
-    $apiargs['status'] = $this->status; // Published status
+    $apiargs['status'] = (int)$this->status; // Published status
 
     // Handle the sorting order
     switch ($this->order)
