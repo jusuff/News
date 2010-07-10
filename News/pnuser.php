@@ -73,6 +73,7 @@ function News_user_new($args)
         $item['tonolimit'] = 1;
         $item['unlimited'] = 1;
         $item['weight'] = 0;
+        $item['pictures'] = 0;
     }
     
     $preview = '';
@@ -176,6 +177,7 @@ function News_user_create($args)
                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                   'to' => isset($story['to']) ? $story['to'] : null,
                   'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
+                  'weight' => isset($story['weight']) ? $story['weight'] : 0,
                   'action' => isset($story['action']) ? $story['action'] : 0);
 
     // Disable the non accessible fields for non editors
@@ -187,7 +189,7 @@ function News_user_create($args)
         $item['tonolimit'] = true;
         $item['to'] = null;
         $item['unlimited'] = true;
-        $item['weigth'] = 0;
+        $item['weight'] = 0;
         if ($item['action'] > 1) {
             $item['action'] = 0;
         }
@@ -243,14 +245,20 @@ function News_user_create($args)
         SessionUtil::delVar('newsitem');
     }
 
-    // Process the uploaded picture and copy to the upload directory
-    /*
-    if (true) {
-        $item['picture'] = $_FILES['news_picture']['name'];
+    // get all module vars
+    $modvars = pnModGetVar('News');
+    
+    // count the attached pictures (credit msshams)
+    if ($modvars['picupload_enabled']) {
+        $item['pictures'] = 0;
+        foreach ($_FILES['news_files']['error'] as $key => $error) {
+            if ($error == UPLOAD_ERR_OK) {
+                $item['pictures']++;
+            }
+        }
     } else {
-        $item['picture'] = '';
+        $item['pictures'] = 0;
     }
-    */
 
     // Notable by its absence there is no security check here
     
@@ -262,31 +270,11 @@ function News_user_create($args)
         // Success
         LogUtil::registerStatus(__('Done! Created new article.', $dom));
 
-        // Process the uploaded picture and copy to the upload directory
-        //    if (true) { TEST for enabling of picture upload etc etc
-        /*
-        if (true) {
-            $fileNewName = 'sid' . $sid . '_' . $item['picture'];
-            if (!FileUtil::uploadFile('news_picture', 'modules/News/pnimages/pictureupload', $fileNewName)) {
-                LogUtil::registerError(__f('Picture upload %s not succeeded', $item['picture'], $dom));
-            } else {
-                // include the phpthumb library for thumbnail generation
-                require_once ('pnincludes/PhpThumb/ThumbLib.inc.php');
-                $thumb = PhpThumbFactory::create('modules/News/pnimages/pictureupload/' . $fileNewName);
-                $thumbName = FileUtil::stripExtension($fileNewName) . '_thumb' . FileUtil::getExtension($fileNewName, true);
-                $thumb->resize(100,75)->save('modules/News/pnimages/pictureupload/' . $thumbName);
-            }
-        } else {
-            $item['picture'] = '';
-        }
-        */
-
         // notify the configured addresses of a new Pending Review article
         $notifyonpending = pnModGetVar('News', 'notifyonpending', false);
         if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
             $sitename = pnConfigGetVar('sitename');
             $adminmail = pnConfigGetVar('adminmail');
-            $modvars = pnModGetVar('News');
             $fromname    = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
             $fromaddress = !empty($modvars['notifyonpending_fromaddress']) ? $modvars['notifyonpending_fromaddress'] : $adminmail;
             $toname    = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
@@ -325,6 +313,47 @@ Regards,
             } else {
                 LogUtil::registerStatus(__('Warning! E-mail about new pending article could not be sent.', $dom));
             }
+        }
+
+        // Process the uploaded picture and copy to the upload directory (credit msshams)
+        if ($modvars['picupload_enabled']) {
+            // include the phpthumb library for thumbnail generation
+            require_once ('pnincludes/phpthumb/ThumbLib.inc.php');
+            $uploaddir = $modvars['picupload_uploaddir'] . '/';
+            foreach ($_FILES['news_files']['error'] as $key => $error) {
+                if ($error == UPLOAD_ERR_OK) {
+                    $tmp_name = $_FILES['news_files']['tmp_name'][$key];
+                    $name = $_FILES['news_files']['name'][$key];
+                    
+                    $thumb = PhpThumbFactory::create($tmp_name);
+                    if ($modvars['sizing'] == 0) {
+                        $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                    } else {
+                        $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                    }
+                    $thumb->save($uploaddir.'pic_sid'.$sid.'-'.$key.'-norm.png', 'png');
+
+                    $thumb1 = PhpThumbFactory::create($tmp_name);
+                    if ($modvars['sizing'] == 0) {
+                        $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                    } else {
+                        $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                    }
+                    $thumb1->save($uploaddir.'pic_sid'.$sid.'-'.$key.'-thumb.png', 'png');
+
+                    // for index page picture create extra thumbnail
+                    if ($key==0){
+                        $thumb2 = PhpThumbFactory::create($tmp_name);
+                        if ($modvars['sizing'] == 0) {
+                            $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                        } else {
+                            $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                        }
+                        $thumb2->save($uploaddir.'pic_sid'.$sid.'-'.$key.'-thumb2.png', 'png');
+                    }
+                }
+            }
+            LogUtil::registerStatus(__('Pictures uploaded.', $dom));
         }
     }
 
@@ -633,10 +662,8 @@ function News_user_display($args)
                           'page'      => $page));
 
     $modvars = pnModGetVar('News');
-    $render->assign('enablecategorization', $modvars['enablecategorization']);
-    $render->assign('catimagepath', $modvars['catimagepath']);
-    $render->assign('enableajaxedit', $modvars['enableajaxedit']);
-    $render->assign('lang', ZLanguage::getLanguageCode());    
+    $render->assign($modvars);
+    $render->assign('lang', ZLanguage::getLanguageCode());
     
     // get more articletitles in the categories of this article
     if ($modvars['enablecategorization'] && $modvars['enablemorearticlesincat']) {

@@ -14,7 +14,9 @@
 <!--[pnpageaddvar name='stylesheet' value='modules/News/pnstyle/datepicker.css']-->
 <!--[browserhack condition="if lte IE 7" assign="iebuttonfix"]--><script type="text/javascript" src="modules/News/pnjavascript/buttonfix.js"></script><!--[/browserhack]-->
 <!--[pnpageaddvar name='rawtext' value=$iebuttonfix]-->
-<!--[* pnpageaddvar name='rawtext' value=$smarty.ldelim|cat:'if lte IE 7]><script type="text/javascript" src="modules/News/pnjavascript/buttonfix.js"></script><![endif'|cat:$smarty.rdelim *]-->
+<!--[if $picupload_enabled]-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/multifile.js']-->
+<!--[/if]-->
 
 <!--[gt text='Create new article' assign='templatetitle']-->
 <!--[include file='news_admin_menu.htm']-->
@@ -30,6 +32,8 @@
     var string_updatedraft = "<!--[gt text='Update draft']-->";
     var string_savingdraft = "<!--[gt text='Saving draft...']-->";
     var string_emptytitle = "<!--[gt text='<strong>Title is empty, draft not saved!</strong>']-->";
+    var string_remove = "<!--[gt text='Remove']-->";
+    var string_picture = "<!--[gt text='Picture']-->";
     <!--[if $enableattribution]-->
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
@@ -49,7 +53,11 @@
 
     <h2><!--[$templatetitle]--></h2>
 
+    <!--[if $picupload_enabled]-->
+    <form id="news_admin_newform" class="z-form" action="<!--[pnmodurl modname='News' type='user' func='create']-->" method="post" enctype="multipart/form-data">
+    <!--[else]-->
     <form id="news_admin_newform" class="z-form" action="<!--[pnmodurl modname='News' type='user' func='create']-->" method="post" enctype="application/x-www-form-urlencoded">
+    <!--[/if]-->
         <div>
             <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
             <!--[if $accessadd neq 1]-->
@@ -157,6 +165,21 @@
             </div>
             <!--[/if]-->
         </fieldset>
+
+        <!--[if $picupload_enabled]-->
+        <fieldset>
+            <legend><!--[gt text='Pictures']--></legend>
+			<label for="news_files_element"><!--[gt text='Select a picture']--></label>
+			<input id="news_files_element" name="news_files" type="file"><br><span class="z-sub"><!--[gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures]--></span>
+            <div id="news_files_list"></div>
+            <script type="text/javascript">
+                // <![CDATA[
+                var multi_selector = new MultiSelector( document.getElementById( 'news_files_list' ), <!--[$picupload_maxpictures]--> );
+                multi_selector.addElement( document.getElementById( 'news_files_element' ) );
+                // ]]>
+            </script>
+        </fieldset>
+        <!--[/if]-->
 
         <!--[if $accessadd eq 1]-->
         <fieldset>

@@ -14,6 +14,9 @@
 <!--[pnpageaddvar name='stylesheet' value='modules/News/pnstyle/datepicker.css']-->
 <!--[browserhack condition="if lte IE 7" assign="iebuttonfix"]--><script type="text/javascript" src="modules/News/pnjavascript/buttonfix.js"></script><!--[/browserhack]-->
 <!--[pnpageaddvar name='rawtext' value=$iebuttonfix]-->
+<!--[if $picupload_enabled]-->
+<!--[pnpageaddvar name='javascript' value='modules/News/pnjavascript/multifile.js']-->
+<!--[/if]-->
 
 <!--[gt text='Edit news article' assign='templatetitle']-->
 
@@ -51,11 +54,16 @@
 
     <h2><!--[$templatetitle]--></h2>
 
+    <!--[if $picupload_enabled]-->
+    <form id="news_user_modifyform" class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" method="post" enctype="multipart/form-data">
+    <!--[else]-->
     <form id="news_user_modifyform" class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" method="post" enctype="application/x-www-form-urlencoded">
+    <!--[/if]-->
         <div>
             <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
             <input type="hidden" name="story[sid]" value="<!--[$sid|pnvarprepfordisplay]-->" />
             <input type="hidden" name="story[approver]" value="<!--[$approver]-->" />
+            <input type="hidden" name="story[pictures]" value="<!--[$pictures]-->" />
             <!--[if $formattedcontent eq 1]-->
             <input type="hidden" name="story[hometextcontenttype]" value="1" />
             <input type="hidden" name="story[bodytextcontenttype]" value="1" />
@@ -148,6 +156,29 @@
                     </p>
                 </div>
             </fieldset>
+
+            <!--[if $picupload_enabled]-->
+            <fieldset>
+                <legend><!--[gt text='Pictures']--></legend>
+                <label for="news_files_element"><!--[gt text='Select a picture']--></label>
+                <input id="news_files_element" name="news_files" type="file"><br><span class="z-sub"><!--[gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures]--></span>
+                <div id="news_files_list"></div>
+                <script type="text/javascript">
+                    // <![CDATA[
+                    var multi_selector = new MultiSelector( document.getElementById( 'news_files_list' ), <!--[$picupload_maxpictures]--> );
+                    multi_selector.addElement( document.getElementById( 'news_files_element' ) );
+                    // ]]>
+                </script>
+
+                <!--[if $pictures gt 0]-->
+                <div><br>
+                    <!--[section name=counter start=0 loop=$pictures step=1]-->
+                        <img src="<!--[$picupload_uploaddir]-->/pic_sid<!--[$sid]-->-<!--[$smarty.section.counter.index]-->-thumb.png" width="80" /> <input type="checkbox" name="story[del_pictures-<!--[$smarty.section.counter.index]-->]"><!--[gt text='Delete this picture']--><br>
+                    <!--[/section]-->
+                </div>
+                <!--[/if]-->
+            </fieldset>
+            <!--[/if]-->
 
             <fieldset>
                 <legend><a id="news_publication_collapse" href="javascript:void(0);"><span id="news_publication_showhide"><!--[gt text='Show']--></span> <!--[gt text='Publishing options']--></a></legend>

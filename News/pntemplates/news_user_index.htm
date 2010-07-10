@@ -5,13 +5,11 @@
     <span class="news_meta z-sub"><!--[gt text='Contributed']--> <!--[gt text='by %1$s on %2$s' tag1=$info.contributor tag2=$info.briefdatetime]--></span>
 
     <div class="news_body">
-        <!--[* Picture upload
-        <!--[if !empty($info.picture)]-->
-        <div style="float:left;margin:5px">
-            <img src="modules/News/pnimages/pictureupload/sid<!--[$info.sid]-->_ansvaridea_logo_thumb.gif" alt=""/>
+        <!--[if $picupload_enabled AND $info.pictures gt 0]-->
+        <div class="news_photoindex news_thumbsindex" style="float:<!--[$picupload_index_float]-->">
+            <a href="<!--[pnmodurl modname='News' type='user' func='display' sid=$info.sid]-->"><!--[*<span></span>*]--><img src="<!--[$picupload_uploaddir]-->/pic_sid<!--[$info.sid]-->-0-thumb.png" alt="<!--[gt text='Picture %s for %s' tag1='0' tag2=$info.title]-->" /></a>
         </div>
-        <!--[/if]--> 
-        *]-->
+        <!--[/if]-->
         <!--[$preformat.hometext|pnvarprephtmldisplay]-->
     </div>
 

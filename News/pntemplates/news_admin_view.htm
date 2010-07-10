@@ -83,6 +83,9 @@
                 <!--[if $enablecategorization]-->
                 <th><!--[gt text='Category']--></th>
                 <!--[/if]-->
+                <!--[if $picupload_enabled]-->
+                <th><!--[gt text='Pictures']--></th>
+                <!--[/if]-->
                 <th><!--[gt text='Index page<br />listing / Weight']--></th>
                 <th><!--[gt text='Date']--></th>
                 <th><!--[gt text='Actions']--></th>
@@ -101,6 +104,11 @@
                 <!--[if $enablecategorization]-->
                 <td class="news_categorieslist">
                     <!--[assignedcategorieslist item=$newsitem]-->
+                </td>
+                <!--[/if]-->
+                <!--[if $picupload_enabled]-->
+                <td>
+                    <!--[$newsitem.pictures|pnvarprepfordisplay]-->
                 </td>
                 <!--[/if]-->
                 <td><!--[$newsitem.hideonindex|pnvarprepfordisplay]--> / <!--[$newsitem.weight|pnvarprepfordisplay]--></td>

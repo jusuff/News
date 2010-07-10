@@ -44,6 +44,7 @@ function News_init()
     pnModSetVar('News', 'enablemorearticlesincat', false);
     pnModSetVar('News', 'morearticlesincat', 0);
 
+    // notification on new article
     pnModSetVar('News', 'notifyonpending', false);
     pnModSetVar('News', 'notifyonpending_fromname', '');
     pnModSetVar('News', 'notifyonpending_fromaddress', '');
@@ -52,37 +53,29 @@ function News_init()
     pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
     pnModSetVar('News', 'notifyonpending_html', true);
 
+    // pdf link for an article
     pnModSetVar('News', 'pdflink', false);
     pnModSetVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
     pnModSetVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
     pnModSetVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
     pnModSetVar('News', 'pdflink_headerlogo_width', '30');
 
-/*
-    // image uploading
-    pnModSetVar('News', 'imgupload_enable', false);
-    pnModSetVar('News', 'imgupload_allowext', 'jpg, gif, png');
-    pnModSetVar('News', 'imgupload_floatindex', 'left');
-    pnModSetVar('News', 'imgupload_floatarticle', 'right');
-    pnModSetVar('News', 'imgupload_thumbextension', '_thumb');
-    pnModSetVar('News', 'imgupload_maxfilesize', '1000000');
-    pnModSetVar('News', 'imgupload_thumbmaxwidth', '150');
-    pnModSetVar('News', 'imgupload_thumbmaxheight', '150');
-    pnModSetVar('News', 'imgupload_uploaddir', '');
+    // picture uploading
+    pnModSetVar('News', 'picupload_enabled', false);
+    pnModSetVar('News', 'picupload_allowext', 'jpg, gif, png');
+    pnModSetVar('News', 'picupload_index_float', 'left');
+    pnModSetVar('News', 'picupload_article_float', 'left');
+    pnModSetVar('News', 'picupload_maxfilesize', '1000000');
+    pnModSetVar('News', 'picupload_maxpictures', '3');
+    pnModSetVar('News', 'picupload_sizing', '0');
+    pnModSetVar('News', 'picupload_picmaxwidth', '600');
+    pnModSetVar('News', 'picupload_picmaxheight', '600');
+    pnModSetVar('News', 'picupload_thumbmaxwidth', '150');
+    pnModSetVar('News', 'picupload_thumbmaxheight', '150');
+    pnModSetVar('News', 'picupload_thumb2maxwidth', '200');
+    pnModSetVar('News', 'picupload_thumb2maxheight', '200');
+    pnModSetVar('News', 'picupload_uploaddir', '');
 
-    // TODO MOVE TO admin file and use when enabling pic upload
-    // upload dir creation if the temp dir is not outside the root (relative path)
-    $tempdir = CacheUtil::getLocalDir();
-    $newsuploaddir   = $tempdir.'/News';
-    if (StringUtil::left($tempdir, 1) <> '/') {
-        if (CacheUtil::createLocalDir('News', 777)) {
-            LogUtil::registerStatus(__f('News publisher created the image upload directory successfully at [%s]. Make sure that this folder is accessible via the web and writable by the webserver.', $newsuploaddir, $dom));
-        }
-    } else {
-        LogUtil::registerStatus(__f('News publisher could not create the image upload directory [%s]. Please create an image upload directory manually, accessible via the web and writable by the webserver.', $newsuploaddir, $dom));
-    }
-*/    
-    
     // create the default data for the News module
     News_defaultdata();
 
@@ -280,6 +273,26 @@ function News_upgrade($oldversion)
             if (!DBUtil::changeTable('news')) {
                 return '2.5.2';
             }
+            // add new picture uploading variables
+            pnModSetVar('News', 'picupload_enabled', false);
+            pnModSetVar('News', 'picupload_allowext', 'jpg, gif, png');
+            pnModSetVar('News', 'picupload_index_float', 'left');
+            pnModSetVar('News', 'picupload_article_float', 'left');
+            pnModSetVar('News', 'picupload_maxfilesize', '1000000');
+            pnModSetVar('News', 'picupload_maxpictures', '3');
+            pnModSetVar('News', 'picupload_sizing', '0');
+            pnModSetVar('News', 'picupload_picmaxwidth', '600');
+            pnModSetVar('News', 'picupload_picmaxheight', '600');
+            pnModSetVar('News', 'picupload_thumbmaxwidth', '150');
+            pnModSetVar('News', 'picupload_thumbmaxheight', '150');
+            pnModSetVar('News', 'picupload_thumb2maxwidth', '200');
+            pnModSetVar('News', 'picupload_thumb2maxheight', '200');
+            pnModSetVar('News', 'picupload_uploaddir', '');
+
+            // clear compiled templates and News cache
+            pnModAPIFunc('pnRender', 'user', 'clear_compiled');
+            pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
+            
         case '2.5.3':
             // migration routines
     }
@@ -345,6 +358,7 @@ function News_defaultdata()
                      'published_status' => 0,
                      'from'             => $now,
                      'weight'           => 0,
+                     'pictures'         => 0,
                      'cr_date'          => $now);
 
     // Insert the default article and preserve the standard fields

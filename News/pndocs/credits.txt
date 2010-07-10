@@ -1,5 +1,4 @@
-This file lists scripts/styles used in News that originate from 
-others. E.Spaan, 18 Jan 2010.
+This file lists scripts/styles used in News that originate from others.
 
 ---
 Datepicker used in new/modify templates originates from Jeremy Jongsma
@@ -25,3 +24,17 @@ Pausing up-down scroller from Dynamic Drive
 ---
 IE6 buttonfix used in user_new template:
 http://www.kopz.org/public/documents/css/multiple_buttons_ie_workaround.html
+
+---
+PHP Thumb image manipulation library
+http://phpthumb.gxdlabs.com/
+License: MIT License
+
+---
+Multiple image upload 
+http://the-stickman.com/web-development/javascript/upload-multiple-files-with-a-single-file-element/
+
+---
+Slideshow block for News messages
+http://www.queness.com/post/152/simple-jquery-image-slide-show-with-semi-transparent-caption
+free to use

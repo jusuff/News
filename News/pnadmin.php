@@ -290,6 +290,81 @@ function News_admin_update($args)
         $story['approver'] = SessionUtil::getVar('uid');
     }
 
+    // delete and add images (credit msshams)
+    $modvars = pnModGetVar('News');
+    if ($modvars['picupload_enabled']) {
+        //  include the phpthumb library
+        require_once ('pnincludes/phpthumb/ThumbLib.inc.php');
+        $uploaddir = $modvars['picupload_uploaddir'] . '/';
+        // remove selected files
+        for ($i=0; $i<$item['pictures']; $i++){
+            if (isset($story['del_pictures-'.$i])) {
+                unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png");
+                unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png");
+                unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png");
+                $story['pictures']--;
+            }
+        }
+        // renumber the remaining files if files were deleted
+        if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
+            $lastfile = 0;
+            for ($i=0; $i<$item['pictures']; $i++){
+                if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png")) {
+                    rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                    rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.png");
+                    rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png");
+                    // create a new hometext image if needed
+                    if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png")){
+                        $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                        if ($modvars['sizing'] == 0) {
+                            $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                        } else {
+                            $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                        }
+                        $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.png', 'png');
+                    }
+                    $lastfile++;
+                }
+            }
+        }
+        // handling of additional image uploads
+        foreach ($_FILES['news_files']['error'] as $key => $error) {
+            if ($error == UPLOAD_ERR_OK) {
+                $tmp_name = $_FILES['news_files']['tmp_name'][$key];
+                $name = $_FILES['news_files']['name'][$key];
+
+                $thumb = PhpThumbFactory::create($tmp_name);
+                if ($modvars['sizing'] == 0) {
+                    $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                } else {
+                    $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                }
+                $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.png', 'png');
+
+                $thumb1 = PhpThumbFactory::create($tmp_name);
+                if ($modvars['sizing'] == 0) {
+                    $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                } else {
+                    $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                }
+                $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.png', 'png');
+
+                // for index page picture create extra thumbnail
+                if ($story['pictures']==0){
+                    $thumb2 = PhpThumbFactory::create($tmp_name);
+                    if ($modvars['sizing'] == 0) {
+                        $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                    } else {
+                        $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                    }
+                    $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
+                }
+                $story['pictures']++;
+            }
+        }
+        LogUtil::registerStatus(__('Images updated.', $dom));
+    }
+    
     // Update the story
     if (pnModAPIFunc('News', 'admin', 'update',
                     array('sid' => $story['sid'],
@@ -311,6 +386,7 @@ function News_admin_update($args)
                           'to' => $story['to'],
                           'approver' => $story['approver'],
                           'weight' => isset($story['weight']) ? $story['weight'] : 0,
+                          'pictures' => $story['pictures'],
                           'action' => $story['action']))) {
         // Success
         LogUtil::registerStatus(__('Done! Saved your changes.', $dom));
@@ -745,6 +821,7 @@ function News_admin_updateconfig()
     $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
     $modvars['enablemorearticlesincat'] = (bool)FormUtil::getPassedValue('enablemorearticlesincat', false, 'POST');
     $modvars['morearticlesincat'] = (int)FormUtil::getPassedValue('morearticlesincat', 0, 'POST');
+
     $modvars['notifyonpending'] = (bool)FormUtil::getPassedValue('notifyonpending', false, 'POST');
     $modvars['notifyonpending_fromname'] = FormUtil::getPassedValue('notifyonpending_fromname', '', 'POST');
     $modvars['notifyonpending_fromaddress'] = FormUtil::getPassedValue('notifyonpending_fromaddress', '', 'POST');
@@ -752,12 +829,41 @@ function News_admin_updateconfig()
     $modvars['notifyonpending_toaddress'] = FormUtil::getPassedValue('notifyonpending_toaddress', '', 'POST');
     $modvars['notifyonpending_subject'] = FormUtil::getPassedValue('notifyonpending_subject', '', 'POST');
     $modvars['notifyonpending_html'] = (bool)FormUtil::getPassedValue('notifyonpending_html', true, 'POST');
+
     $modvars['pdflink'] = (bool)FormUtil::getPassedValue('pdflink', false, 'POST');
     $modvars['pdflink_tcpdfpath'] = FormUtil::getPassedValue('pdflink_tcpdfpath', '', 'POST');
     $modvars['pdflink_tcpdflang'] = FormUtil::getPassedValue('pdflink_tcpdflang', '', 'POST');
     $modvars['pdflink_headerlogo'] = FormUtil::getPassedValue('pdflink_headerlogo', '', 'POST');
     $modvars['pdflink_headerlogo_width'] = FormUtil::getPassedValue('pdflink_headerlogo_width', '', 'POST');
 
+    $modvars['picupload_enabled'] = (bool)FormUtil::getPassedValue('picupload_enabled', false, 'POST');
+    $modvars['picupload_allowext'] = FormUtil::getPassedValue('picupload_allowext', 'jpg, gif, png', 'POST');
+    $modvars['picupload_index_float'] = FormUtil::getPassedValue('picupload_index_float', 'left', 'POST');
+    $modvars['picupload_article_float'] = FormUtil::getPassedValue('picupload_article_float', 'left', 'POST');
+    $modvars['picupload_maxfilesize'] = 1000*(int)FormUtil::getPassedValue('picupload_maxfilesize', '1000', 'POST');
+    $modvars['picupload_maxpictures'] = (int)FormUtil::getPassedValue('picupload_maxpictures', 3, 'POST');
+    $modvars['picupload_sizing'] = FormUtil::getPassedValue('picupload_sizing', '0', 'POST');
+    $modvars['picupload_picmaxwidth'] = (int)FormUtil::getPassedValue('picupload_picmaxwidth', 600, 'POST');
+    $modvars['picupload_picmaxheight'] = (int)FormUtil::getPassedValue('picupload_picmaxheight', 600, 'POST');
+    $modvars['picupload_thumbmaxwidth'] = (int)FormUtil::getPassedValue('picupload_thumbmaxwidth', 150, 'POST');
+    $modvars['picupload_thumbmaxheight'] = (int)FormUtil::getPassedValue('picupload_thumbmaxheight', 150, 'POST');
+    $modvars['picupload_thumb2maxwidth'] = (int)FormUtil::getPassedValue('picupload_thumb2maxwidth', 200, 'POST');
+    $modvars['picupload_thumb2maxheight'] = (int)FormUtil::getPassedValue('picupload_thumb2maxheight', 200, 'POST');
+    $modvars['picupload_uploaddir'] = FormUtil::getPassedValue('picupload_uploaddir', '', 'POST');
+
+    // create picture upload folder if needed
+    if ($modvars['picupload_enabled']) {
+        if (empty($modvars['picupload_uploaddir'])) {
+            $newsuploaddir = 'images/news_picupload';
+            if (!file_exists($newsuploaddir) && FileUtil::mkdirs($newsuploaddir, 0777)) {
+                LogUtil::registerStatus(__f('News publisher created the image upload directory successfully at [%s]. Make sure that this folder is accessible via the web and writable by the webserver.', $newsuploaddir, $dom));
+                $modvars['picupload_uploaddir'] = $newsuploaddir;
+            }
+        } elseif (!is_dir($modvars['picupload_uploaddir']) || !is_writable($modvars['picupload_uploaddir'])) {
+            LogUtil::registerStatus(__f('The specified image upload directory [%s] does not exist or is not writable by the webserver', $modvars['picupload_uploaddir'], $dom));
+        }
+    }
+    
     if (!Loader::loadClass('CategoryRegistryUtil')) {
         return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
     }

@@ -207,3 +207,90 @@ and http://www.zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba */
     padding: 0;
     list-style: inside;
 }
+
+/* Styling for optional picture(s) in articles */
+.news_photo {
+	margin: 0 10px 0 5px;
+	position: relative;
+	/*width: 212px;
+	height: 162px;
+	float: left;*/
+}
+
+.news_photo a {
+	text-decoration: none;
+}
+
+/* Styling with rounded corners by msshams
+.news_thumbs span {
+	width: 200px;
+	height: 150px;
+	display: block;
+	position: absolute;
+	top: 5px;
+	left: 6px;
+	background: url(../pnimages/round-corner.png) no-repeat;
+}
+.news_thumbs img {
+	border: none;
+	padding: 5px 6px 6px;
+	background: url(../pnimages/round-bg.gif) no-repeat;
+}*/
+.news_thumbs img {
+	border: 1px solid #ddd;
+	padding: 4px;
+	background: #fff;
+}
+
+.news_photoslide {
+	margin: 2px 5px;
+	position: relative;
+	/*width: 152px;
+	height: 117px;*/
+	float: left;
+}
+
+.news_photoslide a {
+	text-decoration: none;
+}
+
+/*.news_thumbsslide span, .news_thumbsindex span {
+	width: 140px;
+	height: 105px;
+	display: block;
+	position: absolute;
+	top: 5px;
+	left: 6px;
+	background: url(../pnimages/round-corner1.png) no-repeat;
+}
+.news_thumbsslide img, .news_thumbsindex img {
+	border: none;
+	padding: 5px 6px 6px;
+	background: url(../pnimages/round-bg1.gif) no-repeat;
+}*/
+.news_thumbsslide img, .news_thumbsindex img {
+	border: 1px solid #ddd;
+	padding: 4px;
+	background: #fff;
+}
+
+.news_photoindex {
+	margin: 2px 5px 2px 0px;
+	position: relative;
+	/*width: 152px;
+	height: 117px;
+	float: left;*/
+}
+
+.news_photoindex a {
+	text-decoration: none;
+}
+
+.news_pictures {
+    clear:both; 
+    padding: 30px 40px 0 60px; 
+    float:left;
+}
+
+.news_files_list {
+}

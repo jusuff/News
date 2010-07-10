@@ -5,12 +5,17 @@
 
 <h2><!--[$templatetitle]-->: <!--[$title|pnvarprepfordisplay]--></h2>
 
+<!--[if $picupload_enabled]-->
+<form id="news_ajax_modifyform" class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" onsubmit="return true;" method="post" enctype="multipart/form-data">
+<!--[else]-->
 <form id="news_ajax_modifyform" class="z-form" action="<!--[pnmodurl modname='News' type='admin' func='update']-->" onsubmit="return true;" method="post" enctype="application/x-www-form-urlencoded">
+<!--[/if]-->
     <div >
         <input type="hidden" name="authid" value="<!--[insert name='generateauthkey' module='News']-->" />
         <input type="hidden" name="page" value="<!--[$page|pnvarprepfordisplay]-->" />
         <input type="hidden" name="story[sid]" value="<!--[$sid|pnvarprepfordisplay]-->" />
         <input type="hidden" name="story[published_status]" value="<!--[$published_status|pnvarprepfordisplay]-->" />
+        <input type="hidden" name="story[pictures]" value="<!--[$pictures]-->" />
         <!--[if $formattedcontent eq 1]-->
         <input type="hidden" name="story[hometextcontenttype]" value="1" />
         <input type="hidden" name="story[bodytextcontenttype]" value="1" />
@@ -103,6 +108,29 @@
                 </p>
             </div>
         </fieldset>
+
+        <!--[* if $picupload_enabled]-->
+        <fieldset>
+            <legend><!--[gt text='Pictures' domain='module_news']--></legend>
+            <label for="news_files_element"><!--[gt text='Select a picture' domain='module_news']--></label>
+            <input id="news_files_element" name="news_files" type="file"><br><span class="z-sub"><!--[gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures domain='module_news']--></span>
+            <div id="news_files_list"></div>
+            <script type="text/javascript">
+                // <![CDATA[
+                var multi_selector = new MultiSelector( document.getElementById( 'news_files_list' ), <!--[$picupload_maxpictures]--> );
+                multi_selector.addElement( document.getElementById( 'news_files_element' ) );
+                // ]]>
+            </script>
+
+            <!--[if $pictures gt 0]-->
+            <div><br>
+                <!--[section name=counter start=0 loop=$pictures step=1]-->
+                    <img src="<!--[$picupload_uploaddir]-->/pic_sid<!--[$sid]-->-<!--[$smarty.section.counter.index]-->-thumb.png" width="80" /> <input type="checkbox" name="story[del_pictures-<!--[$smarty.section.counter.index]-->]"><!--[gt text='Delete this picture' domain='module_news']--><br>
+                <!--[/section]-->
+            </div>
+            <!--[/if]-->
+        </fieldset>
+        <!--[/if *]-->
 
         <fieldset>
             <legend><a id="news_publication_collapse" href="javascript:void(0);"><span id="news_publication_showhide"><!--[gt text='Show' domain='module_news']--></span> <!--[gt text='Publishing options' domain='module_news']--></a></legend>

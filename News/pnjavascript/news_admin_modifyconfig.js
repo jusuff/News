@@ -28,6 +28,9 @@ function news_modifyconfig_init_check()
     if ($('news_pdflink_details')) {
         news_pdflink_init();
     }
+    if ($('news_picupload_details')) {
+        news_picupload_init();
+    }
 }
 
 function news_ajaxedit_init()
@@ -47,7 +50,7 @@ function news_morearticles_init()
     if ($('news_enablemorearticlesincat').checked == false) {
         $('news_morearticles_details').hide();
     }
-    Event.observe('news_enablemorearticlesincat', 'change', news_morearticles_onchange);
+    Event.observe('news_enablemorearticlesincat', 'click', news_morearticles_onchange);
 }
 function news_morearticles_onchange()
 {
@@ -59,7 +62,7 @@ function news_notifyonpending_init()
     if ($('news_notifyonpending').checked == false) {
         $('news_notifyonpending_details').hide();
     }
-    Event.observe('news_notifyonpending', 'change', news_notifyonpending_onchange);
+    Event.observe('news_notifyonpending', 'click', news_notifyonpending_onchange);
 }
 function news_notifyonpending_onchange()
 {
@@ -71,11 +74,23 @@ function news_pdflink_init()
     if ($('news_pdflink').checked == false) {
         $('news_pdflink_details').hide();
     }
-    Event.observe('news_pdflink', 'change', news_pdflink_onchange);
+    Event.observe('news_pdflink', 'click', news_pdflink_onchange);
 }
 function news_pdflink_onchange()
 {
     switchdisplaystate('news_pdflink_details');
+}
+
+function news_picupload_init()
+{
+    if ($('news_picupload_enabled').checked == false) {
+        $('news_picupload_details').hide();
+    }
+    Event.observe('news_picupload_enabled', 'click', news_picupload_onchange);
+}
+function news_picupload_onchange()
+{
+    switchdisplaystate('news_picupload_details');
 }
 
 function news_permalink_onclick()

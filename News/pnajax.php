@@ -133,8 +133,82 @@ function News_ajax_update()
     switch ($action)
     {
         case 'update':
-            // Update the story
-            // Security check inside of the API func
+            // Update the story, security check inside of the API func
+
+/*            // delete and add images (credit msshams)
+            $modvars = pnModGetVar('News');
+            if ($modvars['picupload_enabled']) {
+                //  include the phpthumb library
+                require_once ('pnincludes/phpthumb/ThumbLib.inc.php');
+                $uploaddir = $modvars['picupload_uploaddir'] . '/';
+                // remove selected files
+                for ($i=0; $i<$item['pictures']; $i++){
+                    if (isset($story['del_pictures-'.$i])) {
+                        unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png");
+                        unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png");
+                        unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png");
+                        $story['pictures']--;
+                    }
+                }
+                // renumber the remaining files if files were deleted
+                if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
+                    $lastfile = 0;
+                    for ($i=0; $i<$item['pictures']; $i++){
+                        if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png")) {
+                            rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                            rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.png");
+                            rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png");
+                            // create a new hometext image if needed
+                            if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png")){
+                                $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                                if ($modvars['sizing'] == 0) {
+                                    $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                                } else {
+                                    $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                                }
+                                $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.png', 'png');
+                            }
+                            $lastfile++;
+                        }
+                    }
+                }
+                // handling of additional image uploads
+                foreach ($_FILES['news_files']['error'] as $key => $error) {
+                    if ($error == UPLOAD_ERR_OK) {
+                        $tmp_name = $_FILES['news_files']['tmp_name'][$key];
+                        $name = $_FILES['news_files']['name'][$key];
+
+                        $thumb = PhpThumbFactory::create($tmp_name);
+                        if ($modvars['sizing'] == 0) {
+                            $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                        } else {
+                            $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                        }
+                        $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.png', 'png');
+
+                        $thumb1 = PhpThumbFactory::create($tmp_name);
+                        if ($modvars['sizing'] == 0) {
+                            $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                        } else {
+                            $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                        }
+                        $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.png', 'png');
+
+                        // for index page picture create extra thumbnail
+                        if ($story['pictures']==0){
+                            $thumb2 = PhpThumbFactory::create($tmp_name);
+                            if ($modvars['sizing'] == 0) {
+                                $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                            } else {
+                                $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                            }
+                            $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
+                        }
+                        $story['pictures']++;
+                    }
+                }
+            }*/
+
             if (pnModAPIFunc('News', 'admin', 'update',
                             array('sid' => $story['sid'],
                                   'title' => DataUtil::convertFromUTF8($story['title']),
@@ -153,6 +227,7 @@ function News_ajax_update()
                                   'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                                   'to' => isset($story['to']) ? $story['to'] : null,
                                   'weight' => $story['weight'],
+                                  'pictures' => $story['pictures'],
                                   'published_status' => $story['published_status']))) {
 
                 // Success
@@ -194,9 +269,9 @@ function News_ajax_update()
                                         'preformat' => $preformat,
                                         'page'      => $page));
                 // Some vars
-                $render->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
-                $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
-                $render->assign('enableajaxedit', pnModGetVar('News', 'enableajaxedit'));
+                $render->assign('enablecategorization', $modvars['enablecategorization']);
+                $render->assign('catimagepath', $modvars['catimagepath']);
+                $render->assign('enableajaxedit', $modvars['enableajaxedit']);
 
                 // Now lets assign the information to create a pager for the review
                 $render->assign('pager', array('numitems' => $numitems,
@@ -312,7 +387,8 @@ function News_ajax_savedraft()
                               'from' => $story['from'],
                               'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                               'to' => $story['to'],
-                              'weight' => $story['weight'] ))) {
+                              'weight' => $story['weight'],
+                              'pictures' => $story['pictures'] ))) {
 
             $output = DataUtil::formatForDisplayHTML(__('Error! Could not save your changes.', $dom));
         } else {
@@ -345,6 +421,7 @@ function News_ajax_savedraft()
                               'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                               'to' => isset($story['to']) ? $story['to'] : null,
                               'weight' => isset($story['weight']) ? $story['weight'] : 0,
+                              'pictures' => isset($story['pictures']) ? $story['pictures'] : 0,
                               'published_status' => 4 ))) {
             // Success and now reload the news story
             $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $sid));

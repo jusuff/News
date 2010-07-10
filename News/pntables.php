@@ -46,7 +46,7 @@ function News_pntables()
         'from'             => 'pn_from',
         'to'               => 'pn_to',
         'weight'           => 'pn_weight',
-        'picture'          => 'pn_picture'
+        'pictures'         => 'pn_pictures'
     );
     $tables['news_column_def'] = array(
         'sid'              => 'I NOTNULL AUTO PRIMARY',
@@ -66,7 +66,7 @@ function News_pntables()
         'from'             => 'T DEFAULT NULL',
         'to'               => 'T DEFAULT NULL',
         'weight'           => 'I1 DEFAULT 0',
-        'picture'          => 'C(255) DEFAULT NULL'
+        'pictures'         => 'I DEFAULT 0'
     );
 
     // Enable categorization services
