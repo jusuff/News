@@ -164,50 +164,6 @@ function News_adminapi_update($args)
         $args['from'] = DateUtil::formatDatetime($args['from']);
         $args['to'] = DateUtil::formatDatetime($args['to']);
     }
-
-/*	// handling image uploads (credit msshams)
-    $modvars = pnModGetVar('News');
-    if ($modvars['picupload_enabled']) {
-        $count = $args['pictures'];
-        $uploaddir = $modvars['picupload_uploaddir'] . '/';
-        foreach ($_FILES['news_files']['error'] as $key => $error) {
-            if ($error == UPLOAD_ERR_OK) {
-            $tmp_name = $_FILES['news_files']['tmp_name'][$key];
-            $name = $_FILES['news_files']['name'][$key];
-
-            $thumb = PhpThumbFactory::create($tmp_name);
-            if ($modvars['sizing'] == 0) {
-                $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-            } else {
-                $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-            }
-            $thumb->save($uploaddir.'pic_sid'.$sid.'-'.$count.'-norm.png', 'png');
-
-            $thumb1 = PhpThumbFactory::create($tmp_name);
-            if ($modvars['sizing'] == 0) {
-                $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-            } else {
-                $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-            }
-            $thumb1->save($uploaddir.'pic_sid'.$sid.'-'.$count.'-thumb.png', 'png');
-
-            // for index page picture create extra thumbnail
-            if ($count==0){
-                $thumb2 = PhpThumbFactory::create($tmp_name);
-                if ($modvars['sizing'] == 0) {
-                    $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                } else {
-                    $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                }
-                $thumb2->save($uploaddir.'pic_sid'.$sid.'-'.$count.'-thumb2.png', 'png');
-            }
-
-            $count++;
-            $args['pictures']++;
-            }
-        }
-    }
-    */
     
     if (!DBUtil::updateObject($args, 'news', '', 'sid')) {
         return LogUtil::registerError(__('Error! Could not save your changes.', $dom));
