@@ -768,9 +768,8 @@ function News_admin_modifyconfig()
     // Create output object
     $render = & pnRender::getInstance('News', false);
 
-    // Number of items to display per page
+    // assign the module variables
     $render->assign(pnModGetVar('News'));
-
     $render->assign('properties', $properties);
     $render->assign('property', $propertyIndex);
 

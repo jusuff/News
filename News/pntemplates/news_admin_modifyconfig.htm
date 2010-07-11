@@ -204,20 +204,20 @@
                 <div class="z-formrow">
                     <label for="news_permalink_datename"><!--[gt text='Format based on date and name']--></label>
                     <div>
-                        <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
+                        <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"<!--[if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%']-->checked="checked"<!--[/if]--> />
                         <span><!--[$baseurl]--><!--[pnmodgetinfo modname=News info=displayname]-->/<!--[datetime format="%Y/%m/%d"]-->/<!--[gt text='your-article-title']-->/</span>
                     </div>
                 </div>
                 <div class="z-formrow">
                     <label for="news_permalink_numeric"><!--[gt text='Numeric format']--></label>
                     <div>
-                        <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%"<!--[if $permalinkformat eq '%storyid%']--> checked="checked"<!--[/if]--> />
+                        <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%" <!--[if $permalinkformat eq '%storyid%']-->checked="checked"<!--[/if]--> />
                         <span><!--[$baseurl]--><!--[pnmodgetinfo modname='News' info='displayname']-->/123</span>
                     </div>
                 </div>
                 <div class="z-formrow">
                     <label for="news_permalink_custom"><!--[gt text='Custom format']--></label>
-                    <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" <!--[if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%']--> checked="checked"<!--[/if]--> />
+                    <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" <!--[if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%']-->checked="checked"<!--[/if]--> />
                 </div>
                 <div class="z-formrow">
                     <label for="news_permalink_format"><!--[gt text='Custom format definition']--></label>
