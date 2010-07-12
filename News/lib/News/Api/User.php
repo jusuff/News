@@ -599,7 +599,7 @@ class News_Api_User extends Zikula_Api
 
         // Link to topic if there is a topic
         if (!empty($info['topicpath'])) {
-            $topicField = _News_getTopicField();
+            $topicField = $this->getTopicField();
             // check which variable to use for the topic
             if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
                 $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
