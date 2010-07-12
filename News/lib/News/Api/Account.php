@@ -12,41 +12,41 @@
  * @subpackage News
  */
 
-/**
- * Return an array of items to show in the your account panel
- *
- * @return   array   
- */
-function News_accountapi_getall($args)
+class News_Api_Account extends Zikula_Api
 {
-    $dom = ZLanguage::getModuleDomain('News');
+    /**
+     * Return an array of items to show in the your account panel
+     *
+     * @return   array
+     */
+    public function getall($args)
+    {
+        $items = array();
+        $uname = (isset($args['uname'])) ? $args['uname'] : UserUtil::getVar('uname');
+        // does this user exist?
+        if(UserUtil::getIdFromName($uname)==false) {
+            // user does not exist
+            return $items;
+        }
 
-    $items = array();
+        // Create an array of links to return
+        if (SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
+            $items[] = array('url'     => ModUtil::url('News', 'user', 'new'),
+                    'module'  => 'News',
+                    'title'   => $this->__('Submit an article'),
+                    'icon'    => 'news_add.gif');
 
-    $uname = (isset($args['uname'])) ? $args['uname'] : UserUtil::getVar('uname');
-    // does this user exist?
-    if(UserUtil::getIdFromName($uname)==false) {
-        // user does not exist
-        return $items;
-    }
-
-    // Create an array of links to return
-    if (SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
-        $items[] = array('url'     => ModUtil::url('News', 'user', 'new'),
-                         'module'  => 'News',
-                         'title'   => __('Submit an article', $dom),
-                         'icon'    => 'news_add.gif');
-
-/* If users can save draft articles and the viewdraft function is implemented, this can be enabled
+            /* If users can save draft articles and the viewdraft function is implemented, this can be enabled
         $items[] = array('url'     => ModUtil::url('News', 'user', 'viewdraft'),
                          'module'  => 'News',
                          'title'   => __('View personal draft articles', $dom),
                          'icon'    => 'news_draft.gif');
-*/                         
+            */
 
+        }
+
+        // Return the items
+        return $items;
     }
 
-    // Return the items
-    return $items;
 }
-
