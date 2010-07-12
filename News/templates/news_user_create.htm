@@ -1,17 +1,17 @@
 {*  $Id: news_user_new.htm 82 2009-02-25 23:09:21Z mateo $  *}
 {ajaxheader modname='News' filename='news.js' noscriptaculous=true}
-{pageaddvar name='javascript' value='modules/News/pnjavascript/sizecheck.js'}
+{pageaddvar name='javascript' value='modules/News/javascript/sizecheck.js'}
 {pageaddvar name='javascript' value='javascript/ajax/scriptaculous.js'}
 {pageaddvar name='javascript' value='javascript/ajax/effects.js'}
 {if $enableattribution}
 {pageaddvar name='javascript' value='javascript/ajax/dragdrop.js'}
 {pageaddvar name="javascript" value="javascript/helpers/Zikula.itemlist.js"}
 {/if}
-{pageaddvar name='javascript' value='modules/News/pnjavascript/prototype-base-extensions.js'}
-{pageaddvar name='javascript' value='modules/News/pnjavascript/prototype-date-extensions.js'}
-{pageaddvar name='javascript' value='modules/News/pnjavascript/datepicker.js'}
-{pageaddvar name='javascript' value='modules/News/pnjavascript/datepicker-locale.js'}
-{pageaddvar name='stylesheet' value='modules/News/pnstyle/datepicker.css'}
+{pageaddvar name='javascript' value='modules/News/javascript/prototype-base-extensions.js'}
+{pageaddvar name='javascript' value='modules/News/javascript/prototype-date-extensions.js'}
+{pageaddvar name='javascript' value='modules/News/javascript/datepicker.js'}
+{pageaddvar name='javascript' value='modules/News/javascript/datepicker-locale.js'}
+{pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
 {browserhack condition="if lte IE 7" assign="iebuttonfix"}<script type="text/javascript" src="modules/News/pnjavascript/buttonfix.js"></script>{/browserhack}
 {pageaddvar name='rawtext' value=$iebuttonfix}
 
