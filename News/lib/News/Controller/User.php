@@ -839,7 +839,7 @@ Regards,
                 if (!empty($rootcat)) {
                     $rootcat['path'] .= '/';
                     // Get all categories in this category property
-                    $catcount = _countcategories($rootcat, $property, $catregistry, $uid);
+                    $catcount = $this->_countcategories($rootcat, $property, $catregistry, $uid);
                     $rootcat['news_articlecount'] = $catcount['category']['news_articlecount'];
                     $rootcat['news_totalarticlecount'] = $catcount['category']['news_totalarticlecount'];
                     $rootcat['news_yourarticlecount'] = $catcount['category']['news_yourarticlecount'];
