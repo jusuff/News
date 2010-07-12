@@ -12,7 +12,7 @@
  * @subpackage News
  */
 
-class News_Controller_Admin extends Zikula_Admin
+class News_Controller_Admin extends Zikula_Controller
 {
 
     public function postInitialize()
@@ -738,7 +738,7 @@ class News_Controller_Admin extends Zikula_Admin
         $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
 
         // assign the module variables
-        $this->view->assign($this->getVars();
+        $this->view->assign($this->getVars());
         $this->view->assign('properties', $properties);
         $this->view->assign('property', $propertyIndex);
 

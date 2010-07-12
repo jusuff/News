@@ -79,7 +79,7 @@ VALUES ";
 
         ModUtil::loadApi('News', 'user');
 
-        $permChecker = new news_result_checker();
+        $permChecker = new News_ResultChecker();
         $articles = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
 
         foreach ($articles as $article)

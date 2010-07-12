@@ -13,36 +13,8 @@
  */
 
 
-/**
- * Internal callback class used to check permissions to each News item
- * @author Jorn Wildt
- */
-class News_Result_Checker
-{
-    protected $enablecategorization;
 
-    function __construct()
-    {
-        $this->enablecategorization = $this->getVar('enablecategorization');
-    }
-
-    // This method is called by DBUtil::selectObjectArrayFilter() for each and every search result.
-    // A return value of true means "keep result" - false means "discard".
-    function checkResult(&$item)
-    {
-        $ok = (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_OVERVIEW));
-
-        if ($this->enablecategorization)
-        {
-            ObjectUtil::expandObjectWithCategories($item, 'news', 'sid');
-            $ok = $ok && CategoryUtil::hasCategoryAccess($item['__CATEGORIES__'],'News');
-        }
-
-        return $ok;
-    }
-}
-
-class News_Api_Search extends Zikula_Api
+class News_Api_User extends Zikula_Api
 {
     /**
      * get all news items
@@ -205,7 +177,7 @@ class News_Api_Search extends Zikula_Api
             $orderby .= ', ' . $news_column['from'] . ' DESC';
         }
 
-        $permChecker = new News_Result_Checker();
+        $permChecker = new News_ResultChecker();
         $objArray = DBUtil::selectObjectArrayFilter('news', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $args['catFilter']);
 
         // Check for an error with the database code, and if so set an appropriate
@@ -973,4 +945,172 @@ class News_Api_Search extends Zikula_Api
                 'titlefield'  => 'title',
                 'itemid'      => 'sid');
     }
+
+    public function decodeurl($args)
+    {
+        // check we actually have some vars to work with...
+        if (!isset($args['vars'])) {
+            return LogUtil::registerArgsError();
+        }
+
+        // define the available user functions
+        $funcs = array('main', 'new', 'create', 'view', 'archives', 'display', 'categorylist', 'displaypdf');
+        // set the correct function name based on our input
+        if (empty($args['vars'][2])) {
+            System::queryStringSetVar('func', 'main');
+            $nextvar = 3;
+        } elseif ($args['vars'][2] == 'page') {
+            System::queryStringSetVar('func', 'main');
+            $nextvar = 3;
+        } elseif (!in_array($args['vars'][2], $funcs)) {
+            System::queryStringSetVar('func', 'display');
+            $nextvar = 2;
+        } else {
+            System::queryStringSetVar('func', $args['vars'][2]);
+            $nextvar = 3;
+        }
+
+        $func = FormUtil::getPassedValue('func', 'main', 'GET');
+
+        // for now let the core handle the view function
+        if (($func == 'view' || $func == 'main') && isset($args['vars'][$nextvar])) {
+            System::queryStringSetVar('page', (int)$args['vars'][$nextvar]);
+        }
+
+        // add the category info
+        if ($func == 'view' && isset($args['vars'][$nextvar])) {
+            if ($args['vars'][$nextvar] == 'page') {
+                System::queryStringSetVar('page', (int)$args['vars'][$nextvar+1]);
+            } else {
+                System::queryStringSetVar('prop', $args['vars'][$nextvar]);
+                if (isset($args['vars'][$nextvar+1])) {
+                    $numargs = count($args['vars']);
+                    if ($args['vars'][$numargs-2] == 'page' && is_numeric($args['vars'][$numargs-1])) {
+                        System::queryStringSetVar('cat', (string)implode('/', array_slice($args['vars'], $nextvar+1, -2)));
+                        System::queryStringSetVar('page', (int)$args['vars'][$numargs-1]);
+                    } else {
+                        System::queryStringSetVar('cat', (string)implode('/', array_slice($args['vars'], $nextvar+1)));
+                        System::queryStringSetVar('page', 1);
+                    }
+                }
+            }
+        }
+
+        // identify the correct parameter to identify the news article
+        if ($func == 'display' || $func == 'displaypdf') {
+            // check the permalink structure and obtain any missing vars
+            $permalinkkeys = array_flip(explode('/', ModUtil::getVar('News', 'permalinkformat')));
+            // get rid of unused vars
+            $args['vars'] = array_slice($args['vars'], $nextvar);
+
+            // remove any category path down to the leaf category
+            $permalinkkeycount = count($permalinkkeys);
+            $varscount = count($args['vars']);
+            ($args['vars'][$varscount-2] == 'page') ? $pagersize = 2 : $pagersize = 0 ;
+            if (($permalinkkeycount + $pagersize) != $varscount) {
+                array_splice($args['vars'], $permalinkkeys['%category%'],  $varscount - $permalinkkeycount);
+            }
+
+            // get the story id or title
+            foreach ($permalinkkeys as $permalinkvar => $permalinkkey) {
+                System::queryStringSetVar(str_replace('%', '', $permalinkvar), $args['vars'][$permalinkkey]);
+            }
+
+            if (isset($permalinkkeys['%storyid%']) && isset($args['vars'][$permalinkkeys['%storyid%']]) && is_numeric($args['vars'][$permalinkkeys['%storyid%']])) {
+                System::queryStringSetVar('sid', $args['vars'][$permalinkkeys['%storyid%']]);
+                $nextvar = $permalinkkeys['%storyid%']+1;
+            } else {
+                System::queryStringSetVar('title', $args['vars'][$permalinkkeys['%storytitle%']]);
+                $nextvar = $permalinkkeys['%storytitle%']+1;
+            }
+            if (isset($args['vars'][$nextvar]) && $args['vars'][$nextvar] == 'page') {
+                System::queryStringSetVar('page', (int)$args['vars'][$nextvar+1]);
+            }
+        }
+
+        // handle news archives
+        if ($func == 'archives') {
+            if (isset($args['vars'][$nextvar])) {
+                System::queryStringSetVar('year', $args['vars'][$nextvar]);
+                if (isset($args['vars'][$nextvar+1])) {
+                    System::queryStringSetVar('month', $args['vars'][$nextvar+1]);
+                }
+            }
+        }
+
+        return true;
+    }
+    
+    public function encodeurl($args)
+    {
+        // check we have the required input
+        if (!isset($args['modname']) || !isset($args['func']) || !isset($args['args'])) {
+            return LogUtil::registerArgsError();
+        }
+
+        if (!isset($args['type'])) {
+            $args['type'] = 'user';
+        }
+
+        // create an empty string ready for population
+        $vars = '';
+
+        // for the display function use the defined permalink structure
+        if ($args['func'] == 'display' || $args['func'] == 'displaypdf') {
+            // check for the generic object id parameter
+            if (isset($args['args']['objectid'])) {
+                $args['args']['sid'] = $args['args']['objectid'];
+            }
+            // check the permalink structure and obtain any missing vars
+            $permalinkformat = ModUtil::getVar('News', 'permalinkformat');
+            // get the item (will be cached by DBUtil)
+            $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
+            // replace the vars to form the permalink
+            $date = getdate(strtotime($item['from']));
+            $in = array('%category%', '%storyid%', '%storytitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
+            $out = array(@$item['__CATEGORIES__']['Main']['path_relative'], $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
+            $vars = str_replace($in, $out, $permalinkformat);
+            if (isset($args['args']['page']) && $args['args']['page'] != 1) {
+                $vars .= '/page/'.$args['args']['page'];
+            }
+        }
+
+        // for the archives use year/month
+        if ($args['func'] == 'archives' && isset($args['args']['year']) && isset($args['args']['month'])) {
+            $vars = "{$args['args']['year']}/{$args['args']['month']}";
+        }
+
+        // add the category name to the view link
+        if ($args['func'] == 'view' && isset($args['args']['prop'])) {
+            $vars = $args['args']['prop'];
+            $vars .= isset($args['args']['cat']) ? '/'.$args['args']['cat'] : '';
+        }
+
+        // view, main or now function pager
+        if (isset($args['args']['page']) && is_numeric($args['args']['page']) &&
+                ($args['func'] == '' || $args['func'] == 'main' || $args['func'] == 'view')) {
+            if (!empty($vars)) {
+                $vars .= "/page/{$args['args']['page']}";
+            } else {
+                $vars = "page/{$args['args']['page']}";
+            }
+        }
+
+        // don't display the function name if either displaying an article or the normal overview
+        if ($args['func'] == 'main' || $args['func'] == 'display') {
+            $args['func'] = '';
+        }
+
+        // construct the custom url part
+        if (empty($args['func']) && empty($vars)) {
+            return $args['modname'] . '/';
+        } elseif (empty($args['func'])) {
+            return $args['modname'] . '/' . $vars . '/';
+        } elseif (empty($vars)) {
+            return $args['modname'] . '/' . $args['func'] . '/';
+        } else {
+            return $args['modname'] . '/' . $args['func'] . '/' . $vars . '/';
+        }
+    }
+
 }
