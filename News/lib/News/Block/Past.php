@@ -58,10 +58,10 @@ function News_pastblock_display($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // get the number of stories shown on the frontpage
-    $storyhome = pnModGetVar('News', 'storyhome', 10);
+    $storyhome = ModUtil::getVar('News', 'storyhome', 10);
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (empty($vars['limit'])) {
@@ -69,7 +69,7 @@ function News_pastblock_display($blockinfo)
     }
 
     // call the API
-    $articles = pnModAPIFunc('News', 'user', 'getall',
+    $articles = ModUtil::apiFunc('News', 'user', 'getall',
                              array('hideonindex'    => 0,
                                    'order'    => 'from',
                                    'status'   => 0,
@@ -87,8 +87,8 @@ function News_pastblock_display($blockinfo)
     $limitreached = false;
     foreach ($articles as $article)
     {
-        $info  = pnModAPIFunc('News', 'user', 'getArticleInfo', $article);
-        $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
+        $info  = ModUtil::apiFunc('News', 'user', 'getArticleInfo', $article);
+        $links = ModUtil::apiFunc('News', 'user', 'getArticleLinks', $info);
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $preformat['title'] = "<a href=\"$links[fullarticle]\">$info[title]</a>";
         } else {
@@ -117,7 +117,7 @@ function News_pastblock_display($blockinfo)
         $news[$currentday] = $newscumul;
     }
 
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     $render->assign('news', $news);
 
     $render->assign('dom', $dom);
@@ -129,7 +129,7 @@ function News_pastblock_display($blockinfo)
 
     $blockinfo['content'] = $render->fetch('news_block_past.htm');
 
-    return pnBlockThemeBlock($blockinfo);
+    return BlockUtil::themeBlock($blockinfo);
 }
 
 /**
@@ -144,7 +144,7 @@ function News_pastblock_modify($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (empty($vars['limit'])) {
@@ -152,7 +152,7 @@ function News_pastblock_modify($blockinfo)
     }
 
     // Create output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     // As Admin output changes often, we do not want caching.
     $render->caching = false;
@@ -176,16 +176,16 @@ function News_pastblock_modify($blockinfo)
 function News_pastblock_update($blockinfo)
 {
     // Get current content
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // alter the corresponding variable
     $vars['limit'] = (int)FormUtil::getPassedValue('limit', null, 'POST');
 
     // write back the new contents
-    $blockinfo['content'] = pnBlockVarsToContent($vars);
+    $blockinfo['content'] = BlockUtil::varsToContent($vars);
 
     // clear the block cache
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     $render->clear_cache('news_block_past.htm');
 
     return $blockinfo;

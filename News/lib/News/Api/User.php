@@ -22,7 +22,7 @@ class news_result_checker
 
     function news_result_checker()
     {
-        $this->enablecategorization = pnModGetVar('News', 'enablecategorization');
+        $this->enablecategorization = ModUtil::getVar('News', 'enablecategorization');
     }
 
     // This method is called by DBUtil::selectObjectArrayFilter() for each and every search result.
@@ -98,11 +98,11 @@ function News_userapi_getall($args)
 
     // populate an array with each part of the where clause and then implode the array if there is a need.
     // credit to Jorg Napp for this technique - markwest
-    $tables = pnDBGetTables();
+    $tables = DBUtil::getTables();
     $news_column = $tables['news_column'];
     $queryargs = array();
 
-    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
+    if (System::getVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
         $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR $news_column[language] = '')";
     } elseif (!empty($args['language'])) {
         $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
@@ -169,7 +169,7 @@ function News_userapi_getall($args)
     $orderby = '';
     // Handle the sort order, if nothing requested use admin setting
     if (!isset($args['order'])) {
-        $args['order'] = pnModGetVar('News', 'storyorder');
+        $args['order'] = ModUtil::getVar('News', 'storyorder');
         switch ($args['order'])
         {
             case 0:
@@ -213,7 +213,7 @@ function News_userapi_getall($args)
 
     // need to do this here as the category expansion code can't know the
     // root category which we need to build the relative path component
-    if (pnModGetVar('News', 'enablecategorization') && $objArray && isset($args['catregistry']) && $args['catregistry']) {
+    if (ModUtil::getVar('News', 'enablecategorization') && $objArray && isset($args['catregistry']) && $args['catregistry']) {
         ObjectUtil::postProcessExpandedObjectArrayCategories($objArray, $args['catregistry']);
     }
 
@@ -291,7 +291,7 @@ function News_userapi_get($args)
     }
 
     // process the relative paths of the categories
-    if (pnModGetVar('News', 'enablecategorization') && !empty($item['__CATEGORIES__'])) {
+    if (ModUtil::getVar('News', 'enablecategorization') && !empty($item['__CATEGORIES__'])) {
         static $registeredCats;
         if (!isset($registeredCats)) {
             if (!($class = Loader::loadClass('CategoryRegistryUtil'))) {
@@ -320,7 +320,7 @@ function News_userapi_getMonthsWithNews($args)
         return false;
     }
 
-    $tables =& pnDBGetTables();
+    $tables =& DBUtil::getTables();
     $news_column = $tables['news_column'];
 
     // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
@@ -365,11 +365,11 @@ function News_userapi_countitems($args)
 
     // Get optional arguments a build the where conditional
     // Credit to Jorg Napp for this superb technique.
-    $tables = pnDBGetTables();
+    $tables = DBUtil::getTables();
     $news_column = $tables['news_column'];
     $queryargs = array();
 
-    if (pnConfigGetVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
+    if (System::getVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
         $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR $news_column[language] = '')";
     } elseif (!empty($args['language'])) {
         $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
@@ -474,12 +474,12 @@ function News_userapi_getArticleInfo($info)
 
     // Work out name of story submitter
     if ($info['cr_uid'] == 0) {
-        $anonymous = pnConfigGetVar('anonymous');
+        $anonymous = System::getVar('anonymous');
         if (empty($info['contributor'])) {
             $info['contributor'] = $anonymous;
         }
     } elseif (empty($info['contributor'])) {
-        $info['contributor'] = pnUserGetVar('uname', $info['cr_uid']);
+        $info['contributor'] = UserUtil::getVar('uname', $info['cr_uid']);
     }
 
     // Change the __CATEGORIES__ field to a more usable name
@@ -495,7 +495,7 @@ function News_userapi_getArticleInfo($info)
     }
 
     // For legacy reasons we add some hardwired category and topic variables
-    if (!empty($info['categories']) && pnModGetVar('News', 'enablecategorization')) {
+    if (!empty($info['categories']) && ModUtil::getVar('News', 'enablecategorization')) {
         $lang = ZLanguage::getLanguageCode();
         $categoryField = _News_getCategoryField();
         $topicField = _News_getTopicField();
@@ -552,7 +552,7 @@ function News_userapi_getArticleInfo($info)
     }
 
     // check which variable to use for the category
-    if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
+    if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
         $info['catvar'] = $info['catpath'];
     } else {
         $info['catvar'] = $info['catid'];
@@ -569,7 +569,7 @@ function News_userapi_getArticleInfo($info)
     // Hooks filtering should be after formatForDisplay to allow Hook transforms
     list($info['hometext'],
          $info['bodytext'],
-         $info['notes']) = pnModCallHooks('item', 'transform', '',
+         $info['notes']) = ModUtil::callHooks('item', 'transform', '',
                                           array($info['hometext'],
                                                 $info['bodytext'],
                                                 $info['notes']));
@@ -594,8 +594,8 @@ function News_userapi_getArticleInfo($info)
     unset($info['format_type']);
 
     // Check for comments
-    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-        $info['commentcount'] = pnModAPIFunc('EZComments', 'user', 'countitems',
+    if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+        $info['commentcount'] = ModUtil::apiFunc('EZComments', 'user', 'countitems',
                                              array('mod' => 'News',
                                                    'objectid' => $info['sid'],
                                                    'status' => 0));
@@ -614,15 +614,15 @@ function News_userapi_getArticleInfo($info)
 function News_userapi_getArticleLinks($info)
 {
     // Allowed to comment?
-    if (pnModAvailable('EZComments') &&  pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-        $comment = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+    if (ModUtil::available('EZComments') &&  ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+        $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
     } else {
         $comment     = '';
     }
 
     // Allowed to read full article?
     if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
-        $fullarticle = DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'])));
+        $fullarticle = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'])));
     } else {
         $fullarticle = '';
     }
@@ -631,10 +631,10 @@ function News_userapi_getArticleLinks($info)
     if (!empty($info['topicpath'])) {
         $topicField = _News_getTopicField();
         // check which variable to use for the topic
-        if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
-            $searchtopic = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
+        if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
+            $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
         } else {
-            $searchtopic = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['tid'])));
+            $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['tid'])));
         }
     } else {
         $searchtopic = '';
@@ -642,35 +642,35 @@ function News_userapi_getArticleLinks($info)
 
     // Link to all the categories
     $categories = array();
-    if (!empty($info['categories']) && is_array($info['categories']) && pnModGetVar('News', 'enablecategorization')) {
+    if (!empty($info['categories']) && is_array($info['categories']) && ModUtil::getVar('News', 'enablecategorization')) {
         // check which variable to use for the category
-        if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
+        if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
             $field = 'path_relative';
         } else {
             $field = 'id';
         }
         $properties = array_keys($info['categories']);
         foreach ($properties as $prop) {
-            $categories[$prop] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $prop, 'cat' => $info['categories'][$prop][$field])));
+            $categories[$prop] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $prop, 'cat' => $info['categories'][$prop][$field])));
         }
     }
 
     $author = $info['contributor'];
-    $profileModule = pnConfigGetVar('profilemodule', '');
-    if (!empty($profileModule) && pnModAvailable($profileModule)) {
-        $author = pnModURL($profileModule, 'user', 'view', array('uname' => $author));
+    $profileModule = System::getVar('profilemodule', '');
+    if (!empty($profileModule) && ModUtil::available($profileModule)) {
+        $author = ModUtil::url($profileModule, 'user', 'view', array('uname' => $author));
     }
 
     // Set up the array itself
-    $links = array ('category'        => DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
+    $links = array ('category'        => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
                     'categories'      => $categories,
-                    'permalink'       => DataUtil::formatForDisplayHTML(pnModURL('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
+                    'permalink'       => DataUtil::formatForDisplayHTML(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
                     'comment'         => $comment,
                     'fullarticle'     => $fullarticle,
                     'searchtopic'     => $searchtopic,
-                    'print'           => DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
-                    'commentrssfeed'  => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'commentatomfeed' => DataUtil::formatForDisplay(pnModURL('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'print'           => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
+                    'commentrssfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'commentatomfeed' => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
                     'author'          => DataUtil::formatForDisplay($author),
                     'version'         => 1);
 
@@ -721,7 +721,7 @@ function News_userapi_getArticlePreformat($args)
 
     $comment = '';
     $commentlink = '';
-    if (pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+    if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
         // Work out how to say 'comment(s)(?)' correctly
         if ($info['commentcount'] == 0) {
             $comment = __('Comments?', $dom);
@@ -747,7 +747,7 @@ function News_userapi_getArticlePreformat($args)
     // Build the categories preformated content
     $categories = array();
     $categorynames = array();
-    if (!empty($links['categories']) && is_array($links['categories']) && pnModGetVar('News', 'enablecategorization')) {
+    if (!empty($links['categories']) && is_array($links['categories']) && ModUtil::getVar('News', 'enablecategorization')) {
         $lang = ZLanguage::getLanguageCode();
         $properties = array_keys($links['categories']);
         foreach ($properties as $prop) {
@@ -774,7 +774,7 @@ function News_userapi_getArticlePreformat($args)
                        'version'       => 1);
 
     if (!empty($info['topicimage'])) {
-        $catimagepath = pnModGetVar('News', 'catimagepath');
+        $catimagepath = ModUtil::getVar('News', 'catimagepath');
         $preformat['searchtopic'] = '<a href="'.DataUtil::formatForDisplay($links['searchtopic']).'"><img src="'.$catimagepath.$info['topicimage'] .'" title="'.$info['topictext'].'" alt="'.$info['topictext'].'" /></a>';
     } else {
         $preformat['searchtopic'] = '';
@@ -892,10 +892,10 @@ function News_userapi_create($args)
 
     // Work out name of story submitter and approver
     $args['approver'] = 0;
-    if (!pnUserLoggedIn() && empty($args['contributor'])) {
-        $args['contributor'] = pnConfigGetVar('anonymous');
+    if (!UserUtil::isLoggedIn() && empty($args['contributor'])) {
+        $args['contributor'] = System::getVar('anonymous');
     } else {
-        $args['contributor'] = pnUserGetVar('uname');
+        $args['contributor'] = UserUtil::getVar('uname');
         if ($args['published_status'] == 0) {
             $args['approver'] = SessionUtil::getVar('uid');
         }
@@ -917,10 +917,10 @@ function News_userapi_create($args)
     }
 
     // Let any hooks know that we have created a new item
-    pnModCallHooks('item', 'create', $args['sid'], array('module' => 'News'));
+    ModUtil::callHooks('item', 'create', $args['sid'], array('module' => 'News'));
 
     // An item was created, so we clear all cached pages of the items list.
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     $render->clear_cache('news_user_view.htm');
 
     // Return the id of the newly created item to the calling process
@@ -936,15 +936,15 @@ function News_userapi_isformatted($args)
         $args['func'] = 'all';
     }
 
-    if (pnModAvailable('scribite')) {
-        $modinfo = pnModGetInfo(pnModGetIDFromName('scribite'));
+    if (ModUtil::available('scribite')) {
+        $modinfo = ModUtil::getInfo(ModUtil::getIdFromName('scribite'));
         if (version_compare($modinfo['version'], '2.2', '>=')) {
             $apiargs = array('modulename' => 'News'); // parameter handling corrected in 2.2
         } else {
             $apiargs = 'News'; // old direct parameter
         }
 
-        $modconfig = pnModAPIFunc('scribite', 'user', 'getModuleConfig', $apiargs);
+        $modconfig = ModUtil::apiFunc('scribite', 'user', 'getModuleConfig', $apiargs);
         if (in_array($args['func'], (array)$modconfig['modfuncs']) && $modconfig['modeditor'] != '-') {
             return true;
         }
@@ -960,7 +960,7 @@ function _News_getCategoryField()
 
 function _News_getTopicField()
 {
-    $prop = pnModGetVar('News', 'topicproperty');
+    $prop = ModUtil::getVar('News', 'topicproperty');
     return empty($prop) ? 'Main' : $prop;
 }
 

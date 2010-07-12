@@ -71,15 +71,15 @@ function smarty_function_articleadminlinks($params, &$smarty)
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'prototype-date-extensions.js'), $smarty);
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'datepicker.js'), $smarty);
             smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'datepicker-locale.js'), $smarty);
-            if (pnModGetVar('News', 'enableattribution')) {
+            if (ModUtil::getVar('News', 'enableattribution')) {
                 PageUtil::addVar('javascript', 'javascript/helpers/Zikula.itemlist.js');
             }
             PageUtil::addVar('stylesheet', 'modules/News/pnstyle/datepicker.css');
-            $articlelinks .= '<img id="news_loadnews" src="'.pnGetBaseURL().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
+            $articlelinks .= '<img id="news_loadnews" src="'.System::getBaseUrl().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
         } else {
-            $articlelinks .= '<span class="' . $params['class'] . '"> ' . $params['start'] . ' <a href="' . DataUtil::formatForDisplayHTML(pnModURL('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . __('Edit', $dom) . '</a>';
+            $articlelinks .= '<span class="' . $params['class'] . '"> ' . $params['start'] . ' <a href="' . DataUtil::formatForDisplayHTML(ModUtil::url('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . __('Edit', $dom) . '</a>';
             if (SecurityUtil::checkPermission('News::', "$info[cr_uid]:$info[cattitle]:$info[sid]", ACCESS_DELETE)) {
-                $articlelinks .= ' ' . $params['seperator'] . ' <a href="' . DataUtil::formatForDisplay(pnModURL('News', 'admin', 'delete', array('sid' => $params['sid']))) . '">' . __('Delete', $dom) . '</a>';
+                $articlelinks .= ' ' . $params['seperator'] . ' <a href="' . DataUtil::formatForDisplay(ModUtil::url('News', 'admin', 'delete', array('sid' => $params['sid']))) . '">' . __('Delete', $dom) . '</a>';
             }
             $articlelinks .= ' ' . $params['end'] . "</span>\n";
         }

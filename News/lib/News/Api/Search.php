@@ -29,7 +29,7 @@ function news_searchapi_options($args)
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
         // Create output object - this object will store all of our output so that
         // we can return it easily when required
-        $render = & pnRender::getInstance('News');
+        $render = Zikula_View::getInstance('News');
         $render->assign('active', (isset($args['active']) && isset($args['active']['News'])) || (!isset($args['active'])));
         return $render->fetch('news_search_options.htm');
     }
@@ -46,8 +46,8 @@ function news_searchapi_search($args)
         return true;
     }
 
-    pnModDBInfoLoad('Search');
-    $tables = pnDBGetTables();
+    ModUtil::dbInfoLoad('Search');
+    $tables = DBUtil::getTables();
     $newsTable  = $tables['news'];
     $newsColumn = $tables['news_column'];
     $searchTable   = $tables['search_result'];
@@ -75,7 +75,7 @@ function news_searchapi_search($args)
    $searchColumn[session])
 VALUES ";
 
-    pnModAPILoad('News', 'user');
+    ModUtil::loadApi('News', 'user');
 
     $permChecker = new news_result_checker();
     $articles = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
@@ -109,7 +109,7 @@ function news_searchapi_search_check(&$args)
     $datarow = &$args['datarow'];
     $storyId = $datarow['extra'];
 
-    $datarow['url'] = pnModUrl('News', 'user', 'display', array('sid' => $storyId));
+    $datarow['url'] = ModUtil::url('News', 'user', 'display', array('sid' => $storyId));
 
     return true;
 }

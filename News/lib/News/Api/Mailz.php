@@ -52,8 +52,8 @@ function News_mailzapi_getContent($args)
             //$uid = $args['uid'];
             // Get matching news stories published since last newsletter
             // No selection on categories made !!
-            $items = pnModAPIFunc('News', 'user', 'getall',
-                                  array('numitems'     => pnModGetVar('News', 'itemsperpage'),
+            $items = ModUtil::apiFunc('News', 'user', 'getall',
+                                  array('numitems'     => ModUtil::getVar('News', 'itemsperpage'),
                                         'status'       => 0,
                                         'from'         => DateUtil::getDatetime($args['last']),
                                         'filterbydate' => true));
@@ -66,7 +66,7 @@ function News_mailzapi_getContent($args)
                         $output .= $counter . '. ' . $item['title'] . " (" . __f('by %1$s on %2$s', array($item['contributor'], DateUtil::formatDatetime($item['from'],'datebrief')), $dom) . ")\n";
                     }
                 } else {
-                    $render = pnRender::getInstance('News');
+                    $render = Zikula_View::getInstance('News');
                     $render->assign('readperm', SecurityUtil::checkPermission('News::', "::", ACCESS_READ));
                     $render->assign('articles', $items);
                     $output = $render->fetch('mailz_mailz_listarticles.htm');

@@ -17,11 +17,11 @@
  * 
  * This function is called internally by the core whenever the module is
  * loaded. It delivers the table information to the core.
- * It can be loaded explicitly using the pnModDBInfoLoad() API function.
+ * It can be loaded explicitly using the ModUtil::dbInfoLoad() API function.
  * 
  * @return       array       The table information.
  */
-function News_pntables()
+function News_tables()
 {
     // Initialise table array
     $tables = array();
@@ -70,11 +70,11 @@ function News_pntables()
     );
 
     // Enable categorization services
-    $tables['news_db_extra_enable_categorization'] = pnModGetVar('News', 'enablecategorization');
+    $tables['news_db_extra_enable_categorization'] = ModUtil::getVar('News', 'enablecategorization');
     $tables['news_primary_key_column'] = 'sid';
 
     // Enable attribution services
-    $tables['news_db_extra_enable_attribution'] = pnModGetVar('News', 'enableattribution');
+    $tables['news_db_extra_enable_attribution'] = ModUtil::getVar('News', 'enableattribution');
 
     // add standard data fields
     ObjectUtil::addStandardFieldsToTableDefinition ($tables['news_column'], 'pn_');

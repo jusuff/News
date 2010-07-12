@@ -118,7 +118,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   {
     // Parameters for category related items properties like topicimage
     $lang = ZLanguage::getLanguageCode();
-    $topicProperty = pnModGetVar('News', 'topicproperty');
+    $topicProperty = ModUtil::getVar('News', 'topicproperty');
     $topicField = empty($topicProperty) ? 'Main' : $topicProperty;
 
     // work out the parameters for the News api call
@@ -153,7 +153,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
             // Use News module setting, so don't set apiargs[order]
     }
 
-    $enablecategorization = pnModGetVar('News', 'enablecategorization');
+    $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
 
     // Make a category filter only if categorization is enabled in News module
     if ($enablecategorization && $this->categories != null) {
@@ -175,15 +175,15 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $apiargs['filterbydate'] = true;    
 
     // call the News api and get the requested articles with the above arguments
-    $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
+    $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
 
     // create the output object
-    $render = & pnRender::getInstance('News', false);
+    $render = Zikula_View::getInstance('News', false);
 
     // UserUtil is not automatically loaded, so load it now if needed and set anonymous
     if ($this->dispuname) {
         Loader::loadClass('UserUtil');
-        $anonymous = pnConfigGetVar('anonymous');
+        $anonymous = System::getVar('anonymous');
     }
 
     // check for an empty return
@@ -205,10 +205,10 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                 // set the path of the topic
                 $items[$k]['topicpath']  = $items[$k]['__CATEGORIES__'][$topicField]['path_relative'];
                 // set the url to search for this topic
-                if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
-                    $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['topicpath'])));
+                if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
+                    $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['topicpath'])));
                 } else {
-                    $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['tid'])));
+                    $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['tid'])));
                 }
             } else {
                 $items[$k]['topic']      = null;
@@ -241,8 +241,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                 }
             }
             // Get the optional commentcount if EZComments is available
-            if ($this->dispcomments && pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News')) {
-                $items[$k]['comments'] = pnModAPIFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $items[$k]['sid'], 'status' => 0));
+            if ($this->dispcomments && ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News')) {
+                $items[$k]['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $items[$k]['sid'], 'status' => 0));
             }
             // Optional display of the hometext (frontpage teaser)
             if ($this->disphometext) {
@@ -274,7 +274,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         $render->assign('titlewraptext', $this->titlewraptext);
         
     }
-    $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
+    $render->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
     $render->assign('linktosubmit', $this->linktosubmit);
     $render->assign('stories', $items);
     $render->assign('title', $this->title);
@@ -344,7 +344,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $dom = ZLanguage::getModuleDomain('News');
 
     // Get the News categorization setting
-    $enablecategorization = pnModGetVar('News', 'enablecategorization');
+    $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
     // Select categories only if enabled for the News module, otherwise selector will not be shown in modify template
     if ($enablecategorization) {
         // load the categories system

@@ -59,7 +59,7 @@ function News_slideshowblock_display($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (!isset($vars['limit'])) {
@@ -87,7 +87,7 @@ function News_slideshowblock_display($blockinfo)
     $apiargs['filterbydate'] = true;
 
     // call the api
-    $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
+    $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
 
     // check for an empty return
     if (empty($items)) {
@@ -95,11 +95,11 @@ function News_slideshowblock_display($blockinfo)
     }
 
     // create the output object
-    $render = & pnRender::getInstance('News', false);
+    $render = Zikula_View::getInstance('News', false);
 
     // loop through the items
-    $picupload_uploaddir = pnModGetVar('News', 'picupload_uploaddir');
-    $picupload_maxpictures = pnModGetVar('News', 'picupload_maxpictures');
+    $picupload_uploaddir = ModUtil::getVar('News', 'picupload_uploaddir');
+    $picupload_maxpictures = ModUtil::getVar('News', 'picupload_maxpictures');
     $slideshowoutput = array();
 	$count = 0;
     foreach ($items as $item) {
@@ -119,7 +119,7 @@ function News_slideshowblock_display($blockinfo)
 
     $blockinfo['content'] = $render->fetch('news_block_slideshow.htm');
 
-    return pnBlockThemeBlock($blockinfo);
+    return BlockUtil::themeBlock($blockinfo);
 }
 
 /**
@@ -134,7 +134,7 @@ function News_slideshowblock_modify($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (empty($vars['limit'])) {
@@ -142,7 +142,7 @@ function News_slideshowblock_modify($blockinfo)
     }
 
     // Create output object
-    $render = & pnRender::getInstance('News', false);
+    $render = Zikula_View::getInstance('News', false);
 
     // load the categories system
     if (!Loader::loadClass('CategoryRegistryUtil')) {
@@ -150,7 +150,7 @@ function News_slideshowblock_modify($blockinfo)
     }
     $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
     $render->assign('mainCategory', $mainCat);
-    $render->assign(pnModGetVar('News'));
+    $render->assign(ModUtil::getVar('News'));
 
     // assign the block vars
     $render->assign($vars);
@@ -170,17 +170,17 @@ function News_slideshowblock_modify($blockinfo)
 function News_slideshowblock_update($blockinfo)
 {
     // Get current content
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // alter the corresponding variable
     $vars['category']    = FormUtil::getPassedValue('category', null, 'POST');
     $vars['limit']       = (int)FormUtil::getPassedValue('limit', null, 'POST');
 
     // write back the new contents
-    $blockinfo['content'] = pnBlockVarsToContent($vars);
+    $blockinfo['content'] = BlockUtil::varsToContent($vars);
 
     // clear the block cache
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     $render->clear_cache('news_block_slideshow.htm');
 
     return $blockinfo;

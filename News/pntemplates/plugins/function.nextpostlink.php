@@ -11,9 +11,9 @@
 */
 
 /**
- * pnRender plugin
+ * view plugin
  *
- * This file is a plugin for pnRender, the Zikula implementation of Smarty
+ * This file is a plugin for view, the Zikula implementation of Smarty
  *
  * @package Zikula_3rdParty_Modules
  * @subpackage News
@@ -51,7 +51,7 @@ function smarty_function_nextpostlink($params, &$smarty)
         $params['layout'] = '%link% <span class="news_metanav">&raquo;</span>';
     }
 
-    $article = pnModAPIFunc('News', 'user', 'getall',
+    $article = ModUtil::apiFunc('News', 'user', 'getall',
                             array('query' => array(array('sid', '>', $params[sid])),
                                   'orderdir' => 'ASC',
                                   'numitems' => 1));
@@ -60,7 +60,7 @@ function smarty_function_nextpostlink($params, &$smarty)
         return;
     }
 
-    $articlelink = '<a href="'.DataUtil::formatForDisplay(pnModURL('News', 'user', 'display', array('sid' => $article[0]['sid']))).'">'.DataUtil::formatForDisplay($article[0]['title']).'</a>';
+    $articlelink = '<a href="'.DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $article[0]['sid']))).'">'.DataUtil::formatForDisplay($article[0]['title']).'</a>';
     $articlelink = str_replace('%link%', $articlelink, $params['layout']);
 
     if (isset($params['assign'])) {

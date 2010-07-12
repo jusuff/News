@@ -94,13 +94,13 @@ function News_storiesextblock_display($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
     // Get the News categorization setting
-    $enablecategorization = pnModGetVar('News', 'enablecategorization');
+    $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
     $lang = ZLanguage::getLanguageCode();
-    $topicProperty = pnModGetVar('News', 'topicproperty');
+    $topicProperty = ModUtil::getVar('News', 'topicproperty');
     $topicField = empty($topicProperty) ? 'Main' : $topicProperty;
-    $catimagepath = pnModGetVar('News', 'catimagepath');
+    $catimagepath = ModUtil::getVar('News', 'catimagepath');
 
     // --- Setting of the Defaults
     if (!isset($vars['category'])) {
@@ -256,14 +256,14 @@ height:50px;
     $apiargs['filterbydate'] = true;
 
     // Call the News api and get the requested articles with the above arguments
-    $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
+    $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
 
     // check for an empty return
     if (empty($items)) {
         if ($vars['showemptyresult']) {
             // Show empty result message instead of empty block if variable is set
             $blockinfo['content'] = __('No articles.', $dom);
-            return pnBlockThemeBlock($blockinfo);
+            return BlockUtil::themeBlock($blockinfo);
         } else {
             return;
         }
@@ -272,11 +272,11 @@ height:50px;
     // UserUtil is not automatically loaded, so load it now if needed and set anonymous
     if ($vars['dispuname']) {
         Loader::loadClass('UserUtil');
-        $anonymous = pnConfigGetVar('anonymous');
+        $anonymous = System::getVar('anonymous');
     }
 
     // create the output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     // --- Select the configurable row template or the default. The row templates is cached with its sid (storyid)
     $storiesoutput = array();
@@ -302,10 +302,10 @@ height:50px;
             // set the path of the topic
             $item['topicpath']  = $item['__CATEGORIES__'][$topicField]['path_relative'];
             // set the url to search for this topic
-            if (pnConfigGetVar('shorturls') && pnConfigGetVar('shorturlstype') == 0) {
-                $item['topicsearchurl'] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['topicpath'])));
+            if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
+                $item['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['topicpath'])));
             } else {
-                $item['topicsearchurl'] = DataUtil::formatForDisplay(pnModURL('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['tid'])));
+                $item['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['tid'])));
             }
         } else {
             $item['topic']      = null;
@@ -337,8 +337,8 @@ height:50px;
             }
         }
         // Check for EZComments
-        if ($vars['dispcomments'] && pnModAvailable('EZComments') && pnModIsHooked('EZComments', 'News')) {
-            $item['comments'] = pnModAPIFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $item['sid'], 'status' => 0));
+        if ($vars['dispcomments'] && ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News')) {
+            $item['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $item['sid'], 'status' => 0));
         }
         if ($vars['disphometext']) {
             if ($vars['maxhometextlength'] > 0 && strlen(strip_tags($item['hometext'])) > (int)$vars['maxhometextlength']) {
@@ -390,7 +390,7 @@ height:50px;
 
     $blockinfo['content'] = $render->fetch($blocktemplate);
 
-    return pnBlockThemeBlock($blockinfo);
+    return BlockUtil::themeBlock($blockinfo);
 }
 
 /**
@@ -405,7 +405,7 @@ function News_storiesextblock_modify($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (!isset($vars['category'])) {
@@ -510,10 +510,10 @@ height:50px;
     }
 
     // Get the News categorization setting
-    $enablecategorization = pnModGetVar('News', 'enablecategorization');
+    $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
 
     // Create output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     // As Admin output changes often, we do not want caching.
     $render->caching = false;
 
@@ -547,7 +547,7 @@ height:50px;
 function News_storiesextblock_update($blockinfo)
 {
     // Get current content
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // alter the corresponding variable
     $vars['show'] = (int)FormUtil::getPassedValue('show', 1, 'POST');
@@ -583,7 +583,7 @@ function News_storiesextblock_update($blockinfo)
     $vars['scrolldelay'] = (int)FormUtil::getPassedValue('scrolldelay', 0, 'POST');
     $vars['scrollmspeed'] = (int)FormUtil::getPassedValue('scrollmspeed', 0, 'POST');
 
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     // Check the templates 
     if (!$render->template_exists($vars['rowtemplate'])) {
@@ -594,7 +594,7 @@ function News_storiesextblock_update($blockinfo)
     }
 
     // write back the new contents
-    $blockinfo['content'] = pnBlockVarsToContent($vars);
+    $blockinfo['content'] = BlockUtil::varsToContent($vars);
 
     // clear the block cache
     $render->clear_all_cache();

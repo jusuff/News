@@ -29,7 +29,7 @@ function News_adminapi_delete($args)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Get the news story
-    $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
+    $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
         return LogUtil::registerError(__('Error! No such article found.', $dom));
@@ -45,7 +45,7 @@ function News_adminapi_delete($args)
     }
 
 	// delete News images (credit msshams)
-    $modvars = pnModGetVar('News');
+    $modvars = ModUtil::getVar('News');
 	if ($modvars['picupload_enabled'] && $item['pictures'] > 0){
         $uploaddir = $modvars['picupload_uploaddir'] . '/';
 		for ($i=0; $i<$item['pictures']; $i++){
@@ -58,7 +58,7 @@ function News_adminapi_delete($args)
 	}
 
     // Let any hooks know that we have deleted an item
-    pnModCallHooks('item', 'delete', $args['sid'], array('module' => 'News'));
+    ModUtil::callHooks('item', 'delete', $args['sid'], array('module' => 'News'));
 
     // Let the calling process know that we have finished successfully
     return true;
@@ -104,7 +104,7 @@ function News_adminapi_update($args)
     }
 
     // Get the news item
-    $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['sid']));
+    $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['sid']));
 
     if ($item == false) {
         return LogUtil::registerError(__('Error! No such article found.', $dom));
@@ -170,10 +170,10 @@ function News_adminapi_update($args)
     }
 
     // Let any hooks know that we have updated an item.
-    pnModCallHooks('item', 'update', $args['sid'], array('module' => 'News'));
+    ModUtil::callHooks('item', 'update', $args['sid'], array('module' => 'News'));
 
     // The item has been modified, so we clear all cached pages of this item.
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     $render->clear_cache(null, $args['sid']);
     $render->clear_cache('news_user_view.htm');
 
@@ -194,10 +194,10 @@ function News_adminapi_purgepermalinks($args)
     }
 
     // disable categorization to do this (if enabled)
-    $catenabled = pnModGetVar('News', 'enablecategorization');
+    $catenabled = ModUtil::getVar('News', 'enablecategorization');
     if ($catenabled) {
-        pnModSetVar('News', 'enablecategorization', false);
-        pnModDBInfoLoad('News', 'News', true);
+        ModUtil::setVar('News', 'enablecategorization', false);
+        ModUtil::dbInfoLoad('News', 'News', true);
     }
 
     // get all the ID and permalink of the table
@@ -216,7 +216,7 @@ function News_adminapi_purgepermalinks($args)
 
     // restore the categorization if was enabled
     if ($catenabled) {
-        pnModSetVar('News', 'enablecategorization', true);
+        ModUtil::setVar('News', 'enablecategorization', true);
     }
 
     if (empty($data)) {
@@ -243,18 +243,18 @@ function news_adminapi_getlinks()
     $links = array();
 
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
-        $links[] = array('url'  => pnModURL('News', 'admin', 'view'),
+        $links[] = array('url'  => ModUtil::url('News', 'admin', 'view'),
                          'text' => __('News articles list', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
-        $links[] = array('url'  => pnModURL('News', 'admin', 'new'),
+        $links[] = array('url'  => ModUtil::url('News', 'admin', 'new'),
                          'text' =>  __('Create new article', $dom));
     }
     if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
-        $links[] = array('url'  => pnModURL('News', 'admin', 'view', array('purge' => 1)),
+        $links[] = array('url'  => ModUtil::url('News', 'admin', 'view', array('purge' => 1)),
                          'text' => __('Purge permalinks', $dom));
 
-        $links[] = array('url'  => pnModURL('News', 'admin', 'modifyconfig'),
+        $links[] = array('url'  => ModUtil::url('News', 'admin', 'modifyconfig'),
                          'text' => __('Settings', $dom));
     }
 

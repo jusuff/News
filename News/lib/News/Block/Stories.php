@@ -59,7 +59,7 @@ function News_storiesblock_display($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (!isset($vars['storiestype'])) {
@@ -103,7 +103,7 @@ function News_storiesblock_display($blockinfo)
     $apiargs['filterbydate'] = true;
 
     // call the api
-    $items = pnModAPIFunc('News', 'user', 'getall', $apiargs);
+    $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
 
     // check for an empty return
     if (empty($items)) {
@@ -111,7 +111,7 @@ function News_storiesblock_display($blockinfo)
     }
 
     // create the output object
-    $render = & pnRender::getInstance('News', false);
+    $render = Zikula_View::getInstance('News', false);
 
     // loop through the items
     $storiesoutput = array();
@@ -133,7 +133,7 @@ function News_storiesblock_display($blockinfo)
 
     $blockinfo['content'] = $render->fetch('news_block_stories.htm');
 
-    return pnBlockThemeBlock($blockinfo);
+    return BlockUtil::themeBlock($blockinfo);
 }
 
 /**
@@ -148,7 +148,7 @@ function News_storiesblock_modify($blockinfo)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // Defaults
     if (empty($vars['storiestype'])) {
@@ -159,7 +159,7 @@ function News_storiesblock_modify($blockinfo)
     }
 
     // Create output object
-    $render = & pnRender::getInstance('News', false);
+    $render = Zikula_View::getInstance('News', false);
 
     // load the categories system
     if (!Loader::loadClass('CategoryRegistryUtil')) {
@@ -167,7 +167,7 @@ function News_storiesblock_modify($blockinfo)
     }
     $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
     $render->assign('mainCategory', $mainCat);
-    $render->assign(pnModGetVar('News'));
+    $render->assign(ModUtil::getVar('News'));
 
     // assign the block vars
     $render->assign($vars);
@@ -188,7 +188,7 @@ function News_storiesblock_modify($blockinfo)
 function News_storiesblock_update($blockinfo)
 {
     // Get current content
-    $vars = pnBlockVarsFromContent($blockinfo['content']);
+    $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
     // alter the corresponding variable
     $vars['storiestype'] = FormUtil::getPassedValue('storiestype', null, 'POST');
@@ -197,10 +197,10 @@ function News_storiesblock_update($blockinfo)
     $vars['limit']       = (int)FormUtil::getPassedValue('limit', null, 'POST');
 
     // write back the new contents
-    $blockinfo['content'] = pnBlockVarsToContent($vars);
+    $blockinfo['content'] = BlockUtil::varsToContent($vars);
 
     // clear the block cache
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
     $render->clear_cache('news_block_stories.htm');
 
     return $blockinfo;

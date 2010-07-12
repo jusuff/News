@@ -22,7 +22,7 @@ function News_user_main()
 {
     $args = array(
         'hideonindex' => 0,
-        'itemsperpage' => pnModGetVar('News', 'storyhome', 10)
+        'itemsperpage' => ModUtil::getVar('News', 'storyhome', 10)
     );
     return News_user_view($args);
 }
@@ -88,13 +88,13 @@ function News_user_new($args)
 
     // Create output object
     if (strtolower($type) == 'admin') {
-        $render = & pnRender::getInstance('News', false);
+        $render = Zikula_View::getInstance('News', false);
     } else {
-        $render = & pnRender::getInstance('News');
+        $render = Zikula_View::getInstance('News');
     }
 
     // Get the module vars
-    $modvars = pnModGetVar('News');
+    $modvars = ModUtil::getVar('News');
 
     if ($modvars['enablecategorization']) {
         // load the categories system
@@ -119,7 +119,7 @@ function News_user_new($args)
     $render->assign($item);
 
     // Assign the content format
-    $formattedcontent = pnModAPIFunc('News', 'user', 'isformatted', array('func' => 'new'));
+    $formattedcontent = ModUtil::apiFunc('News', 'user', 'isformatted', array('func' => 'new'));
     $render->assign('formattedcontent', $formattedcontent);
 
     $render->assign('accessadd', 0);
@@ -196,7 +196,7 @@ function News_user_create($args)
     }
 
     // Get the referer type for later use
-    if (stristr(pnServerGetVar('HTTP_REFERER'), 'type=admin')) {
+    if (stristr(System::serverGetVar('HTTP_REFERER'), 'type=admin')) {
         $referertype = 'admin';
     } else {
         $referertype = 'user';
@@ -233,12 +233,12 @@ function News_user_create($args)
         }
         // back to the referer form
         SessionUtil::setVar('newsitem', $item);
-        return pnRedirect(pnModURL('News', $referertype, 'new'));
+        return System::redirect(ModUtil::url('News', $referertype, 'new'));
 
     } else {
         // Confirm authorisation code.
         if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(pnModURL('News', $referertype, 'view'));
+            return LogUtil::registerAuthidError(ModUtil::url('News', $referertype, 'view'));
         }
 
         // As we're not previewing the item let's remove it from the session
@@ -246,7 +246,7 @@ function News_user_create($args)
     }
 
     // get all module vars
-    $modvars = pnModGetVar('News');
+    $modvars = ModUtil::getVar('News');
     
     // count the attached pictures (credit msshams)
     if ($modvars['picupload_enabled']) {
@@ -263,7 +263,7 @@ function News_user_create($args)
     // Notable by its absence there is no security check here
     
     // Create the news story
-    $sid = pnModAPIFunc('News', 'user', 'create', $item);
+    $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
 
 
     if ($sid != false) {
@@ -271,23 +271,23 @@ function News_user_create($args)
         LogUtil::registerStatus(__('Done! Created new article.', $dom));
 
         // notify the configured addresses of a new Pending Review article
-        $notifyonpending = pnModGetVar('News', 'notifyonpending', false);
+        $notifyonpending = ModUtil::getVar('News', 'notifyonpending', false);
         if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
-            $sitename = pnConfigGetVar('sitename');
-            $adminmail = pnConfigGetVar('adminmail');
+            $sitename = System::getVar('sitename');
+            $adminmail = System::getVar('adminmail');
             $fromname    = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
             $fromaddress = !empty($modvars['notifyonpending_fromaddress']) ? $modvars['notifyonpending_fromaddress'] : $adminmail;
             $toname    = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
             $toaddress = !empty($modvars['notifyonpending_toaddress']) ? $modvars['notifyonpending_toaddress'] : $adminmail;
             $subject     = $modvars['notifyonpending_subject'];
             $html        = $modvars['notifyonpending_html'];
-            if (!pnUserLoggedIn()) {
-                $contributor = pnConfigGetVar('anonymous');
+            if (!UserUtil::isLoggedIn()) {
+                $contributor = System::getVar('anonymous');
             } else {
-                $contributor = pnUserGetVar('uname');
+                $contributor = UserUtil::getVar('uname');
             }
             if ($html) {
-                $body = __f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+                $body = __f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
             } else {
                 $body = __f('
 A News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.
@@ -299,9 +299,9 @@ Index page teaser text of the article:
 Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).
 
 Regards,
-%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], pnModURL('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
+%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename), $dom);
             }
-            $sent = pnModAPIFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
+            $sent = ModUtil::apiFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
                                                                         'toaddress'  => $toaddress,
                                                                         'fromname'   => $fromname,
                                                                         'fromaddress'=> $fromaddress,
@@ -357,7 +357,7 @@ Regards,
         }
     }
 
-    return pnRedirect(pnModURL('News', $referertype, 'view'));
+    return System::redirect(ModUtil::url('News', $referertype, 'view'));
 }
 
 /**
@@ -380,7 +380,7 @@ function News_user_view($args = array())
     SessionUtil::delVar('newsitem');
 
     // get all module vars for later use
-    $modvars = pnModGetVar('News');
+    $modvars = ModUtil::getVar('News');
 
     // Get parameters from whatever input we need
     $page         = isset($args['page']) ? $args['page'] : (int)FormUtil::getPassedValue('page', 1, 'GET');
@@ -431,7 +431,7 @@ function News_user_view($args = array())
     }
     
     // get matching news articles
-    $items = pnModAPIFunc('News', 'user', 'getall',
+    $items = ModUtil::apiFunc('News', 'user', 'getall',
                           array('startnum'     => $startnum,
                                 'numitems'     => $itemsperpage,
                                 'status'       => 0,
@@ -449,14 +449,14 @@ function News_user_view($args = array())
     }
 
     // Create output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     // assign various useful template variables
     $render->assign('startnum', $startnum);
     $render->assign('lang', $lang);
     $render->assign($modvars);
-    $render->assign('shorturls', pnConfigGetVar('shorturls'));
-    $render->assign('shorturlstype', pnConfigGetVar('shorturlstype'));
+    $render->assign('shorturls', System::getVar('shorturls'));
+    $render->assign('shorturlstype', System::getVar('shorturlstype'));
 
     // assign the root category
     $render->assign('category', $cat);
@@ -472,17 +472,17 @@ function News_user_view($args = array())
 
             // $info is array holding raw information.
             // Used below and also passed to the theme - jgm
-            $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $item);
+            $info = ModUtil::apiFunc('News', 'user', 'getArticleInfo', $item);
 
             // $links is an array holding pure URLs to
             // specific functions for this article.
             // Used below and also passed to the theme - jgm
-            $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
+            $links = ModUtil::apiFunc('News', 'user', 'getArticleLinks', $info);
 
             // $preformat is an array holding chunks of
             // preformatted text for this article.
             // Used below and also passed to the theme - jgm
-            $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat',
+            $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
                                        array('info' => $info,
                                              'links' => $links));
 
@@ -503,7 +503,7 @@ function News_user_view($args = array())
     $render->assign('newsitems', $newsitems);
 
     // Assign the values for the smarty plugin to produce a pager
-    $render->assign('pager', array('numitems' => pnModAPIFunc('News', 'user', 'countitems', 
+    $render->assign('pager', array('numitems' => ModUtil::apiFunc('News', 'user', 'countitems', 
                                                               array('status' => 0,
                                                                     'filterbydate' => true,
                                                                     'hideonindex' => isset($args['hideonindex']) ? $args['hideonindex'] : null,
@@ -561,14 +561,14 @@ function News_user_display($args)
     // increment the read count
     if ($page == 1) {
         if (isset($sid)) {
-            pnModAPIFunc('News', 'user', 'incrementreadcount', array('sid' => $sid));
+            ModUtil::apiFunc('News', 'user', 'incrementreadcount', array('sid' => $sid));
         } else {
-            pnModAPIFunc('News', 'user', 'incrementreadcount', array('title' => $title));
+            ModUtil::apiFunc('News', 'user', 'incrementreadcount', array('title' => $title));
         }
     }
 
     // Create output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     // For caching reasons you must pass a cache ID
     if (isset($sid)) {
@@ -585,11 +585,11 @@ function News_user_display($args)
     // Get the news story
     if (!SecurityUtil::checkPermission('News::', "::$sid", ACCESS_ADD)) {
         if (isset($sid)) {
-            $item = pnModAPIFunc('News', 'user', 'get', 
+            $item = ModUtil::apiFunc('News', 'user', 'get', 
                                  array('sid'       => $sid, 
                                        'status'    => 0));
         } else {
-            $item = pnModAPIFunc('News', 'user', 'get', 
+            $item = ModUtil::apiFunc('News', 'user', 'get', 
                                  array('title'     => $title,
                                        'year'      => $year,
                                        'monthname' => $monthname,
@@ -597,21 +597,21 @@ function News_user_display($args)
                                        'day'       => $day,
                                        'status'    => 0));
             $sid = $item['sid'];
-            pnQueryStringSetVar('sid', $sid);
+            System::queryStringSetVar('sid', $sid);
         }
     } else {
         if (isset($sid)) {
-            $item = pnModAPIFunc('News', 'user', 'get', 
+            $item = ModUtil::apiFunc('News', 'user', 'get', 
                                  array('sid'       => $sid));
         } else {
-            $item = pnModAPIFunc('News', 'user', 'get', 
+            $item = ModUtil::apiFunc('News', 'user', 'get', 
                                  array('title'     => $title,
                                        'year'      => $year,
                                        'monthname' => $monthname,
                                        'monthnum'  => $monthnum,
                                        'day'       => $day));
             $sid = $item['sid'];
-            pnQueryStringSetVar('sid', $sid);
+            System::queryStringSetVar('sid', $sid);
         }
     }
 
@@ -636,15 +636,15 @@ function News_user_display($args)
 
     // $info is array holding raw information.
     // Used below and also passed to the theme - jgm
-    $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $item);
+    $info = ModUtil::apiFunc('News', 'user', 'getArticleInfo', $item);
 
     // $links is an array holding pure URLs to specific functions for this article.
     // Used below and also passed to the theme - jgm
-    $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
+    $links = ModUtil::apiFunc('News', 'user', 'getArticleLinks', $info);
 
     // $preformat is an array holding chunks of preformatted text for this article.
     // Used below and also passed to the theme - jgm
-    $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat',
+    $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
                               array('info'  => $info,
                                     'links' => $links));
 
@@ -661,7 +661,7 @@ function News_user_display($args)
                           'preformat' => $preformat,
                           'page'      => $page));
 
-    $modvars = pnModGetVar('News');
+    $modvars = ModUtil::getVar('News');
     $render->assign($modvars);
     $render->assign('lang', ZLanguage::getLanguageCode());
     
@@ -686,7 +686,7 @@ function News_user_display($args)
             }
             // get matching news articles
             // TODO exclude current article, query does not work yet :-(
-            $morearticlesincat = pnModAPIFunc('News', 'user', 'getall',
+            $morearticlesincat = ModUtil::apiFunc('News', 'user', 'getall',
                                   array('numitems'     => $morearticlesincat,
                                         'status'       => 0,
                                         'filterbydate' => true,
@@ -731,7 +731,7 @@ function News_user_archives($args)
     if (!empty($year) || !empty($month)) {
         if ((empty($year) || empty($month)) ||
             ($year > (int)$currentdate[0] || ($year == (int)$currentdate[0] && $month > (int)$currentdate[1]))) {
-                pnRedirect(pnModURL('News', 'user', 'archives'));
+                System::redirect(ModUtil::url('News', 'user', 'archives'));
         } elseif ($year == (int)$currentdate[0] && $month == (int)$currentdate[1]) {
             $day = (int)$currentdate[2];
         }
@@ -742,14 +742,14 @@ function News_user_archives($args)
 
     // Create output object
     $cacheid = "$month|$year";
-    $render = & pnRender::getInstance('News', null, $cacheid);
+    $render = Zikula_View::getInstance('News', null, $cacheid);
 
     // output vars
     $archivemonths = array();
     $archiveyears = array();
 
     if (!empty($year) && !empty($month)) {
-        $items = pnModAPIFunc('News', 'user', 'getall',
+        $items = ModUtil::apiFunc('News', 'user', 'getall',
                               array('order'  => 'from',
                                     'from'   => "$year-$month-01 00:00:00",
                                     'to'     => "$year-$month-$day 23:59:59",
@@ -759,7 +759,7 @@ function News_user_archives($args)
 
     } else {
         // get all matching news articles
-        $monthsyears = pnModAPIFunc('News', 'user', 'getMonthsWithNews');
+        $monthsyears = ModUtil::apiFunc('News', 'user', 'getMonthsWithNews');
 
         foreach ($monthsyears as $monthyear) {
             $month = DateUtil::getDatetime_Field($monthyear, 2);
@@ -771,12 +771,12 @@ function News_user_archives($args)
             {
                 //$linktext = $monthnames[$month-1]." $year";
                 $linktext = $monthnames[$month-1];
-                $nrofarticles = pnModAPIFunc('News', 'user', 'countitems',
+                $nrofarticles = ModUtil::apiFunc('News', 'user', 'countitems',
                                              array('from'   => "$year-$month-01 00:00:00",
                                                    'to'     => "$year-$month-$day 23:59:59",
                                                    'status' => 0));
 
-                $archivemonths[$year][$month] = array('url'          => pnModURL('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
+                $archivemonths[$year][$month] = array('url'          => ModUtil::url('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
                                                       'title'        => $linktext,
                                                       'nrofarticles' => $nrofarticles);
             }
@@ -786,7 +786,7 @@ function News_user_archives($args)
 
     $render->assign('archivemonths', $archivemonths);
     $render->assign('archiveitems', $items);
-    $render->assign('enablecategorization', pnModGetVar('News', 'enablecategorization'));
+    $render->assign('enablecategorization', ModUtil::getVar('News', 'enablecategorization'));
 
     // Return the output that has been generated by this function
     return $render->fetch('news_user_archives.htm');
@@ -819,7 +819,7 @@ function News_user_preview($args)
         $bodytext = nl2br($bodytext);
     }
 
-    $render = & pnRender::getInstance('News', false);
+    $render = Zikula_View::getInstance('News', false);
 
     $render->assign('preview', array('title'    => $title,
                                      'hometext' => $hometext,
@@ -845,10 +845,10 @@ function News_user_categorylist($args)
     $dom = ZLanguage::getModuleDomain('News');
 
     // Create output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
-    $enablecategorization = pnModGetVar('News', 'enablecategorization');
-    if (pnUserLoggedIn()) {
+    $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
+    if (UserUtil::isLoggedIn()) {
         $uid = SessionUtil::getVar('uid');
     } else {
         $uid = 0;
@@ -884,10 +884,10 @@ function News_user_categorylist($args)
 
     // Assign the config vars
     $render->assign('enablecategorization', $enablecategorization);
-    $render->assign('shorturls', pnConfigGetVar('shorturls'));
-    $render->assign('shorturlstype', pnConfigGetVar('shorturlstype'));
+    $render->assign('shorturls', System::getVar('shorturls'));
+    $render->assign('shorturlstype', System::getVar('shorturlstype'));
     $render->assign('lang', ZLanguage::getLanguageCode());
-    $render->assign('catimagepath', pnModGetVar('News', 'catimagepath'));
+    $render->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
 
     // Return the output that has been generated by this function
     return $render->fetch('news_user_categorylist.htm');
@@ -918,7 +918,7 @@ function News_user_displaypdf($args)
     $dom = ZLanguage::getModuleDomain('News');
 
     // get all module vars for later use
-    $modvars = pnModGetVar('News');
+    $modvars = ModUtil::getVar('News');
 
     // At this stage we check to see if we have been passed $objectid, the
     // generic item identifier
@@ -939,15 +939,15 @@ function News_user_displaypdf($args)
     Loader::includeOnce($modvars['pdflink_tcpdflang']);
 
     // Create output object
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     // Get the news story
     if (isset($sid)) {
-        $item = pnModAPIFunc('News', 'user', 'get', 
+        $item = ModUtil::apiFunc('News', 'user', 'get', 
                              array('sid'       => $sid, 
                                    'status'    => 0));
     } else {
-        $item = pnModAPIFunc('News', 'user', 'get', 
+        $item = ModUtil::apiFunc('News', 'user', 'get', 
                              array('title'     => $title,
                                    'year'      => $year,
                                    'monthname' => $monthname,
@@ -955,7 +955,7 @@ function News_user_displaypdf($args)
                                    'day'       => $day,
                                    'status'    => 0));
         $sid = $item['sid'];
-        pnQueryStringSetVar('sid', $sid);
+        System::queryStringSetVar('sid', $sid);
     }
     if ($item === false) {
         return LogUtil::registerError(__('Error! No such article found.', $dom), 404);
@@ -971,13 +971,13 @@ function News_user_displaypdf($args)
     //unset($allpages);
 
     // $info is array holding raw information.
-    $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $item);
+    $info = ModUtil::apiFunc('News', 'user', 'getArticleInfo', $item);
 
     // $links is an array holding pure URLs to specific functions for this article.
-    $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
+    $links = ModUtil::apiFunc('News', 'user', 'getArticleLinks', $info);
 
     // $preformat is an array holding chunks of preformatted text for this article.
-    $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat',
+    $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
                               array('info'  => $info,
                                     'links' => $links));
 
@@ -997,7 +997,7 @@ function News_user_displaypdf($args)
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); 
 
     // set pdf document information
-    $pdf->SetCreator(pnConfigGetVar('sitename'));
+    $pdf->SetCreator(System::getVar('sitename'));
     $pdf->SetAuthor($info['contributor']);
     $pdf->SetTitle($info['title']);
     $pdf->SetSubject($info['cattitle']);
@@ -1005,7 +1005,7 @@ function News_user_displaypdf($args)
 
     // set default header data
     //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
-    $sitename = pnConfigGetVar('sitename');
+    $sitename = System::getVar('sitename');
 /*    $pdf->SetHeaderData(
                 $modvars['pdflink_headerlogo'],
                 $modvars['pdflink_headerlogo_width'],
@@ -1063,7 +1063,7 @@ function News_user_displaypdf($args)
 function _countcategories($category, $property, $catregistry, $uid)
 {
     // Get the number of articles in this category within this category property
-    $news_articlecount = pnModAPIFunc('News', 'user', 'countitems',
+    $news_articlecount = ModUtil::apiFunc('News', 'user', 'countitems',
                                       array('status'       => 0,
                                             'filterbydate' => true,
                                             'category'     => array($property => $category['id']),
@@ -1073,7 +1073,7 @@ function _countcategories($category, $property, $catregistry, $uid)
 
     // Get the number of articles by the current uid in this category within this category property
     if ($uid > 0) {
-        $news_yourarticlecount = pnModAPIFunc('News', 'user', 'countitems',
+        $news_yourarticlecount = ModUtil::apiFunc('News', 'user', 'countitems',
                                               array('status'       => 0,
                                                     'filterbydate' => true,
                                                     'uid'          => $uid,

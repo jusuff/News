@@ -32,49 +32,49 @@ function News_init()
     }
 
     // Set up config variables
-    pnModSetVar('News', 'storyhome', 10);
-    pnModSetVar('News', 'storyorder', 1); // publication datetime
-    pnModSetVar('News', 'itemsperpage', 25);
-    pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
-    pnModSetVar('News', 'enablecategorization', true);
-    pnModSetVar('News', 'refereronprint', 0);
-    pnModSetVar('News', 'enableattribution', false);
-    pnModSetVar('News', 'catimagepath', 'images/categories/');
-    pnModSetVar('News', 'enableajaxedit', false);
-    pnModSetVar('News', 'enablemorearticlesincat', false);
-    pnModSetVar('News', 'morearticlesincat', 0);
+    ModUtil::setVar('News', 'storyhome', 10);
+    ModUtil::setVar('News', 'storyorder', 1); // publication datetime
+    ModUtil::setVar('News', 'itemsperpage', 25);
+    ModUtil::setVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
+    ModUtil::setVar('News', 'enablecategorization', true);
+    ModUtil::setVar('News', 'refereronprint', 0);
+    ModUtil::setVar('News', 'enableattribution', false);
+    ModUtil::setVar('News', 'catimagepath', 'images/categories/');
+    ModUtil::setVar('News', 'enableajaxedit', false);
+    ModUtil::setVar('News', 'enablemorearticlesincat', false);
+    ModUtil::setVar('News', 'morearticlesincat', 0);
 
     // notification on new article
-    pnModSetVar('News', 'notifyonpending', false);
-    pnModSetVar('News', 'notifyonpending_fromname', '');
-    pnModSetVar('News', 'notifyonpending_fromaddress', '');
-    pnModSetVar('News', 'notifyonpending_toname', '');
-    pnModSetVar('News', 'notifyonpending_toaddress', ''); // can be comma seperated list
-    pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
-    pnModSetVar('News', 'notifyonpending_html', true);
+    ModUtil::setVar('News', 'notifyonpending', false);
+    ModUtil::setVar('News', 'notifyonpending_fromname', '');
+    ModUtil::setVar('News', 'notifyonpending_fromaddress', '');
+    ModUtil::setVar('News', 'notifyonpending_toname', '');
+    ModUtil::setVar('News', 'notifyonpending_toaddress', ''); // can be comma seperated list
+    ModUtil::setVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
+    ModUtil::setVar('News', 'notifyonpending_html', true);
 
     // pdf link for an article
-    pnModSetVar('News', 'pdflink', false);
-    pnModSetVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
-    pnModSetVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
-    pnModSetVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
-    pnModSetVar('News', 'pdflink_headerlogo_width', '30');
+    ModUtil::setVar('News', 'pdflink', false);
+    ModUtil::setVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
+    ModUtil::setVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
+    ModUtil::setVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
+    ModUtil::setVar('News', 'pdflink_headerlogo_width', '30');
 
     // picture uploading
-    pnModSetVar('News', 'picupload_enabled', false);
-    pnModSetVar('News', 'picupload_allowext', 'jpg, gif, png');
-    pnModSetVar('News', 'picupload_index_float', 'left');
-    pnModSetVar('News', 'picupload_article_float', 'left');
-    pnModSetVar('News', 'picupload_maxfilesize', '1000000');
-    pnModSetVar('News', 'picupload_maxpictures', '3');
-    pnModSetVar('News', 'picupload_sizing', '0');
-    pnModSetVar('News', 'picupload_picmaxwidth', '600');
-    pnModSetVar('News', 'picupload_picmaxheight', '600');
-    pnModSetVar('News', 'picupload_thumbmaxwidth', '150');
-    pnModSetVar('News', 'picupload_thumbmaxheight', '150');
-    pnModSetVar('News', 'picupload_thumb2maxwidth', '200');
-    pnModSetVar('News', 'picupload_thumb2maxheight', '200');
-    pnModSetVar('News', 'picupload_uploaddir', '');
+    ModUtil::setVar('News', 'picupload_enabled', false);
+    ModUtil::setVar('News', 'picupload_allowext', 'jpg, gif, png');
+    ModUtil::setVar('News', 'picupload_index_float', 'left');
+    ModUtil::setVar('News', 'picupload_article_float', 'left');
+    ModUtil::setVar('News', 'picupload_maxfilesize', '1000000');
+    ModUtil::setVar('News', 'picupload_maxpictures', '3');
+    ModUtil::setVar('News', 'picupload_sizing', '0');
+    ModUtil::setVar('News', 'picupload_picmaxwidth', '600');
+    ModUtil::setVar('News', 'picupload_picmaxheight', '600');
+    ModUtil::setVar('News', 'picupload_thumbmaxwidth', '150');
+    ModUtil::setVar('News', 'picupload_thumbmaxheight', '150');
+    ModUtil::setVar('News', 'picupload_thumb2maxwidth', '200');
+    ModUtil::setVar('News', 'picupload_thumb2maxheight', '200');
+    ModUtil::setVar('News', 'picupload_uploaddir', '');
 
     // create the default data for the News module
     News_defaultdata();
@@ -97,15 +97,15 @@ function News_upgrade($oldversion)
     {
         case '1.3':
         case '1.4':
-            pnModSetVar('News', 'storyhome', pnConfigGetVar('storyhome'));
-            pnConfigDelVar('storyhome');
-            pnModSetVar('News', 'storyorder', pnConfigGetVar('storyorder'));
-            pnConfigDelVar('storyorder');
-            pnModSetVar('News', 'itemsperpage', 25);
+            ModUtil::setVar('News', 'storyhome', System::getVar('storyhome'));
+            System::delVar('storyhome');
+            ModUtil::setVar('News', 'storyorder', System::getVar('storyorder'));
+            System::delVar('storyorder');
+            ModUtil::setVar('News', 'itemsperpage', 25);
 
         case '1.5':
-            $tables = pnDBGetTables();
-            $shorturlsep = pnConfigGetVar('shorturlsseparator');
+            $tables = DBUtil::getTables();
+            $shorturlsep = System::getVar('shorturlsseparator');
             // move the data from the author uid to creator and updator uid
             $sqls = array();
             $sqls[] = "UPDATE $tables[stories] SET pn_cr_uid = pn_aid";
@@ -123,7 +123,7 @@ function News_upgrade($oldversion)
             // drop the old columns
             DBUtil::dropColumn('stories', array('pn_aid'));
             DBUtil::dropColumn('stories', array('pn_time'));
-            pnModSetVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
+            ModUtil::setVar('News', 'permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
 
         case '2.0':
             // import autonews and queue articles
@@ -132,21 +132,21 @@ function News_upgrade($oldversion)
                 return '2.0';
             }
             // migrate the comments to ezcomments
-            if (pnModAvailable('Comments') || defined('_PNINSTALLVER')) {
+            if (ModUtil::available('Comments') || defined('_PNINSTALLVER')) {
                 // check for the ezcomments module
-                if (!pnModAvailable('EZComments')) {
+                if (!ModUtil::available('EZComments')) {
                     LogUtil::registerError(__f('Error! The \'%s\' module is not installed.', 'EZComments', $dom));
                     return '2.0';
                 }
                 //  drop the comments table if successful
-                if (pnModAPIFunc('EZComments', 'migrate', 'news')) {
+                if (ModUtil::apiFunc('EZComments', 'migrate', 'news')) {
                     // drop comments table after migration has succeeded
                     if (!DBUtil::dropTable('comments')) {
                         LogUtil::registerError(__('Error! Could not delete table.', $dom));
                         return '2.0';
                     }
                     // remove the Comments module
-                    pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('Comments')));
+                    ModUtil::apiFunc('Modules', 'admin', 'remove', array('id' => ModUtil::getIdFromName('Comments')));
                 }
             }
             // drop the autonews and queue tables, articles are already imported
@@ -159,12 +159,12 @@ function News_upgrade($oldversion)
                 return '2.0';
             }
             // remove the AddStory and Submit_News modules
-            pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('AddStory')));
-            pnModAPIFunc('Modules', 'admin', 'remove', array('id' => pnModGetIDFromName('Submit_News')));
+            ModUtil::apiFunc('Modules', 'admin', 'remove', array('id' => ModUtil::getIdFromName('AddStory')));
+            ModUtil::apiFunc('Modules', 'admin', 'remove', array('id' => ModUtil::getIdFromName('Submit_News')));
 
         case '2.1':
-            pnModSetVar('News', 'enablecategorization', true);
-            pnModDBInfoLoad('News', 'News', true);
+            ModUtil::setVar('News', 'enablecategorization', true);
+            ModUtil::dbInfoLoad('News', 'News', true);
 
             if (!_news_migratecategories()) {
                 LogUtil::registerError(__('Error! Could not migrate categories.', $dom));
@@ -172,10 +172,10 @@ function News_upgrade($oldversion)
             }
 
         case '2.2':
-            pnModSetVar('News', 'refereronprint', pnConfigGetVar('refereronprint', 0));
+            ModUtil::setVar('News', 'refereronprint', System::getVar('refereronprint', 0));
 
         case '2.3':
-            $prefix = pnConfigGetVar('prefix');
+            $prefix = System::getVar('prefix');
             // when from is not set, put it to the creation date
             $sqls = array();
             $sqls[] = "UPDATE {$prefix}_stories SET pn_from = pn_cr_date WHERE pn_from IS NULL";
@@ -187,16 +187,16 @@ function News_upgrade($oldversion)
                     return '2.3';
                 }
             }
-            pnModSetVar('News', 'enableattribution', false);
+            ModUtil::setVar('News', 'enableattribution', false);
             // import the topicimagepath, variable tipath deletion is up to Topics module
-            pnModSetVar('News', 'catimagepath', pnConfigGetVar('tipath'));
-            pnModSetVar('News', 'enableajaxedit', false);
+            ModUtil::setVar('News', 'catimagepath', System::getVar('tipath'));
+            ModUtil::setVar('News', 'enableajaxedit', false);
             // drop old legacy columns
             DBUtil::dropColumn('stories', 'pn_comments');
             DBUtil::dropColumn('stories', 'pn_themeoverride');
             // clear compiled templates and News cache (see #74)
-            pnModAPIFunc('pnRender', 'user', 'clear_compiled');
-            pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
+            ModUtil::apiFunc('view', 'user', 'clear_compiled');
+            ModUtil::apiFunc('view', 'user', 'clear_cache', array('module' => 'News'));
 
         case '2.4':
         case '2.4.1':
@@ -227,8 +227,8 @@ function News_upgrade($oldversion)
                 return '2.4.3';
             }
             // update permissions with new scheme News::
-            pnMOdDBInfoLoad('Categories');
-            $tables  = pnDBGetTables();
+            ModUtil::dbInfoLoad('Categories');
+            $tables  = DBUtil::getTables();
             $grperms = $tables['group_perms_column'];
 
             $sqls   = array();
@@ -243,24 +243,24 @@ function News_upgrade($oldversion)
                 }
             }
             // Add new variable(s)
-            pnModSetVar('News', 'enablemorearticlesincat', false);
-            pnModSetVar('News', 'morearticlesincat', 0);
-            pnModSetVar('News', 'notifyonpending', false);
-            pnModSetVar('News', 'notifyonpending_fromname', '');
-            pnModSetVar('News', 'notifyonpending_fromaddress', '');
-            pnModSetVar('News', 'notifyonpending_toname', '');
-            pnModSetVar('News', 'notifyonpending_toaddress', '');
-            pnModSetVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
-            pnModSetVar('News', 'notifyonpending_html', true);
-            pnModSetVar('News', 'pdflink', false);
-            pnModSetVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
-            pnModSetVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
-            pnModSetVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
-            pnModSetVar('News', 'pdflink_headerlogo_width', '30');
+            ModUtil::setVar('News', 'enablemorearticlesincat', false);
+            ModUtil::setVar('News', 'morearticlesincat', 0);
+            ModUtil::setVar('News', 'notifyonpending', false);
+            ModUtil::setVar('News', 'notifyonpending_fromname', '');
+            ModUtil::setVar('News', 'notifyonpending_fromaddress', '');
+            ModUtil::setVar('News', 'notifyonpending_toname', '');
+            ModUtil::setVar('News', 'notifyonpending_toaddress', '');
+            ModUtil::setVar('News', 'notifyonpending_subject', __('A News Publisher article has been submitted for review', $dom));
+            ModUtil::setVar('News', 'notifyonpending_html', true);
+            ModUtil::setVar('News', 'pdflink', false);
+            ModUtil::setVar('News', 'pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
+            ModUtil::setVar('News', 'pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
+            ModUtil::setVar('News', 'pdflink_headerlogo', 'tcpdf_logo.jpg');
+            ModUtil::setVar('News', 'pdflink_headerlogo_width', '30');
             
             // clear compiled templates and News cache
-            pnModAPIFunc('pnRender', 'user', 'clear_compiled');
-            pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
+            ModUtil::apiFunc('view', 'user', 'clear_compiled');
+            ModUtil::apiFunc('view', 'user', 'clear_cache', array('module' => 'News'));
 
         case '2.5':
             // update table
@@ -274,24 +274,24 @@ function News_upgrade($oldversion)
                 return '2.5.2';
             }
             // add new picture uploading variables
-            pnModSetVar('News', 'picupload_enabled', false);
-            pnModSetVar('News', 'picupload_allowext', 'jpg, gif, png');
-            pnModSetVar('News', 'picupload_index_float', 'left');
-            pnModSetVar('News', 'picupload_article_float', 'left');
-            pnModSetVar('News', 'picupload_maxfilesize', '1000000');
-            pnModSetVar('News', 'picupload_maxpictures', '3');
-            pnModSetVar('News', 'picupload_sizing', '0');
-            pnModSetVar('News', 'picupload_picmaxwidth', '600');
-            pnModSetVar('News', 'picupload_picmaxheight', '600');
-            pnModSetVar('News', 'picupload_thumbmaxwidth', '150');
-            pnModSetVar('News', 'picupload_thumbmaxheight', '150');
-            pnModSetVar('News', 'picupload_thumb2maxwidth', '200');
-            pnModSetVar('News', 'picupload_thumb2maxheight', '200');
-            pnModSetVar('News', 'picupload_uploaddir', '');
+            ModUtil::setVar('News', 'picupload_enabled', false);
+            ModUtil::setVar('News', 'picupload_allowext', 'jpg, gif, png');
+            ModUtil::setVar('News', 'picupload_index_float', 'left');
+            ModUtil::setVar('News', 'picupload_article_float', 'left');
+            ModUtil::setVar('News', 'picupload_maxfilesize', '1000000');
+            ModUtil::setVar('News', 'picupload_maxpictures', '3');
+            ModUtil::setVar('News', 'picupload_sizing', '0');
+            ModUtil::setVar('News', 'picupload_picmaxwidth', '600');
+            ModUtil::setVar('News', 'picupload_picmaxheight', '600');
+            ModUtil::setVar('News', 'picupload_thumbmaxwidth', '150');
+            ModUtil::setVar('News', 'picupload_thumbmaxheight', '150');
+            ModUtil::setVar('News', 'picupload_thumb2maxwidth', '200');
+            ModUtil::setVar('News', 'picupload_thumb2maxheight', '200');
+            ModUtil::setVar('News', 'picupload_uploaddir', '');
 
             // clear compiled templates and News cache
-            pnModAPIFunc('pnRender', 'user', 'clear_compiled');
-            pnModAPIFunc('pnRender', 'user', 'clear_cache', array('module' => 'News'));
+            ModUtil::apiFunc('view', 'user', 'clear_compiled');
+            ModUtil::apiFunc('view', 'user', 'clear_cache', array('module' => 'News'));
             
         case '2.5.3':
             // migration routines
@@ -314,10 +314,10 @@ function News_delete()
     }
 
     // Delete module variables
-    pnModDelVar('News');
+    ModUtil::delVar('News');
 
     // Delete entries from category registry
-    pnModDBInfoLoad ('Categories');
+    ModUtil::dbInfoLoad ('Categories');
     DBUtil::deleteWhere('categories_registry', "crg_modname='News'");
     DBUtil::deleteWhere('categories_mapobj', "cmo_modname='News'");
 
@@ -339,9 +339,9 @@ function News_defaultdata()
     $dom = ZLanguage::getModuleDomain('News');
 
     // Short URL seperator
-    $shorturlsep = pnConfigGetVar('shorturlsseparator');
+    $shorturlsep = System::getVar('shorturlsseparator');
     $now = DateUtil::getDatetime();
-    $uname = pnUserGetVar('uname');
+    $uname = UserUtil::getVar('uname');
     // set creation date and from to the time set in autonews
     $article = array('title'            => __('News introduction article', $dom),
                      'urltitle'         => __('news_introduction_article', $dom),
@@ -380,7 +380,7 @@ function _news_migratecategories()
 
     // load the admin language file
     // pull all data from the old tables
-    $tables = pnDBGetTables();
+    $tables = DBUtil::getTables();
     $sql = "SELECT pn_catid, pn_title FROM {$tables[stories_cat]}";
     $result = DBUtil::executeSQL($sql);
     $categories = array(array(0, 'Articles'));
@@ -414,7 +414,7 @@ function _news_migratecategories()
     // migrate our main categories
     $categorymap = array();
     foreach ($categories as $category) {
-        $cat = new PNCategory ();
+        $cat = new Categories_DBObject_Category ();
         $cat->setDataField('parent_id', $rootcat['id']);
         $cat->setDataField('name', $category[1]);
         $cat->setDataField('display_name', array($lang => $category[1]));
@@ -433,7 +433,7 @@ function _news_migratecategories()
     // migrate our topic categories
     $topicsmap = array();
     foreach ($topics as $topic) {
-        $cat = new PNCategory ();
+        $cat = new Categories_DBObject_Category ();
         $data = $cat->getData();
         $data['parent_id']                     = $rootcat['id'];
         $data['name']                          = $topic[1];
@@ -451,7 +451,7 @@ function _news_migratecategories()
     }
 
     // After an upgrade we want the legacy topic template variables to point to the Topic property
-    pnModSetVar('News', 'topicproperty', 'Topic');
+    ModUtil::setVar('News', 'topicproperty', 'Topic');
 
     // migrate page category assignments
     $sql = "SELECT pn_sid, pn_catid, pn_topic FROM {$tables[stories]}";
@@ -500,7 +500,7 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
 
     if (!$nCat) {
         // create placeholder for all our migrated categories
-        $cat = new PNCategory ();
+        $cat = new Categories_DBObject_Category ();
         $cat->setDataField('parent_id', $rootcat['id']);
         $cat->setDataField('name', 'News');
         $cat->setDataField('display_name', array($lang => __('News publisher', $dom)));
@@ -516,7 +516,7 @@ function _news_createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
     $rootcat = CategoryUtil::getCategoryByPath($regpath);
     if ($rootcat) {
         // create an entry in the categories registry to the Main property
-        $registry = new PNCategoryRegistry();
+        $registry = new Categories_DBObject_Registry();
         $registry->setDataField('modname', 'News');
         $registry->setDataField('table', 'news');
         $registry->setDataField('property', 'Main');
@@ -546,7 +546,7 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
 
     if (!$tCat) {
         // create placeholder for all our migrated categories
-        $cat = new PNCategory ();
+        $cat = new Categories_DBObject_Category ();
         $cat->setDataField('parent_id', $rootcat['id']);
         $cat->setDataField('name', 'Topics');
         // pnModLangLoad doesn't handle type 1 modules
@@ -564,7 +564,7 @@ function _news_createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
     $rootcat = CategoryUtil::getCategoryByPath($regpath);
     if ($rootcat) {
         // create an entry in the categories registry to the Topic property
-        $registry = new PNCategoryRegistry();
+        $registry = new Categories_DBObject_Registry();
         $registry->setDataField('modname', 'News');
         $registry->setDataField('table', 'stories');
         $registry->setDataField('property', 'Topic');
@@ -584,8 +584,8 @@ function _news_import_autonews_queue()
 {
     $dom = ZLanguage::getModuleDomain('News');
 
-    $tables = pnDBGetTables();
-    $shorturlsep = pnConfigGetVar('shorturlsseparator');
+    $tables = DBUtil::getTables();
+    $shorturlsep = System::getVar('shorturlsseparator');
 
     // pull all data from the autonews table and import into stories
     $sql = "SELECT * FROM {$tables[autonews]}";
@@ -623,7 +623,7 @@ function _news_import_autonews_queue()
                       'cr_date'       => $obj['time'],
                       'cr_uid'        => $obj['aid'],
                       'lu_date'       => DateUtil::getDatetime(),
-                      'lu_uid'        => pnUserGetVar('uid'));
+                      'lu_uid'        => UserUtil::getVar('uid'));
 
         // Insert the imoprted object in stories and preserve the creation/lastupdated values set above.
         $res = DBUtil::insertObject($objj, 'stories', 'sid', true);
@@ -672,7 +672,7 @@ function _news_import_autonews_queue()
                       'cr_date'       => $obj['timestamp'],
                       'cr_uid'        => $obj['uid'],
                       'lu_date'       => DateUtil::getDatetime(),
-                      'lu_uid'        => pnUserGetVar('uid'));
+                      'lu_uid'        => UserUtil::getVar('uid'));
 
         // Insert the imported object in stories and preserve the creation/lastupdated values set above.
         $res = DBUtil::insertObject($objj, 'stories', 'sid', true);

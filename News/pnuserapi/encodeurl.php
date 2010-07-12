@@ -39,9 +39,9 @@ function News_userapi_encodeurl($args)
             $args['args']['sid'] = $args['args']['objectid'];
         }
         // check the permalink structure and obtain any missing vars
-        $permalinkformat = pnModGetVar('News', 'permalinkformat');
+        $permalinkformat = ModUtil::getVar('News', 'permalinkformat');
         // get the item (will be cached by DBUtil)
-        $item = pnModAPIFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
+        $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
         // replace the vars to form the permalink
         $date = getdate(strtotime($item['from']));
         $in = array('%category%', '%storyid%', '%storytitle%', '%year%', '%monthnum%', '%monthname%', '%day%');

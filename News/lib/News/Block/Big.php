@@ -71,7 +71,7 @@ function News_bigblock_display($blockinfo)
     $tdate = "$year-$month-$day";
 
     // call the API
-    $articles = pnModAPIFunc('News', 'user', 'getall',
+    $articles = ModUtil::apiFunc('News', 'user', 'getall',
                              array('tdate' => $tdate,
                                    'hideonindex' => 0,
                                    'order' => 'counter',
@@ -81,10 +81,10 @@ function News_bigblock_display($blockinfo)
     if (empty($articles)) {
         return;
     } else {
-        $info = pnModAPIFunc('News', 'user', 'getArticleInfo', $row = $articles[0]);
+        $info = ModUtil::apiFunc('News', 'user', 'getArticleInfo', $row = $articles[0]);
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_OVERVIEW)) {
-            $links = pnModAPIFunc('News', 'user', 'getArticleLinks', $info);
-            $preformat = pnModAPIFunc('News', 'user', 'getArticlePreformat', array('info' => $info, 'links' => $links));
+            $links = ModUtil::apiFunc('News', 'user', 'getArticleLinks', $info);
+            $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat', array('info' => $info, 'links' => $links));
         } else {
             return;
         }
@@ -94,7 +94,7 @@ function News_bigblock_display($blockinfo)
         $blockinfo['title'] = __('Today\'s most-read article', $dom);
     }
 
-    $render = & pnRender::getInstance('News');
+    $render = Zikula_View::getInstance('News');
 
     $render->assign('dom', $dom);
 
@@ -104,5 +104,5 @@ function News_bigblock_display($blockinfo)
 
     $blockinfo['content'] = $render->fetch('news_block_big.htm');
 
-    return pnBlockThemeBlock($blockinfo);
+    return BlockUtil::themeBlock($blockinfo);
 }
