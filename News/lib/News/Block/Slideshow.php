@@ -12,12 +12,14 @@
  * @subpackage News
  */
 
+class News_Block_Slideshow extends Zikula_Block
+{
 /**
  * initialise block
  *
  * @author       The Zikula Development Team
  */
-function News_slideshowblock_init()
+public function init()
 {
     SecurityUtil::registerPermissionSchema('Slideshowblock::', 'Block ID::');
 }
@@ -28,10 +30,8 @@ function News_slideshowblock_init()
  * @author       The Zikula Development Team
  * @return       array       The block information
  */
-function News_slideshowblock_info()
+public function info()
 {
-    $dom = ZLanguage::getModuleDomain('News');
-
     return array('module'          => 'News',
                  'text_type'       => ('slideshow'),
                  'text_type_long'  => ('Display news slideshow'),
@@ -49,14 +49,12 @@ function News_slideshowblock_info()
  * @param        array       $blockinfo     a blockinfo structure
  * @return       output      the rendered bock
  */
-function News_slideshowblock_display($blockinfo)
+public function display($blockinfo)
 {
     // security check
     if (!SecurityUtil::checkPermission('Slideshowblock::', $blockinfo['bid'].'::', ACCESS_OVERVIEW)) {
         return;
     }
-
-    $dom = ZLanguage::getModuleDomain('News');
 
     // Break out options from our content field
     $vars = BlockUtil::varsFromContent($blockinfo['content']);
@@ -74,7 +72,7 @@ function News_slideshowblock_display($blockinfo)
 
     if (isset($vars['category']) && !empty($vars['category'])) {
         if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
+            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil'));
         }
         $cat = CategoryUtil::getCategoryByID($vars['category']);
         $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
@@ -95,7 +93,7 @@ function News_slideshowblock_display($blockinfo)
     }
 
     // create the output object
-    $render = Zikula_View::getInstance('News', false);
+    $this->view->setCaching(false);
 
     // loop through the items
     $picupload_uploaddir = ModUtil::getVar('News', 'picupload_uploaddir');
@@ -105,19 +103,19 @@ function News_slideshowblock_display($blockinfo)
     foreach ($items as $item) {
 		$count++;
         if ($item['pictures'] > 0) {
-            $render->assign('readperm', SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ));
-            $render->assign('count', $count);
-            $render->assign('picupload_uploaddir', $picupload_uploaddir);
-            $render->assign($item);
-            $slideshowoutput[] = $render->fetch('news_block_slideshow_row.htm', $item['sid'], null, false, false);
+            $this->view->assign('readperm', SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ));
+            $this->view->assign('count', $count);
+            $this->view->assign('picupload_uploaddir', $picupload_uploaddir);
+            $this->view->assign($item);
+            $slideshowoutput[] = $this->view->fetch('news_block_slideshow_row.htm', $item['sid'], null, false, false);
         }
     }
 
     // assign the results
-    $render->assign('slideshow', $slideshowoutput);
-    $render->assign('dom', $dom);
+    $this->view->assign('slideshow', $slideshowoutput);
+    $this->view->assign('dom');
 
-    $blockinfo['content'] = $render->fetch('news_block_slideshow.htm');
+    $blockinfo['content'] = $this->view->fetch('news_block_slideshow.htm');
 
     return BlockUtil::themeBlock($blockinfo);
 }
@@ -129,10 +127,8 @@ function News_slideshowblock_display($blockinfo)
  * @param        array       $blockinfo     a blockinfo structure
  * @return       output      the bock form
  */
-function News_slideshowblock_modify($blockinfo)
+public function modify($blockinfo)
 {
-    $dom = ZLanguage::getModuleDomain('News');
-
     // Break out options from our content field
     $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
@@ -142,22 +138,18 @@ function News_slideshowblock_modify($blockinfo)
     }
 
     // Create output object
-    $render = Zikula_View::getInstance('News', false);
+    $this->view->setCaching(false);
 
-    // load the categories system
-    if (!Loader::loadClass('CategoryRegistryUtil')) {
-        return LogUtil::registerError(__f('Error! Could not load [%s] class.'), 'CategoryRegistryUtil', $dom);
-    }
     $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
-    $render->assign('mainCategory', $mainCat);
-    $render->assign(ModUtil::getVar('News'));
+    $this->view->assign('mainCategory', $mainCat);
+    $this->view->assign(ModUtil::getVar('News'));
 
     // assign the block vars
-    $render->assign($vars);
-    $render->assign('dom', $dom);
+    $this->view->assign($vars);
+    $this->view->assign('dom');
 
     // Return the output that has been generated by this function
-    return $render->fetch('news_block_slideshow_modify.htm');
+    return $this->view->fetch('news_block_slideshow_modify.htm');
 }
 
 /**
@@ -167,7 +159,7 @@ function News_slideshowblock_modify($blockinfo)
  * @param        array       $blockinfo     a blockinfo structure
  * @return       $blockinfo  the modified blockinfo structure
  */
-function News_slideshowblock_update($blockinfo)
+public function update($blockinfo)
 {
     // Get current content
     $vars = BlockUtil::varsFromContent($blockinfo['content']);
@@ -180,8 +172,8 @@ function News_slideshowblock_update($blockinfo)
     $blockinfo['content'] = BlockUtil::varsToContent($vars);
 
     // clear the block cache
-    $render = Zikula_View::getInstance('News');
-    $render->clear_cache('news_block_slideshow.htm');
+    $this->view->clear_cache('news_block_slideshow.htm');
 
     return $blockinfo;
+}
 }

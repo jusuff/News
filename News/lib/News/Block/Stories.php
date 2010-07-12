@@ -12,196 +12,188 @@
  * @subpackage News
  */
 
-/**
- * initialise block
- *
- * @author       The Zikula Development Team
- */
-function News_storiesblock_init()
+class News_Block_Stories extends Zikula_Block
 {
-    SecurityUtil::registerPermissionSchema('Storiesblock::', 'Block ID::');
-}
-
-/**
- * get information on block
- *
- * @author       The Zikula Development Team
- * @return       array       The block information
- */
-function News_storiesblock_info()
-{
-    $dom = ZLanguage::getModuleDomain('News');
-
-    return array('module'          => 'News',
-                 'text_type'       => __('Article titles', $dom),
-                 'text_type_long'  => __('Display article titles', $dom),
-                 'allow_multiple'  => true,
-                 'form_content'    => false,
-                 'form_refresh'    => false,
-                 'show_preview'    => true,
-                 'admin_tableless' => true);
-}
-
-/**
- * display block
- *
- * @author       The Zikula Development Team
- * @param        array       $blockinfo     a blockinfo structure
- * @return       output      the rendered bock
- */
-function News_storiesblock_display($blockinfo)
-{
-    // security check
-    if (!SecurityUtil::checkPermission('Storiesblock::', $blockinfo['bid'].'::', ACCESS_OVERVIEW)) {
-        return;
-    }
-
-    $dom = ZLanguage::getModuleDomain('News');
-
-    // Break out options from our content field
-    $vars = BlockUtil::varsFromContent($blockinfo['content']);
-
-    // Defaults
-    if (!isset($vars['storiestype'])) {
-        $vars['storiestype'] = 2;
-    }
-    if (!isset($vars['limit'])) {
-        $vars['limit'] = 10;
-    }
-
-    // work out the paraemters for the api all
-    $apiargs = array();
-    switch ($vars['storiestype'])
+    /**
+     * initialise block
+     *
+     * @author       The Zikula Development Team
+     */
+    public function init()
     {
-        case 1:
+        SecurityUtil::registerPermissionSchema('Storiesblock::', 'Block ID::');
+    }
+
+    /**
+     * get information on block
+     *
+     * @author       The Zikula Development Team
+     * @return       array       The block information
+     */
+    public function info()
+    {
+        return array('module'          => 'News',
+                'text_type'       => $this->__('Article titles'),
+                'text_type_long'  => $this->__('Display article titles'),
+                'allow_multiple'  => true,
+                'form_content'    => false,
+                'form_refresh'    => false,
+                'show_preview'    => true,
+                'admin_tableless' => true);
+    }
+
+    /**
+     * display block
+     *
+     * @author       The Zikula Development Team
+     * @param        array       $blockinfo     a blockinfo structure
+     * @return       output      the rendered bock
+     */
+    public function display($blockinfo)
+    {
+        // security check
+        if (!SecurityUtil::checkPermission('Storiesblock::', $blockinfo['bid'].'::', ACCESS_OVERVIEW)) {
+            return;
+        }
+
+        // Break out options from our content field
+        $vars = BlockUtil::varsFromContent($blockinfo['content']);
+
+        // Defaults
+        if (!isset($vars['storiestype'])) {
+            $vars['storiestype'] = 2;
+        }
+        if (!isset($vars['limit'])) {
+            $vars['limit'] = 10;
+        }
+
+        // work out the paraemters for the api all
+        $apiargs = array();
+        switch ($vars['storiestype'])
+        {
+            case 1:
             // non index page articles
-            $apiargs['hideonindex'] = 1;
-            break;
-        case 3:
+                $apiargs['hideonindex'] = 1;
+                break;
+            case 3:
             // index page articles
-            $apiargs['hideonindex'] = 0;
-            break;
+                $apiargs['hideonindex'] = 0;
+                break;
             // all - doesn't need hideonindex
-    }
-
-    $apiargs['numitems'] = $vars['limit'];
-    $apiargs['status'] = 0;
-    $apiargs['ignorecats'] = true;
-
-    if (isset($vars['category']) && !empty($vars['category'])) {
-        if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil', $dom));
-        }
-        $cat = CategoryUtil::getCategoryByID($vars['category']);
-        $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
-        $catstofilter = array();
-        foreach ($categories as $category) {
-            $catstofilter[] = $category['id'];
-        }
-        $apiargs['category'] = array('Main' => $catstofilter);
-    }
-    $apiargs['filterbydate'] = true;
-
-    // call the api
-    $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
-
-    // check for an empty return
-    if (empty($items)) {
-        return;
-    }
-
-    // create the output object
-    $render = Zikula_View::getInstance('News', false);
-
-    // loop through the items
-    $storiesoutput = array();
-    foreach ($items as $item) {
-        $storyreadperm = false;
-        if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ)) {
-            $storyreadperm = true;
         }
 
-        $render->assign('readperm', $storyreadperm);
-        $render->assign($item);
-        $storiesoutput[] = $render->fetch('news_block_stories_row.htm', $item['sid'], null, false, false);
+        $apiargs['numitems'] = $vars['limit'];
+        $apiargs['status'] = 0;
+        $apiargs['ignorecats'] = true;
+
+        if (isset($vars['category']) && !empty($vars['category'])) {
+            if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
+                return LogUtil::registerError($this->__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil'));
+            }
+            $cat = CategoryUtil::getCategoryByID($vars['category']);
+            $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
+            $catstofilter = array();
+            foreach ($categories as $category) {
+                $catstofilter[] = $category['id'];
+            }
+            $apiargs['category'] = array('Main' => $catstofilter);
+        }
+        $apiargs['filterbydate'] = true;
+
+        // call the api
+        $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
+
+        // check for an empty return
+        if (empty($items)) {
+            return;
+        }
+
+        // create the output object
+        $this->view->setCaching(false);
+
+        // loop through the items
+        $storiesoutput = array();
+        foreach ($items as $item) {
+            $storyreadperm = false;
+            if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ)) {
+                $storyreadperm = true;
+            }
+
+            $this->view->assign('readperm', $storyreadperm);
+            $this->view->assign($item);
+            $storiesoutput[] = $this->view->fetch('news_block_stories_row.htm', $item['sid'], null, false, false);
+        }
+
+        // assign the results
+        $this->view->assign('stories', $storiesoutput);
+
+        $this->view->assign('dom');
+
+        $blockinfo['content'] = $this->view->fetch('news_block_stories.htm');
+
+        return BlockUtil::themeBlock($blockinfo);
     }
 
-    // assign the results
-    $render->assign('stories', $storiesoutput);
+    /**
+     * modify block settings
+     *
+     * @author       The Zikula Development Team
+     * @param        array       $blockinfo     a blockinfo structure
+     * @return       output      the bock form
+     */
+    public function modify($blockinfo)
+    {
+        // Break out options from our content field
+        $vars = BlockUtil::varsFromContent($blockinfo['content']);
 
-    $render->assign('dom', $dom);
+        // Defaults
+        if (empty($vars['storiestype'])) {
+            $vars['storiestype'] = 2;
+        }
+        if (empty($vars['limit'])) {
+            $vars['limit'] = 10;
+        }
 
-    $blockinfo['content'] = $render->fetch('news_block_stories.htm');
+        // Create output object
+        $this->view->setCaching(false);
 
-    return BlockUtil::themeBlock($blockinfo);
-}
+        $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
+        $this->view->assign('mainCategory', $mainCat);
+        $this->view->assign(ModUtil::getVar('News'));
 
-/**
- * modify block settings
- *
- * @author       The Zikula Development Team
- * @param        array       $blockinfo     a blockinfo structure
- * @return       output      the bock form
- */
-function News_storiesblock_modify($blockinfo)
-{
-    $dom = ZLanguage::getModuleDomain('News');
+        // assign the block vars
+        $this->view->assign($vars);
 
-    // Break out options from our content field
-    $vars = BlockUtil::varsFromContent($blockinfo['content']);
+        $this->view->assign('dom');
 
-    // Defaults
-    if (empty($vars['storiestype'])) {
-        $vars['storiestype'] = 2;
+        // Return the output that has been generated by this function
+        return $this->view->fetch('news_block_stories_modify.htm');
     }
-    if (empty($vars['limit'])) {
-        $vars['limit'] = 10;
+
+    /**
+     * update block settings
+     *
+     * @author       The Zikula Development Team
+     * @param        array       $blockinfo     a blockinfo structure
+     * @return       $blockinfo  the modified blockinfo structure
+     */
+    public function update($blockinfo)
+    {
+        // Get current content
+        $vars = BlockUtil::varsFromContent($blockinfo['content']);
+
+        // alter the corresponding variable
+        $vars['storiestype'] = FormUtil::getPassedValue('storiestype', null, 'POST');
+        $vars['topic']       = FormUtil::getPassedValue('topic', null, 'POST');
+        $vars['category']    = FormUtil::getPassedValue('category', null, 'POST');
+        $vars['limit']       = (int)FormUtil::getPassedValue('limit', null, 'POST');
+
+        // write back the new contents
+        $blockinfo['content'] = BlockUtil::varsToContent($vars);
+
+        // clear the block cache
+        $this->view->clear_cache('news_block_stories.htm');
+
+        return $blockinfo;
     }
-
-    // Create output object
-    $render = Zikula_View::getInstance('News', false);
-
-    // load the categories system
-    if (!Loader::loadClass('CategoryRegistryUtil')) {
-        return LogUtil::registerError(__f('Error! Could not load [%s] class.'), 'CategoryRegistryUtil', $dom);
-    }
-    $mainCat = CategoryRegistryUtil::getRegisteredModuleCategory('News', 'news', 'Main', 30); // 30 == /__SYSTEM__/Modules/Global
-    $render->assign('mainCategory', $mainCat);
-    $render->assign(ModUtil::getVar('News'));
-
-    // assign the block vars
-    $render->assign($vars);
-
-    $render->assign('dom', $dom);
-
-    // Return the output that has been generated by this function
-    return $render->fetch('news_block_stories_modify.htm');
-}
-
-/**
- * update block settings
- *
- * @author       The Zikula Development Team
- * @param        array       $blockinfo     a blockinfo structure
- * @return       $blockinfo  the modified blockinfo structure
- */
-function News_storiesblock_update($blockinfo)
-{
-    // Get current content
-    $vars = BlockUtil::varsFromContent($blockinfo['content']);
-
-    // alter the corresponding variable
-    $vars['storiestype'] = FormUtil::getPassedValue('storiestype', null, 'POST');
-    $vars['topic']       = FormUtil::getPassedValue('topic', null, 'POST');
-    $vars['category']    = FormUtil::getPassedValue('category', null, 'POST');
-    $vars['limit']       = (int)FormUtil::getPassedValue('limit', null, 'POST');
-
-    // write back the new contents
-    $blockinfo['content'] = BlockUtil::varsToContent($vars);
-
-    // clear the block cache
-    $render = Zikula_View::getInstance('News');
-    $render->clear_cache('news_block_stories.htm');
-
-    return $blockinfo;
 }
