@@ -14,21 +14,18 @@
  * @subpackage News
  */
 
-$dom = ZLanguage::getModuleDomain('News');
-
-$modversion['name']        = 'News';
-$modversion['displayname'] = __('News publisher', $dom);
-$modversion['description'] = __('Provides the ability to publish and manage news articles contributed by site users, with support for news categories and various associated blocks.', $dom);
-$modversion['version']     = '2.5.3';
-//! this defines the module's url
-$modversion['url']            = __('news', $dom);
-
-$modversion['credits']     = 'pndocs/credits.txt';
-$modversion['help']        = 'pndocs/install.txt';
-$modversion['changelog']   = 'pndocs/changelog.txt';
-$modversion['license']     = 'pndocs/license.txt';
-$modversion['official']    = 1;
-$modversion['author']      = 'Mark West, Mateo Tibaquira, Erik Spaan';
-$modversion['contact']     = 'http://code.zikula.org/news';
-
-$modversion['securityschema'] = array('News::' => 'Contributor ID::Article ID');
+class News_Version extends Zikula_Version
+{
+    public function getMetaData()
+    {
+        $meta = array();
+        $meta['displayname'] = $this->__('News publisher');
+        $meta['description'] = $this->__('Provides the ability to publish and manage news articles contributed by site users, with support for news categories and various associated blocks.');
+        $meta['version']     = '2.6.0';
+        //! this defines the module's url
+        $meta['url']            = $this->__('news');
+        $meta['contact']     = 'Mark West, Mateo Tibaquira, Erik Spaan http://code.zikula.org/news';
+        $meta['securityschema'] = array('News::' => 'Contributor ID::Article ID');
+        return $meta;
+    }
+}
