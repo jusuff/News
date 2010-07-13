@@ -39,6 +39,9 @@ class News_Api_User extends Zikula_Api
         if (!isset($args['language'])) {
             $args['language'] = '';
         }
+        if (!isset($args['filterbydate'])) {
+            $args['filterbydate'] = true;
+        }
 
         if ((!empty($args['status']) && !is_numeric($args['status'])) ||
                 !is_numeric($args['startnum']) ||
@@ -108,7 +111,7 @@ class News_Api_User extends Zikula_Api
                 $queryargs[] = "($news_column[from] < '$date')";
             }
             // or can filter with the current date
-        } elseif (isset($args['filterbydate'])) {
+        } elseif ($args['filterbydate']) {
             $date = DateUtil::getDatetime();
             $queryargs[] = "('$date' >= $news_column[from] AND ($news_column[to] IS NULL OR '$date' <= $news_column[to]))";
         }

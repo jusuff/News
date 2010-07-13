@@ -540,6 +540,7 @@ class News_Controller_Admin extends Zikula_Controller
                 'order'    => isset($order) ? $order : 'from',
                 'from'     => isset($from) ? $from : null,
                 'to'       => isset($to) ? $to : null,
+                'filterbydate' => false,
                 'category' => isset($catFilter) ? $catFilter : null,
                 'catregistry' => isset($catregistry) ? $catregistry : null));
 
