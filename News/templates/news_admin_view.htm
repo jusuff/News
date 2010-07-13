@@ -114,15 +114,14 @@
                 <td>{$newsitem.hideonindex|safetext} / {$newsitem.weight|safetext}</td>
                 <td>
                     {if $newsitem.published_status eq '2'}
-                    {gt text='Last edited on'}
-                    {$newsitem.lu_date|dateformatHuman:'%x':'3'}.
+                    {gt text='Last edited on %s' tag1=$newsitem.lu_date|dateformatHuman:'%x':'3'}
                     {else}
                     {if $newsitem.infuture}{gt text='Scheduled for'}{else}{$newsitem.published_status|news_getstatustext}{/if}
                     {$newsitem.from|dateformatHuman:'%x':'2'}.
+                    {if $newsitem.to neq null}<br />{gt text='until %s' tag1=$newsitem.to|dateformatHuman:'%x':'3'}{/if}
                     {/if}
                     {if $newsitem.disallowcomments eq '1'}
-                    <br />
-                    <em>{gt text='No comments allowed.'}</em>
+                    <br /><em>{gt text='No comments allowed.'}</em>
                     {/if}
                 </td>
                 <td>
