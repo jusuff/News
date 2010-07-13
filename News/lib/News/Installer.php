@@ -293,7 +293,7 @@ class News_Installer extends Zikula_Installer
 
             case '2.5.3':
 
-            case '2.6.0':
+            case '3.0.0':
             // migration routines
         }
 

@@ -21,7 +21,7 @@ class News_Version extends Zikula_Version
         $meta = array();
         $meta['displayname'] = $this->__('News publisher');
         $meta['description'] = $this->__('Provides the ability to publish and manage news articles contributed by site users, with support for news categories and various associated blocks.');
-        $meta['version']     = '2.6.0';
+        $meta['version']     = '3.0.0';
         //! this defines the module's url
         $meta['url']            = $this->__('news');
         $meta['contact']     = 'Mark West, Mateo Tibaquira, Erik Spaan http://code.zikula.org/news';
