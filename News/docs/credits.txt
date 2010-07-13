@@ -38,3 +38,4 @@ http://the-stickman.com/web-development/javascript/upload-multiple-files-with-a-
 Slideshow block for News messages
 http://www.queness.com/post/152/simple-jquery-image-slide-show-with-semi-transparent-caption
 free to use
+Javascript file converted from jquery to prototype, E.Spaan, Jul 2010
