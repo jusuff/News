@@ -24,7 +24,6 @@ class News_Version extends Zikula_Version
         $meta['version']     = '3.0.0';
         //! this defines the module's url
         $meta['url']            = $this->__('news');
-        $meta['contact']     = 'Mark West, Mateo Tibaquira, Erik Spaan http://code.zikula.org/news';
         $meta['securityschema'] = array('News::' => 'Contributor ID::Article ID');
         return $meta;
     }
