@@ -323,6 +323,7 @@ class News_Controller_Admin extends Zikula_Controller
             // handling of additional image uploads
             $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
             foreach ($_FILES['news_files']['error'] as $key => $error) {
+                $file_extension = FileUtil::getExtension($_FILES['news_files']['name'][$key]);
                 if ($error == UPLOAD_ERR_OK && $_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize'] && !in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
                     $tmp_name = $_FILES['news_files']['tmp_name'][$key];
                     $name = $_FILES['news_files']['name'][$key];
