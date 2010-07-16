@@ -38,16 +38,20 @@
  *      [for duplicate name bug]
  *         'neal'
  */
-function MultiSelector( list_target, max ){
+function MultiSelector( list_target, max, count ){
 
 	// Where to write the list
 	this.list_target = list_target;
 	// How many elements?
-	this.count = 0;
+    if (count) {
+        this.count = count;
+    } else {
+        this.count = 0;
+    }
 	// How many elements?
 	this.id = 0;
 	// Is there a maximum?
-	if( max ){
+	if( max ) {
 		this.max = max;
 	} else {
 		this.max = -1;

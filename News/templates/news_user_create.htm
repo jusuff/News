@@ -1,10 +1,7 @@
 {*  $Id: news_user_new.htm 82 2009-02-25 23:09:21Z mateo $  *}
-{ajaxheader modname='News' filename='news.js' noscriptaculous=true}
+{ajaxheader modname='News' filename='news.js' effects=true dragdrop=true noscriptaculous=true}
 {pageaddvar name='javascript' value='modules/News/javascript/sizecheck.js'}
-{pageaddvar name='javascript' value='javascript/ajax/scriptaculous.js'}
-{pageaddvar name='javascript' value='javascript/ajax/effects.js'}
 {if $enableattribution}
-{pageaddvar name='javascript' value='javascript/ajax/dragdrop.js'}
 {pageaddvar name="javascript" value="javascript/helpers/Zikula.itemlist.js"}
 {/if}
 {pageaddvar name='javascript' value='modules/News/javascript/prototype-base-extensions.js'}
@@ -14,6 +11,9 @@
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
 {browserhack condition="if lte IE 7" assign="iebuttonfix"}<script type="text/javascript" src="modules/News/pnjavascript/buttonfix.js"></script>{/browserhack}
 {pageaddvar name='rawtext' value=$iebuttonfix}
+{if $accesspicupload AND $picupload_enabled AND $picupload_maxpictures gt 1}
+{pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
+{/if}
 
 {gt text='Submit an article' assign='templatetitle'}
 
@@ -46,15 +46,21 @@
 
 <h3>{$templatetitle}</h3>
 
-{* <form id="news_user_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="multipart/form-data"> *}
+{if $accesspicupload AND $picupload_enabled}
+<form id="news_user_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="MAX_FILE_SIZE" value="{$picupload_maxfilesize|safetext}" />
+{else}
 <form id="news_user_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="application/x-www-form-urlencoded">
+{/if}
     <div>
         <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
         {if $accessadd neq 1}
-        <input type="hidden" name="story[hideonindex]" value="1" />
         <input type="hidden" name="story[notes]" value="" />
-        <input type="hidden" name="story[disallowcomments]" value="1" />
         <input type="hidden" name="story[urltitle]" value="" />
+        {if $accesspubdetails neq 1}
+        <input type="hidden" name="story[hideonindex]" value="1" />
+        <input type="hidden" name="story[disallowcomments]" value="1" />
+        {/if}
         {/if}
         {if $formattedcontent eq 1}
         <input type="hidden" name="story[hometextcontenttype]" value="1" />
@@ -146,15 +152,29 @@
                 </p>
             </div>
             {/if}
-
-            {* Picture upload commented out
-            <div class="z-formrow">
-                <label for="news_picture"><strong>{gt text='Article picture'}</strong></label>
-                <input id="news_picture" name="news_picture" type="file" size="50"> 
-            </div> *}
         </fieldset>
+        
+        {if $accesspicupload AND $picupload_enabled}
+        <fieldset>
+            <legend>{gt text='Pictures'}</legend>
+			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
+            {if $picupload_maxpictures eq 1}
+			<input id="news_files_element" name="news_files[0]" type="file">
+            {else}
+			<input id="news_files_element" name="news_files" type="file"><br>
+            <span class="z-sub">{gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures}</span>
+            <div id="news_files_list"></div>
+            <script type="text/javascript">
+                // <![CDATA[
+                var multi_selector = new MultiSelector( document.getElementById( 'news_files_list' ), {{$picupload_maxpictures}} );
+                multi_selector.addElement( document.getElementById( 'news_files_element' ) );
+                // ]]>
+            </script>
+            {/if}
+        </fieldset>
+        {/if}
 
-        {if $accessadd eq 1}
+        {if $accessadd eq 1 OR $accesspubdetails eq 1}
         <fieldset>
             <legend><a id="news_publication_collapse" href="javascript:void(0);"><span id="news_publication_showhide">{gt text='Show'}</span> {gt text='Publishing options'}</a></legend>
             <div id="news_publication_details">

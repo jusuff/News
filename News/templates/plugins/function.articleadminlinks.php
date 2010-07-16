@@ -59,8 +59,16 @@ function smarty_function_articleadminlinks($params, &$smarty)
         $params['type'] = '';
     }
 
+/*
+    // Check for the current user to enable users to edit their own articles
+    if (UserUtil::isLoggedIn()) {
+        $uid = SessionUtil::getVar('uid');
+    } else {
+        $uid = 0;
+    }
+*/
     $articlelinks = '';
-    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]:$info[cattitle]:$info[sid]", ACCESS_EDIT)) {
+    if (SecurityUtil::checkPermission('News::', "$info[cr_uid]:$info[cattitle]:$info[sid]", ACCESS_EDIT) /*|| ($uid != 0 && $info['cr_uid'] == $uid)*/) {
         // load our ajax files into the header
         if (isset($params['type']) && $params['type'] == 'ajax') {
             // load our ajax files into the header

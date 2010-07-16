@@ -65,7 +65,7 @@ class News_Installer extends Zikula_Installer
         $this->setVar('picupload_allowext', 'jpg, gif, png');
         $this->setVar('picupload_index_float', 'left');
         $this->setVar('picupload_article_float', 'left');
-        $this->setVar('picupload_maxfilesize', '1000000');
+        $this->setVar('picupload_maxfilesize', '500000');
         $this->setVar('picupload_maxpictures', '3');
         $this->setVar('picupload_sizing', '0');
         $this->setVar('picupload_picmaxwidth', '600');
@@ -276,7 +276,7 @@ class News_Installer extends Zikula_Installer
                 $this->setVar('picupload_allowext', 'jpg, gif, png');
                 $this->setVar('picupload_index_float', 'left');
                 $this->setVar('picupload_article_float', 'left');
-                $this->setVar('picupload_maxfilesize', '1000000');
+                $this->setVar('picupload_maxfilesize', '500000');
                 $this->setVar('picupload_maxpictures', '3');
                 $this->setVar('picupload_sizing', '0');
                 $this->setVar('picupload_picmaxwidth', '600');

@@ -286,7 +286,7 @@ class News_Controller_Admin extends Zikula_Controller
         $modvars = ModUtil::getVar('News');
         if ($modvars['picupload_enabled']) {
             //  include the phpthumb library
-            require_once ('lib/vendor/phpthumb/ThumbLib.inc.php');
+            require_once ('modules/News/lib/vendor/phpthumb/ThumbLib.inc.php');
             $uploaddir = $modvars['picupload_uploaddir'] . '/';
             // remove selected files
             for ($i=0; $i<$item['pictures']; $i++){
@@ -319,9 +319,11 @@ class News_Controller_Admin extends Zikula_Controller
                     }
                 }
             }
+
             // handling of additional image uploads
+            $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
             foreach ($_FILES['news_files']['error'] as $key => $error) {
-                if ($error == UPLOAD_ERR_OK) {
+                if ($error == UPLOAD_ERR_OK && $_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize'] && !in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
                     $tmp_name = $_FILES['news_files']['tmp_name'][$key];
                     $name = $_FILES['news_files']['name'][$key];
 
@@ -352,6 +354,8 @@ class News_Controller_Admin extends Zikula_Controller
                         $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
                     }
                     $story['pictures']++;
+                } else {
+                    LogUtil::registerStatus($this->__f('Picture %s is not uploaded, due to an upload error, too large filesize (max. %s kB) or using a not allowed extension (only %s allowed).', array($key+1, $modvars['picupload_maxfilesize']/1000, $modvars['picupload_allowext'])));
                 }
             }
         }
@@ -737,7 +741,7 @@ class News_Controller_Admin extends Zikula_Controller
         $properties    = array_keys($catregistry);
         $propertyName  = ModUtil::getVar('News', 'topicproperty');
         $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
-
+        
         // assign the module variables
         $this->view->assign($this->getVars());
         $this->view->assign('properties', $properties);
@@ -806,7 +810,7 @@ class News_Controller_Admin extends Zikula_Controller
         $modvars['picupload_allowext'] = FormUtil::getPassedValue('picupload_allowext', 'jpg, gif, png', 'POST');
         $modvars['picupload_index_float'] = FormUtil::getPassedValue('picupload_index_float', 'left', 'POST');
         $modvars['picupload_article_float'] = FormUtil::getPassedValue('picupload_article_float', 'left', 'POST');
-        $modvars['picupload_maxfilesize'] = 1000*(int)FormUtil::getPassedValue('picupload_maxfilesize', '1000', 'POST');
+        $modvars['picupload_maxfilesize'] = (int)FormUtil::getPassedValue('picupload_maxfilesize', '500000', 'POST');
         $modvars['picupload_maxpictures'] = (int)FormUtil::getPassedValue('picupload_maxpictures', 3, 'POST');
         $modvars['picupload_sizing'] = FormUtil::getPassedValue('picupload_sizing', '0', 'POST');
         $modvars['picupload_picmaxwidth'] = (int)FormUtil::getPassedValue('picupload_picmaxwidth', 600, 'POST');

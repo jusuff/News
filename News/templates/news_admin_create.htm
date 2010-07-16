@@ -1,10 +1,7 @@
 {*  $Id: news_admin_new.htm 75 2009-02-24 04:51:52Z mateo $  *}
-{ajaxheader modname='News' filename='news.js' noscriptaculous=true}
+{ajaxheader modname='News' filename='news.js' effects=true dragdrop=true noscriptaculous=true}
 {pageaddvar name='javascript' value='modules/News/javascript/sizecheck.js'}
-{pageaddvar name='javascript' value='javascript/ajax/scriptaculous.js'}
-{pageaddvar name='javascript' value='javascript/ajax/effects.js'}
 {if $enableattribution}
-{pageaddvar name='javascript' value='javascript/ajax/dragdrop.js'}
 {pageaddvar name="javascript" value="javascript/helpers/Zikula.itemlist.js"}
 {/if}
 {pageaddvar name='javascript' value='modules/News/javascript/prototype-base-extensions.js'}
@@ -14,7 +11,7 @@
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
 {browserhack condition="if lte IE 7" assign="iebuttonfix"}<script type="text/javascript" src="modules/News/javascript/buttonfix.js"></script>{/browserhack}
 {pageaddvar name='rawtext' value=$iebuttonfix}
-{if $picupload_enabled}
+{if $picupload_enabled AND $picupload_maxpictures gt 1}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if}
 
@@ -55,6 +52,7 @@
 
     {if $picupload_enabled}
     <form id="news_admin_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="MAX_FILE_SIZE" value="{$picupload_maxfilesize|safetext}" />
     {else}
     <form id="news_admin_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="application/x-www-form-urlencoded">
     {/if}
@@ -169,8 +167,12 @@
         {if $picupload_enabled}
         <fieldset>
             <legend>{gt text='Pictures'}</legend>
-			<label for="news_files_element">{gt text='Select a picture'}</label>
-			<input id="news_files_element" name="news_files" type="file"><br><span class="z-sub">{gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures}</span>
+			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
+            {if $picupload_maxpictures eq 1}
+			<input id="news_files_element" name="news_files[0]" type="file">
+            {else}
+			<input id="news_files_element" name="news_files" type="file"><br>
+            <span class="z-sub">{gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures}</span>
             <div id="news_files_list"></div>
             <script type="text/javascript">
                 // <![CDATA[
@@ -178,6 +180,7 @@
                 multi_selector.addElement( document.getElementById( 'news_files_element' ) );
                 // ]]>
             </script>
+            {/if}
         </fieldset>
         {/if}
 

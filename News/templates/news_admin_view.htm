@@ -114,7 +114,7 @@
                 <td>{$newsitem.hideonindex|safetext} / {$newsitem.weight|safetext}</td>
                 <td>
                     {if $newsitem.published_status eq '2'}
-                    {gt text='Last edited on %s' tag1=$newsitem.lu_date|dateformatHuman:'%x':'3'}
+                    {gt text='Last edited %s' tag1=$newsitem.lu_date|dateformatHuman:'%x':'3'}
                     {else}
                     {if $newsitem.infuture}{gt text='Scheduled for'}{else}{$newsitem.published_status|news_getstatustext}{/if}
                     {$newsitem.from|dateformatHuman:'%x':'2'}.
