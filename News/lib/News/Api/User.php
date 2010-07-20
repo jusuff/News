@@ -590,7 +590,7 @@ class News_Api_User extends Zikula_Api
         if (ModUtil::available('EZComments') &&  ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
             $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
         } else {
-            $comment     = '';
+            $comment = '';
         }
 
         // Allowed to read full article?
