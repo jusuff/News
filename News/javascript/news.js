@@ -52,7 +52,11 @@ function news_init_check()
     }
     if ($('news_multicategory_filter')) {
         news_filter_init(); 
-    } 
+    }
+    // activate the title field for a new article
+    if ($('news_title') && $F('news_title') == '') {
+        $('news_title').focus();
+    }
 }
 
 
