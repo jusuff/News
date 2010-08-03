@@ -1019,12 +1019,12 @@ class News_Api_User extends Zikula_Api
                 System::queryStringSetVar(str_replace('%', '', $permalinkvar), $args['vars'][$permalinkkey]);
             }
 
-            if (isset($permalinkkeys['%storyid%']) && isset($args['vars'][$permalinkkeys['%storyid%']]) && is_numeric($args['vars'][$permalinkkeys['%storyid%']])) {
-                System::queryStringSetVar('sid', $args['vars'][$permalinkkeys['%storyid%']]);
-                $nextvar = $permalinkkeys['%storyid%']+1;
+            if (isset($permalinkkeys['%articleid%']) && isset($args['vars'][$permalinkkeys['%articleid%']]) && is_numeric($args['vars'][$permalinkkeys['%articleid%']])) {
+                System::queryStringSetVar('sid', $args['vars'][$permalinkkeys['%articleid%']]);
+                $nextvar = $permalinkkeys['%articleid%']+1;
             } else {
-                System::queryStringSetVar('title', $args['vars'][$permalinkkeys['%storytitle%']]);
-                $nextvar = $permalinkkeys['%storytitle%']+1;
+                System::queryStringSetVar('title', $args['vars'][$permalinkkeys['%articletitle%']]);
+                $nextvar = $permalinkkeys['%articletitle%']+1;
             }
             if (isset($args['vars'][$nextvar]) && $args['vars'][$nextvar] == 'page') {
                 System::queryStringSetVar('page', (int)$args['vars'][$nextvar+1]);
@@ -1066,12 +1066,19 @@ class News_Api_User extends Zikula_Api
             }
             // check the permalink structure and obtain any missing vars
             $permalinkformat = ModUtil::getVar('News', 'permalinkformat');
-            // get the item (will be cached by DBUtil)
-            $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
-            // replace the vars to form the permalink
-            $date = getdate(strtotime($item['from']));
-            $in = array('%category%', '%storyid%', '%storytitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
-            $out = array(@$item['__CATEGORIES__']['Main']['path_relative'], $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
+            if (isset($args['args']['from']) && isset($args['args']['urltitle'])) {
+                $date = getdate(strtotime($args['args']['from']));
+                $in = array('%category%', '%articleid%', '%articletitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
+                $out = array((isset($args['args']['__CATEGORIES__']['Main']['path_relative']) ? $args['args']['__CATEGORIES__']['Main']['path_relative'] : null), $args['args']['sid'], $args['args']['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
+            } else {
+                // get the item (will be cached by DBUtil)
+                $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
+                // replace the vars to form the permalink
+                $date = getdate(strtotime($item['from']));
+                $in = array('%category%', '%articleid%', '%articletitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
+                //$out = array(@$item['__CATEGORIES__']['Main']['path_relative'], $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
+                $out = array((isset($item['__CATEGORIES__']['Main']['path_relative']) ? $item['__CATEGORIES__']['Main']['path_relative'] : null), $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
+            }
             $vars = str_replace($in, $out, $permalinkformat);
             if (isset($args['args']['page']) && $args['args']['page'] != 1) {
                 $vars .= '/page/'.$args['args']['page'];

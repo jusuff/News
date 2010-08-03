@@ -202,40 +202,44 @@
             <fieldset>
                 <legend>{gt text='Permalinks'}</legend>
                 <p class="z-informationmsg">{gt text='You can select a pre-defined permalink format, or define your custom format.'}</p>
-                <input id="news_permalink_customformat" name="customformat" type="hidden"  value="{$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/'}" size="50" />
+                <input id="news_permalink_customformat" name="customformat" type="hidden"  value="{$permalinkformat|default:'%year%/%monthnum%/%day%/%articletitle%/'}" size="50" />
                 <div class="z-formrow">
                     <label for="news_permalink_datename">{gt text='Format based on date and name'}</label>
                     <div>
-                        <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%storytitle%"{if $permalinkformat eq '%year%/%monthnum%/%day%/%storytitle%'}checked="checked"{/if} />
+                        <input id="news_permalink_datename" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%year%/%monthnum%/%day%/%articletitle%"{if $permalinkformat eq '%year%/%monthnum%/%day%/%articletitle%'}checked="checked"{/if} />
                         <span>{$baseurl}{modgetinfo modname=News info=displayname}/{datetime format="%Y/%m/%d"}/{gt text='your-article-title'}/</span>
                     </div>
                 </div>
                 <div class="z-formrow">
                     <label for="news_permalink_numeric">{gt text='Numeric format'}</label>
                     <div>
-                        <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%storyid%" {if $permalinkformat eq '%storyid%'}checked="checked"{/if} />
+                        <input id="news_permalink_numeric" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="%articleid%" {if $permalinkformat eq '%articleid%'}checked="checked"{/if} />
                         <span>{$baseurl}{modgetinfo modname='News' info='displayname'}/123</span>
                     </div>
                 </div>
                 <div class="z-formrow">
                     <label for="news_permalink_custom">{gt text='Custom format'}</label>
-                    <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" {if $permalinkformat neq '%storyid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%storytitle%'}checked="checked"{/if} />
+                    <div>
+                        <input id="news_permalink_custom" onclick="news_permalink_onclick()" name="permalinkformat" type="radio" value="custom" {if $permalinkformat neq '%articleid%' and $permalinkformat neq '%year%/%monthnum%/%day%/%articletitle%'}checked="checked"{/if} />
+                    </div>
                 </div>
-                <div class="z-formrow">
-                    <label for="news_permalink_format">{gt text='Custom format definition'}</label>
-                    <input id="news_permalink_format" onclick="news_permalink_onclick()" name="permalinkstructure" type="text"  value="{$permalinkformat|default:'%year%/%monthnum%/%day%/%storytitle%/'}" size="50" />
-                    <em class="z-sub z-formnote">{gt text='Notice: A custom format definition must contain at least either \'%storyid%\' or \'%storytitle%\', in order to be able to identify the article.'}</em>
+                <div id="news_permalink_custom_details">
+                    <div class="z-formrow">
+                        <label for="news_permalink_format">{gt text='Custom format definition'}</label>
+                        <input id="news_permalink_format" onclick="news_permalink_onclick()" name="permalinkstructure" type="text"  value="{$permalinkformat|default:'%year%/%monthnum%/%day%/%articletitle%/'}" size="50" />
+                        <em class="z-sub z-formnote">{gt text='Notice: A custom format definition must contain at least either \'%articleid%\' or \'%articletitle%\', in order to be able to identify the article.'}</em>
+                    </div>
+                    <h4>{gt text='Acceptable values for use in custom format definition:'}</h4>
+                    <ul>
+                        <li>%year% - {gt text='Year of publication (including century numerals)'}</li>
+                        <li>%monthnum% - {gt text='Month of publication, as a number (ergo 1 to 12)'}</li>
+                        <li>%monthname% - {gt text='Month of publication as a name (ergo January to December)'}</li>
+                        <li>%day% - {gt text='Day'}</li>
+                        <li>%articletitle% - {gt text='Article title'}</li>
+                        <li>%articleid% - {gt text='Article ID'} </li>
+                        <li>%category% - {gt text='Article category'} </li>
+                    </ul>
                 </div>
-                <h4>{gt text='Acceptable values for use in custom format definition:'}</h4>
-                <ul>
-                    <li>%year% - {gt text='Year of publication (including century numerals)'}</li>
-                    <li>%monthnum% - {gt text='Month of publication, as a number (ergo 1 to 12)'}</li>
-                    <li>%monthname% - {gt text='Month of publication as a name (ergo January to December)'}</li>
-                    <li>%day% - {gt text='Day'}</li>
-                    <li>%storytitle% - {gt text='Article title'}</li>
-                    <li>%storyid% - {gt text='Article ID'} </li>
-                    <li>%category% - {gt text='Article category'} </li>
-                </ul>
             </fieldset>
             {/if}
 

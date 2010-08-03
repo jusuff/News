@@ -35,7 +35,7 @@ class News_Installer extends Zikula_Installer
         $this->setVar('storyhome', 10);
         $this->setVar('storyorder', 1); // publication datetime
         $this->setVar('itemsperpage', 25);
-        $this->setVar('permalinkformat', '%year%/%monthnum%/%day%/%storytitle%');
+        $this->setVar('permalinkformat', '%year%/%monthnum%/%day%/%articletitle%');
         $this->setVar('enablecategorization', true);
         $this->setVar('refereronprint', 0);
         $this->setVar('enableattribution', false);
@@ -286,6 +286,9 @@ class News_Installer extends Zikula_Installer
                 $this->setVar('picupload_thumb2maxwidth', '200');
                 $this->setVar('picupload_thumb2maxheight', '200');
                 $this->setVar('picupload_uploaddir', '');
+
+                // permalink format change story to article
+                $this->setVar('permalinkformat', str_replace(array('storytitle', 'storyid'), array('articletitle', 'articleid'), $this->getVar('permalinkformat')));
 
                 // clear compiled templates and News cache
                 ModUtil::apiFunc('view', 'user', 'clear_compiled');
