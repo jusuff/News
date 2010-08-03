@@ -69,7 +69,7 @@ class News_Api_Mailz extends Zikula_Api
                         $render = Zikula_View::getInstance('News');
                         $render->assign('readperm', SecurityUtil::checkPermission('News::', "::", ACCESS_READ));
                         $render->assign('articles', $items);
-                        $output = $render->fetch('mailz_mailz_listarticles.htm');
+                        $output = $render->fetch('news_mailz_listarticles.htm');
                     }
                 } else {
                     $output = $this->__f('No News publisher articles since last newsletter on %s.', DateUtil::formatDatetime($args['last'],'datebrief')) . "\n";
