@@ -476,8 +476,7 @@ class News_Api_User extends Zikula_Api
             }
 
             if (isset($info['categories'][$topicField])) {
-                $info['topic'] = $info['categories'][$topicField]['id'];
-                $info['tid']   = $info['categories'][$topicField]['id'];
+                $info['topicid']   = $info['categories'][$topicField]['id'];
                 $info['topicname'] = isset($info['categories'][$topicField]['display_name'][$lang]) ? $info['categories'][$topicField]['display_name'][$lang] : $info['categories'][$topicField]['name'];
                 // set the topic image if exists
                 if (isset($info['categories'][$topicField]['__ATTRIBUTES__']) && isset($info['categories'][$topicField]['__ATTRIBUTES__']['topic_image'])) {
@@ -494,8 +493,7 @@ class News_Api_User extends Zikula_Api
                 // set the path of the Topic
                 $info['topicpath']  = isset($info['categories'][$topicField]['path_relative']) ? $info['categories'][$topicField]['path_relative'] : '';
             } else {
-                $info['topic']      = null;
-                $info['tid']        = null;
+                $info['topicid']    = null;
                 $info['topicname']  = '';
                 $info['topicimage'] = '';
                 $info['topictext']  = '';
@@ -505,8 +503,7 @@ class News_Api_User extends Zikula_Api
             $info['catid']      = null;
             $info['cattitle']   = '';
             $info['catpath']    = '';
-            $info['topic']      = null;
-            $info['tid']        = null;
+            $info['topicid']    = null;
             $info['topicname']  = '';
             $info['topicimage'] = '';
             $info['topictext']  = '';
@@ -600,7 +597,7 @@ class News_Api_User extends Zikula_Api
             if ($shorturls && $shorturlstype == 0) {
                 $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
             } else {
-                $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['tid'])));
+                $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicid'])));
             }
         } else {
             $searchtopic = '';
@@ -631,8 +628,7 @@ class News_Api_User extends Zikula_Api
                     'searchtopic'      => $searchtopic,
                     'print'            => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories'], 'theme' => 'Printer'))),
                     'commentrssfeed'   => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'commentatomfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'version'          => 1);
+                    'commentatomfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))));
         } else {
             $links = array ('category' => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
                     'categories'       => $categories,
@@ -642,8 +638,7 @@ class News_Api_User extends Zikula_Api
                     'searchtopic'      => $searchtopic,
                     'print'            => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
                     'commentrssfeed'   => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'commentatomfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                    'version'          => 1);
+                    'commentatomfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))));
         }
 
         return $links;
@@ -728,7 +723,7 @@ class News_Api_User extends Zikula_Api
         }
 
         // Set up the array itself
-        $preformat = array('bodytext'      => $bodytext,
+        $preformat = array('bodytext' => $bodytext,
                 'bytesmore'     => $bytesmorelink,
                 'category'      => '<a href="'.$links['category'].'" title="'.$info['cattitle'].'">'.$info['cattitle'].'</a>',
                 'categories'    => $categories,
@@ -740,8 +735,7 @@ class News_Api_User extends Zikula_Api
                 'print'         => $print,
                 'printicon'     => $printicon,
                 'readmore'      => $readmore,
-                'title'         => $title,
-                'version'       => 1);
+                'title'         => $title);
 
         if (!empty($info['topicimage'])) {
             $catimagepath = $this->getVar('catimagepath');
@@ -750,28 +744,10 @@ class News_Api_User extends Zikula_Api
             $preformat['searchtopic'] = '';
         }
 
-        // More complex extras - use values in the array
-        $preformat['more'] = '';
-        if ($bytesmore > 0) {
-            $preformat['more'] .= $preformat['readmore'].' ('.$preformat['bytesmore'].') ';
-        }
-        $preformat['more'] .= $preformat['comment'].' '.$preformat['print'];
-
         if ($info['catid']) {
             $preformat['catandtitle'] = $preformat['category'].': '.$preformat['title'];
         } else {
             $preformat['catandtitle'] = $preformat['title'];
-        }
-
-        if (!empty($preformat['bodytext'])) {
-            $preformat['maintext'] = '<div>'.$preformat['hometext'].'</div><div>'.$preformat['bodytext'].'</div>';
-        } else {
-            $preformat['maintext'] = '<div>'.$preformat['hometext'].'</div>';
-        }
-        if (!empty($preformat['notes'])) {
-            $preformat['fulltext'] = '<div>'.$preformat['maintext'].'</div><div>'.$preformat['notes'].'</div>';
-        } else {
-            $preformat['fulltext'] = $preformat['maintext'];
         }
 
         return $preformat;

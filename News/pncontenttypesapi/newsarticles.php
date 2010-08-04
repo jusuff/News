@@ -191,8 +191,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
             // GetArticleInfo, GetArticleLinks and getArticlesPreformat because of speed etc.
             // --- Check for Topic related properties like topicimage, topicsearchurl etc.
             if ($enablecategorization && !empty($items[$k]['__CATEGORIES__']) && isset($items[$k]['__CATEGORIES__'][$topicField])) {
-                $items[$k]['topic'] = $items[$k]['__CATEGORIES__'][$topicField]['id'];
-                $items[$k]['tid']   = $items[$k]['__CATEGORIES__'][$topicField]['id'];
+                $items[$k]['topicid'] = $items[$k]['__CATEGORIES__'][$topicField]['id'];
                 $items[$k]['topicname'] = isset($items[$k]['__CATEGORIES__'][$topicField]['display_name'][$lang]) ? $items[$k]['__CATEGORIES__'][$topicField]['display_name'][$lang] : $items[$k]['__CATEGORIES__'][$topicField]['name'];
                 // set the topic image if topic_image category property exists
                 $items[$k]['topicimage'] = (isset($items[$k]['__CATEGORIES__'][$topicField]['__ATTRIBUTES__']) && isset($items[$k]['__CATEGORIES__'][$topicField]['__ATTRIBUTES__']['topic_image'])) ? $items[$k]['__CATEGORIES__'][$topicField]['__ATTRIBUTES__']['topic_image'] : '';
@@ -204,11 +203,10 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                 if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
                     $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['topicpath'])));
                 } else {
-                    $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['tid'])));
+                    $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['topicid'])));
                 }
             } else {
-                $items[$k]['topic']      = null;
-                $items[$k]['tid']        = null;
+                $items[$k]['topicid']    = null;
                 $items[$k]['topicname']  = '';
                 $items[$k]['topicimage'] = '';
                 $items[$k]['topictext']  = '';

@@ -285,8 +285,7 @@ height:50px;
             // GetArticleInfo, GetArticleLinks and getArticlesPreformat because of speed etc.
             // --- Check for Topic related properties like topicimage, topicsearchurl etc.
             if ($enablecategorization && !empty($item['__CATEGORIES__']) && isset($item['__CATEGORIES__'][$topicField])) {
-                $item['topic'] = $item['__CATEGORIES__'][$topicField]['id'];
-                $item['tid']   = $item['__CATEGORIES__'][$topicField]['id'];
+                $item['topicid'] = $item['__CATEGORIES__'][$topicField]['id'];
                 $item['topicname'] = isset($item['__CATEGORIES__'][$topicField]['display_name'][$lang]) ? $item['__CATEGORIES__'][$topicField]['display_name'][$lang] : $item['__CATEGORIES__'][$topicField]['name'];
                 // set the topic image if topic_image category property exists
                 $item['topicimage'] = (isset($item['__CATEGORIES__'][$topicField]['__ATTRIBUTES__']) && isset($item['__CATEGORIES__'][$topicField]['__ATTRIBUTES__']['topic_image'])) ? $item['__CATEGORIES__'][$topicField]['__ATTRIBUTES__']['topic_image'] : '';
@@ -298,11 +297,10 @@ height:50px;
                 if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
                     $item['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['topicpath'])));
                 } else {
-                    $item['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['tid'])));
+                    $item['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $item['topicid'])));
                 }
             } else {
-                $item['topic']      = null;
-                $item['tid']        = null;
+                $item['topicid']    = null;
                 $item['topicname']  = '';
                 $item['topicimage'] = '';
                 $item['topictext']  = '';

@@ -181,7 +181,6 @@ class News_Block_Stories extends Zikula_Block
 
         // alter the corresponding variable
         $vars['storiestype'] = FormUtil::getPassedValue('storiestype', null, 'POST');
-        $vars['topic']       = FormUtil::getPassedValue('topic', null, 'POST');
         $vars['category']    = FormUtil::getPassedValue('category', null, 'POST');
         $vars['limit']       = (int)FormUtil::getPassedValue('limit', null, 'POST');
 
