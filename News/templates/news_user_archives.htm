@@ -68,7 +68,7 @@
             </td>
             {/if}
             <td>{$archiveitems[items].counter|safetext}</td>
-            <td>{gt text='by %1$s on %2$s' tag1=$archiveitems[items].contributor|safetext tag2=$archiveitems[items].from|dateformat|safetext}</td>
+            <td>{gt text='by %1$s on %2$s' tag1=$archiveitems[items].contributor|safetext tag2=$archiveitems[items].from|dateformat:'datetimebrief'|safetext}</td>
         </tr>
         {/section}
     </tbody>

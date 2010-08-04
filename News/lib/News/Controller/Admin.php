@@ -578,9 +578,15 @@ class News_Controller_Admin extends Zikula_Controller
         foreach ($items as $item)
         {
             $options = array();
-            $options[] = array('url'   => ModUtil::url('News', 'user', 'display', array('sid' => $item['sid'])),
-                    'image' => '14_layer_visible.gif',
-                    'title' => $this->__('View'));
+            if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
+                $options[] = array('url'   => ModUtil::url('News', 'user', 'display', array('sid' => $item['sid'], 'from' => $item['from'], 'urltitle' => $item['urltitle'])),
+                        'image' => '14_layer_visible.gif',
+                        'title' => $this->__('View'));
+            } else {
+                $options[] = array('url'   => ModUtil::url('News', 'user', 'display', array('sid' => $item['sid'])),
+                        'image' => '14_layer_visible.gif',
+                        'title' => $this->__('View'));
+            }
 
             if (SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT)) {
                 if ($item['published_status'] == 2) {
@@ -792,6 +798,7 @@ class News_Controller_Admin extends Zikula_Controller
         $modvars['enableajaxedit'] = (bool)FormUtil::getPassedValue('enableajaxedit', false, 'POST');
         $modvars['enablemorearticlesincat'] = (bool)FormUtil::getPassedValue('enablemorearticlesincat', false, 'POST');
         $modvars['morearticlesincat'] = (int)FormUtil::getPassedValue('morearticlesincat', 0, 'POST');
+        $modvars['enablecategorybasedpermissions'] = (bool)FormUtil::getPassedValue('enablecategorybasedpermissions', false, 'POST');
 
         $modvars['notifyonpending'] = (bool)FormUtil::getPassedValue('notifyonpending', false, 'POST');
         $modvars['notifyonpending_fromname'] = FormUtil::getPassedValue('notifyonpending_fromname', '', 'POST');

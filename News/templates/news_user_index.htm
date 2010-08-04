@@ -2,12 +2,16 @@
 
 <div class="news_index">
     <h3 class="news_title">{$preformat.title}</h3>
-    <span class="news_meta z-sub">{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$info.contributor tag2=$info.briefdatetime}</span>
+    <span class="news_meta z-sub">{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$info.contributor tag2=$info.from|dateformat:'datetimebrief'}</span>
 
     <div class="news_body">
         {if $picupload_enabled AND $info.pictures gt 0}
         <div class="news_photoindex news_thumbsindex" style="float:{$picupload_index_float}">
-            <a href="{modurl modname='News' type='user' func='display' sid=$info.sid}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.png" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
+            {if $shorturls AND $shorturlstype eq 0}
+                <a href="{modurl modname='News' type='user' func='display' sid=$info.sid from=$info.from urltitle=$info.urltitle}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.png" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
+            {else}
+                <a href="{modurl modname='News' type='user' func='display' sid=$info.sid}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.png" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
+            {/if}
         </div>
         {/if}
         {$preformat.hometext|safehtml}

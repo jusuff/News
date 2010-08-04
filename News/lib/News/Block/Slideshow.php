@@ -71,9 +71,6 @@ public function display($blockinfo)
     $apiargs['ignorecats'] = true;
 
     if (isset($vars['category']) && !empty($vars['category'])) {
-        if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil'));
-        }
         $cat = CategoryUtil::getCategoryByID($vars['category']);
         $categories = CategoryUtil::getCategoriesByPath($cat['path'], '', 'path');
         $catstofilter = array();

@@ -76,7 +76,6 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   function loadData($data)
   {
     // Get the registrered categories for the News module
-    Loader::loadClass('CategoryRegistryUtil');
     $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
     $properties = array_keys($catregistry);
 
@@ -157,8 +156,6 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
 
     // Make a category filter only if categorization is enabled in News module
     if ($enablecategorization && $this->categories != null) {
-        // load the categories system
-        Loader::loadClass('CategoryRegistryUtil');
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $apiargs['catregistry'] = $catregistry;
@@ -182,7 +179,6 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
 
     // UserUtil is not automatically loaded, so load it now if needed and set anonymous
     if ($this->dispuname) {
-        Loader::loadClass('UserUtil');
         $anonymous = System::getVar('anonymous');
     }
 
@@ -287,7 +283,6 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   function displayEditing()
   {
     $dom = ZLanguage::getModuleDomain('News');
-    Loader::loadClass('CategoryUtil');
     $properties = array_keys($this->categories);
     $lang = ZLanguage::getLanguageCode();
     // Construct the selected categories array
@@ -347,10 +342,6 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
     // Select categories only if enabled for the News module, otherwise selector will not be shown in modify template
     if ($enablecategorization) {
-        // load the categories system
-        if (!Loader::loadClass('CategoryRegistryUtil')) {
-            return LogUtil::registerError(__f('Error! Could not load [%s] class.', 'CategoryRegistryUtil', $dom));
-        }
         // Get the registrered categories for the News module
         $catregistry  = CategoryRegistryUtil::getRegisteredModuleCategories ('News', 'news');
         $render->assign('catregistry', $catregistry);

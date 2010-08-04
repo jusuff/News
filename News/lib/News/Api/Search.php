@@ -69,7 +69,7 @@ class News_Api_Search extends Zikula_Api
 
         $insertSql =
                 "INSERT INTO $searchTable
-  ($searchColumn[title],
+               ($searchColumn[title],
                 $searchColumn[text],
                 $searchColumn[extra],
                 $searchColumn[module],
@@ -79,7 +79,7 @@ VALUES ";
 
         ModUtil::loadApi('News', 'user');
 
-        $permChecker = new News_ResultChecker();
+        $permChecker = new News_ResultChecker(ModUtil::getVar('News', 'enablecategorization'), ModUtil::getVar('News', 'enablecategorybasedpermissions'));
         $articles = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
 
         foreach ($articles as $article)
@@ -93,7 +93,7 @@ VALUES ";
                     . '\'' . DataUtil::formatForStore($sessionId) . '\')';
             $insertResult = DBUtil::executeSQL($sql);
             if (!$insertResult) {
-                return LogUtil::registerError(__('Error! Could not load any articles.', $dom));
+                return LogUtil::registerError($this->__('Error! Could not load any articles.'));
             }
         }
 
@@ -109,9 +109,8 @@ VALUES ";
     public function search_check(&$args)
     {
         $datarow = &$args['datarow'];
-        $storyId = $datarow['extra'];
-
-        $datarow['url'] = ModUtil::url('News', 'user', 'display', array('sid' => $storyId));
+        $articleId = $datarow['extra'];
+        $datarow['url'] = ModUtil::url('News', 'user', 'display', array('sid' => $articleId));
 
         return true;
     }

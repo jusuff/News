@@ -12,8 +12,6 @@
  * @subpackage News
  */
 
-
-
 class News_Api_User extends Zikula_Api
 {
     /**
@@ -56,8 +54,6 @@ class News_Api_User extends Zikula_Api
         if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
             return $items;
         }
-
-        $dom = ZLanguage::getModuleDomain('News');
 
         $args['catFilter'] = array();
         if (isset($args['category']) && !empty($args['category'])){
@@ -180,13 +176,13 @@ class News_Api_User extends Zikula_Api
             $orderby .= ', ' . $news_column['from'] . ' DESC';
         }
 
-        $permChecker = new News_ResultChecker();
+        $permChecker = new News_ResultChecker($this->getVar('enablecategorization'), $this->getVar('enablecategorybasedpermissions'));
         $objArray = DBUtil::selectObjectArrayFilter('news', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $args['catFilter']);
 
         // Check for an error with the database code, and if so set an appropriate
         // error message and return
         if ($objArray === false) {
-            return LogUtil::registerError(__('Error! Could not load any articles.', $dom));
+            return LogUtil::registerError($this->__('Error! Could not load any articles.'));
         }
 
         // need to do this here as the category expansion code can't know the
@@ -226,7 +222,7 @@ class News_Api_User extends Zikula_Api
         // form a date using some ofif present...
         // step 1 - convert month name into
         if (isset($args['monthname']) && !empty($args['monthname'])) {
-            $months = explode(' ', __('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec', $dom));
+            $months = explode(' ', $this->__('Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec'));
             $keys = array_flip($months);
             $args['monthnum'] = $keys[ucfirst($args['monthname'])] + 1;
         }
@@ -293,7 +289,7 @@ class News_Api_User extends Zikula_Api
             return false;
         }
 
-        $tables =& DBUtil::getTables();
+        $tables = DBUtil::getTables();
         $news_column = $tables['news_column'];
 
         // TODO: Check syntax for other Databases (i.e. Postgres doesn't know YEAR_MONTH)
@@ -438,33 +434,29 @@ class News_Api_User extends Zikula_Api
      */
     public function getArticleInfo($info)
     {
-        // Dates
-        $info['unixtime']      = strtotime($info['from']);
-        $info['longdatetime']  = DateUtil::getDatetime($info['unixtime'], 'datetimelong');
-        $info['briefdatetime'] = DateUtil::getDatetime($info['unixtime'], 'datetimebrief');
-        $info['longdate']      = DateUtil::getDatetime($info['unixtime'], 'datelong');
-        $info['briefdate']     = DateUtil::getDatetime($info['unixtime'], 'datebrief');
-
-        // Work out name of story submitter
-        if ($info['cr_uid'] == 0) {
-            $anonymous = System::getVar('anonymous');
-            if (empty($info['contributor'])) {
-                $info['contributor'] = $anonymous;
+        // Work out name of story submitter if needed
+        if (empty($info['contributor'])) {
+            if ($info['cr_uid'] == 0) {
+                $info['contributor'] = System::getVar('anonymous');
+            } else {
+                $info['contributor'] = UserUtil::getVar('uname', $info['cr_uid']);
             }
-        } elseif (empty($info['contributor'])) {
-            $info['contributor'] = UserUtil::getVar('uname', $info['cr_uid']);
         }
 
         // Change the __CATEGORIES__ field to a more usable name
         if (isset($info['__CATEGORIES__'])) {
             $info['categories'] = $info['__CATEGORIES__'];
             unset($info['__CATEGORIES__']);
+        } else {
+            $info['categories'] = null;
         }
 
         // also the __ATTRIBUTES__ field
         if (isset($info['__ATTRIBUTES__'])) {
             $info['attributes'] = $info['__ATTRIBUTES__'];
             unset($info['__ATTRIBUTES__']);
+        } else {
+            $info['attributes'] = null;
         }
 
         // For legacy reasons we add some hardwired category and topic variables
@@ -475,12 +467,10 @@ class News_Api_User extends Zikula_Api
 
             if (isset($info['categories'][$categoryField])) {
                 $info['catid']      = $info['categories'][$categoryField]['id'];
-                $info['cat']        = $info['categories'][$categoryField]['id'];
                 $info['cattitle']   = isset($info['categories'][$categoryField]['display_name'][$lang]) ? $info['categories'][$categoryField]['display_name'][$lang] : $info['categories'][$categoryField]['name'];
-                $info['catpath']    = $info['categories'][$categoryField]['path_relative'];
+                $info['catpath']    = isset($info['categories'][$categoryField]['path_relative']) ? $info['categories'][$categoryField]['path_relative'] : '';
             } else {
                 $info['catid']      = null;
-                $info['cat']        = null;
                 $info['cattitle']   = '';
                 $info['catpath']    = '';
             }
@@ -502,7 +492,7 @@ class News_Api_User extends Zikula_Api
                     $info['topictext'] = '';
                 }
                 // set the path of the Topic
-                $info['topicpath']  = $info['categories'][$topicField]['path_relative'];
+                $info['topicpath']  = isset($info['categories'][$topicField]['path_relative']) ? $info['categories'][$topicField]['path_relative'] : '';
             } else {
                 $info['topic']      = null;
                 $info['tid']        = null;
@@ -513,7 +503,6 @@ class News_Api_User extends Zikula_Api
             }
         } else {
             $info['catid']      = null;
-            $info['cat']        = null;
             $info['cattitle']   = '';
             $info['catpath']    = '';
             $info['topic']      = null;
@@ -554,13 +543,6 @@ class News_Api_User extends Zikula_Api
             $info['catandtitle'] = $info['title'];
         }
 
-        $info['maintext'] = $info['hometext']."\n".$info['bodytext'];
-        if (!empty($info['notes'])) {
-            $info['fulltext'] = $info['maintext']."\n".$info['notes'];
-        } else {
-            $info['fulltext'] = $info['maintext'];
-        }
-
         // Get the format types. 'home' string is bits 0-1, 'body' is bits 2-3.
         $info['hometype'] = ($info['format_type']%4);
         $info['bodytype'] = ($info['format_type']/4)%4;
@@ -570,8 +552,8 @@ class News_Api_User extends Zikula_Api
         if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
             $info['commentcount'] = ModUtil::apiFunc('EZComments', 'user', 'countitems',
                     array('mod' => 'News',
-                    'objectid' => $info['sid'],
-                    'status' => 0));
+                        'objectid' => $info['sid'],
+                        'status' => 0));
         }
 
         return($info);
@@ -586,16 +568,27 @@ class News_Api_User extends Zikula_Api
      */
     public function getArticleLinks($info)
     {
+        $shorturls = System::getVar('shorturls');
+        $shorturlstype = System::getVar('shorturlstype');
+
         // Allowed to comment?
         if (ModUtil::available('EZComments') &&  ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-            $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+            if ($shorturls && $shorturlstype == 0) {
+                $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories']), null, 'comments'));
+            } else {
+                $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+            }
         } else {
             $comment = '';
         }
 
         // Allowed to read full article?
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
-            $fullarticle = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'])));
+            if ($shorturls && $shorturlstype == 0) {
+                $fullarticle = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories'])));
+            } else {
+                $fullarticle = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'])));
+            }
         } else {
             $fullarticle = '';
         }
@@ -604,7 +597,7 @@ class News_Api_User extends Zikula_Api
         if (!empty($info['topicpath'])) {
             $topicField = $this->getTopicField();
             // check which variable to use for the topic
-            if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
+            if ($shorturls && $shorturlstype == 0) {
                 $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['topicpath'])));
             } else {
                 $searchtopic = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $info['tid'])));
@@ -617,7 +610,7 @@ class News_Api_User extends Zikula_Api
         $categories = array();
         if (!empty($info['categories']) && is_array($info['categories']) && $this->getVar('enablecategorization')) {
             // check which variable to use for the category
-            if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
+            if ($shorturls && $shorturlstype == 0) {
                 $field = 'path_relative';
             } else {
                 $field = 'id';
@@ -628,24 +621,30 @@ class News_Api_User extends Zikula_Api
             }
         }
 
-        $author = $info['contributor'];
-        $profileModule = System::getVar('profilemodule', '');
-        if (!empty($profileModule) && ModUtil::available($profileModule)) {
-            $author = ModUtil::url($profileModule, 'user', 'view', array('uname' => $author));
-        }
-
         // Set up the array itself
-        $links = array ('category'        => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
-                'categories'      => $categories,
-                'permalink'       => DataUtil::formatForDisplayHTML(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
-                'comment'         => $comment,
-                'fullarticle'     => $fullarticle,
-                'searchtopic'     => $searchtopic,
-                'print'           => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
-                'commentrssfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                'commentatomfeed' => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
-                'author'          => DataUtil::formatForDisplay($author),
-                'version'         => 1);
+        if ($shorturls && $shorturlstype == 0) {
+            $links = array ('category' => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
+                    'categories'       => $categories,
+                    'permalink'        => DataUtil::formatForDisplayHTML(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories']), null, null, true)),
+                    'comment'          => $comment,
+                    'fullarticle'      => $fullarticle,
+                    'searchtopic'      => $searchtopic,
+                    'print'            => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories'], 'theme' => 'Printer'))),
+                    'commentrssfeed'   => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'commentatomfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'version'          => 1);
+        } else {
+            $links = array ('category' => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => 'Main', 'cat' => $info['catvar']))),
+                    'categories'       => $categories,
+                    'permalink'        => DataUtil::formatForDisplayHTML(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, null, true)),
+                    'comment'          => $comment,
+                    'fullarticle'      => $fullarticle,
+                    'searchtopic'      => $searchtopic,
+                    'print'            => DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'theme' => 'Printer'))),
+                    'commentrssfeed'   => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'commentatomfeed'  => DataUtil::formatForDisplay(ModUtil::url('EZComments', 'user', 'feed', array('mod' => 'News', 'objectid' => $info['sid']))),
+                    'version'          => 1);
+        }
 
         return $links;
     }
@@ -673,17 +672,17 @@ class News_Api_User extends Zikula_Api
         $bytesmorelink = '';
         if ($bytesmore > 0) {
             if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
-                $title =  __('Read more...', $dom);
+                $title =  $this->__('Read more...');
                 $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
             }
-            $bytesmorelink = __f('%s bytes more', $bytesmore, $dom);
+            $bytesmorelink = $this->__f('%s bytes more', $bytesmore);
         }
 
         // Allowed to read full article?
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
             $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
-            $print = '<a class="news_printlink" href="'.$links['print'].'">'.__('Print', $dom).' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
-            $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.__('Printer-friendly page', $dom).'" /></a>';
+            $print = '<a class="news_printlink" href="'.$links['print'].'">'.$this->__('Print').' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
+            $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
         } else {
             $title = $info['title'];
             $print = '';
@@ -695,14 +694,14 @@ class News_Api_User extends Zikula_Api
         if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
             // Work out how to say 'comment(s)(?)' correctly
             if ($info['commentcount'] == 0) {
-                $comment = __('Comments?', $dom);
+                $comment = $this->__('Comments?');
             } else {
-                $comment = _fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount'], $dom);
+                $comment = $this->_fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount']);
             }
 
             // Allowed to comment?
             if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
-                $commentlink = '<a title="'.__f('%1$s about %2$s', array($info['commentcount'], $info['title']), $dom).'" href="'.$links['comment'].'">'.$comment.'</a>';
+                $commentlink = '<a title="'.$this->__f('%1$s about %2$s', array($info['commentcount'], $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
             } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
                 $commentlink = $comment;
             }
@@ -710,7 +709,7 @@ class News_Api_User extends Zikula_Api
 
         // Notes, if there are any
         if (isset($info['notes']) && !empty($info['notes'])) {
-            $notes = __f('Footnote: %s', $info['notes'], $dom);
+            $notes = $this->__f('Footnote: %s', $info['notes']);
         } else {
             $notes = '';
         }
@@ -758,7 +757,7 @@ class News_Api_User extends Zikula_Api
         }
         $preformat['more'] .= $preformat['comment'].' '.$preformat['print'];
 
-        if ($info['cat']) {
+        if ($info['catid']) {
             $preformat['catandtitle'] = $preformat['category'].': '.$preformat['title'];
         } else {
             $preformat['catandtitle'] = $preformat['title'];
@@ -874,14 +873,14 @@ class News_Api_User extends Zikula_Api
         $args['comments'] = 0;
 
         if (!($obj = DBUtil::insertObject($args, 'news', 'sid'))) {
-            return LogUtil::registerError(__('Error! Could not create new article.', $dom));
+            return LogUtil::registerError($this->__('Error! Could not create new article.'));
         }
 
         // update the from field to the same cr_date if it's null
         if (is_null($args['from'])) {
             $obj = array('sid'  => $obj['sid'], 'from' => $obj['cr_date']);
             if (!DBUtil::updateObject($obj, 'news', '', 'sid')) {
-                LogUtil::registerError(__('Error! Could not save your changes.', $dom));
+                LogUtil::registerError($this->__('Error! Could not save your changes.'));
             }
         }
 
@@ -940,7 +939,7 @@ class News_Api_User extends Zikula_Api
     {
         return array('viewfunc'    => 'view',
                 'displayfunc' => 'display',
-                'newfunc'     => 'new',
+                'newfunc'     => 'newitem',
                 'createfunc'  => 'create',
                 'modifyfunc'  => 'modify',
                 'updatefunc'  => 'update',
@@ -949,6 +948,9 @@ class News_Api_User extends Zikula_Api
                 'itemid'      => 'sid');
     }
 
+    /**
+     * decode a short url 
+     */
     public function decodeurl($args)
     {
         // check we actually have some vars to work with...
@@ -957,7 +959,7 @@ class News_Api_User extends Zikula_Api
         }
 
         // define the available user functions
-        $funcs = array('main', 'new', 'create', 'view', 'archives', 'display', 'categorylist', 'displaypdf');
+        $funcs = array('main', 'newitem', 'create', 'view', 'archives', 'display', 'categorylist', 'displaypdf');
         // set the correct function name based on our input
         if (empty($args['vars'][2])) {
             System::queryStringSetVar('func', 'main');
@@ -1044,13 +1046,15 @@ class News_Api_User extends Zikula_Api
         return true;
     }
     
+    /**
+     * encode an url to News into a shorturl
+     */
     public function encodeurl($args)
     {
         // check we have the required input
         if (!isset($args['modname']) || !isset($args['func']) || !isset($args['args'])) {
             return LogUtil::registerArgsError();
         }
-
         if (!isset($args['type'])) {
             $args['type'] = 'user';
         }
@@ -1073,12 +1077,11 @@ class News_Api_User extends Zikula_Api
             } else {
                 // get the item (will be cached by DBUtil)
                 $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $args['args']['sid']));
-                // replace the vars to form the permalink
                 $date = getdate(strtotime($item['from']));
                 $in = array('%category%', '%articleid%', '%articletitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
-                //$out = array(@$item['__CATEGORIES__']['Main']['path_relative'], $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
                 $out = array((isset($item['__CATEGORIES__']['Main']['path_relative']) ? $item['__CATEGORIES__']['Main']['path_relative'] : null), $item['sid'], $item['urltitle'], $date['year'], $date['mon'], strtolower(substr($date['month'], 0 , 3)), $date['mday']);
             }
+            // replace the vars to form the permalink
             $vars = str_replace($in, $out, $permalinkformat);
             if (isset($args['args']['page']) && $args['args']['page'] != 1) {
                 $vars .= '/page/'.$args['args']['page'];
@@ -1122,5 +1125,4 @@ class News_Api_User extends Zikula_Api
             return $args['modname'] . '/' . $args['func'] . '/' . $vars . '/';
         }
     }
-
 }

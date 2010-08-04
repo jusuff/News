@@ -119,13 +119,19 @@ class News_Controller_User extends Zikula_Controller
         $this->view->assign('accessadd', 0);
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
             $this->view->assign('accessadd', 1);
+            $this->view->assign('accesspicupload', 1);
+            $this->view->assign('accesspubdetails', 1);
         } else {
             // if higher level access_add is not permitted, check for more specific permission rights
             if (SecurityUtil::checkPermission('News:pictureupload:', '::', ACCESS_ADD)) {
                 $this->view->assign('accesspicupload', 1);
+            } else {
+                $this->view->assign('accesspubdetails', 0);
             }
             if (SecurityUtil::checkPermission('News:publicationdetails:', '::', ACCESS_ADD)) {
                 $this->view->assign('accesspubdetails', 1);
+            } else {
+                $this->view->assign('accesspubdetails', 0);
             }
         }
 
@@ -249,8 +255,6 @@ class News_Controller_User extends Zikula_Controller
         // get all module vars
         $modvars = $this->getVars();
 
-
-        
         // count the attached pictures (credit msshams)
         if ($modvars['picupload_enabled']) {
             $sizedpics = array();
@@ -409,9 +413,6 @@ Regards,
 
         // check if categorization is enabled
         if ($modvars['enablecategorization']) {
-            if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-                return LogUtil::registerError($this->__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil'));
-            }
             // get the categories registered for News
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
             $properties = array_keys($catregistry);
@@ -468,7 +469,7 @@ Regards,
 
         // assign the root category
         $this->view->assign('category', $cat);
-        $this->view->assign('catname', isset($catname) ? $catname : null);
+        $this->view->assign('catname', isset($catname) ? $catname : '');
 
         $newsitems = array();
         // Loop through each item and display it
@@ -586,7 +587,7 @@ Regards,
         }
 
         // Get the news story
-        if (!SecurityUtil::checkPermission('News::', "::$sid", ACCESS_ADD)) {
+        if (!SecurityUtil::checkPermission('News::', "::", ACCESS_ADD)) {
             if (isset($sid)) {
                 $item = ModUtil::apiFunc('News', 'user', 'get',
                         array('sid'       => $sid,
@@ -679,9 +680,6 @@ Regards,
                 $morearticlesincat = 0;
             }
             if ($morearticlesincat > 0) {
-                if (!Loader::loadClass('CategoryUtil') || !Loader::loadClass('CategoryRegistryUtil')) {
-                    return LogUtil::registerError($this->__f('Error! Could not load [%s] class.', 'CategoryUtil | CategoryRegistryUtil'));
-                }
                 // get the categories registered for News
                 $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
                 foreach (array_keys($catregistry) as $property) {

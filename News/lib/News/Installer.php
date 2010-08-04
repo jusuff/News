@@ -39,10 +39,12 @@ class News_Installer extends Zikula_Installer
         $this->setVar('enablecategorization', true);
         $this->setVar('refereronprint', 0);
         $this->setVar('enableattribution', false);
+        $this->setVar('topicproperty', '');
         $this->setVar('catimagepath', 'images/categories/');
         $this->setVar('enableajaxedit', false);
         $this->setVar('enablemorearticlesincat', false);
         $this->setVar('morearticlesincat', 0);
+        $this->setVar('enablecategorybasedpermissions', true); 
 
         // notification on new article
         $this->setVar('notifyonpending', false);
@@ -286,7 +288,9 @@ class News_Installer extends Zikula_Installer
                 $this->setVar('picupload_thumb2maxwidth', '200');
                 $this->setVar('picupload_thumb2maxheight', '200');
                 $this->setVar('picupload_uploaddir', '');
-
+                // add new category parameter
+                $this->setVar('enablecategorybasedpermissions', true); 
+                
                 // permalink format change story to article
                 $this->setVar('permalinkformat', str_replace(array('storytitle', 'storyid'), array('articletitle', 'articleid'), $this->getVar('permalinkformat')));
 
