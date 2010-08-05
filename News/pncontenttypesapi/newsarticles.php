@@ -84,7 +84,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     // Store the the seperate category related form returns in the categories array for News catfiltering
     $this->categories = array();
     foreach($properties as $prop) {
-        $this->categories[$prop] = $data['category__'.$prop];
+        if (!empty($data['category__'.$prop])) {
+            $this->categories[$prop] = $data['category__'.$prop];
+        }
     }
     $this->status = $data['status'];
     $this->show = $data['show'];
@@ -244,7 +246,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                     $items[$k]['hometextwrapped'] = true;
                 }
             }
-            $items[$k]['readperm']  = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
+            $items[$k]['readperm'] = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
         }
         if ($this->dispuname||$this->dispdate||$this->dispreads||$this->dispcomments) {
             $render->assign('dispinfo', true);
@@ -272,6 +274,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $render->assign('linktosubmit', $this->linktosubmit);
     $render->assign('stories', $items);
     $render->assign('title', $this->title);
+    $render->assign('useshorturls', (System::getVar('shorturls') && System::getVar('shorturlstype') == 0));
     return $render->fetch('contenttype/newsarticles_view.html');
   }
 
@@ -316,7 +319,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                  'disphometext' => false,
                  'maxhometextlength' => 300,
                  'hometextwraptext' => '['.__('Read more...', $dom).']',
-                 'dispuname' => false,
+                 'dispuname' => true,
                  'dispdate' => true,
                  'dateformat' => '%x',
                  'dispreads' => false,
