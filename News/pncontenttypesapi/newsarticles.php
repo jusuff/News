@@ -42,6 +42,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
   var $newimageset;
   var $newimagesrc;
   var $linktosubmit;
+  var $customtemplate;
 
   function getModule()
   {
@@ -110,6 +111,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $this->newimageset = $data['newimageset'];
     $this->newimagesrc = $data['newimagesrc'];
     $this->linktosubmit = $data['linktosubmit'];
+    $this->customtemplate = $data['customtemplate'];
   }
 
   /**
@@ -275,7 +277,12 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     $render->assign('stories', $items);
     $render->assign('title', $this->title);
     $render->assign('useshorturls', (System::getVar('shorturls') && System::getVar('shorturlstype') == 0));
-    return $render->fetch('contenttype/newsarticles_view.html');
+    if (!empty($this->customtemplate)) {
+        $template = $this->customtemplate;
+    } else {
+        $template = 'newsarticles_view.html';
+    }
+    return $render->fetch('contenttype/'.$template);
   }
 
   /**
@@ -329,7 +336,8 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                  'newimagelimit' => 3,
                  'newimageset' => 'global',
                  'newimagesrc' => 'new_3day.gif',
-                 'linktosubmit' => true);
+                 'linktosubmit' => true,
+                 'customtemplate' => '');
   }
 
   /**
