@@ -60,8 +60,8 @@
         <div>
             <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
             <input type="hidden" name="story[sid]" value="{$sid|safetext}" />
-            <input type="hidden" name="story[approver]" value="{$approver}" />
-            <input type="hidden" name="story[pictures]" value="{$pictures}" />
+            <input type="hidden" name="story[approver]" value="{$approver|safetext}" />
+            <input type="hidden" name="story[pictures]" value="{$pictures|safetext}" />
             {if $formattedcontent eq 1}
             <input type="hidden" name="story[hometextcontenttype]" value="1" />
             <input type="hidden" name="story[bodytextcontenttype]" value="1" />
