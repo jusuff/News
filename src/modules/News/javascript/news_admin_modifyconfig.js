@@ -6,10 +6,7 @@
  * create the onload function to enable the respective functions
  *
  */
-Event.observe(window, 
-              'load', 
-              news_modifyconfig_init_check,
-              false);
+Event.observe(window, 'load', news_modifyconfig_init_check);
 
 function news_modifyconfig_init_check() 
 {
@@ -44,7 +41,7 @@ function news_ajaxedit_init()
     if ($('news_enableajaxedit').checked == false) {
         $('news_ajaxedit_details').hide();
     }
-    Event.observe('news_enableajaxedit', 'change', news_ajaxedit_onchange);
+    $('news_enableajaxedit').observe('change', news_ajaxedit_onchange);
 }
 function news_ajaxedit_onchange()
 {
@@ -56,7 +53,7 @@ function news_category_init()
     if ($('news_enablecategorization').checked == false) {
         $('news_category_details').hide();
     }
-    Event.observe('news_enablecategorization', 'click', news_category_onchange);
+    $('news_enablecategorization').observe('click', news_category_onchange);
 }
 function news_category_onchange()
 {
@@ -68,7 +65,7 @@ function news_morearticles_init()
     if ($('news_enablemorearticlesincat').checked == false) {
         $('news_morearticles_details').hide();
     }
-    Event.observe('news_enablemorearticlesincat', 'click', news_morearticles_onchange);
+    $('news_enablemorearticlesincat').observe('click', news_morearticles_onchange);
 }
 function news_morearticles_onchange()
 {
@@ -80,7 +77,7 @@ function news_notifyonpending_init()
     if ($('news_notifyonpending').checked == false) {
         $('news_notifyonpending_details').hide();
     }
-    Event.observe('news_notifyonpending', 'click', news_notifyonpending_onchange);
+    $('news_notifyonpending').observe('click', news_notifyonpending_onchange);
 }
 function news_notifyonpending_onchange()
 {
@@ -92,7 +89,7 @@ function news_pdflink_init()
     if ($('news_pdflink').checked == false) {
         $('news_pdflink_details').hide();
     }
-    Event.observe('news_pdflink', 'click', news_pdflink_onchange);
+    $('news_pdflink').observe('click', news_pdflink_onchange);
 }
 function news_pdflink_onchange()
 {
@@ -104,7 +101,7 @@ function news_picupload_init()
     if ($('news_picupload_enabled').checked == false) {
         $('news_picupload_details').hide();
     }
-    Event.observe('news_picupload_enabled', 'click', news_picupload_onchange);
+    $('news_picupload_enabled').observe('click', news_picupload_onchange);
 }
 function news_picupload_onchange()
 {

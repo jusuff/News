@@ -102,9 +102,6 @@ VALUES ";
 
     /**
      * Do last minute access checking and assign URL to items
-     *
-     * Access checking is ignored since access check has
-     * already been done. But we do add a URL to the found user
      */
     public function search_check(&$args)
     {

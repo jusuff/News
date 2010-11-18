@@ -2,7 +2,7 @@
   *  $Id:  $ 
   * Create the onload function to enable the switch visibility functions
  */
-Event.observe(window, 'load', news_storiesextblock_modify_init, false);
+Event.observe(window, 'load', news_storiesextblock_modify_init);
 
 /**
  * Functions to enable watching for changes in  the optional divs and show and hide these divs 
@@ -11,34 +11,34 @@ Event.observe(window, 'load', news_storiesextblock_modify_init, false);
  */
 function news_storiesextblock_modify_init()
 {
-  Event.observe('news_storiesextblock_disphometext_yes', 'click', news_storiesextblock_disphometext_onchange);
-  Event.observe('news_storiesextblock_disphometext_no', 'click', news_storiesextblock_disphometext_onchange);
-  Event.observe('news_storiesextblock_dispnewimage_yes', 'click', news_storiesextblock_dispnewimage_onchange);
-  Event.observe('news_storiesextblock_dispnewimage_no', 'click', news_storiesextblock_dispnewimage_onchange);
-  Event.observe('news_storiesextblock_scrolling', 'change', news_storiesextblock_scrolling_onchange);
-  // Set the initial state of the optional visible parts
-  if ( !$('news_storiesextblock_disphometext_yes').checked) {
-    $('news_storiesextblock_disphometext_container').hide();
-  }
-  if ( !$('news_storiesextblock_dispnewimage_yes').checked) {
-    $('news_storiesextblock_dispnewimage_container').hide();
-  }
-  if ( $F('news_storiesextblock_scrolling') == "1") {
-    // Hide scrolling parameters when the first option "No Scrolling" is selected
-    $('news_storiesextblock_scrolling_container').hide();
-  }
+    $('news_storiesextblock_disphometext_yes').observe('click', news_storiesextblock_disphometext_onchange);
+    $('news_storiesextblock_disphometext_no').observe('click', news_storiesextblock_disphometext_onchange);
+    $('news_storiesextblock_dispnewimage_yes').observe('click', news_storiesextblock_dispnewimage_onchange);
+    $('news_storiesextblock_dispnewimage_no').observe('click', news_storiesextblock_dispnewimage_onchange);
+    $('news_storiesextblock_scrolling').observe('change', news_storiesextblock_scrolling_onchange);
+    // Set the initial state of the optional visible parts
+    if ( !$('news_storiesextblock_disphometext_yes').checked) {
+        $('news_storiesextblock_disphometext_container').hide();
+    }
+    if ( !$('news_storiesextblock_dispnewimage_yes').checked) {
+        $('news_storiesextblock_dispnewimage_container').hide();
+    }
+    if ( $F('news_storiesextblock_scrolling') == "1") {
+        // Hide scrolling parameters when the first option "No Scrolling" is selected
+        $('news_storiesextblock_scrolling_container').hide();
+    }
 }
 function news_storiesextblock_disphometext_onchange()
 {
-  switchdisplaystate('news_storiesextblock_disphometext_container');
+    switchdisplaystate('news_storiesextblock_disphometext_container');
 }
 function news_storiesextblock_dispnewimage_onchange()
 {
-  switchdisplaystate('news_storiesextblock_dispnewimage_container');
+    switchdisplaystate('news_storiesextblock_dispnewimage_container');
 }
 function news_storiesextblock_scrolling_onchange()
 {
-  switchdisplaystate('news_storiesextblock_scrolling_container');
+    switchdisplaystate('news_storiesextblock_scrolling_container');
 }
 
 /**
@@ -47,9 +47,9 @@ function news_storiesextblock_scrolling_onchange()
 function news_storiesextblock_selectAllOptions(selectElement, selected)
 {
     if (selected == null) {
-      selected = true;
+        selected = true;
     }
     for (var i = 0; i < selectElement.options.length; i++) {
-      selectElement.options[i].selected = selected;
+        selectElement.options[i].selected = selected;
     }
 }

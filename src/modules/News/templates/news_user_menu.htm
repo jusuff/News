@@ -51,7 +51,7 @@
         {modapifunc modname='News' type='user' func='countitems' status='2' assign='pendingcount'}
         {if $pendingcount gt 0}
         |
-        <a href="{modurl modname='News' type='admin' func='view' news_status='2'}">{if $pendingcount gt 0}{gt text='%s pending article' plural='%s pending articles' count=$pendingcount tag1=$pendingcount}{/if}</a>
+        <a href="{modurl modname='News' type='admin' func='view' news_status='2'}">{gt text='%s pending article' plural='%s pending articles' count=$pendingcount tag1=$pendingcount}</a>
         {else}
         |
         <a href="{pnmodurl modname='News' type='admin' func='view'}">{gt text="Admin"}</a>

@@ -9,10 +9,7 @@ var draftsaved = false;
  * create the onload function to enable the respective functions
  *
  */
-Event.observe(window, 
-              'load', 
-              news_init_check,
-              false);
+Event.observe(window, 'load', news_init_check);
 
 function news_init_check() 
 {
@@ -397,7 +394,7 @@ function news_title_init()
 
 function news_filter_init()
 {
-    Event.observe('news_property', 'change', news_property_onchange);
+    $('news_property').observe('change', news_property_onchange);
     news_property_onchange();
     $('news_multicategory_filter').show();
 }
@@ -421,8 +418,8 @@ function news_expiration_init()
     } else if ($('news_button_text_publish')) {
         $('news_button_text_publish').update(string_schedule);
     }
-    Event.observe('news_unlimited', 'click', news_unlimited_onchange);
-    Event.observe('news_tonolimit', 'click', news_tonolimit_onchange);
+    $('news_unlimited').observe('click', news_unlimited_onchange);
+    $('news_tonolimit').observe('click', news_tonolimit_onchange);
 }
 
 function news_unlimited_onchange()
@@ -443,7 +440,7 @@ function news_tonolimit_onchange()
 
 function news_publication_init()
 {
-    Event.observe('news_publication_collapse', 'click', news_publication_click);
+    $('news_publication_collapse').observe('click', news_publication_click);
     $('news_publication_collapse').addClassName('z-toggle-link');
     // show the publication details when a variable is not set to default
     if ($('news_unlimited').checked == true && $('news_hideonindex').checked == true && $('news_disallowcomments').checked == true) {
@@ -478,7 +475,7 @@ function news_publication_click()
 
 function news_attributes_init()
 {
-    Event.observe('news_attributes_collapse', 'click', news_attributes_click);
+    $('news_attributes_collapse').observe('click', news_attributes_click);
     $('news_attributes_collapse').addClassName('z-toggle-link');
     // show attributes when there are any
     if ($('listitem_news_attributes_1')) {
@@ -508,7 +505,7 @@ function news_attributes_click()
 
 function news_notes_init()
 {
-    Event.observe('news_notes_collapse', 'click', news_notes_click);
+    $('news_notes_collapse').observe('click', news_notes_click);
     $('news_notes_collapse').addClassName('z-toggle-link');
     if ($('news_notes_details').style.display != "none") {
         $('news_notes_collapse').removeClassName('z-toggle-link-open');
@@ -532,7 +529,7 @@ function news_notes_click()
 
 function news_meta_init()
 {
-    Event.observe('news_meta_collapse', 'click', news_meta_click);
+    $('news_meta_collapse').observe('click', news_meta_click);
     $('news_meta_collapse').addClassName('z-toggle-link');
     if ($('news_meta_details').style.display != "none") {
         $('news_meta_collapse').removeClassName('z-toggle-link-open');
