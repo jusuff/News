@@ -2,9 +2,9 @@
 
 {formutil_getpassedvalue name='func' default='main' noprocess=true assign='func'}
 {formutil_getpassedvalue name='theme' default='' noprocess=true assign='theme'}
-{securityutil_checkpermission component='News::' instance='::' level='ACCESS_OVERVIEW' assign='authoverview'}
-{securityutil_checkpermission component='News::' instance='::' level='ACCESS_COMMENT' assign='authcomm'}
-{securityutil_checkpermission component='News::' instance='::' level='ACCESS_EDIT' assign='authedit'}
+{checkpermission component='News::' instance='::' level='ACCESS_OVERVIEW' assign='authoverview'}
+{checkpermission component='News::' instance='::' level='ACCESS_COMMENT' assign='authcomm'}
+{checkpermission component='News::' instance='::' level='ACCESS_EDIT' assign='authedit'}
 
 {* assign the page title if News is the current module *}
 {modgetname assign='module'}

@@ -100,7 +100,7 @@
             {if $multilingual}
             <div class="z-formrow">
                 <label for="news_language">{gt text='Language'}</label>
-                {languagelist id='news_language' name='story[language]' all=true installed=true selected=$language}
+                {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
             </div>
             {/if}
         </fieldset>
@@ -109,7 +109,7 @@
             <legend>{gt text='Article'}</legend>
 
             {if $formattedcontent eq 0}
-            <div class="z-warningmsg">{gt text='Permitted HTML tags'}: {allowedhtml}</div>
+            <div class="z-warningmsg">{gt text='Permitted HTML tags'}: {news_allowedhtml}</div>
             {/if}
             <div class="z-formrow">
                 <label for="news_hometext"><strong>{gt text='Index page teaser text'}</strong></label>

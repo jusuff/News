@@ -1,5 +1,5 @@
 {*  $Id: news_ajax_modify.htm 75 2009-02-24 04:51:52Z mateo $  *}
-{securityutil_checkpermission component='News::' instance="$cr_uid::$sid" level='ACCESS_DELETE' assign='mayDelete'}
+{checkpermission component='News::' instance="$cr_uid::$sid" level='ACCESS_DELETE' assign='mayDelete'}
 
 {gt text='Edit news article' assign='templatetitle' domain='module_news'}
 
@@ -57,7 +57,7 @@
             {if $multilingual}
             <div class="z-formrow">
                 <label for="news_language">{gt text='Language(s) for which article should be displayed' domain='module_news'}</label>
-                {languagelist id='news_language' name='story[language]' all=true installed=true selected=$language}
+                {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
             </div>
             {/if}
         </fieldset>
@@ -66,7 +66,7 @@
             <legend>{gt text='Article' domain='module_news'}</legend>
 
             {if $formattedcontent eq 0}
-            <div class="z-warningmsg">{gt text='Permitted HTML tags' domain='module_news'}: {allowedhtml}</div>
+            <div class="z-warningmsg">{gt text='Permitted HTML tags' domain='module_news'}: {news_allowedhtml}</div>
             {/if}
             <div class="z-formrow">
                 <label for="news_hometext"><strong>{gt text='Index page teaser text' domain='module_news'}</strong></label>
