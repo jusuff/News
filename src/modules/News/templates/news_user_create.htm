@@ -225,11 +225,11 @@
                 if (!Control.DatePicker.Locale[lang+'_iso8601']) {
                     with (Control.DatePicker) Locale[lang+'_iso8601'] = i18n.createLocale('iso8601', lang);
                 }
-                new Control.DatePicker('news_from', {locale: lang+'_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
-                new Control.DatePicker('news_to', {locale: lang+'_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
+                new Control.DatePicker('news_from', {locale: lang+'_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/images/calendar.png', timePicker: true, timePickerAdjacent: true});
+                new Control.DatePicker('news_to', {locale: lang+'_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/images/calendar.png', timePicker: true, timePickerAdjacent: true});
             } else {
-                new Control.DatePicker('news_from', {locale: 'en_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
-                new Control.DatePicker('news_to', {locale: 'en_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/pnimages/calendar.png', timePicker: true, timePickerAdjacent: true});
+                new Control.DatePicker('news_from', {locale: 'en_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/images/calendar.png', timePicker: true, timePickerAdjacent: true});
+                new Control.DatePicker('news_to', {locale: 'en_iso8601', use24hrs: true, icon: '{{$baseurl}}modules/News/images/calendar.png', timePicker: true, timePickerAdjacent: true});
             }
             // ]]>
         </script>

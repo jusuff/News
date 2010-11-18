@@ -17,7 +17,7 @@
     margin-left: 15%;
 }
 .news_preview {
-    background: url(../pnimages/bg_preview.png) #fafafa;
+    background: url(../images/bg_preview.png) #fafafa;
     margin: 1em 0;
     padding: 7px;
 }
@@ -106,7 +106,7 @@ and http://www.zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba */
 #news_buttons a, #news_buttons button {
     display:inline-block;
     margin:0 2px 5px;
-    background:#f2f2f2 url(../pnimages/overlay-button.png) repeat-x;
+    background:#f2f2f2 url(../images/overlay-button.png) repeat-x;
     font-size:100%;
     line-height:1;
     text-decoration:none;
@@ -229,12 +229,12 @@ and http://www.zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba */
 	position: absolute;
 	top: 5px;
 	left: 6px;
-	background: url(../pnimages/round-corner.png) no-repeat;
+	background: url(../images/round-corner.png) no-repeat;
 }
 .news_thumbs img {
 	border: none;
 	padding: 5px 6px 6px;
-	background: url(../pnimages/round-bg.gif) no-repeat;
+	background: url(../images/round-bg.gif) no-repeat;
 }*/
 .news_thumbs img {
 	border: 1px solid #ddd;
@@ -261,12 +261,12 @@ and http://www.zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba */
 	position: absolute;
 	top: 5px;
 	left: 6px;
-	background: url(../pnimages/round-corner1.png) no-repeat;
+	background: url(../images/round-corner1.png) no-repeat;
 }
 .news_thumbsslide img, .news_thumbsindex img {
 	border: none;
 	padding: 5px 6px 6px;
-	background: url(../pnimages/round-bg1.gif) no-repeat;
+	background: url(../images/round-bg1.gif) no-repeat;
 }*/
 .news_thumbsslide img, .news_thumbsindex img {
 	border: 1px solid #ddd;

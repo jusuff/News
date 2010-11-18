@@ -7,8 +7,8 @@
 var persisteduls=new Object()
 var ddtreemenu=new Object()
 
-//ddtreemenu.closefolder="modules/News/pnimages/closed.gif" //set image path to "closed" folder image
-//ddtreemenu.openfolder="modules/News/pnimages/open.gif" //set image path to "open" folder image
+//ddtreemenu.closefolder="modules/News/images/closed.gif" //set image path to "closed" folder image
+//ddtreemenu.openfolder="modules/News/images/open.gif" //set image path to "open" folder image
 
 //////////No need to edit beyond here///////////////////////////
 
