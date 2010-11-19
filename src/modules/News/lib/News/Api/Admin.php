@@ -240,18 +240,22 @@ class News_Api_Admin extends Zikula_Api
 
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'view'),
-                    'text' => $this->__('News articles list'));
+                    'text' => $this->__('News articles list'),
+                    'class' => 'z-icon-es-list');
         }
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'newitem'),
-                    'text' =>  $this->__('Create new article'));
+                    'text' =>  $this->__('Create new article'),
+                    'class' => 'z-icon-es-new');
         }
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'view', array('purge' => 1)),
-                    'text' => $this->__('Purge permalinks'));
+                    'text' => $this->__('Purge permalinks'),
+                    'class' => 'z-icon-es-regenerate');
 
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'modifyconfig'),
-                    'text' => $this->__('Settings'));
+                    'text' => $this->__('Settings'),
+                    'class' => 'z-icon-es-config');
         }
 
         return $links;
