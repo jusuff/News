@@ -81,6 +81,9 @@ class News_Installer extends Zikula_Installer
         // create the default data for the News module
         $this->defaultdata();
 
+        // register handlers
+        EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
+
         // Initialisation successful
         return true;
     }
@@ -298,10 +301,14 @@ class News_Installer extends Zikula_Installer
                 ModUtil::apiFunc('view', 'user', 'clear_compiled');
                 ModUtil::apiFunc('view', 'user', 'clear_cache', array('module' => 'News'));
 
-            case '2.5.3':
+            case '2.6.0':
+            case '2.6.1':
+            case '2.6.2':
+                // register handlers
+                EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
 
             case '3.0.0':
-            // migration routines
+            // future plans
         }
 
         // Update successful
@@ -327,6 +334,9 @@ class News_Installer extends Zikula_Installer
         ModUtil::dbInfoLoad ('Categories');
         DBUtil::deleteWhere('categories_registry', "crg_modname='News'");
         DBUtil::deleteWhere('categories_mapobj', "cmo_modname='News'");
+
+        // unregister handlers
+        EventUtil::unregisterPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
 
         // Deletion successful
         return true;
