@@ -22,10 +22,6 @@ Cross browser Marquee II from Dynamic Drive
 Pausing up-down scroller from Dynamic Drive
 
 ---
-IE6 buttonfix used in user_new template:
-http://www.kopz.org/public/documents/css/multiple_buttons_ie_workaround.html
-
----
 PHP Thumb image manipulation library
 http://phpthumb.gxdlabs.com/
 License: MIT License
