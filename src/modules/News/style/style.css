@@ -109,13 +109,6 @@ div.news_index {
     margin: 1em 0 1em 1em;
 }
 
-#news_admintable .news_categorieslist ul,
-#news_admintable .news_categorieslist ul li {
-    margin: 0;
-    padding: 0;
-    list-style: inside;
-}
-
 /* Styling for optional picture(s) in articles */
 .news_photo {
     margin: 0 10px 0 5px;

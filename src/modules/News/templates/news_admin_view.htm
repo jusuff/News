@@ -1,4 +1,4 @@
-{ajaxheader modname='News' filename='news.js' nobehaviour=true noscriptaculous=true}
+{ajaxheader modname='News' filename='news.js' nobehaviour=true noscriptaculous=true ui=true}
 {gt text='News articles list' assign='templatetitle'}
 
 {include file='news_admin_menu.htm'}
@@ -126,7 +126,7 @@
                 <td>
                     {assign var='options' value=$newsitem.options}
                     {section name='options' loop=$options}
-                    <a href="{$options[options].url|safetext}">{img modname='core' set='icons/extrasmall' src=$options[options].image title=$options[options].title alt=$options[options].title}</a>
+                    <a href="{$options[options].url|safetext}">{img modname='core' set='icons/extrasmall' src=$options[options].image title=$options[options].title alt=$options[options].title class='tooltips'}</a>
                     {/section}
                 </td>
             </tr>
@@ -147,3 +147,7 @@
 
     {pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='startnum' shift=1}
 </div>
+
+<script type="text/javascript">
+    Zikula.UI.Tooltips($$('.tooltips'));
+</script>
