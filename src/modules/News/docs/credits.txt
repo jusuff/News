@@ -11,11 +11,6 @@ URL: http://www.dynamicdrive.com/dynamicindex1/navigate1.htm
 License: http://www.dynamicdrive.com/notice.htm - Terms of Use
 
 ---
-Button layout inspiration in new/modify forms:
-http://particletree.com/features/rediscovering-the-button-element/
-http://www.zurb.com/article/266/super-awesome-buttons-with-css3-and-rgba
-
----
 Storiesext block scrolling scripts:
 Memory Ticker script from Dynamic Drive
 Cross browser Marquee II from Dynamic Drive

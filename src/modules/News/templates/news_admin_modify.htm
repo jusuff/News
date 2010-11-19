@@ -308,37 +308,37 @@
 
             {modcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News'}
 
-            <div id="news_buttons" class="z-center">
-                <button id="news_button_preview" type="submit" name="story[action]" value="0" title="{gt text='Preview this article'}">{img src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview' __title='Preview this article'}{gt text='Preview'}</button>
+            <div class="z-buttonrow z-buttons z-center">
+                <button id="news_button_preview" type="submit" name="story[action]" value="0" title="{gt text='Preview this article'}">{img src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview' __title='Preview this article'} {gt text='Preview'}</button>
                 {if $accessadd neq 1}
-                <button id="news_button_submit" class="positive" type="submit" name="story[action]" value="1" title="{gt text='Submit this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article'}{gt text='Submit'}</button>
+                <button id="news_button_submit" class="z-btgreen" type="submit" name="story[action]" value="1" title="{gt text='Submit this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article'} {gt text='Submit'}</button>
                 {else}
                 {if $published_status eq 4}
-                <button id="news_button_draft" type="submit" name="story[action]" value="6" title="{gt text='Update draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Update draft' __title='Update draft'}{gt text='Update draft'}</button>
+                <button id="news_button_draft" type="submit" name="story[action]" value="6" title="{gt text='Update draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Update draft' __title='Update draft'} {gt text='Update draft'}</button>
                 {else}
-                <button id="news_button_draft" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'}{gt text='Save as draft'}</button>
+                <button id="news_button_draft" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'} {gt text='Save as draft'}</button>
                 {/if}
                 {if $published_status neq 2}
-                <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'}{gt text='Pending'}</button>
+                <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'} {gt text='Pending'}</button>
                 {/if}
                 {if $published_status eq 2}
-                <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="{gt text='Approve and publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Approve and Publish'  __title='Approve and publish this article' }{gt text='Approve and'} <span id="news_button_text_publish">{gt text='Publish'}</span></button>
+                <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Approve and publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Approve and Publish'  __title='Approve and publish this article' }{gt text='Approve and'} <span id="news_button_text_publish"> {gt text='Publish'}</span></button>
                 {elseif $published_status eq 0}
-                <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="{gt text='Update this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Update'  __title='Update this article' }{gt text='Update'}</button>
+                <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Update this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Update'  __title='Update this article' } {gt text='Update'}</button>
                 {else}
-                <button id="news_button_publish" class="positive" type="submit" name="story[action]" value="2" title="{gt text='Publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' }<span id="news_button_text_publish">{gt text='Publish'}</span></button>
+                <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish'  __title='Publish this article' }<span id="news_button_text_publish"> {gt text='Publish'}</span></button>
                 {/if}
                 {if $published_status neq 3}
-                <button id="news_button_archive" type="submit" name="story[action]" value="5" title="{gt text='Archive this article'}">{img src='folder_yellow.gif' modname='core' set='icons/extrasmall' __alt='Archive'  __title='Archive this article' }{gt text='Archive'}</button>
+                <button id="news_button_archive" type="submit" name="story[action]" value="5" title="{gt text='Archive this article'}">{img src='folder_yellow.gif' modname='core' set='icons/extrasmall' __alt='Archive'  __title='Archive this article' } {gt text='Archive'}</button>
                 {/if}
                 {if $published_status eq 2}
-                <button id="news_button_reject" class="negative" type="submit" name="story[action]" value="3" title="{gt text='Reject this article'}">{img src='locked.gif' modname='core' set='icons/extrasmall' __alt='Reject'  __title='Reject this article' }{gt text='Reject'}</button>
+                <button id="news_button_reject" class="z-btred" type="submit" name="story[action]" value="3" title="{gt text='Reject this article'}">{img src='locked.gif' modname='core' set='icons/extrasmall' __alt='Reject'  __title='Reject this article' } {gt text='Reject'}</button>
                 {/if}
                 {/if}
                 {if $mayDelete}
-                <a id="news_button_delete" href="{modurl modname='News' type='admin' func='delete' sid=$sid}" class="negative">{img modname='core' src='editdelete.gif' set='icons/extrasmall' __alt='Delete' __title='Delete this article'}{gt text='Delete'}</a>
+                <a id="news_button_delete" href="{modurl modname='News' type='admin' func='delete' sid=$sid}" class="z-btred">{img modname='core' src='editdelete.gif' set='icons/extrasmall' __alt='Delete' __title='Delete this article'} {gt text='Delete'}</a>
                 {/if}
-                <a id="news_button_cancel" href="{modurl modname='News' type='admin' func='view'}" class="negative">{img modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel'}{gt text='Cancel'}</a>
+                <a id="news_button_cancel" href="{modurl modname='News' type='admin' func='view'}" class="z-btred">{img modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel'} {gt text='Cancel'}</a>
             </div>
         </div>
     </form>
