@@ -1,4 +1,3 @@
-{*  $Id: news_admin_view.htm 75 2009-02-24 04:51:52Z mateo $  *}
 {ajaxheader modname='News' filename='news.js' nobehaviour=true noscriptaculous=true}
 {gt text='News articles list' assign='templatetitle'}
 
@@ -74,7 +73,7 @@
     </form>
     {/if}
 
-    <table id="news_admintable" class="z-admintable">
+    <table id="news_admintable" class="z-datatable">
         <thead>
             <tr>
                 <th>{gt text='ID'}</th>
@@ -132,7 +131,7 @@
                 </td>
             </tr>
             {foreachelse}
-            <tr class="z-admintableempty"><td colspan="{if $enablecategorization}7{else}6{/if}">{gt text='No articles currently in database.'}</td></tr>
+            <tr class="z-datatableempty"><td colspan="{if $enablecategorization}7{else}6{/if}">{gt text='No articles currently in database.'}</td></tr>
             {/foreach}
         </tbody>
     </table>
