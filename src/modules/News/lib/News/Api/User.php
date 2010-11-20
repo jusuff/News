@@ -526,12 +526,13 @@ class News_Api_User extends Zikula_Api
         $info['cattitle'] = DataUtil::formatForDisplayHTML($info['cattitle']);
 
         // Hooks filtering should be after formatForDisplay to allow Hook transforms
-        list($info['hometext'],
-                $info['bodytext'],
-                $info['notes']) = ModUtil::callHooks('item', 'transform', '',
-                array($info['hometext'],
-                $info['bodytext'],
-                $info['notes']));
+        // TODO
+//        list($info['hometext'],
+//                $info['bodytext'],
+//                $info['notes']) = ModUtil::callHooks('item', 'transform', '',
+//                array($info['hometext'],
+//                $info['bodytext'],
+//                $info['notes']));
 
         // Create 'Category: title'-style header -- Credit to Rabbit for the older theme compatibility.
         if ($info['catid']) {
@@ -546,12 +547,13 @@ class News_Api_User extends Zikula_Api
         unset($info['format_type']);
 
         // Check for comments
-        if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-            $info['commentcount'] = ModUtil::apiFunc('EZComments', 'user', 'countitems',
-                    array('mod' => 'News',
-                        'objectid' => $info['sid'],
-                        'status' => 0));
-        }
+        // TODO
+//        if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+//            $info['commentcount'] = ModUtil::apiFunc('EZComments', 'user', 'countitems',
+//                    array('mod' => 'News',
+//                        'objectid' => $info['sid'],
+//                        'status' => 0));
+//        }
 
         return($info);
     }
@@ -569,15 +571,16 @@ class News_Api_User extends Zikula_Api
         $shorturlstype = System::getVar('shorturlstype');
 
         // Allowed to comment?
-        if (ModUtil::available('EZComments') &&  ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-            if ($shorturls && $shorturlstype == 0) {
-                $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories']), null, 'comments'));
-            } else {
-                $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
-            }
-        } else {
+        // TODO
+//        if (ModUtil::available('EZComments') &&  ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+//            if ($shorturls && $shorturlstype == 0) {
+//                $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories']), null, 'comments'));
+//            } else {
+//                $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid']), null, 'comments'));
+//            }
+//        } else {
             $comment = '';
-        }
+//        }
 
         // Allowed to read full article?
         if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
@@ -686,21 +689,22 @@ class News_Api_User extends Zikula_Api
 
         $comment = '';
         $commentlink = '';
-        if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
-            // Work out how to say 'comment(s)(?)' correctly
-            if ($info['commentcount'] == 0) {
-                $comment = $this->__('Comments?');
-            } else {
-                $comment = $this->_fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount']);
-            }
-
-            // Allowed to comment?
-            if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
-                $commentlink = '<a title="'.$this->__f('%1$s about %2$s', array($info['commentcount'], $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
-            } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
-                $commentlink = $comment;
-            }
-        }
+        // TODO
+//        if (ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News') && $info['disallowcomments'] == 0) {
+//            // Work out how to say 'comment(s)(?)' correctly
+//            if ($info['commentcount'] == 0) {
+//                $comment = $this->__('Comments?');
+//            } else {
+//                $comment = $this->_fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount']);
+//            }
+//
+//            // Allowed to comment?
+//            if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
+//                $commentlink = '<a title="'.$this->__f('%1$s about %2$s', array($info['commentcount'], $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
+//            } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+//                $commentlink = $comment;
+//            }
+//        }
 
         // Notes, if there are any
         if (isset($info['notes']) && !empty($info['notes'])) {
@@ -861,7 +865,8 @@ class News_Api_User extends Zikula_Api
         }
 
         // Let any hooks know that we have created a new item
-        $this->callHooks('item', 'create', $args['sid'], array('module' => 'News'));
+        // TODO
+//        $this->callHooks('item', 'create', $args['sid'], array('module' => 'News'));
 
         // An item was created, so we clear all cached pages of the items list.
         $render = Zikula_View::getInstance('News');

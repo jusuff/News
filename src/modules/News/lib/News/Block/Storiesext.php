@@ -328,9 +328,10 @@ height:50px;
                 }
             }
             // Check for EZComments
-            if ($vars['dispcomments'] && ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News')) {
-                $item['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $item['sid'], 'status' => 0));
-            }
+            // TODO
+//            if ($vars['dispcomments'] && ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News')) {
+//                $item['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $item['sid'], 'status' => 0));
+//            }
             if ($vars['disphometext']) {
                 if ($vars['maxhometextlength'] > 0 && strlen(strip_tags($item['hometext'])) > (int)$vars['maxhometextlength']) {
                     $item['hometextwrapped'] = true;

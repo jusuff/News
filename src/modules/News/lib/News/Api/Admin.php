@@ -58,7 +58,8 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // Let any hooks know that we have deleted an item
-        $this->callHooks('item', 'delete', $args['sid'], array('module' => 'News'));
+        // TODO
+        //$this->callHooks('item', 'delete', $args['sid'], array('module' => 'News'));
 
         // Let the calling process know that we have finished successfully
         return true;
@@ -168,7 +169,8 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // Let any hooks know that we have updated an item.
-        $this->callHooks('item', 'update', $args['sid'], array('module' => 'News'));
+        // TODO
+        //$this->callHooks('item', 'update', $args['sid'], array('module' => 'News'));
 
         // The item has been modified, so we clear all cached pages of this item.
         $render = Zikula_View::getInstance('News');

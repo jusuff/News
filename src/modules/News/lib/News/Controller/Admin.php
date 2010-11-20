@@ -856,7 +856,8 @@ class News_Controller_Admin extends Zikula_Controller
         $this->setVars($modvars);
 
         // Let any other modules know that the modules configuration has been updated
-        $this->callHooks('module','updateconfig','News', array('module' => 'News'));
+        // TODO
+        // $this->callHooks('module','updateconfig','News', array('module' => 'News'));
 
         // the module configuration has been updated successfuly
         LogUtil::registerStatus($this->__('Done! Saved module settings.'));
