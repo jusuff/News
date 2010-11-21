@@ -33,7 +33,7 @@ class News_Api_Search extends Zikula_Api
             // we can return it easily when required
             $render = Zikula_View::getInstance('News');
             $render->assign('active', (isset($args['active']) && isset($args['active']['News'])) || (!isset($args['active'])));
-            return $render->fetch('news_search_options.htm');
+            return $render->fetch('search/options.tpl');
         }
 
         return '';

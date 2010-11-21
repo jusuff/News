@@ -98,7 +98,7 @@ class News_Block_Big extends Zikula_Block
                 'links' => $links,
                 'preformat' => $preformat));
 
-        $blockinfo['content'] = $this->view->fetch('news_block_big.htm');
+        $blockinfo['content'] = $this->view->fetch('block/big.tpl');
 
         return BlockUtil::themeBlock($blockinfo);
     }

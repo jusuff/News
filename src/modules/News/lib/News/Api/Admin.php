@@ -175,7 +175,7 @@ class News_Api_Admin extends Zikula_Api
         // The item has been modified, so we clear all cached pages of this item.
         $render = Zikula_View::getInstance('News');
         $render->clear_cache(null, $args['sid']);
-        $render->clear_cache('news_user_view.htm');
+        $render->clear_cache('user/view.tpl');
 
         // Let the calling process know that we have finished successfully
         return true;

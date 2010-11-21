@@ -870,7 +870,7 @@ class News_Api_User extends Zikula_Api
 
         // An item was created, so we clear all cached pages of the items list.
         $render = Zikula_View::getInstance('News');
-        $render->clear_cache('news_user_view.htm');
+        $render->clear_cache('user/view.tpl');
 
         // Return the id of the newly created item to the calling process
         return $args['sid'];
