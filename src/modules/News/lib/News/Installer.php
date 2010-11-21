@@ -265,13 +265,13 @@ class News_Installer extends Zikula_Installer
                 ModUtil::apiFunc('view', 'user', 'clear_cache', array('module' => 'News'));
 
             case '2.5':
-            // update table
+                // update table
                 if (!DBUtil::changeTable('news')) {
                     return '2.5';
                 }
             case '2.5.1':
             case '2.5.2':
-            // add the new picture column and update the table
+                // add the new picture column and update the table
                 if (!DBUtil::changeTable('news')) {
                     return '2.5.2';
                 }
@@ -305,7 +305,10 @@ class News_Installer extends Zikula_Installer
             case '2.6.2':
                 // register handlers
                 EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
-
+                // update the table
+                if (!DBUtil::changeTable('news')) {
+                    return '2.6.2';
+                }
             case '3.0.0':
             // future plans
         }
