@@ -4,7 +4,6 @@
  *
  * @copyright  (c) Zikula Development Team
  * @link       http://www.zikula.org
- * @version    $Id: pnadminapi.php 75 2009-02-24 04:51:52Z mateo $
  * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @author     Mark West <mark@zikula.org>
  * @category   Zikula_3rdParty_Modules
@@ -243,7 +242,23 @@ class News_Api_Admin extends Zikula_Api
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'view'),
                     'text' => $this->__('News articles list'),
-                    'class' => 'z-icon-es-list');
+                    'class' => 'z-icon-es-list',
+                    'links' => array(
+                        array('url' => ModUtil::url('News', 'admin', 'view'),
+                            'text' => $this->__('All')),
+                        array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>0)),
+                            'text' => $this->__('Published')),
+                        array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>1)),
+                            'text' => $this->__('Rejected')),
+                        array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>2)),
+                            'text' => $this->__('Pending Review')),
+                        array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>3)),
+                            'text' => $this->__('Archived')),
+                        array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>4)),
+                            'text' => $this->__('Draft')),
+                        array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>5)),
+                            'text' => $this->__('Scheduled'))
+                    ));
         }
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'newitem'),
