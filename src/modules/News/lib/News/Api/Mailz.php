@@ -45,8 +45,6 @@ class News_Api_Mailz extends Zikula_Api
     */
     public function getContent($args)
     {
-        $dom = ZLanguage::getModuleDomain('News');
-
         switch($args['pluginid']) {
             case 1:
             //$uid = $args['uid'];

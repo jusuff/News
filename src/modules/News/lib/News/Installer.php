@@ -391,8 +391,6 @@ class News_Installer extends Zikula_Installer
      */
     function _news_migratecategories()
     {
-        $dom = ZLanguage::getModuleDomain('News');
-
         // load the admin language file
         // pull all data from the old tables
         $tables = DBUtil::getTables();
