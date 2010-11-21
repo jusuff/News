@@ -4,7 +4,6 @@
  *
  * @copyright (c) 2001, Zikula Development Team
  * @link http://www.zikula.org
- * @version $Id: stories.php 22319 2007-07-04 18:09:18Z markwest $
  * @link http://code.zikula.org/storiesext  Project page
  * @link http://www.erikspaan.nl    Homepage of author
  * @license GNU/GPL - http://www.gnu.org/copyleft/gpl.html

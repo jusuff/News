@@ -4,7 +4,6 @@
  *
  * @copyright  (c) Zikula Development Team
  * @link       http://www.zikula.org
- * @version    $Id: pnadmin.php 82 2009-02-25 23:09:21Z mateo $
  * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @author     Mark West <mark@zikula.org>
  * @category   Zikula_3rdParty_Modules

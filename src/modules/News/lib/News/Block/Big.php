@@ -4,7 +4,6 @@
  *
  * @copyright  (c) Zikula Development Team
  * @link       http://www.zikula.org
- * @version    $Id: big.php 75 2009-02-24 04:51:52Z mateo $
  * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @author     Mark West <mark@zikula.org>
  * @category   Zikula_3rdParty_Modules

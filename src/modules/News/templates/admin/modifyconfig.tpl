@@ -6,7 +6,7 @@
     <div class="z-adminpageicon">{img modname='core' src='configure.gif' set='icons/large' __alt='Settings'}</div>
 
     <h2>{gt text='Settings'}</h2>
-    <p class="z-warningmsg">{gt text='Notice: Your theme could be using template overrides for the News publisher module (in themes/YourThemeName/templates/modules/News/...). They might lack behind in functionality to the current default News publisher templates, please remove them or check them carefully against the default News publisher templates (in modules/News/pntemplates/...).'}</p>
+    <p class="z-warningmsg">{gt text='Notice: Your theme could be using template overrides for the News publisher module (in themes/YourThemeName/templates/modules/News/...). They might lack behind in functionality to the current default News publisher templates, please remove them or check them carefully against the default News publisher templates (in modules/News/templates/...).'}</p>
 
     <form class="z-form" action="{modurl modname='News' type='admin' func='updateconfig'}" method="post" enctype="application/x-www-form-urlenpred">
         <div>

@@ -4,7 +4,6 @@
  *
  * @copyright  (c) Zikula Development Team
  * @link       http://www.zikula.org
- * @version    $Id:  $
  * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @author     Erik Spaan <erik@erikspaan.nl>
  * @category   Zikula_3rdParty_Modules

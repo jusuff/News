@@ -4,7 +4,6 @@
  *
  * @copyright  (c) Zikula Development Team
  * @link       http://www.zikula.org
- * @version    $Id: slideshow.php 77 2009-02-25 17:33:19Z espaan $
  * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @author     msshams <ms.shams@gmail.com>
  * @category   Zikula_3rdParty_Modules
