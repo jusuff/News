@@ -232,7 +232,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                     $items[$k]['aid_uname'] = $anonymous;
                     $items[$k]['aid_name'] = $anonymous;
                 } else {
-                    $user = UserUtil::getPNUser($items[$k]['cr_uid']);
+                    $user = UserUtil::getVars($items[$k]['cr_uid']);
                     $items[$k]['aid_uname'] = $user['uname'];
                     $items[$k]['aid_name'] = $user['name'];
                 }

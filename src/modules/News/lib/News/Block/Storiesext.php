@@ -322,7 +322,7 @@ height:50px;
                     $this->view->assign('aid_uname', $anonymous);
                     $this->view->assign('aid_name', $anonymous);
                 } else {
-                    $user = UserUtil::getPNUser($item['cr_uid']);
+                    $user = UserUtil::getVars($item['cr_uid']);
                     $this->view->assign('aid_uname', $user['uname']);
                     $this->view->assign('aid_name', $user['name']);
                 }

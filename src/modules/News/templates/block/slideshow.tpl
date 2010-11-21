@@ -1,5 +1,5 @@
 {ajaxheader modname='News' filename='slideshow.js' effects=true nobehaviour=true noscriptaculous=true}
-{pageaddvar name='stylesheet' value='modules/News/pnstyle/slideshow.css'}
+{pageaddvar name='stylesheet' value='modules/News/style/slideshow.css'}
 
 <div id="ssb_gallery">
     {section name='slideshowblock' loop=$slideshow}

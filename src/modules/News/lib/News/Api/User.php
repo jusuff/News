@@ -245,7 +245,9 @@ class News_Api_User extends Zikula_Api
         if (isset($args['sid']) && is_numeric($args['sid'])) {
             $item = DBUtil::selectObjectByID('news', $args['sid'], 'sid', null, $permFilter, null, $args['SQLcache']);
         } elseif (isset($timestring)) {
-            $where = "pn_urltitle = '".DataUtil::formatForStore($args['title'])."' AND pn_from LIKE '{$timestring}%'";
+            $tables = DBUtil::getTables();
+            $col = $tables['news_column'];
+            $where = "{$col['urltitle']} = '".DataUtil::formatForStore($args['title'])."' AND {$col['from']} LIKE '{$timestring}%'";
             $item = DBUtil::selectObject('news', $where, null, $permFilter, null, $args['SQLcache']);
         } else {
             $item = DBUtil::selectObjectByID('news', $args['title'], 'urltitle', null, $permFilter, null, $args['SQLcache']);

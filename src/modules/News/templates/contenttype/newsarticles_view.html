@@ -1,5 +1,3 @@
-{*  $Id:  $  *}
-
 <h4>{$title}</h4>
 {if $stories}
 <ul class="content_stories">
@@ -13,7 +11,7 @@
             {/if}
         {/if}
         {if $story.readperm}<a href="{modurl modname=News func=display sid=$story.sid}">{/if}
-            {if $story.dispnewimage}{pnimg modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article' domain="module_news"}{/if}
+            {if $story.dispnewimage}{img modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article' domain="module_news"}{/if}
             {$story.title|varprephtmldisplay}{if $story.titlewrapped}{$titlewraptext|varprephtmldisplay}{/if}
         {if $story.readperm}</a>{/if}
 
@@ -52,5 +50,5 @@
 
 {checkpermission component='News::' instance='::' level=ACCESS_COMMENT assign='submitauth'}
 {if $linktosubmit && $submitauth}
-<a href="{modurl modname='News' type='user' func='newitem'}">{pnimg modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit an article' domain="module_news"}{gt text='Submit an article' domain="module_news"}</a>
+<a href="{modurl modname='News' type='user' func='newitem'}">{img modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit an article' domain="module_news"}{gt text='Submit an article' domain="module_news"}</a>
 {/if}

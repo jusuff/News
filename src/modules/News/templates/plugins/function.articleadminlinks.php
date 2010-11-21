@@ -72,17 +72,17 @@ function smarty_function_articleadminlinks($params, &$smarty)
         // load our ajax files into the header
         if (isset($params['type']) && $params['type'] == 'ajax') {
             // load our ajax files into the header
-            require_once $smarty->_get_plugin_filepath('function', 'pnajaxheader');
-            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'news.js'), $smarty);
-            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'sizecheck.js'), $smarty);
-            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'prototype-base-extensions.js'), $smarty);
-            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'prototype-date-extensions.js'), $smarty);
-            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'datepicker.js'), $smarty);
-            smarty_function_pnajaxheader(array('modname' => 'News', 'filename' => 'datepicker-locale.js'), $smarty);
+            require_once $smarty->_get_plugin_filepath('function', 'ajaxheader');
+            smarty_function_ajaxheader(array('modname' => 'News', 'filename' => 'news.js'), $smarty);
+            smarty_function_ajaxheader(array('modname' => 'News', 'filename' => 'sizecheck.js'), $smarty);
+            smarty_function_ajaxheader(array('modname' => 'News', 'filename' => 'prototype-base-extensions.js'), $smarty);
+            smarty_function_ajaxheader(array('modname' => 'News', 'filename' => 'prototype-date-extensions.js'), $smarty);
+            smarty_function_ajaxheader(array('modname' => 'News', 'filename' => 'datepicker.js'), $smarty);
+            smarty_function_ajaxheader(array('modname' => 'News', 'filename' => 'datepicker-locale.js'), $smarty);
             if (ModUtil::getVar('News', 'enableattribution')) {
                 PageUtil::addVar('javascript', 'javascript/helpers/Zikula.itemlist.js');
             }
-            PageUtil::addVar('stylesheet', 'modules/News/pnstyle/datepicker.css');
+            PageUtil::addVar('stylesheet', 'modules/News/style/datepicker.css');
             $articlelinks .= '<img id="news_loadnews" src="'.System::getBaseUrl().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
         } else {
             $articlelinks .= '<span class="' . $params['class'] . '"> ' . $params['start'] . ' <a href="' . DataUtil::formatForDisplayHTML(ModUtil::url('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . __('Edit', $dom) . '</a>';

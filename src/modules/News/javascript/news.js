@@ -1,7 +1,3 @@
-/*
- *  $Id: news.js 75 2009-02-24 04:51:52Z mateo $ 
- */
- 
 var editing = false;
 var draftsaved = false;
 

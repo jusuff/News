@@ -51,7 +51,7 @@ class News_Api_Search extends Zikula_Api
         $tables = DBUtil::getTables();
         $newsColumn = $tables['news_column'];
 
-        $where = search_construct_where($args,
+        $where = Search_Api_User::construct_where($args,
                 array($newsColumn['title'],
                 $newsColumn['hometext'],
                 $newsColumn['bodytext']),
