@@ -74,7 +74,7 @@ class News_Block_Past extends Zikula_Block
                 'startnum' => $storyhome,
                 'numitems' => $vars['limit']));
 
-        if ($articles === false) {
+        if (($articles === false) || (empty($articles))) {
             return;
         }
 
