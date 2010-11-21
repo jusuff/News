@@ -4,7 +4,6 @@
  *
  * @copyright  (c) Zikula Development Team
  * @link       http://www.zikula.org
- * @version    $Id: pnsearchapi.php 75 2009-02-24 04:51:52Z mateo $
  * @license    GNU/GPL - http://www.gnu.org/copyleft/gpl.html
  * @author     Mark West <mark@zikula.org>
  * @category   Zikula_3rdParty_Modules
@@ -50,10 +49,7 @@ class News_Api_Search extends Zikula_Api
 
         ModUtil::dbInfoLoad('Search');
         $tables = DBUtil::getTables();
-        $newsTable  = $tables['news'];
         $newsColumn = $tables['news_column'];
-        $searchTable   = $tables['search_result'];
-        $searchColumn  = $tables['search_result_column'];
 
         $where = search_construct_where($args,
                 array($newsColumn['title'],
@@ -61,21 +57,11 @@ class News_Api_Search extends Zikula_Api
                 $newsColumn['bodytext']),
                 $newsColumn['language']);
         // Only search in published articles that are currently visible
-        $where .= " AND ($newsColumn[published_status] = '0')";
+        $where .= " AND ({$newsColumn['published_status']} = '0')";
         $date = DateUtil::getDatetime();
-        $where .= " AND ('$date' >= $newsColumn[from] AND ($newsColumn[to] IS NULL OR '$date' <= $newsColumn[to]))";
+        $where .= " AND ('$date' >= {$newsColumn['from']} AND ({$newsColumn['to']} IS NULL OR '$date' <= {$newsColumn['to']}))";
 
         $sessionId = session_id();
-
-        $insertSql =
-                "INSERT INTO $searchTable
-               ($searchColumn[title],
-                $searchColumn[text],
-                $searchColumn[extra],
-                $searchColumn[module],
-                $searchColumn[created],
-                $searchColumn[session])
-VALUES ";
 
         ModUtil::loadApi('News', 'user');
 
@@ -84,14 +70,15 @@ VALUES ";
 
         foreach ($articles as $article)
         {
-            $sql = $insertSql . '('
-                    . '\'' . DataUtil::formatForStore($article['title']) . '\', '
-                    . '\'' . DataUtil::formatForStore($article['hometext']) . '\', '
-                    . '\'' . DataUtil::formatForStore($article['sid']) . '\', '
-                    . '\'' . 'News' . '\', '
-                    . '\'' . DataUtil::formatForStore($article['from']) . '\', '
-                    . '\'' . DataUtil::formatForStore($sessionId) . '\')';
-            $insertResult = DBUtil::executeSQL($sql);
+            $item = array(
+                'title' => $article['title'],
+                'text'  => $article['hometext'],
+                'extra' => $article['sid'],
+                'created' => $article['from'],
+                'module'  => 'News',
+                'session' => $sessionId
+            );
+            $insertResult = DBUtil::insertObject($item, 'search_result');
             if (!$insertResult) {
                 return LogUtil::registerError($this->__('Error! Could not load any articles.'));
             }
@@ -103,9 +90,9 @@ VALUES ";
     /**
      * Do last minute access checking and assign URL to items
      */
-    public function search_check(&$args)
+    public function search_check($args)
     {
-        $datarow = &$args['datarow'];
+        $datarow = $args['datarow'];
         $articleId = $datarow['extra'];
         $datarow['url'] = ModUtil::url('News', 'user', 'display', array('sid' => $articleId));
 
