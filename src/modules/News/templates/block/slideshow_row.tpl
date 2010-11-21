@@ -1,0 +1,1 @@
+<a href="{modurl modname='News' func='display' sid=$sid}"{if $count eq 1} class="show"{/if}><img src="{$picupload_uploaddir}/pic_sid{$sid}-0-norm.png" style="height: 300px; width: 594px;" rel="<h4>{$title|safehtml}<a style='padding-left: 10px;' href='{modurl modname='News' func='display' sid=$sid}'>[ link ]</a></h4>{$hometext|safehtml}"/></a>
