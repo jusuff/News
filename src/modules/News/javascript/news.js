@@ -65,12 +65,10 @@ function editnews(sid, page)
 {
     if(editing==false) {
         Element.show('news_loadnews');
-        var pars = 'module=News&func=modify&sid=' + sid  + '&page=' + page;
-        var myAjax = new Ajax.Request(
-            document.location.pnbaseURL+'ajax.php', 
+        new Ajax.Request(
+            'ajax.php?module=News&func=modify&sid=' + sid  + '&page=' + page,
             {
                 method: 'post', 
-                parameters: pars, 
                 onComplete: editnews_init
             });
     }
@@ -87,14 +85,14 @@ function editnews(sid, page)
 function editnews_init(req) 
 {
     Element.hide('news_loadnews');
-    if(req.status != 200 ) { 
-        pnshowajaxerror(req.responseText);
+    if(!req.isSuccess()) {
+        Zikula.showajaxerror(req.getMessage());
         return;
     }
-    var json = pndejsonize(req.responseText);
+    var data = req.getData();
     editing = true;
     // Fill the news_modify div with rendered template news_ajax_modify.htm
-    Element.update('news_modify', json.result);
+    Element.update('news_modify', data.result);
     Element.hide('news_savenews');
     Element.hide('news_articlecontent');
     sizecheckinit();
@@ -141,13 +139,10 @@ function editnews_save(action)
         if (typeof Xinha != "undefined") {
             $('news_ajax_modifyform').onsubmit();
         }
-        
-        var pars = 'module=News&func=update&action='+ action +'&' + Form.serialize('news_ajax_modifyform');
-        var myAjax = new Ajax.Request(
-            document.location.pnbaseURL+'ajax.php', 
+        new Ajax.Request(
+            'ajax.php?module=News&func=update&action='+ action +'&' + Form.serialize('news_ajax_modifyform'),
             {
                 method: 'post', 
-                parameters: pars, 
                 onComplete: editnews_saveresponse
             });
     }
@@ -171,31 +166,31 @@ function editnews_saveresponse(req)
     Element.hide('news_savenews');
     editing = false;
 
-    if(req.status != 200 ) { 
-        pnshowajaxerror(req.responseText);
+    if(!req.isSuccess()) {
+        Zikula.showajaxerror(req.getMessage());
         return;
     }
-    var json = pndejsonize(req.responseText);
+    var data = req.getData();
 
     Element.update('news_modify', '&nbsp;');
-    Element.update('news_articlecontent', json.result);
+    Element.update('news_articlecontent', data.result);
     if ($('news_editlinks_ajax')) {
         Element.hide('news_loadnews');
         Element.remove('news_editlinks');
         Element.removeClassName($('news_editlinks_ajax'), 'hidelink'); 
     } 
     Element.show('news_articlecontent');
-    switch(json.action) {
+    switch(data.action) {
         case 'update':
             // reload if necessary (e.g. urltitle change)
-            if (json.reloadurl != '') {
-                location.replace(json.reloadurl);
+            if (data.reloadurl != '') {
+                location.replace(data.reloadurl);
             }
             break;
         case 'delete':
         case 'pending':
             // redirect to the news index
-            location.replace(json.reloadurl);
+            location.replace(data.reloadurl);
             break;
         default:
     }
@@ -331,8 +326,8 @@ function savedraft()
     $('news_saving_draft').show();
     $('news_status_text').update(string_savingdraft);
     $('news_button_text_draft').update(string_savingdraft);
-    var myAjax = new Ajax.Request(
-        document.location.pnbaseURL+'ajax.php', 
+    new Ajax.Request(
+        'ajax.php', 
         {
             method: 'post', 
             parameters: pars, 
@@ -342,16 +337,17 @@ function savedraft()
 
 function savedraft_update(req) 
 {
-    if (req.status != 200 ) {
-        pnshowajaxerror(req.responseText);
+    if(!req.isSuccess()) {
+        Zikula.showajaxerror(req.getMessage());
         return;
     }
+    var data = req.getData();
+
     draftsaved = true;
     $('news_saving_draft').hide();
     $('news_button_text_draft').update(string_updatedraft);
-    var json = pndejsonize(req.responseText);
-    $('news_status_text').update(json.result);
-    $('news_urltitle').value = json.slug;
+    $('news_status_text').update(data.result);
+    $('news_urltitle').value = data.slug;
 //    $('news_sample_urltitle').update(json.fullpermalink);
 //    $('news_urltitle_details').show();
 //    if (json.showslugedit) {
@@ -361,7 +357,7 @@ function savedraft_update(req)
     $('news_button_preview').setStyle({color: '#565656'});
     $('news_button_preview').setOpacity(1.0);
     $('news_button_preview').disabled = false;    
-    $('news_sid').value = json.sid;
+    $('news_sid').value = data.sid;
 //    pnsetselectoption('news_published_status',4);
 //    $('news_published_status').selectedIndex = 4;
     return;
