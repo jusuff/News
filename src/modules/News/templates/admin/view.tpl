@@ -19,6 +19,7 @@
     {if $enablecategorization && $numproperties > 0}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset id="news_multicategory_filter">
+            <legend>{gt text="Filter"}</legend>
             <label for="news_property">{gt text='Category'}</label>
             {gt text='All' assign='lblDef'}
             {nocache}
@@ -54,8 +55,10 @@
             <label for="order">{gt text='Order articles by'}</label>
             {html_options name='order' id='order' options=$orderoptions selected=$order}
             &nbsp;&nbsp;
-            <input name="submit" type="submit" value="{gt text='Apply filter'}" />
-            <input name="clear" type="submit" value="{gt text='Reset'}" />
+            <span class="z-nowrap z-buttons">
+                <input class="z-bt-small" name="submit" type="submit" value="{gt text='Filter'}" />
+                <input class="z-bt-small" name="clear" type="submit" value="{gt text='Clear'}" />
+            </span>
         </fieldset>
     </form>
     {elseif $multilingual}
