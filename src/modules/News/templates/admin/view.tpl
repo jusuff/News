@@ -143,8 +143,10 @@
         <fieldset>
             <label for="directsid">{gt text='Access a past article via its ID'}:</label>
             <input type="text" id="directsid" name="sid" value="" size="5" maxlength="8" />
-            <input name="submit" type="submit" value="{gt text='Go retrieve'}" />
-            <input name="reset" type="reset" value="{gt text='Reset'}" />
+            <span class="z-nowrap z-buttons">
+                <input class="z-bt-small" name="submit" type="submit" value="{gt text='Go retrieve'}" />
+                <input class="z-bt-small" name="reset" type="reset" value="{gt text='Reset'}" />
+            </span>
         </fieldset>
     </form>
 
