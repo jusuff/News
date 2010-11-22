@@ -3,10 +3,10 @@
 {$title|safehtml}{if $titlewrapped}{$titlewraptxt|safehtml}{/if}
 {if $readperm}</a>{/if}
 
-{if $dispinfo}({if $dispuname}{gt text='by %s' tag1=$aid_uname|userprofilelink domain="module_news"}
-{if $dispdate} {gt text='on %s' tag1=$from|dateformat:$dateformat domain="module_news"} {elseif $dispreads OR $dispcomments}{$dispsplitchar} {/if}{/if}
-{if $dispreads}{if $counter gt 0}{gt text='%s pageview' plural='%s pageviews' count=$counter tag1=$counter domain="module_news"}{/if}{if $dispcomments}{$dispsplitchar} {/if}{/if}
-{if $dispcomments and $comments gt 0}{gt text='%s comment' plural='%s comments' count=$comments tag1=$comments domain="module_news"}{/if})
+{if $dispinfo}({if $dispuname}{gt text='by %s' tag1=$aid_uname|userprofilelink}
+{if $dispdate} {gt text='on %s' tag1=$from|dateformat:$dateformat} {elseif $dispreads OR $dispcomments}{$dispsplitchar} {/if}{/if}
+{if $dispreads}{if $counter gt 0}{gt text='%s pageview' plural='%s pageviews' count=$counter tag1=$counter}{/if}{if $dispcomments}{$dispsplitchar} {/if}{/if}
+{if $dispcomments and $comments gt 0}{gt text='%s comment' plural='%s comments' count=$comments tag1=$comments}{/if})
 {/if}
 
 {if $disphometext}
