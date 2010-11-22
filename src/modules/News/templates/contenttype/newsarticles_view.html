@@ -11,22 +11,22 @@
             {/if}
         {/if}
         {if $story.readperm}<a href="{modurl modname=News func=display sid=$story.sid}">{/if}
-            {if $story.dispnewimage}{img modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article' domain="module_news"}{/if}
+            {if $story.dispnewimage}{img modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article'}{/if}
             {$story.title|varprephtmldisplay}{if $story.titlewrapped}{$titlewraptext|varprephtmldisplay}{/if}
         {if $story.readperm}</a>{/if}
 
         {* Optional additional info on the story *}
-        {if $dispinfo}({if $dispuname}{gt text='Contributed by %s' tag1=$story.aid_uname|userprofilelink domain="module_news"}
-        {if $dispdate} {gt text='on %s' tag1=$story.from|dateformat:$dateformat domain="module_news"}{/if}{if $dispreads||$dispcomments}{$dispsplitchar} {/if}{/if}
-        {if $dispreads}{gt text='%s pageview' plural='%s pageviews' count=$story.counter tag1=$story.counter domain="module_news"}{if $dispcomments}{$dispsplitchar} {/if}{/if}
-        {if $dispcomments}{gt text='%s comment' plural='%s comments' count=$story.comments tag1=$story.comments domain="module_news"}{/if})
+        {if $dispinfo}({if $dispuname}{gt text='Contributed by %s' tag1=$story.aid_uname|userprofilelink}
+        {if $dispdate} {gt text='on %s' tag1=$story.from|dateformat:$dateformat}{/if}{if $dispreads||$dispcomments}{$dispsplitchar} {/if}{/if}
+        {if $dispreads}{gt text='%s pageview' plural='%s pageviews' count=$story.counter tag1=$story.counter}{if $dispcomments}{$dispsplitchar} {/if}{/if}
+        {if $dispcomments}{gt text='%s comment' plural='%s comments' count=$story.comments tag1=$story.comments}{/if})
         {/if}<br />
 
         {* Optional hometext display *}
         {if $disphometext}
         <div class="content_newsarticles_hometext">
             {if $story.hometextwrapped}
-            {$story.hometext|truncatehtml:$maxhometextlength:''|varprephtmldisplay domain="module_news"}
+            {$story.hometext|truncatehtml:$maxhometextlength:''|varprephtmldisplay}
             {if $story.readperm}<a href="{modurl modname=News func=display sid=$story.sid}">{/if}
                 {$hometextwraptext|varprephtmldisplay}
             {if $story.readperm}</a>{/if}
@@ -45,10 +45,10 @@
     {/foreach}
 </ul>
 {else}
-<p>{gt text='No articles published recently.' domain="module_news"}</p>
+<p>{gt text='No articles published recently.'}</p>
 {/if}
 
 {checkpermission component='News::' instance='::' level=ACCESS_COMMENT assign='submitauth'}
 {if $linktosubmit && $submitauth}
-<a href="{modurl modname='News' type='user' func='newitem'}">{img modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit an article' domain="module_news"}{gt text='Submit an article' domain="module_news"}</a>
+<a href="{modurl modname='News' type='user' func='newitem'}">{img modname='core' set='icons/extrasmall' src='edit_add.gif' __alt='Submit an article'}{gt text='Submit an article'}</a>
 {/if}
