@@ -159,3 +159,7 @@ div.news_index {
 
 .news_files_list {
 }
+.z-icon-es-rss {
+    background: url("../../../images/feeds/feed-icon-12x12.png") no-repeat scroll 0 50% transparent;
+    padding: 2px 0 2px 20px;
+}

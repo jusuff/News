@@ -1107,4 +1107,63 @@ class News_Api_User extends Zikula_Api
             return $args['modname'] . '/' . $args['func'] . '/' . $vars . '/';
         }
     }
+
+    /**
+     * get module links
+     *
+     * @return array array of admin links
+     */
+    public function getlinks()
+    {
+        if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
+            return;
+        }
+
+        $func = FormUtil::getPassedValue('func', 'main');
+        $links = array();
+
+        if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
+            if ($func <> "main") {
+                $links[] = array('url' => ModUtil::url('News', 'user', 'main'),
+                        'text' => $this->__('News articles list'),
+                        'class' => 'z-icon-es-list');
+            } else {
+                $links[] = array('url'  => ModUtil::url('News', 'user', 'main', array('theme' => 'RSS')),
+                        'text' => '',
+                        'class' => 'z-icon-es-rss'); // class defined in News module style.css
+            }
+            if (ModUtil::getVar('News', 'enablecategorization')) {
+                if ($func <> "categorylist") {
+                    $links[] = array('url'  => ModUtil::url('News', 'user', 'categorylist'),
+                            'text' =>  $this->__('News categories'),
+                            'class' => 'z-icon-es-list');
+                }
+                if ($func <> "archives") {
+                    $links[] = array('url' => ModUtil::url('News', 'user', 'archives'),
+                            'text' => $this->__('News archive'),
+                            'class' => 'z-icon-es-archive');
+                }
+            }
+        }
+        if (SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
+            $links[] = array('url' => ModUtil::url('News', 'user', 'newitem'),
+                    'text' => $this->__('Submit an article'),
+                    'class' => 'z-icon-es-new');
+        }
+        if (SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT)) {
+            $count = $this->countitems(array('status' => 2));
+            if ($count > 0) {
+                $links[] = array('url' => ModUtil::url('News', 'admin', 'view', array('news_status' => 2)),
+                        'text' => $this->__fn('%s pending article', '%s pending articles', $count, $count),
+                        'class' => 'z-icon-es-config');
+            } else {
+                $links[] = array('url' => ModUtil::url('News', 'admin', 'view'),
+                        'text' => $this->__('Admin'),
+                        'class' => 'z-icon-es-config');
+            }
+        }
+        
+        return $links;
+    }
 }
+

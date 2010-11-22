@@ -36,9 +36,9 @@
                 {/if}
                 Remove this line to enable category image display *} 
                 {if $shorturls and $shorturlstype eq 0}
-                <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.path|replace:$property.category.path:'' theme='rss'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
+                <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.path|replace:$property.category.path:'' theme='RSS'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
                 {else}
-                <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.id theme='rss'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
+                <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.id theme='RSS'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
                 {/if}
 
                 {if $authcatedit}
@@ -79,9 +79,9 @@
                 {/if}
                 Remove this line to enable category image display *} 
                         {if $shorturls and $shorturlstype eq 0}
-                        <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.path|replace:$property.category.path:'' theme='rss'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
+                        <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.path|replace:$property.category.path:'' theme='RSS'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
                         {else}
-                        <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.id theme='rss'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
+                        <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.id theme='RSS'}">{img modname='core' set='feeds' src='feed-icon-12x12.png' __alt='RSS feed' __title='RSS feed'}</a>
                         {/if}
 
                         {if $authcatedit}
