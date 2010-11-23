@@ -426,7 +426,7 @@ class News_Installer extends Zikula_Installer
         // migrate our main categories
         $categorymap = array();
         foreach ($categories as $category) {
-            $cat = new Categories_DBObject_Category ();
+            $cat = new Categories_DBObject_Category();
             $cat->setDataField('parent_id', $rootcat['id']);
             $cat->setDataField('name', $category[1]);
             $cat->setDataField('display_name', array($lang => $category[1]));
@@ -445,7 +445,7 @@ class News_Installer extends Zikula_Installer
         // migrate our topic categories
         $topicsmap = array();
         foreach ($topics as $topic) {
-            $cat = new Categories_DBObject_Category ();
+            $cat = new Categories_DBObject_Category();
             $data = $cat->getData();
             $data['parent_id']                     = $rootcat['id'];
             $data['name']                          = $topic[1];
@@ -506,7 +506,7 @@ class News_Installer extends Zikula_Installer
 
         if (!$nCat) {
             // create placeholder for all our migrated categories
-            $cat = new Categories_DBObject_Category ();
+            $cat = new Categories_DBObject_Category();
             $cat->setDataField('parent_id', $rootcat['id']);
             $cat->setDataField('name', 'News');
             $cat->setDataField('display_name', array($lang => $this->__('News publisher')));
@@ -551,7 +551,7 @@ class News_Installer extends Zikula_Installer
 
         if (!$tCat) {
             // create placeholder for all our migrated categories
-            $cat = new Categories_DBObject_Category ();
+            $cat = new Categories_DBObject_Category();
             $cat->setDataField('parent_id', $rootcat['id']);
             $cat->setDataField('name', 'Topics');
             // pnModLangLoad doesn't handle type 1 modules
