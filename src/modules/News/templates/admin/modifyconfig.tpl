@@ -201,8 +201,7 @@
                 </div>
               </fieldset>
 
-            {configgetvar name='shorturls' assign='shorturls'}
-            {if $shorturls eq true}
+            {if $modvars.ZConfig.shorturls eq true}
             <fieldset>
                 <legend>{gt text='Permalinks'}</legend>
                 <p class="z-informationmsg">{gt text='You can select a pre-defined permalink format, or define your custom format.'}</p>

@@ -52,8 +52,7 @@
             </div>
             {/if}
 
-            {configgetvar name='multilingual' assign='multilingual'}
-            {if $multilingual}
+            {if $modvars.ZConfig.multilingual}
             <div class="z-formrow">
                 <label for="news_language">{gt text='Language(s) for which article should be displayed' domain='module_news'}</label>
                 {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}

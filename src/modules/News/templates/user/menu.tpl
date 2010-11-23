@@ -5,10 +5,9 @@
 {modgetname assign='module'}
 {if $module eq 'News'}
   {if $func eq 'main'}
-    {configgetvar name='entrypoint' default='index.php' assign='entrypoint'}
     {servergetvar name='REQUEST_URI' default='/' assign='requesturi'}
     {assign var='requesturi' value=$requesturi|replace:$baseuri:''}
-    {if $requesturi neq '/' AND $requesturi neq "/$entrypoint"}
+    {if $requesturi neq '/' AND $requesturi neq "/$modvars.ZConfig.entrypoint"}
       {pagesetvar name='title' __value='News'}
     {/if}
   {elseif $func eq 'view' AND $catname|default:'' neq ''}

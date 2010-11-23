@@ -15,7 +15,6 @@
         {/foreach}
     </p>
 
-    {configgetvar name='multilingual' assign='multilingual'}
     {if $enablecategorization && $numproperties > 0}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset id="news_multicategory_filter">
@@ -42,7 +41,7 @@
                 {selector_category category=$cat name=$propref selectedValue=$selectedValue allValue=0 allText=$lblDef editLink=false}
                 {/foreach}
             </div>
-            {if $multilingual}
+            {if $modvars.ZConfig.multilingual}
             &nbsp;
             <label for="news_language">{gt text='Language'}</label>
             {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
@@ -61,7 +60,7 @@
             </span>
         </fieldset>
     </form>
-    {elseif $multilingual}
+    {elseif $modvars.ZConfig.multilingual}
     <form action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <div id="news_multicategory_filter">
             <label for="news_language">{gt text='Language'}</label>

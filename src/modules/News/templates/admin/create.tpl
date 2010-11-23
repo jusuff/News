@@ -38,7 +38,6 @@
 </script>
 
 <div class="z-admincontainer">
-
     {if $preview neq ''}
     <div class="news_article news_preview">{$preview}</div>
     {/if}
@@ -99,8 +98,7 @@
             </div>
             {/if}
 
-            {configgetvar name='multilingual' assign='multilingual'}
-            {if $multilingual}
+            {if $modvars.ZConfig.multilingual}
             <div class="z-formrow">
                 <label for="news_language">{gt text='Language'}</label>
                 {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
