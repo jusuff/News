@@ -149,7 +149,7 @@
         </fieldset>
     </form>
 
-    {pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='startnum' shift=1}
+    {pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='startnum'}
 </div>
 
 <script type="text/javascript">

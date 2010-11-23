@@ -61,4 +61,4 @@
 {/if}
 
 {* the next code is to display the pager *}
-{pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='page' shift=1}
+{pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='page'}
