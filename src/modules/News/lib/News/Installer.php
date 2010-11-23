@@ -26,7 +26,7 @@ class News_Installer extends Zikula_Installer
         }
 
         // create our default category
-        if (!$this->createdefaultcategory()) {
+        if (!$this->_createdefaultcategory()) {
             LogUtil::registerStatus($this->__('Warning! Could not create the default News category tree. If you want to use categorisation with News, register at least one property for the module in the Category Registry.'));
         }
 
@@ -78,7 +78,7 @@ class News_Installer extends Zikula_Installer
         $this->setVar('picupload_uploaddir', '');
 
         // create the default data for the News module
-        $this->defaultdata();
+        $this->_defaultdata();
 
         // register handlers
         EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
@@ -129,7 +129,7 @@ class News_Installer extends Zikula_Installer
 
             case '2.0':
             // import autonews and queue articles
-                if (!$this->import_autonews_queue()) {
+                if (!$this->_import_autonews_queue()) {
                     LogUtil::registerError($this->__('Error! Could not update articles.'));
                     return '2.0';
                 }
@@ -353,7 +353,7 @@ class News_Installer extends Zikula_Installer
      * @author       Erik Spaan
      * @return       bool       false
      */
-    public function defaultdata()
+    private function _defaultdata()
     {
         // Short URL seperator
         $shorturlsep = System::getVar('shorturlsseparator');
@@ -390,8 +390,10 @@ class News_Installer extends Zikula_Installer
 
     /**
      * migrate old local categories to the categories module
+     * TODO
+     * NOTE: as of this commit 22 Nov 2010, I cannot find any use of this function in the module.
      */
-    function _news_migratecategories()
+    private function _news_migratecategories()
     {
         // load the admin language file
         // pull all data from the old tables
@@ -413,10 +415,10 @@ class News_Installer extends Zikula_Installer
         $lang = ZLanguage::getLanguageCode();
 
         // create the Main category and entry in the categories registry
-        $this->createdefaultcategory('/__SYSTEM__/Modules/News');
+        $this->_createdefaultcategory('/__SYSTEM__/Modules/News');
 
         // create the Topics category and entry in the categories registry
-        $this->createtopicscategory('/__SYSTEM__/Modules/Topics');
+        $this->_createtopicscategory('/__SYSTEM__/Modules/Topics');
 
         // get the category path for which we're going to insert our upgraded News categories
         $rootcat = CategoryUtil::getCategoryByPath('/__SYSTEM__/Modules/News');
@@ -493,7 +495,7 @@ class News_Installer extends Zikula_Installer
     /**
      * create the default category tree
      */
-    function createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
+    private function _createdefaultcategory($regpath = '/__SYSTEM__/Modules/Global')
     {
         // get the language file
         $lang = ZLanguage::getLanguageCode();
@@ -536,7 +538,7 @@ class News_Installer extends Zikula_Installer
     /**
      * create the Topics category tree
      */
-    function createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
+    private function _createtopicscategory($regpath = '/__SYSTEM__/Modules/Topics')
     {
         // get the language file
         $lang = ZLanguage::getLanguageCode();
@@ -583,7 +585,7 @@ class News_Installer extends Zikula_Installer
     /**
      * Import autonews and queue into stories
      */
-    function import_autonews_queue()
+    private function _import_autonews_queue()
     {
         $tables = DBUtil::getTables();
         $shorturlsep = System::getVar('shorturlsseparator');
