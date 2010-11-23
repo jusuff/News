@@ -7,7 +7,7 @@
   {if $func eq 'main'}
     {servergetvar name='REQUEST_URI' default='/' assign='requesturi'}
     {assign var='requesturi' value=$requesturi|replace:$baseuri:''}
-    {if $requesturi neq '/' AND $requesturi neq "/$modvars.ZConfig.entrypoint"}
+    {if $requesturi neq '/' AND $requesturi neq "/`$modvars.ZConfig.entrypoint`"}
       {pagesetvar name='title' __value='News'}
     {/if}
   {elseif $func eq 'view' AND $catname|default:'' neq ''}
