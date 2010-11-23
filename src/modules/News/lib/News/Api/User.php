@@ -468,10 +468,12 @@ class News_Api_User extends Zikula_Api
 
             if (isset($info['categories'][$categoryField])) {
                 $info['catid']      = $info['categories'][$categoryField]['id'];
+                $info['cat']        = $info['categories'][$categoryField]['id'];
                 $info['cattitle']   = isset($info['categories'][$categoryField]['display_name'][$lang]) ? $info['categories'][$categoryField]['display_name'][$lang] : $info['categories'][$categoryField]['name'];
                 $info['catpath']    = isset($info['categories'][$categoryField]['path_relative']) ? $info['categories'][$categoryField]['path_relative'] : '';
             } else {
                 $info['catid']      = null;
+                $info['cat']        = null;
                 $info['cattitle']   = '';
                 $info['catpath']    = '';
             }
