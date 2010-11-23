@@ -1154,7 +1154,7 @@ class News_Api_User extends Zikula_Api
             $count = $this->countitems(array('status' => 2));
             if ($count > 0) {
                 $links[] = array('url' => ModUtil::url('News', 'admin', 'view', array('news_status' => 2)),
-                        'text' => $this->__fn('%s pending article', '%s pending articles', $count, $count),
+                        'text' => $this->_fn('%s pending article', '%s pending articles', $count, $count),
                         'class' => 'z-icon-es-config');
             } else {
                 $links[] = array('url' => ModUtil::url('News', 'admin', 'view'),
