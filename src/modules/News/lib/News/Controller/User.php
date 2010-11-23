@@ -125,7 +125,7 @@ class News_Controller_User extends Zikula_Controller
             if (SecurityUtil::checkPermission('News:pictureupload:', '::', ACCESS_ADD)) {
                 $this->view->assign('accesspicupload', 1);
             } else {
-                $this->view->assign('accesspubdetails', 0);
+                $this->view->assign('accesspicupload', 0);
             }
             if (SecurityUtil::checkPermission('News:publicationdetails:', '::', ACCESS_ADD)) {
                 $this->view->assign('accesspubdetails', 1);
@@ -256,26 +256,35 @@ class News_Controller_User extends Zikula_Controller
 
         // count the attached pictures (credit msshams)
         if ($modvars['picupload_enabled']) {
-            $sizedpics = array();
-            $allowedExtensions = $modvars['picupload_allowext'];
-            $allowedExtensionsArray = explode(',', $allowedExtensions);
+            $pics2resize = array();
+            $picsuploaded = 0;
+            $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
             foreach ($_FILES['news_files']['error'] as $key => $error) {
                 if ($error == UPLOAD_ERR_OK) {
                     if ($_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize']) {
                         $file_extension = FileUtil::getExtension($_FILES['news_files']['name'][$key]);
                         if (!in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
-                            LogUtil::registerStatus($this->__f('Picture %s is not uploaded, since the file extension is now allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
+                            LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the file extension is now allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
                         } else {
-                            $sizedpics[] = $key;
+                            $pics2resize[] = $key;
                         }
                     } else {
-                        LogUtil::registerStatus($this->__f('Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
+                        LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
                     }
-                } else {
-                    LogUtil::registerStatus($this->__f('Picture %s gave an error during uploading.', $key+1));
+                    $picsuploaded++;
+                } elseif ($error == UPLOAD_ERR_FORM_SIZE) {
+                    LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
+                    $picsuploaded++;
+                } elseif ($error != UPLOAD_ERR_NO_FILE) {
+                    LogUtil::registerStatus($this->__f('Warning! Picture %1$s gave an error (code %2$s, explained on this page: %3$s) during uploading.', array($key+1, $error, 'http://php.net/manual/features.file-upload.errors.php')));
+                    $picsuploaded++;
                 }
             }
-            $item['pictures'] = count($sizedpics);
+            $item['pictures'] = count($pics2resize);
+            // make the article draft when there is an upload error and ADD permission is present
+            if ($picsuploaded != count($pics2resize) && SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
+                $item['action'] = 6;
+            }
         } else {
             $item['pictures'] = 0;
         }
@@ -339,38 +348,42 @@ Regards,
                 // include the phpthumb library for thumbnail generation
                 require_once ('modules/News/lib/vendor/phpthumb/ThumbLib.inc.php');
                 $uploaddir = $modvars['picupload_uploaddir'] . '/';
-                foreach ($sizedpics as $piccount => $key) {
+                foreach ($pics2resize as $piccount => $key) {
                     $tmp_name = $_FILES['news_files']['tmp_name'][$key];
                     $name = $_FILES['news_files']['name'][$key];
 
-                    $thumb = PhpThumbFactory::create($tmp_name);
-                    if ($modvars['sizing'] == 0) {
+                    $thumb = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
+                    if ($modvars['picupload_sizing'] == '0') {
                         $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
                     } else {
                         $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
                     }
-                    $thumb->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-norm.png', 'png');
+                    $thumb->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-norm.jpg', 'jpg');
 
                     $thumb1 = PhpThumbFactory::create($tmp_name);
-                    if ($modvars['sizing'] == 0) {
+                    if ($modvars['picupload_sizing'] == '0') {
                         $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
                     } else {
                         $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
                     }
-                    $thumb1->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb.png', 'png');
+                    $thumb1->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb.jpg', 'jpg');
 
                     // for index page picture create an extra thumbnail
                     if ($piccount==0){
                         $thumb2 = PhpThumbFactory::create($tmp_name);
-                        if ($modvars['sizing'] == 0) {
+                        if ($modvars['picupload_sizing'] == '0') {
                             $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                         } else {
                             $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                         }
-                        $thumb2->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb2.png', 'png');
+                        $thumb2->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb2.jpg', 'jpg');
                     }
                 }
-                LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $sizedpictures, array(count($sizedpics), count($_FILES['news_files']['error']))));
+                if ($picsuploaded != count($pics2resize) && SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
+                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $picsuploaded, array(count($pics2resize), $picsuploaded)));
+                } else {
+                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $picsuploaded, array(count($pics2resize), $picsuploaded)));
+                }
             }
         }
         return System::redirect(ModUtil::url('News', $referertype, 'view'));

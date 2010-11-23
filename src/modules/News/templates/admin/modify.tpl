@@ -8,7 +8,7 @@
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker.js'}
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker-locale.js'}
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
-{if $picupload_enabled}
+{if $picupload_enabled AND $picupload_maxpictures gt 1}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if}
 
@@ -155,20 +155,24 @@
             <fieldset>
                 <legend>{gt text='Pictures'}</legend>
                 <label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
+                {if $picupload_maxpictures eq 1}
+                <input id="news_files_element" name="news_files[0]" type="file">
+                {else}
                 <input id="news_files_element" name="news_files" type="file"><br>
                 <span class="z-sub">{gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures}</span>
                 <div id="news_files_list"></div>
                 <script type="text/javascript">
                     // <![CDATA[
-                    var multi_selector = new MultiSelector( document.getElementById( 'news_files_list' ), {{$picupload_maxpictures}}, {{$pictures}} );
-                    multi_selector.addElement( document.getElementById( 'news_files_element' ) );
+                    var multi_selector = new MultiSelector(document.getElementById('news_files_list'), {{$picupload_maxpictures}}, {{$pictures}});
+                    multi_selector.addElement(document.getElementById('news_files_element'));
                     // ]]>
                 </script>
+                {/if}
 
                 {if $pictures gt 0}
                 <div><br>
                     {section name=counter start=0 loop=$pictures step=1}
-                        <img src="{$picupload_uploaddir}/pic_sid{$sid}-{$smarty.section.counter.index}-thumb.png" width="80" /> <input type="checkbox" name="story[del_pictures-{$smarty.section.counter.index}]">{gt text='Delete this picture'}<br>
+                        <img src="{$picupload_uploaddir}/pic_sid{$sid}-{$smarty.section.counter.index}-thumb.jpg" width="80" /> <input type="checkbox" name="story[del_pictures-{$smarty.section.counter.index}]">{gt text='Delete this picture'}<br>
                     {/section}
                 </div>
                 {/if}

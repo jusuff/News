@@ -8,7 +8,7 @@
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker.js'}
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker-locale.js'}
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
-{if $accesspicupload AND $picupload_enabled AND $picupload_maxpictures gt 1}
+{if $picupload_enabled AND $picupload_maxpictures gt 1}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if}
 
@@ -150,7 +150,7 @@
             {/if}
         </fieldset>
         
-        {if $accesspicupload AND $picupload_enabled}
+        {if $picupload_enabled}
         <fieldset>
             <legend>{gt text='Pictures'}</legend>
 			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
@@ -162,8 +162,8 @@
             <div id="news_files_list"></div>
             <script type="text/javascript">
                 // <![CDATA[
-                var multi_selector = new MultiSelector( document.getElementById( 'news_files_list' ), {{$picupload_maxpictures}} );
-                multi_selector.addElement( document.getElementById( 'news_files_element' ) );
+                var multi_selector = new MultiSelector(document.getElementById('news_files_list'), {{$picupload_maxpictures}} );
+                multi_selector.addElement( document.getElementById( 'news_files_element' ));
                 // ]]>
             </script>
             {/if}

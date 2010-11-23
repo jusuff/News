@@ -6,9 +6,9 @@
         {if $picupload_enabled AND $info.pictures gt 0}
         <div class="news_photoindex news_thumbsindex" style="float:{$picupload_index_float}">
             {if $shorturls AND $shorturlstype eq 0}
-                <a href="{modurl modname='News' type='user' func='display' sid=$info.sid from=$info.from urltitle=$info.urltitle}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.png" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
+                <a href="{modurl modname='News' type='user' func='display' sid=$info.sid from=$info.from urltitle=$info.urltitle}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.jpg" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
             {else}
-                <a href="{modurl modname='News' type='user' func='display' sid=$info.sid}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.png" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
+                <a href="{modurl modname='News' type='user' func='display' sid=$info.sid}">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb.jpg" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
             {/if}
         </div>
         {/if}

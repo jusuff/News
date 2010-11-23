@@ -79,6 +79,17 @@
                     <label for="news_enablemorearticlesincat">{gt text='Enable \'More articles in category\' when displaying an article'}</label>
                     <input id="news_enablemorearticlesincat" type="checkbox" name="enablemorearticlesincat"{if $enablemorearticlesincat} checked="checked"{/if} />
                 </div>
+                <div class="z-formrow">
+                    <label for="news_enabledescriptionvar"><!--[gt text='Enable the description page variable in the article display for SEO.']--></label>
+                    <input id="news_enabledescriptionvar" type="checkbox" name="enabledescriptionvar"<!--[if $enabledescriptionvar]--> checked="checked"<!--[/if]--> />
+                </div>
+                <div id="news_descriptionvar_details">
+                    <div class="z-formrow">
+                        <label for="news_descriptionvarchars"><!--[gt text='How many characters of the index page teaser text should be shown in the description']--></label>
+                        <input id="news_descriptionvarchars" type="text" name="descriptionvarchars" value="<!--[$descriptionvarchars|pnvarprepfordisplay]-->" />
+                        <div class="z-informationmsg z-formnote"><!--[gt text="Notice: Check your theme templates and you probably have to adapt <em>meta name=\"description\" content=\"%s\"</em> to get the correct meta text in the header. When you don't want the long string also in the title of the page you have to adapt the titleplugin call to <em>%s</em>" tag1=$smarty.ldelim|cat:"pnpagegetvar name='description'"|cat:$smarty.rdelim|pnvarprepfordisplay tag2="<title>"|cat:$smarty.ldelim|cat:"title noslogan=1"|cat:$smarty.rdelim|cat:"</title>"|pnvarprepfordisplay]--></div>
+                    </div>
+                </div>
                 <div id="news_morearticles_details">
                     <div class="z-formrow">
                         <label for="news_morearticlesincat">{gt text='Number of \'More articles in category\' for every article'}</label>
@@ -141,9 +152,14 @@
                         <input id="news_pdflink_headerlogo_width" type="text" name="pdflink_headerlogo_width" value="{$pdflink_headerlogo_width|safetext}" />
                     </div>
                 </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>{gt text='Picture uploading'}</legend>
                 <div class="z-formrow">
                     <label for="news_picupload_enabled">{gt text='Allow article picture(s) uploading'}</label>
                     <input id="news_picupload_enabled" type="checkbox" name="picupload_enabled"{if $picupload_enabled} checked="checked"{/if} />
+                    <div class="z-warningmsg z-formnote">{gt text='Notice: Enabling picture uploading has a small security risk, since the upload folder needs to have write permission for the webserver. Make sure that you trust the users that have picture uploading permissions and when you create the picture upload directory yourself make sure that you copy the <strong>htaccess</strong> file in pndocs to <strong>.htaccess</strong> in the picture upload folder. This restricts access to images only.'}</div>
                 </div>
                 <div id="news_picupload_details">
                     <div class="z-formrow">
@@ -151,12 +167,20 @@
                         <input id="news_picupload_allowext" type="text" name="picupload_allowext" value="{$picupload_allowext|safetext}" />
                     </div>
                     <div class="z-formrow">
-                        <label for="news_picupload_index_float">{gt text='Image float (left/right/none) on the index page'}</label>
-                        <input id="news_picupload_index_float" type="text" name="picupload_index_float" value="{$picupload_index_float|safetext}" />
+                        <label for="news_picupload_index_float">{gt text='Image float on the index page'}</label>
+                        <select id="news_picupload_index_float" name="picupload_index_float" size="1">
+                            <option value="left"{if $picupload_index_float eq 'left'} selected="selected"{/if}>{gt text='Left - image floats to the left and text wraps around it'}</option>
+                            <option value="right"{if $picupload_index_float eq 'right'} selected="selected"{/if}>{gt text='Right - image floats to the right and text wraps around it'}</option>
+                            <option value="none"{if $picupload_index_float eq 'none'} selected="selected"{/if}>{gt text='None - text is not wrapped around the image'}</option>
+                        </select>
                     </div>
                     <div class="z-formrow">
-                        <label for="news_picupload_article_float">{gt text='Image float (left/right/none) on the article display page'}</label>
-                        <input id="news_picupload_article_float" type="text" name="picupload_article_float" value="{$picupload_article_float|safetext}" />
+                        <label for="news_picupload_article_float">{gt text='Image float on the article display page'}</label>
+                        <select id="news_picupload_article_float" name="picupload_article_float" size="1">
+                            <option value="left"{if $picupload_article_float eq 'left'} selected="selected"{/if}>{gt text='Left - image floats to the left and text wraps around it'}</option>
+                            <option value="right"{if $picupload_article_float eq 'right'} selected="selected"{/if}>{gt text='Right - image floats to the right and text wraps around it'}</option>
+                            <option value="none"{if $picupload_article_float eq 'none'} selected="selected"{/if}>{gt text='None - text is not wrapped around the image'}</option>
+                        </select>
                     </div>
                     <div class="z-formrow">
                         <label for="news_picupload_maxpictures">{gt text='How many pictures are allowed'}</label>
@@ -167,8 +191,11 @@
                         <input id="news_picupload_maxfilesize" type="text" name="picupload_maxfilesize" value="{$picupload_maxfilesize|safetext}" />
                     </div>
                     <div class="z-formrow">
-                        <label for="news_picupload_sizing">{gt text='What thumbnail sizing to use (0=best-fit / 1=adaptive resizing'}</label>
-                        <input id="news_picupload_sizing" type="text" name="picupload_sizing" value="{$picupload_sizing|safetext}" />
+                        <label for="news_picupload_sizing">{gt text='What thumbnail sizing to use'}</label>
+                        <select id="news_picupload_sizing" name="picupload_sizing" size="1">
+                            <option value="0"{if $picupload_sizing eq 0} selected="selected"{/if}>{gt text='Best fit (keeps aspect ratio)'}</option>
+                            <option value="1"{if $picupload_sizing eq 1} selected="selected"{/if}>{gt text='Fixed size (scale and crop)'}</option>
+                        </select>
                     </div>
                     <div class="z-formrow">
                         <label for="news_picupload_picmaxwidth">{gt text='Maximum width of the full size pictures (in pixels)'}</label>
@@ -195,9 +222,13 @@
                         <input id="news_picupload_thumb2maxheight" type="text" name="picupload_thumb2maxheight" value="{$picupload_thumb2maxheight|safetext}" />
                     </div>
                     <div class="z-formrow">
-                        <label for="news_picupload_uploaddir">{gt text='Directory where the images are uploaded (leaving empty will create the default directory images/news_picupload)'}</label>
-                        <input id="news_picupload_uploaddir" type="text" name="picupload_uploaddir" value="{$picupload_uploaddir|safetext}" />
+                        <label for="news_picupload_uploaddir">{gt text='Directory where the images are uploaded'}</label>
+                        <input id="news_picupload_uploaddir" type="text" name="picupload_uploaddir" value="{$picupload_uploaddir|pnvarprepfordisplay}" />
+                        <div id="news_picupload_writable" class="z-formnote">&nbsp;</div>
                     </div>
+                    <div class="z-formrow">
+                        <label for="news_picupload_createfolder">{gt text='Create the specified upload directory'}</label>
+                        <input id="news_picupload_createfolder" type="checkbox" name="picupload_createfolder"{if $picupload_createfolder} checked="checked"{/if} />
                 </div>
               </fieldset>
 

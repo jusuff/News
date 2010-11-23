@@ -728,7 +728,8 @@ class News_Api_User extends Zikula_Api
         }
 
         // Set up the array itself
-        $preformat = array('bodytext' => $bodytext,
+        $preformat = array(
+                'bodytext'      => $bodytext,
                 'bytesmore'     => $bytesmorelink,
                 'category'      => '<a href="'.$links['category'].'" title="'.$info['cattitle'].'">'.$info['cattitle'].'</a>',
                 'categories'    => $categories,
@@ -740,7 +741,8 @@ class News_Api_User extends Zikula_Api
                 'print'         => $print,
                 'printicon'     => $printicon,
                 'readmore'      => $readmore,
-                'title'         => $title);
+                'title'         => $title,
+                'version'       => 1);
 
         if (!empty($info['topicimage'])) {
             $catimagepath = $this->getVar('catimagepath');
@@ -749,10 +751,28 @@ class News_Api_User extends Zikula_Api
             $preformat['searchtopic'] = '';
         }
 
-        if ($info['catid']) {
+        // More complex extras - use values in the array
+        $preformat['more'] = '';
+        if ($bytesmore > 0) {
+            $preformat['more'] .= $preformat['readmore'].' ('.$preformat['bytesmore'].') ';
+        }
+        $preformat['more'] .= $preformat['comment'].' '.$preformat['print'];
+
+        if ($info['cat']) {
             $preformat['catandtitle'] = $preformat['category'].': '.$preformat['title'];
         } else {
             $preformat['catandtitle'] = $preformat['title'];
+        }
+
+        if (!empty($preformat['bodytext'])) {
+            $preformat['maintext'] = '<div>'.$preformat['hometext'].'</div><div>'.$preformat['bodytext'].'</div>';
+        } else {
+            $preformat['maintext'] = '<div>'.$preformat['hometext'].'</div>';
+        }
+        if (!empty($preformat['notes'])) {
+            $preformat['fulltext'] = '<div>'.$preformat['maintext'].'</div><div>'.$preformat['notes'].'</div>';
+        } else {
+            $preformat['fulltext'] = $preformat['maintext'];
         }
 
         return $preformat;

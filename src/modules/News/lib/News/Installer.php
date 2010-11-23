@@ -43,7 +43,9 @@ class News_Installer extends Zikula_Installer
         $this->setVar('enableajaxedit', false);
         $this->setVar('enablemorearticlesincat', false);
         $this->setVar('morearticlesincat', 0);
-        $this->setVar('enablecategorybasedpermissions', true); 
+        $this->setVar('enablecategorybasedpermissions', true);
+        $this->setVar('enabledescriptionvar', false);
+        $this->setVar('descriptionvarchars', 250);
 
         // notification on new article
         $this->setVar('notifyonpending', false);
@@ -302,6 +304,8 @@ class News_Installer extends Zikula_Installer
 
             case '2.6.0':
             case '2.6.1':
+                $this->setVar('enabledescriptionvar', false);
+                $this->setVar('descriptionvarchars', 250);
             case '2.6.2':
                 // register handlers
                 EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));

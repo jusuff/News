@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zikula Application Framework
  *
@@ -10,9 +11,9 @@
  * @package    Content_Management
  * @subpackage News
  */
-
 class News_Controller_Ajax extends Zikula_Controller
 {
+
     /**
      * modify a news entry (incl. delete) via ajax
      *
@@ -23,7 +24,7 @@ class News_Controller_Ajax extends Zikula_Controller
      */
     public function modify()
     {
-        $sid  = FormUtil::getPassedValue('sid', null, 'POST');
+        $sid = FormUtil::getPassedValue('sid', null, 'POST');
         $page = FormUtil::getPassedValue('page', 1, 'POST');
 
         // Get the news article
@@ -38,8 +39,8 @@ class News_Controller_Ajax extends Zikula_Controller
         }
 
         // Get the format types. 'home' string is bits 0-1, 'body' is bits 2-3.
-        $item['hometextcontenttype'] = ($item['format_type']%4);
-        $item['bodytextcontenttype'] = (($item['format_type']/4)%4);
+        $item['hometextcontenttype'] = ($item['format_type'] % 4);
+        $item['bodytextcontenttype'] = (($item['format_type'] / 4) % 4);
 
         // Set the publishing date options.
         if (!isset($item['to'])) {
@@ -105,9 +106,9 @@ class News_Controller_Ajax extends Zikula_Controller
      */
     public function update()
     {
-        $story  = FormUtil::getPassedValue('story', null, 'POST');
+        $story = FormUtil::getPassedValue('story', null, 'POST');
         $action = FormUtil::getPassedValue('action', null, 'POST');
-        $page   = (int)FormUtil::getPassedValue('page', 1, 'POST');
+        $page = (int) FormUtil::getPassedValue('page', 1, 'POST');
 
         // Get the current news article
         $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $story['sid']));
@@ -125,102 +126,102 @@ class News_Controller_Ajax extends Zikula_Controller
         switch ($action)
         {
             case 'update':
-            // Update the story, security check inside of the API func
+                // Update the story, security check inside of the API func
 
                 $modvars = ModUtil::getVar('News');
                 /*            // delete and add images (credit msshams)
-            if ($modvars['picupload_enabled']) {
-                //  include the phpthumb library
-                require_once ('pnincludes/phpthumb/ThumbLib.inc.php');
-                $uploaddir = $modvars['picupload_uploaddir'] . '/';
-                // remove selected files
-                for ($i=0; $i<$item['pictures']; $i++){
-                    if (isset($story['del_pictures-'.$i])) {
-                        unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png");
-                        unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png");
-                        unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png");
-                        $story['pictures']--;
-                    }
-                }
-                // renumber the remaining files if files were deleted
-                if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
-                    $lastfile = 0;
-                    for ($i=0; $i<$item['pictures']; $i++){
-                        if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png")) {
-                            rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
-                            rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.png");
-                            rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png");
-                            // create a new hometext image if needed
-                            if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png")){
-                                $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
-                                if ($modvars['sizing'] == 0) {
-                                    $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                                } else {
-                                    $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                                }
-                                $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.png', 'png');
-                            }
-                            $lastfile++;
-                        }
-                    }
-                }
-                // handling of additional image uploads
-                foreach ($_FILES['news_files']['error'] as $key => $error) {
-                    if ($error == UPLOAD_ERR_OK) {
-                        $tmp_name = $_FILES['news_files']['tmp_name'][$key];
-                        $name = $_FILES['news_files']['name'][$key];
+                  if ($modvars['picupload_enabled']) {
+                  //  include the phpthumb library
+                  require_once ('pnincludes/phpthumb/ThumbLib.inc.php');
+                  $uploaddir = $modvars['picupload_uploaddir'] . '/';
+                  // remove selected files
+                  for ($i=0; $i<$item['pictures']; $i++){
+                  if (isset($story['del_pictures-'.$i])) {
+                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png");
+                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png");
+                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png");
+                  $story['pictures']--;
+                  }
+                  }
+                  // renumber the remaining files if files were deleted
+                  if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
+                  $lastfile = 0;
+                  for ($i=0; $i<$item['pictures']; $i++){
+                  if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png")) {
+                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.png");
+                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png");
+                  // create a new hometext image if needed
+                  if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png")){
+                  $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                  if ($modvars['sizing'] == 0) {
+                  $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                  } else {
+                  $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                  }
+                  $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.png', 'png');
+                  }
+                  $lastfile++;
+                  }
+                  }
+                  }
+                  // handling of additional image uploads
+                  foreach ($_FILES['news_files']['error'] as $key => $error) {
+                  if ($error == UPLOAD_ERR_OK) {
+                  $tmp_name = $_FILES['news_files']['tmp_name'][$key];
+                  $name = $_FILES['news_files']['name'][$key];
 
-                        $thumb = PhpThumbFactory::create($tmp_name);
-                        if ($modvars['sizing'] == 0) {
-                            $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                        } else {
-                            $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                        }
-                        $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.png', 'png');
+                  $thumb = PhpThumbFactory::create($tmp_name);
+                  if ($modvars['sizing'] == 0) {
+                  $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                  } else {
+                  $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                  }
+                  $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.png', 'png');
 
-                        $thumb1 = PhpThumbFactory::create($tmp_name);
-                        if ($modvars['sizing'] == 0) {
-                            $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                        } else {
-                            $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                        }
-                        $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.png', 'png');
+                  $thumb1 = PhpThumbFactory::create($tmp_name);
+                  if ($modvars['sizing'] == 0) {
+                  $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                  } else {
+                  $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                  }
+                  $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.png', 'png');
 
-                        // for index page picture create extra thumbnail
-                        if ($story['pictures']==0){
-                            $thumb2 = PhpThumbFactory::create($tmp_name);
-                            if ($modvars['sizing'] == 0) {
-                                $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                            } else {
-                                $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                            }
-                            $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
-                        }
-                        $story['pictures']++;
-                    }
-                }
-            }*/
+                  // for index page picture create extra thumbnail
+                  if ($story['pictures']==0){
+                  $thumb2 = PhpThumbFactory::create($tmp_name);
+                  if ($modvars['sizing'] == 0) {
+                  $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                  } else {
+                  $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                  }
+                  $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
+                  }
+                  $story['pictures']++;
+                  }
+                  }
+                  } */
 
                 if (ModUtil::apiFunc('News', 'admin', 'update',
-                array('sid' => $story['sid'],
-                'title' => DataUtil::convertFromUTF8($story['title']),
-                'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
-                '__CATEGORIES__' => $story['__CATEGORIES__'],
-                'language' => isset($story['language']) ? $story['language'] : '',
-                'hometext' => DataUtil::convertFromUTF8($story['hometext']),
-                'hometextcontenttype' => $story['hometextcontenttype'],
-                'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
-                'bodytextcontenttype' => $story['bodytextcontenttype'],
-                'notes' => DataUtil::convertFromUTF8($story['notes']),
-                'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
-                'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
-                'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
-                'from' => isset($story['from']) ? $story['from'] : null,
-                'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-                'to' => isset($story['to']) ? $story['to'] : null,
-                'weight' => $story['weight'],
-                'pictures' => $story['pictures'],
-                'published_status' => $story['published_status']))) {
+                                array('sid' => $story['sid'],
+                                    'title' => DataUtil::convertFromUTF8($story['title']),
+                                    'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
+                                    '__CATEGORIES__' => $story['__CATEGORIES__'],
+                                    'language' => isset($story['language']) ? $story['language'] : '',
+                                    'hometext' => DataUtil::convertFromUTF8($story['hometext']),
+                                    'hometextcontenttype' => $story['hometextcontenttype'],
+                                    'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
+                                    'bodytextcontenttype' => $story['bodytextcontenttype'],
+                                    'notes' => DataUtil::convertFromUTF8($story['notes']),
+                                    'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
+                                    'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+                                    'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
+                                    'from' => isset($story['from']) ? $story['from'] : null,
+                                    'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+                                    'to' => isset($story['to']) ? $story['to'] : null,
+                                    'weight' => $story['weight'],
+                                    'pictures' => $story['pictures'],
+                                    'published_status' => $story['published_status']))) {
 
                     // Success
                     // reload the news story and ignore the DBUtil SQLCache
@@ -235,7 +236,7 @@ class News_Controller_Ajax extends Zikula_Controller
 
                     // Set the item hometext to be the required page
                     // no arrays start from zero, pages from one
-                    $item['bodytext'] = $allpages[$page-1];
+                    $item['bodytext'] = $allpages[$page - 1];
                     $numitems = count($allpages);
                     unset($allpages);
 
@@ -249,16 +250,16 @@ class News_Controller_Ajax extends Zikula_Controller
                     // $preformat is an array holding chunks of
                     // preformatted text for this article.
                     $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
-                            array('info'  => $info,
-                            'links' => $links));
+                                    array('info' => $info,
+                                        'links' => $links));
 
                     $this->setCaching(false);
 
                     // Assign the story info arrays
-                    $this->view->assign(array('info'      => $info,
-                            'links'     => $links,
-                            'preformat' => $preformat,
-                            'page'      => $page));
+                    $this->view->assign(array('info' => $info,
+                        'links' => $links,
+                        'preformat' => $preformat,
+                        'page' => $page));
                     // Some vars
                     $this->view->assign('enablecategorization', $modvars['enablecategorization']);
                     $this->view->assign('catimagepath', $modvars['catimagepath']);
@@ -266,10 +267,9 @@ class News_Controller_Ajax extends Zikula_Controller
 
                     // Now lets assign the information to create a pager for the review
                     $this->view->assign('pager', array('numitems' => $numitems,
-                            'itemsperpage' => 1));
+                        'itemsperpage' => 1));
 
                     // we do not increment the read count!!!
-
                     // when urltitle has changed, do a reload with the full url and switch to no shorturl usage
                     if (strcmp($oldurltitle, $item['urltitle']) != 0) {
                         $reloadurl = ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'page' => $page), null, null, true, true);
@@ -285,13 +285,13 @@ class News_Controller_Ajax extends Zikula_Controller
                 break;
 
             case 'pending':
-            // Security check
+                // Security check
                 if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$story[sid]", ACCESS_EDIT)) {
                     AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
                 }
                 // set published_status to 2 to make the story a pending story
                 $object = array('published_status' => 2,
-                        'sid'              => $story['sid']);
+                    'sid' => $story['sid']);
 
                 if (DBUtil::updateObject($object, 'news', '', 'sid') == false) {
                     $output = DataUtil::formatForDisplayHTML($this->__('Error! Could not save your changes.'));
@@ -304,7 +304,7 @@ class News_Controller_Ajax extends Zikula_Controller
                 break;
 
             case 'delete':
-            // Security check inside of the API func
+                // Security check inside of the API func
                 if (ModUtil::apiFunc('News', 'admin', 'delete', array('sid' => $story['sid']))) {
                     // Success
                     // the url for reloading, after deleting refer to the news index
@@ -319,10 +319,9 @@ class News_Controller_Ajax extends Zikula_Controller
         }
 
         return array('result' => $output,
-                'action' => $action,
-                'reloadurl' => $reloadurl);
+            'action' => $action,
+            'reloadurl' => $reloadurl);
     }
-
 
     /**
      * This is the Ajax function that is called with the results of the
@@ -337,7 +336,7 @@ class News_Controller_Ajax extends Zikula_Controller
     public function savedraft()
     {
         $title = FormUtil::getPassedValue('title', null, 'POST');
-        $sid   = FormUtil::getPassedValue('sid', null, 'POST');
+        $sid = FormUtil::getPassedValue('sid', null, 'POST');
         $story = FormUtil::getPassedValue('story', null, 'POST');
 
         $output = $title;
@@ -346,7 +345,6 @@ class News_Controller_Ajax extends Zikula_Controller
         $showslugedit = false;
         // Permalink display length, only needed for 2 column layout later.
         //$permalinkmaxdisplay = 40;
-
         // Check  if the article is already saved as draft
         if ($sid > 0) {
             // Get the current news article
@@ -360,24 +358,24 @@ class News_Controller_Ajax extends Zikula_Controller
             }
 
             if (!ModUtil::apiFunc('News', 'admin', 'update',
-            array('sid' => $sid,
-            'title' => DataUtil::convertFromUTF8($story['title']),
-            'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
-            '__CATEGORIES__' => $story['__CATEGORIES__'],
-            'language' => isset($story['language']) ? $story['language'] : '',
-            'hometext' => DataUtil::convertFromUTF8($story['hometext']),
-            'hometextcontenttype' => $story['hometextcontenttype'],
-            'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
-            'bodytextcontenttype' => $story['bodytextcontenttype'],
-            'notes' => DataUtil::convertFromUTF8($story['notes']),
-            'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
-            'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
-            'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
-            'from' => $story['from'],
-            'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-            'to' => $story['to'],
-            'weight' => $story['weight'],
-            'pictures' => $story['pictures'] ))) {
+                            array('sid' => $sid,
+                                'title' => DataUtil::convertFromUTF8($story['title']),
+                                'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
+                                '__CATEGORIES__' => $story['__CATEGORIES__'],
+                                'language' => isset($story['language']) ? $story['language'] : '',
+                                'hometext' => DataUtil::convertFromUTF8($story['hometext']),
+                                'hometextcontenttype' => $story['hometextcontenttype'],
+                                'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
+                                'bodytextcontenttype' => $story['bodytextcontenttype'],
+                                'notes' => DataUtil::convertFromUTF8($story['notes']),
+                                'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
+                                'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+                                'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
+                                'from' => $story['from'],
+                                'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+                                'to' => $story['to'],
+                                'weight' => $story['weight'],
+                                'pictures' => $story['pictures']))) {
 
                 $output = DataUtil::formatForDisplayHTML($this->__('Error! Could not save your changes.'));
             } else {
@@ -395,23 +393,23 @@ class News_Controller_Ajax extends Zikula_Controller
         } else {
             // Create a first draft version of the story
             if ($sid = ModUtil::apiFunc('News', 'user', 'create',
-            array('title' => DataUtil::convertFromUTF8($title),
-            '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
-            'language' => isset($story['language']) ? $story['language'] : '',
-            'hometext' => isset($story['hometext']) ? DataUtil::convertFromUTF8($story['hometext']) : '',
-            'hometextcontenttype' => isset($story['hometextcontenttype']) ? $story['hometextcontenttype'] : 0,
-            'bodytext' => isset($story['bodytext']) ? DataUtil::convertFromUTF8($story['bodytext']) : '',
-            'bodytextcontenttype' => isset($story['bodytextcontenttype']) ? $story['bodytextcontenttype'] : 0,
-            'notes' => isset($story['notes']) ? DataUtil::convertFromUTF8($story['notes']) : '',
-            'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
-            'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
-            'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
-            'from' => isset($story['from']) ? $story['from'] : null,
-            'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-            'to' => isset($story['to']) ? $story['to'] : null,
-            'weight' => isset($story['weight']) ? $story['weight'] : 0,
-            'pictures' => isset($story['pictures']) ? $story['pictures'] : 0,
-            'published_status' => 4 ))) {
+                            array('title' => DataUtil::convertFromUTF8($title),
+                                '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
+                                'language' => isset($story['language']) ? $story['language'] : '',
+                                'hometext' => isset($story['hometext']) ? DataUtil::convertFromUTF8($story['hometext']) : '',
+                                'hometextcontenttype' => isset($story['hometextcontenttype']) ? $story['hometextcontenttype'] : 0,
+                                'bodytext' => isset($story['bodytext']) ? DataUtil::convertFromUTF8($story['bodytext']) : '',
+                                'bodytextcontenttype' => isset($story['bodytextcontenttype']) ? $story['bodytextcontenttype'] : 0,
+                                'notes' => isset($story['notes']) ? DataUtil::convertFromUTF8($story['notes']) : '',
+                                'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
+                                'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+                                'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
+                                'from' => isset($story['from']) ? $story['from'] : null,
+                                'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+                                'to' => isset($story['to']) ? $story['to'] : null,
+                                'weight' => isset($story['weight']) ? $story['weight'] : 0,
+                                'pictures' => isset($story['pictures']) ? $story['pictures'] : 0,
+                                'published_status' => 4))) {
                 // Success and now reload the news story
                 $item = ModUtil::apiFunc('News', 'user', 'get', array('sid' => $sid));
                 if ($item == false) {
@@ -434,13 +432,11 @@ class News_Controller_Ajax extends Zikula_Controller
             }
         }
         return array('result' => $output,
-                'sid' => $sid,
-                'slug' => $slug,
-                'fullpermalink' => $fullpermalink,
-                'showslugedit' => $showslugedit);
-
+            'sid' => $sid,
+            'slug' => $slug,
+            'fullpermalink' => $fullpermalink,
+            'showslugedit' => $showslugedit);
     }
-
 
     /**
      * make the permalink from the title
@@ -457,10 +453,36 @@ class News_Controller_Ajax extends Zikula_Controller
 //    if (!isset($args['urltitle']) || empty($args['urltitle'])) {
 //        $args['urltitle'] = strtolower(DataUtil::formatPermalink($args['title']));
 //    }
-
         // Construct the lowercase permalink, using the title as slug
         $permalink = strtolower(DataUtil::formatPermalink($title));
 
         return array('result' => $permalink);
+    }
+
+    /**
+     * check on the fly if the chosen picture upload directory is writable
+     *
+     * @author Erik Spaan
+     * @param 'folder'   string: the folder name
+     * @return boolean
+     */
+    function checkpicuploadfolder()
+    {
+        $folder = FormUtil::getPassedValue('folder', null, 'POST');
+        if (!empty($folder)) {
+            if (is_dir($folder)) {
+                if (is_writable($folder)) {
+                    $output = '<img src="images/icons/extrasmall/ok.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified folder [%s] does exist and is writable.', $folder));
+                } else {
+                    $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified folder [%s] does exist, but is not writable. Make sure that this folder is accessible via the web and writable by the webserver.', $folder));
+                }
+            } else {
+                $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified folder [%s] does not exist yet. News pubisher will create this folder if you check the field below.', $folder));
+            }
+        } else {
+            $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__('Specified folder is an empty string, please fill in a folder (e.g. images/news_picupload).'));
+        }
+        return array('result' => $output,
+            'folder' => $folder);
     }
 }

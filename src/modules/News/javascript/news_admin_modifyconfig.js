@@ -34,6 +34,9 @@ function news_modifyconfig_init_check()
     if ($('news_permalink_custom_details')) {
         news_permalink_custom_init();
     }
+    if ($('news_descriptionvar_details')) {
+        news_descriptionvar_init();
+    }
 }
 
 function news_ajaxedit_init()
@@ -96,16 +99,52 @@ function news_pdflink_onchange()
     switchdisplaystate('news_pdflink_details');
 }
 
+function news_descriptionvar_init()
+{
+    if ($('news_enabledescriptionvar').checked == false) {
+        $('news_descriptionvar_details').hide();
+    }
+    Event.observe('news_enabledescriptionvar', 'click', news_descriptionvar_onchange);
+}
+function news_descriptionvar_onchange()
+{
+    switchdisplaystate('news_descriptionvar_details');
+}
+
 function news_picupload_init()
 {
     if ($('news_picupload_enabled').checked == false) {
         $('news_picupload_details').hide();
     }
+    // Enable on the fly checking of the existence and writability of the upload dir
     $('news_picupload_enabled').observe('click', news_picupload_onchange);
+    if ($('news_picupload_writable')) {
+        $('news_picupload_uploaddir').observe('change', news_picupload_writable);
+}
+    news_picupload_writable();
 }
 function news_picupload_onchange()
 {
     switchdisplaystate('news_picupload_details');
+}
+function news_picupload_writable()
+{
+    // Make an ajax call for the folder check
+    var folder = $F('news_picupload_uploaddir');
+    var pars = 'module=News&func=checkpicuploadfolder&folder=' + folder;
+    $('news_picupload_writable').update('<img src="images/icons/extrasmall/indicator_circle.gif" width="16" height="16" alt="" />');
+    var myAjax = new Ajax.Request(
+        document.location.pnbaseURL+'ajax.php',
+        {
+            method: 'post',
+            parameters: pars,
+            onComplete: news_picupload_writable_update
+        });
+}
+function news_picupload_writable_update(req)
+{
+    var json = pndejsonize(req.responseText);
+    $('news_picupload_writable').update(json.result);
 }
 
 function news_permalink_custom_init()

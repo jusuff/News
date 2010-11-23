@@ -290,9 +290,9 @@ class News_Controller_Admin extends Zikula_Controller
             // remove selected files
             for ($i=0; $i<$item['pictures']; $i++){
                 if (isset($story['del_pictures-'.$i])) {
-                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png");
-                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png");
-                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png");
+                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg");
+                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.jpg");
+                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.jpg");
                     $story['pictures']--;
                 }
             }
@@ -300,19 +300,19 @@ class News_Controller_Admin extends Zikula_Controller
             if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
                 $lastfile = 0;
                 for ($i=0; $i<$item['pictures']; $i++){
-                    if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png")) {
-                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
-                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.png");
-                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png");
+                    if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg")) {
+                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.jpg");
+                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.jpg");
+                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.jpg");
                         // create a new hometext image if needed
-                        if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png")){
-                            $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
-                            if ($modvars['sizing'] == 0) {
+                        if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.jpg")){
+                            $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.jpg", array('jpegQuality' => 80));
+                            if ($modvars['picupload_sizing'] == 0) {
                                 $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                             } else {
                                 $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                             }
-                            $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.png', 'png');
+                            $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.jpg', 'jpg');
                         }
                         $lastfile++;
                     }
@@ -322,70 +322,80 @@ class News_Controller_Admin extends Zikula_Controller
             // handling of additional image uploads
             $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
             foreach ($_FILES['news_files']['error'] as $key => $error) {
-                $file_extension = FileUtil::getExtension($_FILES['news_files']['name'][$key]);
-                if ($error == UPLOAD_ERR_OK && $_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize'] && !in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
-                    $tmp_name = $_FILES['news_files']['tmp_name'][$key];
-                    $name = $_FILES['news_files']['name'][$key];
+                if ($error == UPLOAD_ERR_OK) {
+                    if ($_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize']) {
+                        $file_extension = FileUtil::getExtension($_FILES['news_files']['name'][$key]);
+                        if (in_array(strtolower($file_extension), $allowedExtensionsArray) || in_array(strtoupper($file_extension), $allowedExtensionsArray)) {
+                            $tmp_name = $_FILES['news_files']['tmp_name'][$key];
+                            $name = $_FILES['news_files']['name'][$key];
 
-                    $thumb = PhpThumbFactory::create($tmp_name);
-                    if ($modvars['sizing'] == 0) {
-                        $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                    } else {
-                        $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                    }
-                    $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.png', 'png');
+                            $thumb = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
+                            if ($modvars['picupload_sizing'] == 0) {
+                                $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                            } else {
+                                $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
+                            }
+                            $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.jpg', 'jpg');
 
-                    $thumb1 = PhpThumbFactory::create($tmp_name);
-                    if ($modvars['sizing'] == 0) {
-                        $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                    } else {
-                        $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                    }
-                    $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.png', 'png');
+                            $thumb1 = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
+                            if ($modvars['picupload_sizing'] == 0) {
+                                $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                            } else {
+                                $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
+                            }
+                            $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.jpg', 'jpg');
 
-                    // for index page picture create extra thumbnail
-                    if ($story['pictures']==0){
-                        $thumb2 = PhpThumbFactory::create($tmp_name);
-                        if ($modvars['sizing'] == 0) {
-                            $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                            // for index page picture create extra thumbnail
+                            if ($story['pictures']==0){
+                                $thumb2 = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
+                                if ($modvars['picupload_sizing'] == 0) {
+                                    $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                                } else {
+                                    $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                                }
+                                $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.jpg', 'jpg');
+                            }
+                            $story['pictures']++;
                         } else {
-                            $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
+                            LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the file extension is not allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
                         }
-                        $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
+                    } else {
+                        LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
                     }
-                    $story['pictures']++;
-                } else {
-                    LogUtil::registerStatus($this->__f('Picture %s is not uploaded, due to an upload error, too large filesize (max. %s kB) or using a not allowed extension (only %s allowed).', array($key+1, $modvars['picupload_maxfilesize']/1000, $modvars['picupload_allowext'])));
+                } elseif ($error == UPLOAD_ERR_FORM_SIZE) {
+                    LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
+                } elseif ($error != UPLOAD_ERR_NO_FILE) {
+                    LogUtil::registerStatus($this->__f('Warning! Picture %1$s gave an error (code %2$s, explained on this page: %3$s) during uploading.', array($key+1, $error, 'http://php.net/manual/features.file-upload.errors.php')));
                 }
             }
         }
 
         // Update the story
-        if (ModUtil::apiFunc('News', 'admin', 'update',
-        array('sid' => $story['sid'],
-        'title' => $story['title'],
-        'urltitle' => $story['urltitle'],
-        '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
-        '__ATTRIBUTES__' => isset($story['__ATTRIBUTES__']) ? $story['__ATTRIBUTES__'] : null,
-        'language' => isset($story['language']) ? $story['language'] : '',
-        'hometext' => isset($story['hometext']) ? $story['hometext'] : '',
-        'hometextcontenttype' => $story['hometextcontenttype'],
-        'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
-        'bodytextcontenttype' => $story['bodytextcontenttype'],
-        'notes' => isset($story['notes']) ? $story['notes'] : '',
-        'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
-        'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
-        'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
-        'from' => $story['from'],
-        'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-        'to' => $story['to'],
-        'approver' => $story['approver'],
-        'weight' => isset($story['weight']) ? $story['weight'] : 0,
-        'pictures' => $story['pictures'],
-        'action' => $story['action']))) {
-            // Success
-            LogUtil::registerStatus($this->__('Done! Saved your changes.'));
-        }
+        if (ModUtil::apiFunc('News', 'admin', 'update', array(
+            'sid' => $story['sid'],
+            'title' => $story['title'],
+            'urltitle' => $story['urltitle'],
+            '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
+            '__ATTRIBUTES__' => isset($story['__ATTRIBUTES__']) ? $story['__ATTRIBUTES__'] : null,
+            'language' => isset($story['language']) ? $story['language'] : '',
+            'hometext' => isset($story['hometext']) ? $story['hometext'] : '',
+            'hometextcontenttype' => $story['hometextcontenttype'],
+            'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
+            'bodytextcontenttype' => $story['bodytextcontenttype'],
+            'notes' => isset($story['notes']) ? $story['notes'] : '',
+            'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
+            'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+            'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
+            'from' => $story['from'],
+            'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+            'to' => $story['to'],
+            'approver' => $story['approver'],
+            'weight' => isset($story['weight']) ? $story['weight'] : 0,
+            'pictures' => $story['pictures'],
+            'action' => $story['action']))) {
+                // Success
+                LogUtil::registerStatus($this->__('Done! Saved your changes.'));
+            }
 
         return System::redirect(ModUtil::url('News', 'admin', 'view'));
     }
@@ -827,17 +837,28 @@ class News_Controller_Admin extends Zikula_Controller
         $modvars['picupload_thumb2maxwidth'] = (int)FormUtil::getPassedValue('picupload_thumb2maxwidth', 200, 'POST');
         $modvars['picupload_thumb2maxheight'] = (int)FormUtil::getPassedValue('picupload_thumb2maxheight', 200, 'POST');
         $modvars['picupload_uploaddir'] = FormUtil::getPassedValue('picupload_uploaddir', '', 'POST');
+        $createfolder = (bool)FormUtil::getPassedValue('picupload_createfolder', false, 'POST');
 
         // create picture upload folder if needed
         if ($modvars['picupload_enabled']) {
-            if (empty($modvars['picupload_uploaddir'])) {
-                $newsuploaddir = 'images/news_picupload';
-                if (!file_exists($newsuploaddir) && FileUtil::mkdirs($newsuploaddir, 0777)) {
-                    LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s]. Make sure that this folder is accessible via the web and writable by the webserver.', $newsuploaddir));
-                    $modvars['picupload_uploaddir'] = $newsuploaddir;
+            if ($createfolder && !empty($modvars['picupload_uploaddir'])) {
+                if (is_dir($modvars['picupload_uploaddir'])) {
+                    LogUtil::registerError($this->__f('Warning! The image upload directory at [%s] already exists. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                } else {
+                    // Try to create the specified directory
+                    if (FileUtil::mkdirs($modvars['picupload_uploaddir'], 0777)) {
+                        // write a htaccess file in the image upload directory
+                        $htaccessContent = "# ----------------------------------------------------------------------\r\n# Purpose of file: block any web access other than images\r\n# ----------------------------------------------------------------------\r\nSetEnvIf Request_URI \"\.jpg$\" object_is_jpg=jpg\r\nSetEnvIf Request_URI \"\.gif$\" object_is_gif=gif\r\nSetEnvIf Request_URI \"\.png$\" object_is_png=png\r\nSetEnvIf Request_URI \"\.tif$\" object_is_tif=tif\r\nOrder deny,allow\r\nDeny from all\r\nAllow from env=object_is_jpg\r\nAllow from env=object_is_gif\r\nAllow from env=object_is_png\r\nAllow from env=object_is_tif";
+
+                        if (FileUtil::writeFile($modvars['picupload_uploaddir'] . '/.htaccess', $htaccessContent)) {
+                            LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s] and wrote an .htaccess file there for security. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                        } else {
+                            LogUtil::registerStatus($this__f('News publisher created the image upload directory successfully at [%s], but could not write the .htaccess file there. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                        }
+                    } else {
+                        LogUtil::registerStatus($this->__f('Warning! News publisher could not create the specified image upload directory [%s]. Try to create it yourself and make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                    }
                 }
-            } elseif (!is_dir($modvars['picupload_uploaddir']) || !is_writable($modvars['picupload_uploaddir'])) {
-                LogUtil::registerStatus($this->__f('The specified image upload directory [%s] does not exist or is not writable by the webserver', $modvars['picupload_uploaddir']));
             }
         }
 
