@@ -267,9 +267,6 @@ height:50px;
             $anonymous = System::getVar('anonymous');
         }
 
-        // create the output object
-        $this->view = Zikula_View::getInstance('News');
-
         // --- Select the configurable row template or the default. The row templates is cached with its sid (storyid)
         $storiesoutput = array();
         if (!empty($vars['rowtemplate'])) {

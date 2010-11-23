@@ -740,7 +740,7 @@ Regards,
 
         // Create output object
         $cacheid = "$month|$year";
-        $this->view = Zikula_View::getInstance('News', null, $cacheid);
+        $this->view->setCache_Id($cacheid);
 
         // output vars
         $archivemonths = array();
@@ -816,8 +816,7 @@ Regards,
         if ($bodytextcontenttype == 0) {
             $bodytext = nl2br($bodytext);
         }
-
-        $this->view = Zikula_View::getInstance('News', false);
+        $this->view->setCaching(false);
 
         $this->view->assign('preview', array('title'    => $title,
                 'hometext' => $hometext,
