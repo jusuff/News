@@ -8,7 +8,7 @@
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker.js'}
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker-locale.js'}
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
-{if $picupload_enabled AND $picupload_maxpictures gt 1}
+{if $picupload_enabled AND $accesspicupload AND $picupload_maxpictures gt 1}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if}
 
@@ -150,7 +150,7 @@
             {/if}
         </fieldset>
         
-        {if $picupload_enabled}
+        {if $picupload_enabled AND $accesspicupload}
         <fieldset>
             <legend>{gt text='Pictures'}</legend>
 			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
