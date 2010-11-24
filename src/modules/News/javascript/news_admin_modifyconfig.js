@@ -130,11 +130,12 @@ function news_picupload_onchange()
 function news_picupload_writable()
 {
     // Make an ajax call for the folder check
-    var folder = $F('news_picupload_uploaddir');
-    var pars = 'module=News&func=checkpicuploadfolder&folder=' + folder;
+    var pars = {
+        folder: $F('news_picupload_uploaddir')
+    };
     $('news_picupload_writable').update('<img src="images/icons/extrasmall/indicator_circle.gif" width="16" height="16" alt="" />');
-    var myAjax = new Ajax.Request(
-        document.location.pnbaseURL+'ajax.php',
+    new Zikula.Ajax.Request(
+        "module=News&func=checkpicuploadfolder",
         {
             method: 'post',
             parameters: pars,
@@ -143,8 +144,8 @@ function news_picupload_writable()
 }
 function news_picupload_writable_update(req)
 {
-    var json = pndejsonize(req.responseText);
-    $('news_picupload_writable').update(json.result);
+    var data = req.getData();
+    $('news_picupload_writable').update(data.result);
 }
 
 function news_permalink_custom_init()

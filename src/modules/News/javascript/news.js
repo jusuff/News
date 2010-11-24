@@ -65,10 +65,15 @@ function editnews(sid, page)
 {
     if(editing==false) {
         Element.show('news_loadnews');
-        new Ajax.Request(
-            'ajax.php?module=News&func=modify&sid=' + sid  + '&page=' + page,
+        var pars = {
+            sid: sid,
+            page: page
+        }
+        new Zikula.Ajax.Request(
+            "ajax.php?module=News&func=modify",
             {
-                method: 'post', 
+                method: 'post',
+                parameters: pars,
                 onComplete: editnews_init
             });
     }
@@ -139,7 +144,7 @@ function editnews_save(action)
         if (typeof Xinha != "undefined") {
             $('news_ajax_modifyform').onsubmit();
         }
-        new Ajax.Request(
+        new Zikula.Ajax.Request(
             'ajax.php?module=News&func=update&action='+ action +'&' + Form.serialize('news_ajax_modifyform'),
             {
                 method: 'post', 
@@ -326,7 +331,7 @@ function savedraft()
     $('news_saving_draft').show();
     $('news_status_text').update(string_savingdraft);
     $('news_button_text_draft').update(string_savingdraft);
-    new Ajax.Request(
+    new Zikula.Ajax.Request(
         'ajax.php', 
         {
             method: 'post', 
