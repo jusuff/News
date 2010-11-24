@@ -848,9 +848,9 @@ class News_Controller_Admin extends Zikula_Controller
                     // Try to create the specified directory
                     if (FileUtil::mkdirs($modvars['picupload_uploaddir'], 0777)) {
                         // write a htaccess file in the image upload directory
-                        $htaccessContent = "# ----------------------------------------------------------------------\r\n# Purpose of file: block any web access other than images\r\n# ----------------------------------------------------------------------\r\nSetEnvIf Request_URI \"\.jpg$\" object_is_jpg=jpg\r\nSetEnvIf Request_URI \"\.gif$\" object_is_gif=gif\r\nSetEnvIf Request_URI \"\.png$\" object_is_png=png\r\nSetEnvIf Request_URI \"\.tif$\" object_is_tif=tif\r\nOrder deny,allow\r\nDeny from all\r\nAllow from env=object_is_jpg\r\nAllow from env=object_is_gif\r\nAllow from env=object_is_png\r\nAllow from env=object_is_tif";
+                        $htaccessContent = FileUtil::readFile('modules' . DIRECTORY_SEPARATOR . 'News' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'htaccess');
 
-                        if (FileUtil::writeFile($modvars['picupload_uploaddir'] . '/.htaccess', $htaccessContent)) {
+                        if (FileUtil::writeFile($modvars['picupload_uploaddir'] . DIRECTORY_SEPARATOR . '.htaccess', $htaccessContent)) {
                             LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s] and wrote an .htaccess file there for security. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
                         } else {
                             LogUtil::registerStatus($this__f('News publisher created the image upload directory successfully at [%s], but could not write the .htaccess file there. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
