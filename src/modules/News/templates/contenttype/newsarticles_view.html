@@ -5,14 +5,15 @@
     <li>
         {if $story.readperm}
             {if $useshorturls}
-                <a href="{modurl modname=News func=display sid=$story.sid from=$story.from urltitle=$story.urltitle}">
+                {modurl modname=News func=display sid=$story.sid from=$story.from urltitle=$story.urltitle assign=storylink'}
             {else}
-                <a href="{modurl modname=News func=display sid=$story.sid}">
+                {modurl modname=News func=display sid=$story.sid assign=storylink'}
             {/if}
         {/if}
-        {if $story.readperm}<a href="{modurl modname=News func=display sid=$story.sid}">{/if}
+        {if $story.readperm}<a href="{$storylink}">{/if}
             {if $story.dispnewimage}{img modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article'}{/if}
-            {$story.title|varprephtmldisplay}{if $story.titlewrapped}{$titlewraptext|varprephtmldisplay}{/if}
+            {$story.title|safehtml}{if $story.titlewrapped}{$titlewraptext|safehtml}
+        {/if}
         {if $story.readperm}</a>{/if}
 
         {* Optional additional info on the story *}
@@ -26,19 +27,19 @@
         {if $disphometext}
         <div class="content_newsarticles_hometext">
             {if $story.hometextwrapped}
-            {$story.hometext|truncatehtml:$maxhometextlength:''|varprephtmldisplay}
+            {$story.hometext|truncatehtml:$maxhometextlength:''|safehtml}
             {if $story.readperm}<a href="{modurl modname=News func=display sid=$story.sid}">{/if}
-                {$hometextwraptext|varprephtmldisplay}
+                {$hometextwraptext|safehtml}
             {if $story.readperm}</a>{/if}
             {else}
-            {$story.hometext|varprephtmldisplay}
+            {$story.hometext|safehtml}
             {/if}
         </div>
         {/if}
 
         {* Remove this line to use the topic link and topicimage per News item as below
         {if $story.topicsearchurl neq ''}
-        <div class="content_newsarticles_news_meta"><a href="{$story.topicsearchurl}">{if $story.topicimage neq ''}<img src="{$catimagepath}{$story.topicimage}" alt="{$story.topicname|varprephtmldisplay}" title="{$story.topicname|varprephtmldisplay}" />{else}{$story.topicname|varprephtmldisplay}{/if}</a></div>
+        <div class="content_newsarticles_news_meta"><a href="{$story.topicsearchurl}">{if $story.topicimage neq ''}<img src="{$catimagepath}{$story.topicimage}" alt="{$story.topicname|safehtml}" title="{$story.topicname|safehtml}" />{else}{$story.topicname|safehtml}{/if}</a></div>
         {/if}
         Remove this line to use the topic link and topicimage per News item as above *}
     </li>
