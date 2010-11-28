@@ -13,11 +13,6 @@
  */
 class News_Controller_Ajax extends Zikula_Controller
 {
-    public function _postSetup()
-    {
-        // no need for a Zikula_View so override it.
-    }
-
     /**
      * modify a news entry (incl. delete) via ajax
      *
@@ -60,7 +55,7 @@ class News_Controller_Ajax extends Zikula_Controller
             $item['tonolimit'] = 0;
         }
 
-        $this->setCaching(false);
+        $this->view->setCaching(false);
 
         $modvars = ModUtil::getVar('News');
         $this->view->assign($modvars);
@@ -258,7 +253,7 @@ class News_Controller_Ajax extends Zikula_Controller
                                     array('info' => $info,
                                         'links' => $links));
 
-                    $this->setCaching(false);
+                    $this->view->setCaching(false);
 
                     // Assign the story info arrays
                     $this->view->assign(array('info' => $info,
