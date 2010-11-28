@@ -79,22 +79,22 @@
                     <label for="news_enablemorearticlesincat">{gt text='Enable \'More articles in category\' when displaying an article'}</label>
                     <input id="news_enablemorearticlesincat" type="checkbox" name="enablemorearticlesincat"{if $enablemorearticlesincat} checked="checked"{/if} />
                 </div>
-                <div class="z-formrow">
-                    <label for="news_enabledescriptionvar"><!--[gt text='Enable the description page variable in the article display for SEO.']--></label>
-                    <input id="news_enabledescriptionvar" type="checkbox" name="enabledescriptionvar"<!--[if $enabledescriptionvar]--> checked="checked"<!--[/if]--> />
-                </div>
-                <div id="news_descriptionvar_details">
-                    <div class="z-formrow">
-                        <label for="news_descriptionvarchars"><!--[gt text='How many characters of the index page teaser text should be shown in the description']--></label>
-                        <input id="news_descriptionvarchars" type="text" name="descriptionvarchars" value="<!--[$descriptionvarchars|pnvarprepfordisplay]-->" />
-                        <div class="z-informationmsg z-formnote"><!--[gt text="Notice: Check your theme templates and you probably have to adapt <em>meta name=\"description\" content=\"%s\"</em> to get the correct meta text in the header. When you don't want the long string also in the title of the page you have to adapt the titleplugin call to <em>%s</em>" tag1=$smarty.ldelim|cat:"pnpagegetvar name='description'"|cat:$smarty.rdelim|pnvarprepfordisplay tag2="<title>"|cat:$smarty.ldelim|cat:"title noslogan=1"|cat:$smarty.rdelim|cat:"</title>"|pnvarprepfordisplay]--></div>
-                    </div>
-                </div>
                 <div id="news_morearticles_details">
                     <div class="z-formrow">
                         <label for="news_morearticlesincat">{gt text='Number of \'More articles in category\' for every article'}</label>
                         <input id="news_morearticlesincat" type="text" name="morearticlesincat" size="3" value="{$morearticlesincat|safetext}" />
                         <div class="z-informationmsg z-formnote">{gt text='When displaying an article, a number of additional articletitles in the same category can be shown.<br />To show the additional articletitles for every article set the value above to a number larger than 0. When the value is set to 0, the number of additional articletitles can be set per article by means of the article attribute \'morearticlesincat\'. You need to enable \'article attributes\' yourself. <br />When the setting above or the article attribute is set to 0, no titles will be extracted from the database.'}</div>
+                    </div>
+                </div>
+                <div class="z-formrow">
+                    <label for="news_enabledescriptionvar">{gt text='Enable the description page variable in the article display for SEO.'}</label>
+                    <input id="news_enabledescriptionvar" type="checkbox" name="enabledescriptionvar"{if $enabledescriptionvar} checked="checked"{/if} />
+                </div>
+                <div id="news_descriptionvar_details">
+                    <div class="z-formrow">
+                        <label for="news_descriptionvarchars">{gt text='How many characters of the index page teaser text should be shown in the description'}</label>
+                        <input id="news_descriptionvarchars" type="text" name="descriptionvarchars" value="{$descriptionvarchars|safetext}" />
+                        <div class="z-informationmsg z-formnote">This is temporarily disabled. {* gt text="Notice: Check your theme templates and you probably have to adapt <em>meta name=\"description\" content=\"%s\"</em> to get the correct meta text in the header. When you don't want the long string also in the title of the page you have to adapt the titleplugin call to <em>%s</em>" tag1=$smarty.ldelim|cat:"pnpagegetvar name='description'"|cat:$smarty.rdelim|safetext tag2="<title>"|cat:$smarty.ldelim|cat:"title noslogan=1"|cat:$smarty.rdelim|cat:"</title>"|safetext *}</div>
                     </div>
                 </div>
                 <div class="z-formrow">
@@ -152,14 +152,14 @@
                         <input id="news_pdflink_headerlogo_width" type="text" name="pdflink_headerlogo_width" value="{$pdflink_headerlogo_width|safetext}" />
                     </div>
                 </div>
-              </fieldset>
+            </fieldset>
 
-              <fieldset>
+            <fieldset>
                 <legend>{gt text='Picture uploading'}</legend>
                 <div class="z-formrow">
                     <label for="news_picupload_enabled">{gt text='Allow article picture(s) uploading'}</label>
                     <input id="news_picupload_enabled" type="checkbox" name="picupload_enabled"{if $picupload_enabled} checked="checked"{/if} />
-                    <div class="z-warningmsg z-formnote">{gt text='Notice: Enabling picture uploading has a small security risk, since the upload folder needs to have write permission for the webserver. Make sure that you trust the users that have picture uploading permissions and when you create the picture upload directory yourself make sure that you copy the <strong>htaccess</strong> file in pndocs to <strong>.htaccess</strong> in the picture upload folder. This restricts access to images only.'}</div>
+                    <div class="z-warningmsg z-formnote">{gt text='Notice: Enabling picture uploading has a small security risk, since the upload folder needs to have write permission for the webserver. Make sure that you trust the users that have picture uploading permissions and when you create the picture upload directory yourself make sure that you copy the <strong>htaccess</strong> file in /docs to <strong>.htaccess</strong> in the picture upload folder. This restricts access to images only.'}</div>
                 </div>
                 <div id="news_picupload_details">
                     <div class="z-formrow">
@@ -223,14 +223,15 @@
                     </div>
                     <div class="z-formrow">
                         <label for="news_picupload_uploaddir">{gt text='Directory where the images are uploaded'}</label>
-                        <input id="news_picupload_uploaddir" type="text" name="picupload_uploaddir" value="{$picupload_uploaddir|pnvarprepfordisplay}" />
+                        <input id="news_picupload_uploaddir" type="text" name="picupload_uploaddir" value="{$picupload_uploaddir|safetext}" />
                         <div id="news_picupload_writable" class="z-formnote">&nbsp;</div>
                     </div>
                     <div class="z-formrow">
                         <label for="news_picupload_createfolder">{gt text='Create the specified upload directory'}</label>
-                        <input id="news_picupload_createfolder" type="checkbox" name="picupload_createfolder"{if $picupload_createfolder} checked="checked"{/if} />
+                        <input id="news_picupload_createfolder" type="checkbox" name="picupload_createfolder" />
+                    </div>
                 </div>
-              </fieldset>
+            </fieldset>
 
             {if $modvars.ZConfig.shorturls eq true}
             <fieldset>

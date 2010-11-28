@@ -752,7 +752,7 @@ class News_Api_User extends Zikula_Api
             $preformat['searchtopic'] = '';
         }
 
-        if ($info['cat']) {
+        if (isset($info['cat'])) {
             $preformat['catandtitle'] = $preformat['category'].': '.$preformat['title'];
         } else {
             $preformat['catandtitle'] = $preformat['title'];

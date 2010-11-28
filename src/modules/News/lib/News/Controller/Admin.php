@@ -759,7 +759,9 @@ class News_Controller_Admin extends Zikula_Controller
         $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
         
         // assign the module variables
-        $this->view->assign($this->getVars());
+        $modvars = $this->getVars();
+        $this->view->assign($modvars);
+        $this->view->assign('uploaddirexists', is_dir($modvars['picupload_uploaddir']));
         $this->view->assign('properties', $properties);
         $this->view->assign('property', $propertyIndex);
 

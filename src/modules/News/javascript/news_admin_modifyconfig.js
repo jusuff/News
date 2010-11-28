@@ -120,7 +120,7 @@ function news_picupload_init()
     $('news_picupload_enabled').observe('click', news_picupload_onchange);
     if ($('news_picupload_writable')) {
         $('news_picupload_uploaddir').observe('change', news_picupload_writable);
-}
+    }
     news_picupload_writable();
 }
 function news_picupload_onchange()
@@ -135,9 +135,10 @@ function news_picupload_writable()
     };
     $('news_picupload_writable').update('<img src="images/icons/extrasmall/indicator_circle.gif" width="16" height="16" alt="" />');
     new Zikula.Ajax.Request(
-        "module=News&func=checkpicuploadfolder",
+        "ajax.php?module=News&func=checkpicuploadfolder",
         {
             method: 'post',
+            // authid: 'newsauthid',
             parameters: pars,
             onComplete: news_picupload_writable_update
         });
@@ -145,6 +146,15 @@ function news_picupload_writable()
 function news_picupload_writable_update(req)
 {
     var data = req.getData();
+    if (!req.isSuccess()) {
+        Zikula.showajaxerror(req.getMessage());
+        return;
+    }
+    if (data.enabled) {
+        Field.enable('news_picupload_createfolder');
+    } else {
+        Field.disable('news_picupload_createfolder');
+    }
     $('news_picupload_writable').update(data.result);
 }
 

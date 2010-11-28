@@ -165,6 +165,7 @@ class News_Controller_User extends Zikula_Controller
     {
         // Get parameters from whatever input we need
         $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
+        $attachedFiles = FormUtil::getPassedValue('news_files', null, 'FILES');
 
         // Create the item array for processing
         $item = array('title' => $story['title'],
@@ -239,7 +240,7 @@ class News_Controller_User extends Zikula_Controller
             }
             // back to the referer form
             SessionUtil::setVar('newsitem', $item);
-            return System::redirect(ModUtil::url('News', $referertype, 'new'));
+            return System::redirect(ModUtil::url('News', $referertype, 'newitem'));
 
         } else {
             // Confirm authorisation code.
@@ -255,34 +256,39 @@ class News_Controller_User extends Zikula_Controller
         $modvars = $this->getVars();
 
         // count the attached pictures (credit msshams)
-        if ($modvars['picupload_enabled']) {
+        if (isset($attachedFiles) && $modvars['picupload_enabled']) {
             $pics2resize = array();
             $picsuploaded = 0;
             $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
-            foreach ($_FILES['news_files']['error'] as $key => $error) {
-                if ($error == UPLOAD_ERR_OK) {
-                    if ($_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize']) {
-                        $file_extension = FileUtil::getExtension($_FILES['news_files']['name'][$key]);
-                        if (!in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
-                            LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the file extension is now allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
+            foreach ($attachedFiles['error'] as $key => $error) {
+                $picsuploaded++;
+                switch ($error) {
+                    case UPLOAD_ERR_OK:
+                        if ($attachedFiles['size'][$key] <= $modvars['picupload_maxfilesize']) {
+                            $file_extension = FileUtil::getExtension($attachedFiles['name'][$key]);
+                            if (!in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
+                                LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the file extension is now allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
+                            } else {
+                                $pics2resize[] = $key;
+                            }
                         } else {
-                            $pics2resize[] = $key;
+                            LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
                         }
-                    } else {
+                        break;
+                    case UPLOAD_ERR_FORM_SIZE:
                         LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
-                    }
-                    $picsuploaded++;
-                } elseif ($error == UPLOAD_ERR_FORM_SIZE) {
-                    LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
-                    $picsuploaded++;
-                } elseif ($error != UPLOAD_ERR_NO_FILE) {
-                    LogUtil::registerStatus($this->__f('Warning! Picture %1$s gave an error (code %2$s, explained on this page: %3$s) during uploading.', array($key+1, $error, 'http://php.net/manual/features.file-upload.errors.php')));
-                    $picsuploaded++;
+                        break;
+                    case UPLOAD_ERR_NO_FILE:
+                        $picsuploaded--;
+                        break;
+                    default:
+                        LogUtil::registerStatus($this->__f('Warning! Picture %1$s gave an error (code %2$s, explained on this page: %3$s) during uploading.', array($key+1, $error, 'http://php.net/manual/features.file-upload.errors.php')));
+                        break;
                 }
             }
             $item['pictures'] = count($pics2resize);
             // make the article draft when there is an upload error and ADD permission is present
-            if ($picsuploaded != count($pics2resize) && SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
+            if (($picsuploaded != $item['pictures']) && SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
                 $item['action'] = 6;
             }
         } else {
@@ -298,59 +304,16 @@ class News_Controller_User extends Zikula_Controller
             // Success
             LogUtil::registerStatus($this->__('Done! Created new article.'));
 
-            // notify the configured addresses of a new Pending Review article
-            $notifyonpending = ModUtil::getVar('News', 'notifyonpending', false);
-            if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
-                $sitename = System::getVar('sitename');
-                $adminmail = System::getVar('adminmail');
-                $fromname    = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
-                $fromaddress = !empty($modvars['notifyonpending_fromaddress']) ? $modvars['notifyonpending_fromaddress'] : $adminmail;
-                $toname    = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
-                $toaddress = !empty($modvars['notifyonpending_toaddress']) ? $modvars['notifyonpending_toaddress'] : $adminmail;
-                $subject     = $modvars['notifyonpending_subject'];
-                $html        = $modvars['notifyonpending_html'];
-                if (!UserUtil::isLoggedIn()) {
-                    $contributor = System::getVar('anonymous');
-                } else {
-                    $contributor = UserUtil::getVar('uname');
-                }
-                if ($html) {
-                    $body = $this->__f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
-                } else {
-                    $body = $this->__f('
-A News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.
-Index page teaser text of the article:
---------
-%4$s
---------
-
-Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).
-
-Regards,
-%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
-                }
-                $sent = ModUtil::apiFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
-                        'toaddress'  => $toaddress,
-                        'fromname'   => $fromname,
-                        'fromaddress'=> $fromaddress,
-                        'subject'    => $subject,
-                        'body'       => $body,
-                        'html'       => $html));
-                if ($sent) {
-                    LogUtil::registerStatus($this->__('Done! E-mail about new pending article is sent.'));
-                } else {
-                    LogUtil::registerStatus($this->__('Warning! E-mail about new pending article could not be sent.'));
-                }
-            }
+            $this->notify($item); // send notification email
 
             // Process the uploaded picture and copy to the upload directory (credit msshams)
-            if ($modvars['picupload_enabled']) {
+            if (isset($attachedFiles) && $modvars['picupload_enabled']) {
                 // include the phpthumb library for thumbnail generation
                 require_once ('modules/News/lib/vendor/phpthumb/ThumbLib.inc.php');
-                $uploaddir = $modvars['picupload_uploaddir'] . '/';
+                $uploaddir = $modvars['picupload_uploaddir'] . DIRECTORY_SEPARATOR;
                 foreach ($pics2resize as $piccount => $key) {
-                    $tmp_name = $_FILES['news_files']['tmp_name'][$key];
-                    $name = $_FILES['news_files']['name'][$key];
+                    $tmp_name = $attachedFiles['tmp_name'][$key];
+                    $name = $attachedFiles['name'][$key];
 
                     $thumb = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
                     if ($modvars['picupload_sizing'] == '0') {
@@ -369,7 +332,7 @@ Regards,
                     $thumb1->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb.jpg', 'jpg');
 
                     // for index page picture create an extra thumbnail
-                    if ($piccount==0){
+                    if ($piccount == 0) {
                         $thumb2 = PhpThumbFactory::create($tmp_name);
                         if ($modvars['picupload_sizing'] == '0') {
                             $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
@@ -379,7 +342,7 @@ Regards,
                         $thumb2->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb2.jpg', 'jpg');
                     }
                 }
-                if ($picsuploaded != count($pics2resize) && SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
+                if ($item['action'] == 6) {
                     LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $picsuploaded, array(count($pics2resize), $picsuploaded)));
                 } else {
                     LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $picsuploaded, array(count($pics2resize), $picsuploaded)));
@@ -1107,5 +1070,63 @@ Regards,
                 'subcategories' => $subcategories);
 
         return $return;
+    }
+
+    /**
+     * Send email to configured notification settings
+     * @param <array> $item the news item
+     * return boolean
+     */
+    public function notify($item)
+    {
+        $modvars = $this->getVars();
+
+        // notify the configured addresses of a new Pending Review article
+        $notifyonpending = ModUtil::getVar('News', 'notifyonpending', false);
+        if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
+            $sitename = System::getVar('sitename');
+            $adminmail = System::getVar('adminmail');
+            $fromname    = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
+            $fromaddress = !empty($modvars['notifyonpending_fromaddress']) ? $modvars['notifyonpending_fromaddress'] : $adminmail;
+            $toname    = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
+            $toaddress = !empty($modvars['notifyonpending_toaddress']) ? $modvars['notifyonpending_toaddress'] : $adminmail;
+            $subject     = $modvars['notifyonpending_subject'];
+            $html        = $modvars['notifyonpending_html'];
+            if (!UserUtil::isLoggedIn()) {
+                $contributor = System::getVar('anonymous');
+            } else {
+                $contributor = UserUtil::getVar('uname');
+            }
+            if ($html) {
+                $body = $this->__f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
+            } else {
+                $body = $this->__f('
+A News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.
+Index page teaser text of the article:
+--------
+%4$s
+--------
+
+Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).
+
+Regards,
+%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
+            }
+            $sent = ModUtil::apiFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
+                    'toaddress'  => $toaddress,
+                    'fromname'   => $fromname,
+                    'fromaddress'=> $fromaddress,
+                    'subject'    => $subject,
+                    'body'       => $body,
+                    'html'       => $html));
+            if ($sent) {
+                LogUtil::registerStatus($this->__('Done! E-mail about new pending article is sent.'));
+                return true;
+            } else {
+                LogUtil::registerError($this->__('Warning! E-mail about new pending article could not be sent.'));
+                return false;
+            }
+        }
+        // method silently fails if not configured to send email
     }
 }
