@@ -65,7 +65,7 @@ class News_Installer extends Zikula_Installer
 
         // picture uploading
         $this->setVar('picupload_enabled', false);
-        $this->setVar('picupload_allowext', 'jpg, gif, png');
+        $this->setVar('picupload_allowext', 'jpg,gif,png');
         $this->setVar('picupload_index_float', 'left');
         $this->setVar('picupload_article_float', 'left');
         $this->setVar('picupload_maxfilesize', '500000');

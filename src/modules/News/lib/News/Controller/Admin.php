@@ -824,7 +824,7 @@ class News_Controller_Admin extends Zikula_Controller
         $modvars['pdflink_headerlogo_width'] = FormUtil::getPassedValue('pdflink_headerlogo_width', '', 'POST');
 
         $modvars['picupload_enabled'] = (bool)FormUtil::getPassedValue('picupload_enabled', false, 'POST');
-        $modvars['picupload_allowext'] = FormUtil::getPassedValue('picupload_allowext', 'jpg, gif, png', 'POST');
+        $modvars['picupload_allowext'] = str_replace(array(' ','.'), '', FormUtil::getPassedValue('picupload_allowext', 'jpg,gif,png', 'POST'));
         $modvars['picupload_index_float'] = FormUtil::getPassedValue('picupload_index_float', 'left', 'POST');
         $modvars['picupload_article_float'] = FormUtil::getPassedValue('picupload_article_float', 'left', 'POST');
         $modvars['picupload_maxfilesize'] = (int)FormUtil::getPassedValue('picupload_maxfilesize', '500000', 'POST');
