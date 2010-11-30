@@ -20,12 +20,26 @@ class News_Version extends Zikula_Version
         $meta = array();
         $meta['displayname'] = $this->__('News publisher');
         $meta['description'] = $this->__('Provides the ability to publish and manage news articles contributed by site users, with support for news categories and various associated blocks.');
-        $meta['version']     = '3.0.0';
+        $meta['version']     = '3.0.1';
         //! this defines the module's url
         $meta['url']            = $this->__('news');
+        $meta['capabilities'] = array(HookUtil::SUBSCRIBER_CAPABLE => array('enabled' => true));
         $meta['securityschema'] = array('News::' => 'Contributor ID::Article ID',
                                         'News:pictureupload:' => '::',
                                         'News:publicationdetails:' => '::');
         return $meta;
+    }
+
+    protected function setupHookBundles()
+    {
+         $bundle = new Zikula_Version_HookSubscriberBundle('modulehook_area.news.articles', __('News Articles'));
+         $bundle->addType('ui.view', 'news.hook.articles.ui.view');
+         $bundle->addType('ui.edit', 'news.hook.articles.ui.edit');
+         $bundle->addType('ui.delete', 'news.hook.articles.ui.delete');
+         $bundle->addType('validate.edit', 'news.hook.articles.validate.edit');
+         $bundle->addType('validate.delete', 'news.hook.articles.validate.delete');
+         $bundle->addType('process.edit', 'news.hook.mhs.articles.edit');
+         $bundle->addType('process.delete', 'news.hook.articles.process.delete');
+         $this->registerHookSubscriberBundle($bundle);
     }
 }

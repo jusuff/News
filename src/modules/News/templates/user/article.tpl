@@ -39,10 +39,11 @@
 {/if}
 
 {* the next code is to display any hooks (e.g. comments, ratings). All hooks are stored in $hooks and called individually. EZComments is not called when Commenting is not allowed *}
-{* modurl modname='News' func='display' sid=$info.sid assign='returnurl'}
-{modcallhooks hookobject='item' hookaction='display' hookid=$info.sid module='News' returnurl=$returnurl owneruid=$info.cr_uid implode=false}
+{modurl modname='News' func='display' sid=$info.sid assign='returnurl'}
+{notifydisplayhooks eventname='news.hook.articles.ui.view' subject=$info id=$info.sid returnurl=$returnurl assign='hooks'}
+{*modcallhooks hookobject='item' hookaction='display' hookid=$info.sid module='News' returnurl=$returnurl owneruid=$info.cr_uid implode=false*}
 {foreach from=$hooks key='hookname' item='hook'}
 {if $hookname neq 'EZComments' or $info.disallowcomments eq 0}
 {$hook}
 {/if}
-{/foreach *}
+{/foreach}

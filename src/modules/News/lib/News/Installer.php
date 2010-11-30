@@ -84,6 +84,7 @@ class News_Installer extends Zikula_Installer
 
         // register handlers
         EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
+        HookUtil::registerHookSubscriberBundles($this->version);
 
         // Initialisation successful
         return true;
@@ -314,7 +315,9 @@ class News_Installer extends Zikula_Installer
                     return '2.6.2';
                 }
             case '3.0.0':
-            // future plans
+                HookUtil::registerHookSubscriberBundles($this->version);
+            case '3.0.1':
+                // future plans
         }
 
         // Update successful
