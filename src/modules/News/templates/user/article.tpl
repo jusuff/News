@@ -43,7 +43,7 @@
 {notifydisplayhooks eventname='news.hook.articles.ui.view' subject=$info id=$info.sid returnurl=$returnurl assign='hooks'}
 {*modcallhooks hookobject='item' hookaction='display' hookid=$info.sid module='News' returnurl=$returnurl owneruid=$info.cr_uid implode=false*}
 {foreach from=$hooks key='hookname' item='hook'}
-{if $hookname neq 'EZComments' or $info.disallowcomments eq 0}
+{*if $hookname neq 'EZComments' or $info.disallowcomments eq 0*}
 {$hook}
-{/if}
+{*/if*}
 {/foreach}
