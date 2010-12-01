@@ -172,7 +172,7 @@
                 {if $pictures gt 0}
                 <div><br>
                     {section name=counter start=0 loop=$pictures step=1}
-                        <img src="{$picupload_uploaddir}/pic_sid{$sid}-{$smarty.section.counter.index}-thumb.jpg" width="80" /> <input type="checkbox" name="story[del_pictures-{$smarty.section.counter.index}]">{gt text='Delete this picture'}<br>
+                        <img src="{$picupload_uploaddir}/pic_sid{$sid}-{$smarty.section.counter.index}-thumb.jpg" width="80" /> <input type="checkbox" id="story_del_picture_{$smarty.section.counter.index}" name="story[del_pictures][]" value="pic_sid{$sid}-{$smarty.section.counter.index}"><label for="story_del_picture_{$smarty.section.counter.index}">{gt text='Delete this picture'}</label><br />
                     {/section}
                 </div>
                 {/if}

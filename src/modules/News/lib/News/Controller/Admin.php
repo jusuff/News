@@ -212,6 +212,8 @@ class News_Controller_Admin extends Zikula_Controller
     public function update($args)
     {
         $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
+        $files = News_ImageUtil::reArrayFiles(FormUtil::getPassedValue('news_files', null, 'FILES'));
+
         if (!empty($story['objectid'])) {
             $story['sid'] = $story['objectid'];
         }
@@ -233,7 +235,7 @@ class News_Controller_Admin extends Zikula_Controller
         }
 
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_EDIT)) {
+        if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_EDIT)) {
             return LogUtil::registerPermissionError();
         }
 
@@ -248,16 +250,9 @@ class News_Controller_Admin extends Zikula_Controller
         }
 
         // Reformat the attributes array
-        // from {0 => {name => '...', value => '...'}} to {name => value}
         if (isset($story['attributes'])) {
-            $attributes = array();
-            foreach ($story['attributes'] as $attr) {
-                if (!empty($attr['name']) && !empty($attr['value'])) {
-                    $attributes[$attr['name']] = $attr['value'];
-                }
-            }
+            $story['__ATTRIBUTES__'] = News_Util::reformatAttributes($story['attributes']);
             unset($story['attributes']);
-            $story['__ATTRIBUTES__'] = $attributes;
         }
 
         // if the user has selected to preview the article we then route them back
@@ -281,94 +276,25 @@ class News_Controller_Admin extends Zikula_Controller
             $story['approver'] = SessionUtil::getVar('uid');
         }
 
-        // delete and add images (credit msshams)
         $modvars = ModUtil::getVar('News');
+
+        // Handle Pictures
         if ($modvars['picupload_enabled']) {
-            //  include the phpthumb library
-            require_once ('modules/News/lib/vendor/phpthumb/ThumbLib.inc.php');
-            $uploaddir = $modvars['picupload_uploaddir'] . '/';
-            // remove selected files
-            for ($i=0; $i<$item['pictures']; $i++){
-                if (isset($story['del_pictures-'.$i])) {
-                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg");
-                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.jpg");
-                    unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.jpg");
-                    $story['pictures']--;
-                }
+            if (isset($story['del_pictures']) && !empty($story['del_pictures'])) {
+                $deletedPics = News_ImageUtil::deleteImagesByName($modvars['picupload_uploaddir'], $story['del_pictures']);
+                $story['pictures'] = $story['pictures'] - $deletedPics;
             }
-            // renumber the remaining files if files were deleted
-            if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
-                $lastfile = 0;
-                for ($i=0; $i<$item['pictures']; $i++){
-                    if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg")) {
-                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.jpg");
-                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.jpg");
-                        rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.jpg");
-                        // create a new hometext image if needed
-                        if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.jpg")){
-                            $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.jpg", array('jpegQuality' => 80));
-                            if ($modvars['picupload_sizing'] == 0) {
-                                $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                            } else {
-                                $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                            }
-                            $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.jpg', 'jpg');
-                        }
-                        $lastfile++;
-                    }
-                }
+            if (isset($deletedPics) && ($deletedPics > 0)) {
+                $nextImageId = News_ImageUtil::renumberImages($item['pictures'], $story['sid'], $modvars);
+            } else {
+                $nextImageId = isset($story['pictures']) ? $story['pictures'] : 0;
             }
-
-            // handling of additional image uploads
-            $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
-            foreach ($_FILES['news_files']['error'] as $key => $error) {
-                if ($error == UPLOAD_ERR_OK) {
-                    if ($_FILES['news_files']['size'][$key] <= $modvars['picupload_maxfilesize']) {
-                        $file_extension = FileUtil::getExtension($_FILES['news_files']['name'][$key]);
-                        if (in_array(strtolower($file_extension), $allowedExtensionsArray) || in_array(strtoupper($file_extension), $allowedExtensionsArray)) {
-                            $tmp_name = $_FILES['news_files']['tmp_name'][$key];
-                            $name = $_FILES['news_files']['name'][$key];
-
-                            $thumb = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
-                            if ($modvars['picupload_sizing'] == 0) {
-                                $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                            } else {
-                                $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                            }
-                            $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.jpg', 'jpg');
-
-                            $thumb1 = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
-                            if ($modvars['picupload_sizing'] == 0) {
-                                $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                            } else {
-                                $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                            }
-                            $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.jpg', 'jpg');
-
-                            // for index page picture create extra thumbnail
-                            if ($story['pictures']==0){
-                                $thumb2 = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
-                                if ($modvars['picupload_sizing'] == 0) {
-                                    $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                                } else {
-                                    $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                                }
-                                $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.jpg', 'jpg');
-                            }
-                            $story['pictures']++;
-                        } else {
-                            LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the file extension is not allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
-                        }
-                    } else {
-                        LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
-                    }
-                } elseif ($error == UPLOAD_ERR_FORM_SIZE) {
-                    LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
-                } elseif ($error != UPLOAD_ERR_NO_FILE) {
-                    LogUtil::registerStatus($this->__f('Warning! Picture %1$s gave an error (code %2$s, explained on this page: %3$s) during uploading.', array($key+1, $error, 'http://php.net/manual/features.file-upload.errors.php')));
-                }
+            if (isset($files) && !empty($files)) {
+                list($files, $story) = News_ImageUtil::validateImages($files, $story, $modvars);
+                $story['pictures'] = News_ImageUtil::resizeImages($story['sid'], $files, $modvars, $nextImageId); // resize and move the uploaded pics
             }
         }
+
 
         // Update the story
         if (ModUtil::apiFunc('News', 'admin', 'update', array(
@@ -397,6 +323,7 @@ class News_Controller_Admin extends Zikula_Controller
                 LogUtil::registerStatus($this->__('Done! Saved your changes.'));
             }
 
+        $this->view->clear_cache();
         return System::redirect(ModUtil::url('News', 'admin', 'view'));
     }
 

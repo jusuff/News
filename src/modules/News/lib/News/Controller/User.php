@@ -121,17 +121,8 @@ class News_Controller_User extends Zikula_Controller
             $this->view->assign('accesspicupload', 1);
             $this->view->assign('accesspubdetails', 1);
         } else {
-            // if higher level access_add is not permitted, check for more specific permission rights
-            if (SecurityUtil::checkPermission('News:pictureupload:', '::', ACCESS_ADD)) {
-                $this->view->assign('accesspicupload', 1);
-            } else {
-                $this->view->assign('accesspicupload', 0);
-            }
-            if (SecurityUtil::checkPermission('News:publicationdetails:', '::', ACCESS_ADD)) {
-                $this->view->assign('accesspubdetails', 1);
-            } else {
-                $this->view->assign('accesspubdetails', 0);
-            }
+            $this->view->assign('accesspicupload', SecurityUtil::checkPermission('News:pictureupload:', '::', ACCESS_ADD));
+            $this->view->assign('accesspubdetails', SecurityUtil::checkPermission('News:publicationdetails:', '::', ACCESS_ADD));
         }
 
         $this->view->assign('preview', $preview);
@@ -165,7 +156,7 @@ class News_Controller_User extends Zikula_Controller
     {
         // Get parameters from whatever input we need
         $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
-        $attachedFiles = FormUtil::getPassedValue('news_files', null, 'FILES');
+        $files = News_ImageUtil::reArrayFiles(FormUtil::getPassedValue('news_files', null, 'FILES'));
 
         // Create the item array for processing
         $item = array('title' => $story['title'],
@@ -203,22 +194,12 @@ class News_Controller_User extends Zikula_Controller
         }
 
         // Get the referer type for later use
-        if (stristr(System::serverGetVar('HTTP_REFERER'), 'type=admin')) {
-            $referertype = 'admin';
-        } else {
-            $referertype = 'user';
-        }
+        $referertype = (stristr(System::serverGetVar('HTTP_REFERER'), 'type=admin')) ? 'admin' : 'user';
 
         // Reformat the attributes array
-        // from {0 => {name => '...', value => '...'}} to {name => value}
-        if (isset($item['__ATTRIBUTES__'])) {
-            $attributes = array();
-            foreach ($item['__ATTRIBUTES__'] as $attr) {
-                if (!empty($attr['name']) && !empty($attr['value'])) {
-                    $attributes[$attr['name']] = $attr['value'];
-                }
-            }
-            $item['__ATTRIBUTES__'] = $attributes;
+        if (isset($item['attributes'])) {
+            $item['__ATTRIBUTES__'] = News_Util::reformatAttributes($item['attributes']);
+            unset($item['attributes']);
         }
 
         // Validate the input
@@ -255,42 +236,8 @@ class News_Controller_User extends Zikula_Controller
         // get all module vars
         $modvars = $this->getVars();
 
-        // count the attached pictures (credit msshams)
-        if (isset($attachedFiles) && $modvars['picupload_enabled']) {
-            $pics2resize = array();
-            $picsuploaded = 0;
-            $allowedExtensionsArray = explode(',', $modvars['picupload_allowext']);
-            foreach ($attachedFiles['error'] as $key => $error) {
-                $picsuploaded++;
-                switch ($error) {
-                    case UPLOAD_ERR_OK:
-                        if ($attachedFiles['size'][$key] <= $modvars['picupload_maxfilesize']) {
-                            $file_extension = FileUtil::getExtension($attachedFiles['name'][$key]);
-                            if (!in_array(strtolower($file_extension), $allowedExtensionsArray) && !in_array(strtoupper(($file_extension)), $allowedExtensionsArray)) {
-                                LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the file extension is now allowed (only %s is allowed).', array($key+1, $modvars['picupload_allowext'])));
-                            } else {
-                                $pics2resize[] = $key;
-                            }
-                        } else {
-                            LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
-                        }
-                        break;
-                    case UPLOAD_ERR_FORM_SIZE:
-                        LogUtil::registerStatus($this->__f('Warning! Picture %s is not uploaded, since the filesize was too large (max. %s kB).', array($key+1, $modvars['picupload_maxfilesize']/1000)));
-                        break;
-                    case UPLOAD_ERR_NO_FILE:
-                        $picsuploaded--;
-                        break;
-                    default:
-                        LogUtil::registerStatus($this->__f('Warning! Picture %1$s gave an error (code %2$s, explained on this page: %3$s) during uploading.', array($key+1, $error, 'http://php.net/manual/features.file-upload.errors.php')));
-                        break;
-                }
-            }
-            $item['pictures'] = count($pics2resize);
-            // make the article draft when there is an upload error and ADD permission is present
-            if (($picsuploaded != $item['pictures']) && SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
-                $item['action'] = 6;
-            }
+        if (isset($files) && $modvars['picupload_enabled']) {
+            list($files, $item) = News_ImageUtil::validateImages($files, $item, $modvars);
         } else {
             $item['pictures'] = 0;
         }
@@ -304,48 +251,13 @@ class News_Controller_User extends Zikula_Controller
             // Success
             LogUtil::registerStatus($this->__('Done! Created new article.'));
 
-            $this->notify($item); // send notification email
-
-            // Process the uploaded picture and copy to the upload directory (credit msshams)
-            if (isset($attachedFiles) && $modvars['picupload_enabled']) {
-                // include the phpthumb library for thumbnail generation
-                require_once ('modules/News/lib/vendor/phpthumb/ThumbLib.inc.php');
-                $uploaddir = $modvars['picupload_uploaddir'] . DIRECTORY_SEPARATOR;
-                foreach ($pics2resize as $piccount => $key) {
-                    $tmp_name = $attachedFiles['tmp_name'][$key];
-                    $name = $attachedFiles['name'][$key];
-
-                    $thumb = PhpThumbFactory::create($tmp_name, array('jpegQuality' => 80));
-                    if ($modvars['picupload_sizing'] == '0') {
-                        $thumb->Resize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                    } else {
-                        $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
-                    }
-                    $thumb->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-norm.jpg', 'jpg');
-
-                    $thumb1 = PhpThumbFactory::create($tmp_name);
-                    if ($modvars['picupload_sizing'] == '0') {
-                        $thumb1->Resize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                    } else {
-                        $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
-                    }
-                    $thumb1->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb.jpg', 'jpg');
-
-                    // for index page picture create an extra thumbnail
-                    if ($piccount == 0) {
-                        $thumb2 = PhpThumbFactory::create($tmp_name);
-                        if ($modvars['picupload_sizing'] == '0') {
-                            $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                        } else {
-                            $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
-                        }
-                        $thumb2->save($uploaddir.'pic_sid'.$sid.'-'.$piccount.'-thumb2.jpg', 'jpg');
-                    }
-                }
+            $this->notify($item, $modvars); // send notification email
+            if (isset($files) && $modvars['picupload_enabled']) {
+                $resized = News_ImageUtil::resizeImages($sid, $files, $modvars); // resize and move the uploaded pics
                 if ($item['action'] == 6) {
-                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $picsuploaded, array(count($pics2resize), $picsuploaded)));
+                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $item['pictures'], array($resized, $item['pictures'])));
                 } else {
-                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $picsuploaded, array(count($pics2resize), $picsuploaded)));
+                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $item['pictures'], array($resized, $item['pictures'])));
                 }
             }
         }
@@ -1074,13 +986,12 @@ class News_Controller_User extends Zikula_Controller
 
     /**
      * Send email to configured notification settings
-     * @param <array> $item the news item
-     * return boolean
+     *
+     * @param array $item the news item
+     * return boolean success/failure of notification
      */
-    public function notify($item)
+    public function notify($item, $modvars)
     {
-        $modvars = $this->getVars();
-
         // notify the configured addresses of a new Pending Review article
         $notifyonpending = ModUtil::getVar('News', 'notifyonpending', false);
         if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {

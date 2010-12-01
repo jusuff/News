@@ -129,6 +129,8 @@ class News_Controller_Ajax extends Zikula_Controller
                 // Update the story, security check inside of the API func
 
                 $modvars = ModUtil::getVar('News');
+                    // TODO: See Admin Controller on usage of News_ImageUtil:: to accomplish the code that has been commented out below...
+
                 /*            // delete and add images (credit msshams)
                   if ($modvars['picupload_enabled']) {
                   //  include the phpthumb library

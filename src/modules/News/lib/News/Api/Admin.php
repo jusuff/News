@@ -43,17 +43,10 @@ class News_Api_Admin extends Zikula_Api
             return LogUtil::registerError($this->__('Error! Could not delete article.'));
         }
 
-        // delete News images (credit msshams)
+        // delete News images
         $modvars = ModUtil::getVar('News');
-        if ($modvars['picupload_enabled'] && $item['pictures'] > 0){
-            $uploaddir = $modvars['picupload_uploaddir'] . '/';
-            for ($i=0; $i<$item['pictures']; $i++){
-                unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-norm.jpg");
-                unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-thumb.jpg");
-                if ($i==0) {
-                    unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-thumb2.jpg");
-                }
-            }
+        if ($modvars['picupload_enabled'] && $item['pictures'] > 0) {
+            News_ImageUtil::deleteImagesBySID($modvars['picupload_uploaddir'], $item['sid'], $item['pictures']);
         }
 
         // Let any hooks know that we have deleted an item
