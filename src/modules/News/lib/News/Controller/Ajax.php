@@ -137,9 +137,9 @@ class News_Controller_Ajax extends Zikula_Controller
                   // remove selected files
                   for ($i=0; $i<$item['pictures']; $i++){
                   if (isset($story['del_pictures-'.$i])) {
-                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png");
-                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png");
-                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png");
+                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg");
+                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.jpg");
+                  unlink($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.jpg");
                   $story['pictures']--;
                   }
                   }
@@ -147,19 +147,19 @@ class News_Controller_Ajax extends Zikula_Controller
                   if ($story['pictures'] != $item['pictures'] && $story['pictures'] != 0) {
                   $lastfile = 0;
                   for ($i=0; $i<$item['pictures']; $i++){
-                  if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png")) {
-                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
-                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.png");
-                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.png", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png");
+                  if (file_exists($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg")) {
+                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-norm.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.jpg");
+                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb.jpg");
+                  rename($uploaddir.'pic_sid'.$story['sid']."-".$i."-thumb2.jpg", $uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.jpg");
                   // create a new hometext image if needed
-                  if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.png")){
-                  $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.png");
+                  if ($lastfile == 0 && !file_exists($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-thumb2.jpg")){
+                  $thumb2 = PhpThumbFactory::create($uploaddir.'pic_sid'.$story['sid']."-".$lastfile."-norm.jpg");
                   if ($modvars['sizing'] == 0) {
                   $thumb2->Resize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                   } else {
                   $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                   }
-                  $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.png', 'png');
+                  $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$lastfile.'-thumb2.jpg', 'png');
                   }
                   $lastfile++;
                   }
@@ -177,7 +177,7 @@ class News_Controller_Ajax extends Zikula_Controller
                   } else {
                   $thumb->adaptiveResize($modvars['picupload_picmaxwidth'],$modvars['picupload_picmaxheight']);
                   }
-                  $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.png', 'png');
+                  $thumb->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-norm.jpg', 'png');
 
                   $thumb1 = PhpThumbFactory::create($tmp_name);
                   if ($modvars['sizing'] == 0) {
@@ -185,7 +185,7 @@ class News_Controller_Ajax extends Zikula_Controller
                   } else {
                   $thumb1->adaptiveResize($modvars['picupload_thumbmaxwidth'],$modvars['picupload_thumbmaxheight']);
                   }
-                  $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.png', 'png');
+                  $thumb1->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb.jpg', 'png');
 
                   // for index page picture create extra thumbnail
                   if ($story['pictures']==0){
@@ -195,7 +195,7 @@ class News_Controller_Ajax extends Zikula_Controller
                   } else {
                   $thumb2->adaptiveResize($modvars['picupload_thumb2maxwidth'],$modvars['picupload_thumb2maxheight']);
                   }
-                  $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.png', 'png');
+                  $thumb2->save($uploaddir.'pic_sid'.$story['sid'].'-'.$story['pictures'].'-thumb2.jpg', 'png');
                   }
                   $story['pictures']++;
                   }

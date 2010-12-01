@@ -48,10 +48,10 @@ class News_Api_Admin extends Zikula_Api
         if ($modvars['picupload_enabled'] && $item['pictures'] > 0){
             $uploaddir = $modvars['picupload_uploaddir'] . '/';
             for ($i=0; $i<$item['pictures']; $i++){
-                unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-norm.png");
-                unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-thumb.png");
+                unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-norm.jpg");
+                unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-thumb.jpg");
                 if ($i==0) {
-                    unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-thumb2.png");
+                    unlink($uploaddir.'pic_sid'.$item['sid']."-".$i."-thumb2.jpg");
                 }
             }
         }

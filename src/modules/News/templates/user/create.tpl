@@ -154,6 +154,7 @@
         <fieldset>
             <legend>{gt text='Pictures'}</legend>
 			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
+            <input type="hidden" name="MAX_FILE_SIZE" value="{$picupload_maxfilesize}" />
             {if $picupload_maxpictures eq 1}
 			<input id="news_files_element" name="news_files[0]" type="file">
             {else}
