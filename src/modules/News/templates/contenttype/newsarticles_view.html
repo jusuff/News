@@ -11,35 +11,49 @@
             {/if}
         {/if}
         {if $story.readperm}<a href="{$storylink}">{/if}
-            {if $story.dispnewimage}{img modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article'}{/if}
-            {$story.title|safehtml}{if $story.titlewrapped}{$titlewraptext|safehtml}
-        {/if}
+        {if $story.dispnewimage}{img modname='core' set=$newimageset src=$newimagesrc __alt='Create new article' __title='Create new article'}{/if}
+        {$story.title|safehtml}
+        {if $story.titlewrapped}{$titlewraptext|safehtml}{/if}
         {if $story.readperm}</a>{/if}
 
         {* Optional additional info on the story *}
-        {if $dispinfo}({if $dispuname}{gt text='Contributed by %s' tag1=$story.uname|userprofilelink}
-        {if $dispdate} {gt text='on %s' tag1=$story.from|dateformat:$dateformat}{/if}{if $dispreads||$dispcomments}{$dispsplitchar} {/if}{/if}
-        {if $dispreads}{gt text='%s pageview' plural='%s pageviews' count=$story.counter tag1=$story.counter}{if $dispcomments}{$dispsplitchar} {/if}{/if}
-        {if $dispcomments}{gt text='%s comment' plural='%s comments' count=$story.comments tag1=$story.comments}{/if})
+        {if $dispinfo}
+            ({if $dispuname}
+                {gt text='Contributed by %s' tag1=$story.uname|userprofilelink}
+                {if $dispdate} {gt text='on %s' tag1=$story.from|dateformat:$dateformat}{/if}
+                {if $dispreads||$dispcomments}{$dispsplitchar} {/if}
+            {/if}
+            {if $dispreads}{gt text='%s pageview' plural='%s pageviews' count=$story.counter tag1=$story.counter}
+                {if $dispcomments}{$dispsplitchar} {/if}
+            {/if}
+            {if $dispcomments}{gt text='%s comment' plural='%s comments' count=$story.comments tag1=$story.comments}{/if})
         {/if}<br />
 
         {* Optional hometext display *}
         {if $disphometext}
         <div class="content_newsarticles_hometext">
             {if $story.hometextwrapped}
-            {$story.hometext|truncatehtml:$maxhometextlength:''|safehtml}
-            {if $story.readperm}<a href="{modurl modname=News func=display sid=$story.sid}">{/if}
-                {$hometextwraptext|safehtml}
-            {if $story.readperm}</a>{/if}
+                {$story.hometext|truncatehtml:$maxhometextlength:''|safehtml}
             {else}
-            {$story.hometext|safehtml}
+                {$story.hometext|safehtml}
+            {/if}
+            {if ($story.hometextwrapped || strlen($story.bodytext) > 0) && $story.readperm}
+                <a href="{modurl modname=News func=display sid=$story.sid}">{$hometextwraptext|safehtml}</a>
             {/if}
         </div>
         {/if}
 
         {* Remove this line to use the topic link and topicimage per News item as below
         {if $story.topicsearchurl neq ''}
-        <div class="content_newsarticles_news_meta"><a href="{$story.topicsearchurl}">{if $story.topicimage neq ''}<img src="{$catimagepath}{$story.topicimage}" alt="{$story.topicname|safehtml}" title="{$story.topicname|safehtml}" />{else}{$story.topicname|safehtml}{/if}</a></div>
+        <div class="content_newsarticles_news_meta">
+            <a href="{$story.topicsearchurl}">
+                {if $story.topicimage neq ''}
+                    <img src="{$catimagepath}{$story.topicimage}" alt="{$story.topicname|safehtml}" title="{$story.topicname|safehtml}" />
+                {else}
+                    {$story.topicname|safehtml}
+                {/if}
+            </a>
+        </div>
         {/if}
         Remove this line to use the topic link and topicimage per News item as above *}
     </li>
