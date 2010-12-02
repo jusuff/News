@@ -289,12 +289,12 @@ class News_Controller_User extends Zikula_Controller
         $prop         = isset($args['prop']) ? $args['prop'] : (string)FormUtil::getPassedValue('prop', null, 'GET');
         $cat          = isset($args['cat']) ? $args['cat'] : (string)FormUtil::getPassedValue('cat', null, 'GET');
         $itemsperpage = isset($args['itemsperpage']) ? $args['itemsperpage'] : (int)FormUtil::getPassedValue('itemsperpage', $modvars['itemsperpage'], 'GET');
+        $hideonindex  = isset($args['hideonindex']) ? (int)$args['hideonindex'] : null;
 
         // work out page size from page number
         $startnum = (($page - 1) * $itemsperpage) + 1;
 
         // default hideonindex argument
-        $args['hideonindex'] = isset($args['hideonindex']) ? (int)$args['hideonindex'] : null;
 
         $lang = ZLanguage::getLanguageCode();
 
@@ -334,7 +334,7 @@ class News_Controller_User extends Zikula_Controller
                 array('startnum'     => $startnum,
                 'numitems'     => $itemsperpage,
                 'status'       => 0,
-                'hideonindex'  => $args['hideonindex'],
+                'hideonindex'  => $hideonindex,
                 'filterbydate' => true,
                 'category'     => isset($catFilter) ? $catFilter : null,
                 'catregistry'  => isset($catregistry) ? $catregistry : null));
@@ -364,7 +364,7 @@ class News_Controller_User extends Zikula_Controller
         {
             // display if it's published and the hideonindex match (if set)
             if (($item['published_status'] == 0) &&
-                    (!isset($args['hideonindex']) || $item['hideonindex'] == $args['hideonindex'])) {
+                    (!isset($hideonindex) || $item['hideonindex'] == $hideonindex)) {
 
                 // $info is array holding raw information.
                 // Used below and also passed to the theme - jgm
@@ -402,7 +402,7 @@ class News_Controller_User extends Zikula_Controller
         $this->view->assign('pager', array('numitems' => ModUtil::apiFunc('News', 'user', 'countitems',
                 array('status' => 0,
                 'filterbydate' => true,
-                'hideonindex' => isset($args['hideonindex']) ? $args['hideonindex'] : null,
+                'hideonindex' => $hideonindex,
                 'category' => isset($catFilter) ? $catFilter : null)),
                 'itemsperpage' => $itemsperpage));
 
