@@ -316,11 +316,11 @@ height:50px;
             if ($vars['dispuname']) {
                 // Get the user information from the author id
                 if ($item['cr_uid'] == 0) {
-                    $this->view->assign('aid_uname', $anonymous);
+                    $this->view->assign('uname', $anonymous);
                     $this->view->assign('aid_name', $anonymous);
                 } else {
                     $user = UserUtil::getVars($item['cr_uid']);
-                    $this->view->assign('aid_uname', $user['uname']);
+                    $this->view->assign('uname', $user['uname']);
                     $this->view->assign('aid_name', $user['name']);
                 }
             }

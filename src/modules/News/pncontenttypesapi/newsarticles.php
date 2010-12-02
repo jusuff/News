@@ -229,11 +229,11 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
             // Get the user information from the author id
             if ($this->dispuname) {
                 if ($items[$k]['cr_uid'] == 0) {
-                    $items[$k]['aid_uname'] = $anonymous;
+                    $items[$k]['uname'] = $anonymous;
                     $items[$k]['aid_name'] = $anonymous;
                 } else {
                     $user = UserUtil::getVars($items[$k]['cr_uid']);
-                    $items[$k]['aid_uname'] = $user['uname'];
+                    $items[$k]['uname'] = $user['uname'];
                     $items[$k]['aid_name'] = $user['name'];
                 }
             }
