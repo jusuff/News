@@ -13,4 +13,5 @@
 {/if}
 
 {modurl modname='News' func='view' startnum=$startnum assign='returnurl'}
-{* modcallhooks hookobject='category' hookaction='display' module='News' returnurl=$returnurl *}
+{* there is no ID because this is a collection *}
+{notifydisplayhooks eventname='news.hook.articles.ui.view' area='module_area.news.articles' subject=$newsitems id=null caller="news"}

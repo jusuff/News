@@ -308,7 +308,8 @@
                 </div>
             </fieldset>
 
-            {* modcallhooks hookobject='item' hookaction='modify' hookid=$sid module='News' *}
+            {* $item is null right now - need to fix assign code *}
+            {notifydisplayhooks eventname='news.hook.articles.ui.edit' area='module_area.news.articles' subject=$item id=$sid caller="News"}
 
             <div class="z-buttonrow z-buttons z-center">
                 {if $published_status eq 2}

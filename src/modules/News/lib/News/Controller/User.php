@@ -211,6 +211,9 @@ class News_Controller_User extends Zikula_Controller
         if ($item['action'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
             $validationerror = $this->__f('Error! You did not enter the minimum necessary %s.', $this->__('article content'));
         }
+        // validate hook data
+        $this->notifyHooks('news.hook.articles.validate.edit', null, array('caller' => 'News'), new Zikula_Collection_HookValidationProviders());
+
 
         // if the user has selected to preview the article we then route them back
         // to the new function with the arguments passed here
@@ -246,6 +249,9 @@ class News_Controller_User extends Zikula_Controller
 
         // Create the news story
         $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
+
+        // Let any hooks know that we have created a new item
+        $this->notifyHooks('news.hook.articles.process.edit', $item, $sid);
 
         if ($sid != false) {
             // Success

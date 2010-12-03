@@ -49,10 +49,6 @@ class News_Api_Admin extends Zikula_Api
             News_ImageUtil::deleteImagesBySID($modvars['picupload_uploaddir'], $item['sid'], $item['pictures']);
         }
 
-        // Let any hooks know that we have deleted an item
-        // TODO
-        //$this->callHooks('item', 'delete', $args['sid'], array('module' => 'News'));
-
         // Let the calling process know that we have finished successfully
         return true;
     }
@@ -159,10 +155,6 @@ class News_Api_Admin extends Zikula_Api
         if (!DBUtil::updateObject($args, 'news', '', 'sid')) {
             return LogUtil::registerError($this->__('Error! Could not save your changes.'));
         }
-
-        // Let any hooks know that we have updated an item.
-        // TODO
-        //$this->callHooks('item', 'update', $args['sid'], array('module' => 'News'));
 
         // The item has been modified, so we clear all cached pages of this item.
         $render = Zikula_View::getInstance('News');
