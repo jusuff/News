@@ -530,11 +530,11 @@ class News_Api_User extends Zikula_Api
 
         // Hooks filtering should be after formatForDisplay to allow Hook transforms
         $view = Zikula_View::getInstance('News');
-        $event = new Zikula_Event('news.hook.articles.ui.filter', $view, array('caller' => $this->getName()), $info['hometext']);
+        $event = new Zikula_Event('news.hook.articlesfilter.ui.filter', $view, array('caller' => $this->getName()), $info['hometext']);
         $info['hometext'] = $this->eventManager->notify($event)->getData();
-        $event = new Zikula_Event('news.hook.articles.ui.filter', $view, array('caller' => $this->getName()), $info['hometext']);
+        $event = new Zikula_Event('news.hook.articlesfilter.ui.filter', $view, array('caller' => $this->getName()), $info['bodytext']);
         $info['bodytext'] = $this->eventManager->notify($event)->getData();
-        $event = new Zikula_Event('news.hook.articles.ui.filter', $view, array('caller' => $this->getName()), $info['notes']);
+        $event = new Zikula_Event('news.hook.articlesfilter.ui.filter', $view, array('caller' => $this->getName()), $info['notes']);
         $info['notes'] = $this->eventManager->notify($event)->getData();
 
         // Create 'Category: title'-style header -- Credit to Rabbit for the older theme compatibility.
