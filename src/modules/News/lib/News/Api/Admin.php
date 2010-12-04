@@ -35,7 +35,7 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_DELETE)) {
+        if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_DELETE)) {
             return LogUtil::registerPermissionError();
         }
 
@@ -98,7 +98,7 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$args[sid]", ACCESS_EDIT)) {
+        if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$args['sid']}", ACCESS_EDIT)) {
             return LogUtil::registerPermissionError();
         }
 

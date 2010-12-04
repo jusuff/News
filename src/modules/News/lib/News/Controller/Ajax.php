@@ -33,7 +33,7 @@ class News_Controller_Ajax extends Zikula_Controller
         }
 
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT)) {
+        if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::$sid", ACCESS_EDIT)) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
         }
 
@@ -288,7 +288,7 @@ class News_Controller_Ajax extends Zikula_Controller
 
             case 'pending':
                 // Security check
-                if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$story[sid]", ACCESS_EDIT)) {
+                if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$story['sid']}", ACCESS_EDIT)) {
                     AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
                 }
                 // set published_status to 2 to make the story a pending story
@@ -355,7 +355,7 @@ class News_Controller_Ajax extends Zikula_Controller
                 AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__f('Error! No such article found.')));
             }
             // Security check
-            if (!SecurityUtil::checkPermission('News::', "$item[cr_uid]::$sid", ACCESS_EDIT)) {
+            if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::$sid", ACCESS_EDIT)) {
                 AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
             }
 

@@ -131,7 +131,7 @@ class News_Api_User extends Zikula_Api
 
         // check for a specific author
         if (isset($args['uid']) && is_numeric($args['uid'])) {
-            $queryargs[] = "$news_column[cr_uid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+            $queryargs[] = "{$news_column['cr_uid']} = '" . DataUtil::formatForStore($args['uid']) . "'";
         }
 
         $where = '';
@@ -395,7 +395,7 @@ class News_Api_User extends Zikula_Api
 
         // check for a specific author
         if (isset($args['uid']) && is_int($args['uid'])) {
-            $queryargs[] = "$news_column[cr_uid] = '" . DataUtil::formatForStore($args['uid']) . "'";
+            $queryargs[] = "{$news_column['cr_uid']} = '" . DataUtil::formatForStore($args['uid']) . "'";
         }
 
         $where = '';
@@ -584,7 +584,7 @@ class News_Api_User extends Zikula_Api
         }
 
         // Allowed to read full article?
-        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "{$info['cr_uid']}::{$info['sid']}", ACCESS_READ)) {
             if ($shorturls && $shorturlstype == 0) {
                 $fullarticle = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories'])));
             } else {
@@ -670,7 +670,7 @@ class News_Api_User extends Zikula_Api
         $readmore = '';
         $bytesmorelink = '';
         if ($bytesmore > 0) {
-            if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+            if (SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_READ)) {
                 $title =  $this->__('Read more...');
                 $readmore = '<a title="'.$title.'" href="'.$links['fullarticle'].'">'.$title.'</a>';
             }
@@ -678,7 +678,7 @@ class News_Api_User extends Zikula_Api
         }
 
         // Allowed to read full article?
-        if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+        if (SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_READ)) {
             $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
             $print = '<a class="news_printlink" href="'.$links['print'].'">'.$this->__('Print').' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
             $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
@@ -695,9 +695,9 @@ class News_Api_User extends Zikula_Api
             $comment = ($info['commentcount'] == 0) ? $this->__('Comments?') : $this->_fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount']);
 
             // Allowed to comment?
-            if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_COMMENT)) {
+            if (SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_COMMENT)) {
                 $commentlink = '<a title="'.$this->__f('%1$s about %2$s', array($info['commentcount'], $info['title'])).'" href="'.$links['comment'].'">'.$comment.'</a>';
-            } else if (SecurityUtil::checkPermission('News::', "$info[cr_uid]::$info[sid]", ACCESS_READ)) {
+            } else if (SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_READ)) {
                 $commentlink = $comment;
             }
         }
