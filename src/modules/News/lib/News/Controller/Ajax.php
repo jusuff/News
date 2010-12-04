@@ -66,7 +66,7 @@ class News_Controller_Ajax extends Zikula_Controller
         }
 
         // Assign the item to the template
-        $this->view->assign($item);
+        $this->view->assign('item', $item);
 
         // Assign the current page
         $this->view->assign('page', $page);

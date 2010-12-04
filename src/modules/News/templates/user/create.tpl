@@ -283,7 +283,7 @@
         {/if}
         {/if}
 
-        {notifydisplayhooks eventname='news.hook.articles.ui.edit' area='module_area.news.articles' subject=null id=null caller="News"}
+        {notifydisplayhooks eventname='news.hook.articles.ui.edit' area='modulehook_area.news.articles' subject=null id=null caller="News"}
 
         <div class="z-buttonrow z-buttons z-center">
             {if $accessadd neq 1}

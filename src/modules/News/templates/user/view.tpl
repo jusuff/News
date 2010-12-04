@@ -14,4 +14,4 @@
 
 {modurl modname='News' func='view' startnum=$startnum assign='returnurl'}
 {* there is no ID because this is a collection *}
-{notifydisplayhooks eventname='news.hook.articles.ui.view' area='module_area.news.articles' subject=$newsitems id=null caller="news"}
+{notifydisplayhooks eventname='news.hook.articles.ui.view' area='modulehook_area.news.articles' subject=$newsitems id=null caller="news"}

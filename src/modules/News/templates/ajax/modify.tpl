@@ -246,8 +246,7 @@
         </script>
         {/if}
 
-        {* $item is null right now - need to fix assign code *}
-        {notifydisplayhooks eventname='news.hook.articles.ui.edit' area='module_area.news.articles' subject=$item id=$sid caller="News"}
+        {notifydisplayhooks eventname='news.hook.articles.ui.edit' area='modulehook_area.news.articles' subject=$item id=$sid caller="News"}
 
         <div class="z-buttonrow z-buttons z-center">
             <a href="javascript:void(0);" onclick="editnews_save('update');" class="z-btgreen">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Save' __title='Save your changes' } {gt text='Save' domain='module_news'}</a>

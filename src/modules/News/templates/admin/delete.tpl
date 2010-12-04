@@ -5,6 +5,7 @@
     <div class="z-adminpageicon">{img modname='core' src='editdelete.gif' set='icons/large' alt=$templatetitle}</div>
     <h2>{$templatetitle}</h2>
     <p class="z-warningmsg">{gt text='Do you really want to delete this news article?'}</p>
+    {notifydisplayhooks eventname='news.hook.articles.ui.delete' area='modulehook_area.news.articles' subject=$item id=$sid caller="News"}
     <form class="z-form" action="{modurl modname='News' type='admin' func='delete'}" method="post" enctype="application/x-www-form-urlencoded">
         <div>
             <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
