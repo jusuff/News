@@ -252,6 +252,9 @@ echo "hasProvider(EZC): <pre>"; var_dump(HookUtil::hasProvider('hookhandler.myho
         if ($story['action'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
             $validationerror = $this->__f('Error! You did not enter the minimum necessary %s.', $this->__('article content'));
         }
+        // validate hook data (name, subject, id, args, data)
+        $this->notifyHooks('news.hook.articles.validate.edit', $story, $story['sid'], array(), new Zikula_Collection_HookValidationProviders());
+
 
         // Reformat the attributes array
         if (isset($story['attributes'])) {

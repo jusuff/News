@@ -211,8 +211,8 @@ class News_Controller_User extends Zikula_Controller
         if ($item['action'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
             $validationerror = $this->__f('Error! You did not enter the minimum necessary %s.', $this->__('article content'));
         }
-        // validate hook data
-        $this->notifyHooks('news.hook.articles.validate.edit', null, array('caller' => 'News'), new Zikula_Collection_HookValidationProviders());
+        // validate hook data (name, subject, id, args, data)
+        $this->notifyHooks('news.hook.articles.validate.edit', null, null, array(), new Zikula_Collection_HookValidationProviders());
 
 
         // if the user has selected to preview the article we then route them back
