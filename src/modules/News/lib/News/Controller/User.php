@@ -203,17 +203,7 @@ class News_Controller_User extends Zikula_Controller
         }
 
         // Validate the input
-        $validationerror = false;
-        if ($item['action'] != 0 && empty($item['title'])) {
-            $validationerror = $this->__f('Error! You did not enter a %s.', $this->__('title'));
-        }
-        // both text fields can't be empty
-        if ($item['action'] != 0 && empty($item['hometext']) && empty($item['bodytext'])) {
-            $validationerror = $this->__f('Error! You did not enter the minimum necessary %s.', $this->__('article content'));
-        }
-        // validate hook data (name, subject, id, args, data)
-        $this->notifyHooks('news.hook.articles.validate.edit', null, null, array(), new Zikula_Collection_HookValidationProviders());
-
+        $validationerror = News_Util::validateArticle($item);
 
         // if the user has selected to preview the article we then route them back
         // to the new function with the arguments passed here
@@ -249,13 +239,12 @@ class News_Controller_User extends Zikula_Controller
 
         // Create the news story
         $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
-
-        // Let any hooks know that we have created a new item
-        $this->notifyHooks('news.hook.articles.process.edit', $item, $sid);
-
         if ($sid != false) {
             // Success
             LogUtil::registerStatus($this->__('Done! Created new article.'));
+
+            // Let any hooks know that we have created a new item
+            $this->notifyHooks('news.hook.articles.process.edit', $item, $sid);
 
             $this->notify($item, $modvars); // send notification email
             if (isset($files) && $modvars['picupload_enabled']) {
