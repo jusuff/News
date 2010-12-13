@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Zikula Application Framework
  *
@@ -10,9 +11,9 @@
  * @package    Content_Management
  * @subpackage News
  */
-
 class News_Controller_User extends Zikula_Controller
 {
+
     /**
      * the main user function
      *
@@ -22,8 +23,8 @@ class News_Controller_User extends Zikula_Controller
     public function main()
     {
         $args = array(
-                'hideonindex' => 0,
-                'itemsperpage' => ModUtil::getVar('News', 'storyhome', 10)
+            'hideonindex' => 0,
+            'itemsperpage' => ModUtil::getVar('News', 'storyhome', 10)
         );
         return $this->view($args);
     }
@@ -78,11 +79,11 @@ class News_Controller_User extends Zikula_Controller
         $preview = '';
         if (isset($item['action']) && $item['action'] == 0) {
             $preview = $this->preview(array('title' => $item['title'],
-                    'hometext' => $item['hometext'],
-                    'hometextcontenttype' => $item['hometextcontenttype'],
-                    'bodytext' => $item['bodytext'],
-                    'bodytextcontenttype' => $item['bodytextcontenttype'],
-                    'notes' => $item['notes']));
+                        'hometext' => $item['hometext'],
+                        'hometextcontenttype' => $item['hometextcontenttype'],
+                        'bodytext' => $item['bodytext'],
+                        'bodytextcontenttype' => $item['bodytextcontenttype'],
+                        'notes' => $item['notes']));
         }
 
         // Create output object
@@ -160,23 +161,23 @@ class News_Controller_User extends Zikula_Controller
 
         // Create the item array for processing
         $item = array('title' => $story['title'],
-                'urltitle' => isset($story['urltitle']) ? $story['urltitle'] : '',
-                '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
-                '__ATTRIBUTES__' => isset($story['attributes']) ? $story['attributes'] : null,
-                'language' => isset($story['language']) ? $story['language'] : '',
-                'hometext' => isset($story['hometext']) ? $story['hometext'] : '',
-                'hometextcontenttype' => $story['hometextcontenttype'],
-                'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
-                'bodytextcontenttype' => $story['bodytextcontenttype'],
-                'notes' => $story['notes'],
-                'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
-                'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
-                'from' => isset($story['from']) ? $story['from'] : null,
-                'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
-                'to' => isset($story['to']) ? $story['to'] : null,
-                'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
-                'weight' => isset($story['weight']) ? $story['weight'] : 0,
-                'action' => isset($story['action']) ? $story['action'] : 0);
+            'urltitle' => isset($story['urltitle']) ? $story['urltitle'] : '',
+            '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
+            '__ATTRIBUTES__' => isset($story['attributes']) ? $story['attributes'] : null,
+            'language' => isset($story['language']) ? $story['language'] : '',
+            'hometext' => isset($story['hometext']) ? $story['hometext'] : '',
+            'hometextcontenttype' => $story['hometextcontenttype'],
+            'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
+            'bodytextcontenttype' => $story['bodytextcontenttype'],
+            'notes' => $story['notes'],
+            'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 0,
+            'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
+            'from' => isset($story['from']) ? $story['from'] : null,
+            'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
+            'to' => isset($story['to']) ? $story['to'] : null,
+            'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
+            'weight' => isset($story['weight']) ? $story['weight'] : 0,
+            'action' => isset($story['action']) ? $story['action'] : 0);
 
         // Disable the non accessible fields for non editors
         if (!SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {
@@ -203,7 +204,7 @@ class News_Controller_User extends Zikula_Controller
         }
 
         // Validate the input
-        $validationerror = News_Util::validateArticle($item);
+        $validationerror = News_Util::validateArticle($this, $item);
 
         // if the user has selected to preview the article we then route them back
         // to the new function with the arguments passed here
@@ -215,7 +216,6 @@ class News_Controller_User extends Zikula_Controller
             // back to the referer form
             SessionUtil::setVar('newsitem', $item);
             return System::redirect(ModUtil::url('News', $referertype, 'newitem'));
-
         } else {
             // Confirm authorisation code.
             if (!SecurityUtil::confirmAuthKey()) {
@@ -236,7 +236,6 @@ class News_Controller_User extends Zikula_Controller
         }
 
         // Notable by its absence there is no security check here
-
         // Create the news story
         $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
         if ($sid != false) {
@@ -280,11 +279,11 @@ class News_Controller_User extends Zikula_Controller
         $modvars = $this->getVars();
 
         // Get parameters from whatever input we need
-        $page         = isset($args['page']) ? $args['page'] : (int)FormUtil::getPassedValue('page', 1, 'GET');
-        $prop         = isset($args['prop']) ? $args['prop'] : (string)FormUtil::getPassedValue('prop', null, 'GET');
-        $cat          = isset($args['cat']) ? $args['cat'] : (string)FormUtil::getPassedValue('cat', null, 'GET');
-        $itemsperpage = isset($args['itemsperpage']) ? $args['itemsperpage'] : (int)FormUtil::getPassedValue('itemsperpage', $modvars['itemsperpage'], 'GET');
-        $hideonindex  = isset($args['hideonindex']) ? (int)$args['hideonindex'] : null;
+        $page = isset($args['page']) ? $args['page'] : (int) FormUtil::getPassedValue('page', 1, 'GET');
+        $prop = isset($args['prop']) ? $args['prop'] : (string) FormUtil::getPassedValue('prop', null, 'GET');
+        $cat = isset($args['cat']) ? $args['cat'] : (string) FormUtil::getPassedValue('cat', null, 'GET');
+        $itemsperpage = isset($args['itemsperpage']) ? $args['itemsperpage'] : (int) FormUtil::getPassedValue('itemsperpage', $modvars['itemsperpage'], 'GET');
+        $hideonindex = isset($args['hideonindex']) ? (int) $args['hideonindex'] : null;
 
         // work out page size from page number
         $startnum = (($page - 1) * $itemsperpage) + 1;
@@ -304,7 +303,7 @@ class News_Controller_User extends Zikula_Controller
             if (!empty($prop) && in_array($prop, $properties) && !empty($cat)) {
                 if (!is_numeric($cat)) {
                     $rootCat = CategoryUtil::getCategoryByID($catregistry[$prop]);
-                    $cat = CategoryUtil::getCategoryByPath($rootCat['path'].'/'.$cat);
+                    $cat = CategoryUtil::getCategoryByPath($rootCat['path'] . '/' . $cat);
                 } else {
                     $cat = CategoryUtil::getCategoryByID($cat);
                 }
@@ -326,13 +325,13 @@ class News_Controller_User extends Zikula_Controller
 
         // get matching news articles
         $items = ModUtil::apiFunc('News', 'user', 'getall',
-                array('startnum'     => $startnum,
-                'numitems'     => $itemsperpage,
-                'status'       => 0,
-                'hideonindex'  => $hideonindex,
-                'filterbydate' => true,
-                'category'     => isset($catFilter) ? $catFilter : null,
-                'catregistry'  => isset($catregistry) ? $catregistry : null));
+                        array('startnum' => $startnum,
+                            'numitems' => $itemsperpage,
+                            'status' => 0,
+                            'hideonindex' => $hideonindex,
+                            'filterbydate' => true,
+                            'category' => isset($catFilter) ? $catFilter : null,
+                            'catregistry' => isset($catregistry) ? $catregistry : null));
 
         if ($items == false) {
             if ($modvars['enablecategorization'] && isset($catFilter)) {
@@ -374,12 +373,12 @@ class News_Controller_User extends Zikula_Controller
                 // preformatted text for this article.
                 // Used below and also passed to the theme - jgm
                 $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
-                        array('info' => $info,
-                        'links' => $links));
+                                array('info' => $info,
+                                    'links' => $links));
 
                 $this->view->assign(array('info' => $info,
-                        'links' => $links,
-                        'preformat' => $preformat));
+                    'links' => $links,
+                    'preformat' => $preformat));
 
                 $newsitems[] = $this->view->fetch('user/index.tpl', $item['sid']);
             }
@@ -395,11 +394,11 @@ class News_Controller_User extends Zikula_Controller
 
         // Assign the values for the smarty plugin to produce a pager
         $this->view->assign('pager', array('numitems' => ModUtil::apiFunc('News', 'user', 'countitems',
-                array('status' => 0,
-                'filterbydate' => true,
-                'hideonindex' => $hideonindex,
-                'category' => isset($catFilter) ? $catFilter : null)),
-                'itemsperpage' => $itemsperpage));
+                    array('status' => 0,
+                        'filterbydate' => true,
+                        'hideonindex' => $hideonindex,
+                        'category' => isset($catFilter) ? $catFilter : null)),
+            'itemsperpage' => $itemsperpage));
 
         // Return the output that has been generated by this function
         return $this->view->fetch('user/view.tpl');
@@ -416,14 +415,14 @@ class News_Controller_User extends Zikula_Controller
     public function display($args)
     {
         // Get parameters from whatever input we need
-        $sid       = (int)FormUtil::getPassedValue('sid', null, 'REQUEST');
-        $objectid  = (int)FormUtil::getPassedValue('objectid', null, 'REQUEST');
-        $page      = (int)FormUtil::getPassedValue('page', 1, 'REQUEST');
-        $title     = FormUtil::getPassedValue('title', null, 'REQUEST');
-        $year      = FormUtil::getPassedValue('year', null, 'REQUEST');
-        $monthnum  = FormUtil::getPassedValue('monthnum', null, 'REQUEST');
+        $sid = (int) FormUtil::getPassedValue('sid', null, 'REQUEST');
+        $objectid = (int) FormUtil::getPassedValue('objectid', null, 'REQUEST');
+        $page = (int) FormUtil::getPassedValue('page', 1, 'REQUEST');
+        $title = FormUtil::getPassedValue('title', null, 'REQUEST');
+        $year = FormUtil::getPassedValue('year', null, 'REQUEST');
+        $monthnum = FormUtil::getPassedValue('monthnum', null, 'REQUEST');
         $monthname = FormUtil::getPassedValue('monthname', null, 'REQUEST');
-        $day       = FormUtil::getPassedValue('day', null, 'REQUEST');
+        $day = FormUtil::getPassedValue('day', null, 'REQUEST');
 
         // User functions of this type can be called by other modules
         extract($args);
@@ -458,9 +457,9 @@ class News_Controller_User extends Zikula_Controller
 
         // For caching reasons you must pass a cache ID
         if (isset($sid)) {
-            $this->view->cache_id = $sid.$page;
+            $this->view->cache_id = $sid . $page;
         } else {
-            $this->view->cache_id = $title.$page;
+            $this->view->cache_id = $title . $page;
         }
 
         // check out if the contents is cached.
@@ -472,30 +471,30 @@ class News_Controller_User extends Zikula_Controller
         if (!SecurityUtil::checkPermission('News::', "::", ACCESS_ADD)) {
             if (isset($sid)) {
                 $item = ModUtil::apiFunc('News', 'user', 'get',
-                        array('sid'       => $sid,
-                        'status'    => 0));
+                                array('sid' => $sid,
+                                    'status' => 0));
             } else {
                 $item = ModUtil::apiFunc('News', 'user', 'get',
-                        array('title'     => $title,
-                        'year'      => $year,
-                        'monthname' => $monthname,
-                        'monthnum'  => $monthnum,
-                        'day'       => $day,
-                        'status'    => 0));
+                                array('title' => $title,
+                                    'year' => $year,
+                                    'monthname' => $monthname,
+                                    'monthnum' => $monthnum,
+                                    'day' => $day,
+                                    'status' => 0));
                 $sid = $item['sid'];
                 System::queryStringSetVar('sid', $sid);
             }
         } else {
             if (isset($sid)) {
                 $item = ModUtil::apiFunc('News', 'user', 'get',
-                        array('sid'       => $sid));
+                                array('sid' => $sid));
             } else {
                 $item = ModUtil::apiFunc('News', 'user', 'get',
-                        array('title'     => $title,
-                        'year'      => $year,
-                        'monthname' => $monthname,
-                        'monthnum'  => $monthnum,
-                        'day'       => $day));
+                                array('title' => $title,
+                                    'year' => $year,
+                                    'monthname' => $monthname,
+                                    'monthnum' => $monthnum,
+                                    'day' => $day));
                 $sid = $item['sid'];
                 System::queryStringSetVar('sid', $sid);
             }
@@ -510,13 +509,13 @@ class News_Controller_User extends Zikula_Controller
 
         // Set the item bodytext to be the required page
         // nb arrays start from zero, pages from one
-        $item['bodytext'] = $allpages[$page-1];
+        $item['bodytext'] = $allpages[$page - 1];
         $numpages = count($allpages);
         unset($allpages);
 
         // If the pagecount is greater than 1 and we're not on the frontpage
         // don't show the hometext
-        if ($numpages > 1  && $page > 1) {
+        if ($numpages > 1 && $page > 1) {
             $item['hometext'] = '';
         }
 
@@ -531,8 +530,8 @@ class News_Controller_User extends Zikula_Controller
         // $preformat is an array holding chunks of preformatted text for this article.
         // Used below and also passed to the theme - jgm
         $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
-                array('info'  => $info,
-                'links' => $links));
+                        array('info' => $info,
+                            'links' => $links));
 
         // set the page title
         if ($numpages <= 1) {
@@ -542,10 +541,10 @@ class News_Controller_User extends Zikula_Controller
         }
 
         // Assign the story info arrays
-        $this->view->assign(array('info'      => $info,
-                'links'     => $links,
-                'preformat' => $preformat,
-                'page'      => $page));
+        $this->view->assign(array('info' => $info,
+            'links' => $links,
+            'preformat' => $preformat,
+            'page' => $page));
 
         $modvars = $this->getVars();
         $this->view->assign($modvars);
@@ -570,19 +569,19 @@ class News_Controller_User extends Zikula_Controller
                 // get matching news articles
                 // TODO exclude current article, query does not work yet :-(
                 $morearticlesincat = ModUtil::apiFunc('News', 'user', 'getall',
-                        array('numitems'     => $morearticlesincat,
-                        'status'       => 0,
-                        'filterbydate' => true,
-                        'category'     => $catFilter,
-                        'catregistry'  => $catregistry,
-                        'query'        => array('sid', '!=', $sid)));
+                                array('numitems' => $morearticlesincat,
+                                    'status' => 0,
+                                    'filterbydate' => true,
+                                    'category' => $catFilter,
+                                    'catregistry' => $catregistry,
+                                    'query' => array('sid', '!=', $sid)));
                 $this->view->assign('morearticlesincat', $morearticlesincat);
             }
         }
 
         // Now lets assign the informatation to create a pager for the review
-        $this->view->assign('pager', array('numitems'     => $numpages,
-                'itemsperpage' => 1));
+        $this->view->assign('pager', array('numitems' => $numpages,
+            'itemsperpage' => 1));
 
         // Return the output that has been generated by this function
         return $this->view->fetch('user/article.tpl');
@@ -598,9 +597,9 @@ class News_Controller_User extends Zikula_Controller
     public function archives($args)
     {
         // Get parameters from whatever input we need
-        $year  = (int)FormUtil::getPassedValue('year', null, 'REQUEST');
-        $month = (int)FormUtil::getPassedValue('month', null, 'REQUEST');
-        $day   = '31';
+        $year = (int) FormUtil::getPassedValue('year', null, 'REQUEST');
+        $month = (int) FormUtil::getPassedValue('month', null, 'REQUEST');
+        $day = '31';
 
         // Security check
         if (!SecurityUtil::checkPermission('News::', '::', ACCESS_OVERVIEW)) {
@@ -611,10 +610,10 @@ class News_Controller_User extends Zikula_Controller
         $currentdate = explode(',', DateUtil::getDatetime('', '%Y,%m,%d'));
         if (!empty($year) || !empty($month)) {
             if ((empty($year) || empty($month)) ||
-                    ($year > (int)$currentdate[0] || ($year == (int)$currentdate[0] && $month > (int)$currentdate[1]))) {
+                    ($year > (int) $currentdate[0] || ($year == (int) $currentdate[0] && $month > (int) $currentdate[1]))) {
                 System::redirect(ModUtil::url('News', 'user', 'archives'));
-            } elseif ($year == (int)$currentdate[0] && $month == (int)$currentdate[1]) {
-                $day = (int)$currentdate[2];
+            } elseif ($year == (int) $currentdate[0] && $month == (int) $currentdate[1]) {
+                $day = (int) $currentdate[2];
             }
         }
 
@@ -631,35 +630,34 @@ class News_Controller_User extends Zikula_Controller
 
         if (!empty($year) && !empty($month)) {
             $items = ModUtil::apiFunc('News', 'user', 'getall',
-                    array('order'  => 'from',
-                    'from'   => "$year-$month-01 00:00:00",
-                    'to'     => "$year-$month-$day 23:59:59",
-                    'status' => 0));
+                            array('order' => 'from',
+                                'from' => "$year-$month-01 00:00:00",
+                                'to' => "$year-$month-$day 23:59:59",
+                                'status' => 0));
             $this->view->assign('year', $year);
-            $this->view->assign('month', $monthnames[$month-1]);
-
+            $this->view->assign('month', $monthnames[$month - 1]);
         } else {
             // get all matching news articles
             $monthsyears = ModUtil::apiFunc('News', 'user', 'getMonthsWithNews');
 
             foreach ($monthsyears as $monthyear) {
                 $month = DateUtil::getDatetime_Field($monthyear, 2);
-                $year  = DateUtil::getDatetime_Field($monthyear, 1);
+                $year = DateUtil::getDatetime_Field($monthyear, 1);
                 $dates[$year][] = $month;
             }
             foreach ($dates as $year => $years) {
                 foreach ($years as $month)
                 {
                     //$linktext = $monthnames[$month-1]." $year";
-                    $linktext = $monthnames[$month-1];
+                    $linktext = $monthnames[$month - 1];
                     $nrofarticles = ModUtil::apiFunc('News', 'user', 'countitems',
-                            array('from'   => "$year-$month-01 00:00:00",
-                            'to'     => "$year-$month-$day 23:59:59",
-                            'status' => 0));
+                                    array('from' => "$year-$month-01 00:00:00",
+                                        'to' => "$year-$month-$day 23:59:59",
+                                        'status' => 0));
 
-                    $archivemonths[$year][$month] = array('url'          => ModUtil::url('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
-                            'title'        => $linktext,
-                            'nrofarticles' => $nrofarticles);
+                    $archivemonths[$year][$month] = array('url' => ModUtil::url('News', 'user', 'archives', array('month' => $month, 'year' => $year)),
+                        'title' => $linktext,
+                        'nrofarticles' => $nrofarticles);
                 }
             }
             $items = false;
@@ -682,12 +680,12 @@ class News_Controller_User extends Zikula_Controller
     public function preview($args)
     {
         // Get parameters from whatever input we need
-        $title               = FormUtil::getPassedValue('title', null, 'REQUEST');
-        $hometext            = FormUtil::getPassedValue('hometext', null, 'REQUEST');
+        $title = FormUtil::getPassedValue('title', null, 'REQUEST');
+        $hometext = FormUtil::getPassedValue('hometext', null, 'REQUEST');
         $hometextcontenttype = FormUtil::getPassedValue('hometextcontenttype', null, 'REQUEST');
-        $bodytext            = FormUtil::getPassedValue('bodytext', null, 'REQUEST');
+        $bodytext = FormUtil::getPassedValue('bodytext', null, 'REQUEST');
         $bodytextcontenttype = FormUtil::getPassedValue('bodytextcontenttype', null, 'REQUEST');
-        $notes               = FormUtil::getPassedValue('notes', null, 'REQUEST');
+        $notes = FormUtil::getPassedValue('notes', null, 'REQUEST');
 
         // User functions of this type can be called by other modules
         extract($args);
@@ -701,10 +699,10 @@ class News_Controller_User extends Zikula_Controller
         }
         $this->view->setCaching(false);
 
-        $this->view->assign('preview', array('title'    => $title,
-                'hometext' => $hometext,
-                'bodytext' => $bodytext,
-                'notes'    => $notes));
+        $this->view->assign('preview', array('title' => $title,
+            'hometext' => $hometext,
+            'bodytext' => $bodytext,
+            'notes' => $notes));
 
         return $this->view->fetch('user/preview.tpl');
     }
@@ -732,7 +730,7 @@ class News_Controller_User extends Zikula_Controller
         if ($enablecategorization) {
             // Get the categories registered for News
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
-            $properties  = array_keys($catregistry);
+            $properties = array_keys($catregistry);
             $propertiesdata = array();
             foreach ($properties as $property)
             {
@@ -746,8 +744,8 @@ class News_Controller_User extends Zikula_Controller
                     $rootcat['news_yourarticlecount'] = $catcount['category']['news_yourarticlecount'];
                     $rootcat['subcategories'] = $catcount['subcategories'];
                     // Store data per property for listing in the overview
-                    $propertiesdata[] = array('name'     => $property,
-                            'category' => $rootcat);
+                    $propertiesdata[] = array('name' => $property,
+                        'category' => $rootcat);
                 }
             }
             // Assign property & category related vars
@@ -776,13 +774,13 @@ class News_Controller_User extends Zikula_Controller
     public function displaypdf($args)
     {
         // Get parameters from whatever input we need
-        $sid       = (int)FormUtil::getPassedValue('sid', null, 'REQUEST');
-        $objectid  = (int)FormUtil::getPassedValue('objectid', null, 'REQUEST');
-        $title     = FormUtil::getPassedValue('title', null, 'REQUEST');
-        $year      = FormUtil::getPassedValue('year', null, 'REQUEST');
-        $monthnum  = FormUtil::getPassedValue('monthnum', null, 'REQUEST');
+        $sid = (int) FormUtil::getPassedValue('sid', null, 'REQUEST');
+        $objectid = (int) FormUtil::getPassedValue('objectid', null, 'REQUEST');
+        $title = FormUtil::getPassedValue('title', null, 'REQUEST');
+        $year = FormUtil::getPassedValue('year', null, 'REQUEST');
+        $monthnum = FormUtil::getPassedValue('monthnum', null, 'REQUEST');
         $monthname = FormUtil::getPassedValue('monthname', null, 'REQUEST');
-        $day       = FormUtil::getPassedValue('day', null, 'REQUEST');
+        $day = FormUtil::getPassedValue('day', null, 'REQUEST');
 
         // User functions of this type can be called by other modules
         extract($args);
@@ -811,16 +809,16 @@ class News_Controller_User extends Zikula_Controller
         // Get the news story
         if (isset($sid)) {
             $item = ModUtil::apiFunc('News', 'user', 'get',
-                    array('sid'       => $sid,
-                    'status'    => 0));
+                            array('sid' => $sid,
+                                'status' => 0));
         } else {
             $item = ModUtil::apiFunc('News', 'user', 'get',
-                    array('title'     => $title,
-                    'year'      => $year,
-                    'monthname' => $monthname,
-                    'monthnum'  => $monthnum,
-                    'day'       => $day,
-                    'status'    => 0));
+                            array('title' => $title,
+                                'year' => $year,
+                                'monthname' => $monthname,
+                                'monthnum' => $monthnum,
+                                'day' => $day,
+                                'status' => 0));
             $sid = $item['sid'];
             System::queryStringSetVar('sid', $sid);
         }
@@ -836,7 +834,6 @@ class News_Controller_User extends Zikula_Controller
         //$item['bodytext'] = $allpages[$page-1];
         $numpages = count($allpages);
         //unset($allpages);
-
         // $info is array holding raw information.
         $info = ModUtil::apiFunc('News', 'user', 'getArticleInfo', $item);
 
@@ -845,13 +842,13 @@ class News_Controller_User extends Zikula_Controller
 
         // $preformat is an array holding chunks of preformatted text for this article.
         $preformat = ModUtil::apiFunc('News', 'user', 'getArticlePreformat',
-                array('info'  => $info,
-                'links' => $links));
+                        array('info' => $info,
+                            'links' => $links));
 
         // Assign the story info arrays
-        $this->view->assign(array('info'      => $info,
-                'links'     => $links,
-                'preformat' => $preformat));
+        $this->view->assign(array('info' => $info,
+            'links' => $links,
+            'preformat' => $preformat));
 
         $this->view->assign('enablecategorization', $modvars['enablecategorization']);
         $this->view->assign('catimagepath', $modvars['catimagepath']);
@@ -869,20 +866,19 @@ class News_Controller_User extends Zikula_Controller
         $pdf->SetTitle($info['title']);
         $pdf->SetSubject($info['cattitle']);
         //$pdf->SetKeywords($info['cattitle']);
-
         // set default header data
         //$pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
         $sitename = System::getVar('sitename');
         /*    $pdf->SetHeaderData(
-                $modvars['pdflink_headerlogo'],
-                $modvars['pdflink_headerlogo_width'],
-                $this->__f('Article %1$s by %2$s', array($info['title'], $info['contributor'])),
-                $sitename . ' :: ' . $this->__('News publisher'));*/
+          $modvars['pdflink_headerlogo'],
+          $modvars['pdflink_headerlogo_width'],
+          $this->__f('Article %1$s by %2$s', array($info['title'], $info['contributor'])),
+          $sitename . ' :: ' . $this->__('News publisher')); */
         $pdf->SetHeaderData(
                 $modvars['pdflink_headerlogo'],
                 $modvars['pdflink_headerlogo_width'],
                 '',
-                $sitename . ' :: ' . $info['cattitle']. ' :: ' . $info['topicname']);
+                $sitename . ' :: ' . $info['cattitle'] . ' :: ' . $info['topicname']);
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
@@ -914,7 +910,7 @@ class News_Controller_User extends Zikula_Controller
         $pdf->lastPage();
 
         //Close and output PDF document
-        $pdf->Output($info['urltitle'].'.pdf', 'I');
+        $pdf->Output($info['urltitle'] . '.pdf', 'I');
 
         // Since the output doesn't need the theme wrapped around it,
         // let the theme know that the function is already finished
@@ -931,21 +927,21 @@ class News_Controller_User extends Zikula_Controller
     {
         // Get the number of articles in this category within this category property
         $news_articlecount = ModUtil::apiFunc('News', 'user', 'countitems',
-                array('status'       => 0,
-                'filterbydate' => true,
-                'category'     => array($property => $category['id']),
-                'catregistry'  => $catregistry));
+                        array('status' => 0,
+                            'filterbydate' => true,
+                            'category' => array($property => $category['id']),
+                            'catregistry' => $catregistry));
 
         $news_totalarticlecount = $news_articlecount;
 
         // Get the number of articles by the current uid in this category within this category property
         if ($uid > 0) {
             $news_yourarticlecount = ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('status'       => 0,
-                    'filterbydate' => true,
-                    'uid'          => $uid,
-                    'category'     => array($property => $category['id']),
-                    'catregistry'  => $catregistry));
+                            array('status' => 0,
+                                'filterbydate' => true,
+                                'uid' => $uid,
+                                'category' => array($property => $category['id']),
+                                'catregistry' => $catregistry));
         } else {
             $news_yourarticlecount = 0;
         }
@@ -958,7 +954,7 @@ class News_Controller_User extends Zikula_Controller
                 $count = $this->_countcategories($cat, $property, $catregistry, $uid);
                 // Add the subcategories count to this category
                 $news_totalarticlecount += $count['category']['news_totalarticlecount'];
-                $news_yourarticlecount  += $count['category']['news_yourarticlecount'];
+                $news_yourarticlecount += $count['category']['news_yourarticlecount'];
                 $subcategories[] = $count;
             }
         } else {
@@ -973,8 +969,8 @@ class News_Controller_User extends Zikula_Controller
             $category['catimage'] = $category['__ATTRIBUTES__']['topic_image'];
         }
 
-        $return = array('category'      => $category,
-                'subcategories' => $subcategories);
+        $return = array('category' => $category,
+            'subcategories' => $subcategories);
 
         return $return;
     }
@@ -992,12 +988,12 @@ class News_Controller_User extends Zikula_Controller
         if ($notifyonpending && ($item['action'] == 1 || $item['action'] == 4)) {
             $sitename = System::getVar('sitename');
             $adminmail = System::getVar('adminmail');
-            $fromname    = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
+            $fromname = !empty($modvars['notifyonpending_fromname']) ? $modvars['notifyonpending_fromname'] : $sitename;
             $fromaddress = !empty($modvars['notifyonpending_fromaddress']) ? $modvars['notifyonpending_fromaddress'] : $adminmail;
-            $toname    = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
+            $toname = !empty($modvars['notifyonpending_toname']) ? $modvars['notifyonpending_toname'] : $sitename;
             $toaddress = !empty($modvars['notifyonpending_toaddress']) ? $modvars['notifyonpending_toaddress'] : $adminmail;
-            $subject     = $modvars['notifyonpending_subject'];
-            $html        = $modvars['notifyonpending_html'];
+            $subject = $modvars['notifyonpending_subject'];
+            $html = $modvars['notifyonpending_html'];
             if (!UserUtil::isLoggedIn()) {
                 $contributor = System::getVar('anonymous');
             } else {
@@ -1018,13 +1014,13 @@ Go to the <a href="%5$s">news publisher admin</a> pages to review and publish th
 Regards,
 %6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
             }
-            $sent = ModUtil::apiFunc('Mailer', 'user', 'sendmessage', array('toname'     => $toname,
-                    'toaddress'  => $toaddress,
-                    'fromname'   => $fromname,
-                    'fromaddress'=> $fromaddress,
-                    'subject'    => $subject,
-                    'body'       => $body,
-                    'html'       => $html));
+            $sent = ModUtil::apiFunc('Mailer', 'user', 'sendmessage', array('toname' => $toname,
+                        'toaddress' => $toaddress,
+                        'fromname' => $fromname,
+                        'fromaddress' => $fromaddress,
+                        'subject' => $subject,
+                        'body' => $body,
+                        'html' => $html));
             if ($sent) {
                 LogUtil::registerStatus($this->__('Done! E-mail about new pending article is sent.'));
                 return true;
@@ -1035,4 +1031,5 @@ Regards,
         }
         // method silently fails if not configured to send email
     }
+
 }
