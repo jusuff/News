@@ -316,7 +316,7 @@ class News_Controller_Admin extends Zikula_Controller
         }
 
         // Let any hooks know that we have edited an item.
-        $this->notifyHooks('news.hook.articles.articles.edit', $story, $story['sid']);
+        $this->notifyHooks('news.hook.articles.process.edit', $story, $story['sid']);
 
         $this->view->clear_cache();
         return System::redirect(ModUtil::url('News', 'admin', 'view'));
