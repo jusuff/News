@@ -346,6 +346,7 @@ class News_Installer extends Zikula_Installer
 
         // unregister handlers
         EventUtil::unregisterPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
+        HookUtil::unregisterHookSubscriberBundles($this->version);
 
         // Deletion successful
         return true;

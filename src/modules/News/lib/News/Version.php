@@ -33,7 +33,7 @@ class News_Version extends Zikula_Version
 
     protected function setupHookBundles()
     {
-        $bundle = new Zikula_Version_HookSubscriberBundle('modulehook_area.news.articles', __('News Articles Hooks'));
+        $bundle = new Zikula_Version_HookSubscriberBundle('modulehook_area.news.articles', $this->__('News Articles Hooks'));
         $bundle->addType('ui.view', 'news.hook.articles.ui.view');
         $bundle->addType('ui.edit', 'news.hook.articles.ui.edit');
         $bundle->addType('ui.delete', 'news.hook.articles.ui.delete');
