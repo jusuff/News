@@ -800,7 +800,7 @@ class News_Controller_Admin extends Zikula_Controller
         $this->setVars($modvars);
 
         // Let any other modules know that the modules configuration has been updated
-        $this->notifyHooks('news.hook.articles.config.process.edit', null, null);
+        $this->notifyHooks('news.hook.config.process.edit', null, null);
         // the module configuration has been updated successfuly
         LogUtil::registerStatus($this->__('Done! Saved module settings.'));
 

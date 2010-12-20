@@ -278,7 +278,7 @@
             </fieldset>
             {/if}
 
-            {notifydisplayhooks eventname='news.hook.articles.config.ui.edit' area='modulehook_area.news.articles' subject=null id=null caller="News"}
+            {notifydisplayhooks eventname='news.hook.config.ui.edit' area='modulehook_area.news.config' subject=null id=null caller="News"}
 
             <div class="z-formbuttons z-buttons">
                 {button src='button_ok.gif' set='icons/extrasmall' __alt='Save' __title='Save' __text='Save'}
