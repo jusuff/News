@@ -134,22 +134,7 @@
                 </div>
                 <div id="news_pdflink_details">
                     <div class="z-formrow">
-                        <label for="news_pdflink_tcpdfpath">{gt text='Path to the TCPDF main file'}</label>
-                        <input id="news_pdflink_tcpdfpath" type="text" name="pdflink_tcpdfpath" value="{$pdflink_tcpdfpath|safetext}" />
-                        <div class="z-informationmsg z-formnote">{gt text='The PDF link is based on <a href="http://www.tcpdf.org">TCPDF</a>. You have to install the files yourself into the path specified above, when you want to use the pdflink. Download TCPDF from the link and place the \'tcpdf\' folder into the correct location.'}</div>
-                    </div>
-                    <div class="z-formrow">
-                        <label for="news_pdflink_tcpdflang">{gt text='TCPDF language file'}</label>
-                        <input id="news_pdflink_tcpdflang" type="text" name="pdflink_tcpdflang" value="{$pdflink_tcpdflang|safetext}" />
-                    </div>
-                    <div class="z-formrow">
-                        <label for="news_pdflink_headerlogo">{gt text='TCPDF Header logo image (absolute path or relative to tcpdf)'}</label>
-                        <input id="news_pdflink_headerlogo" type="text" name="pdflink_headerlogo" value="{$pdflink_headerlogo|safetext}" />
-                        <div class="z-informationmsg z-formnote">{gt text='Default Header logo is defined by TCPDF and in PathToTCPDF/images folder. tcpdf_logo.jpg with a width of 30'}</div>
-                    </div>
-                    <div class="z-formrow">
-                        <label for="news_pdflink_headerlogo_width">{gt text='TCPDF header logo width in mm'}</label>
-                        <input id="news_pdflink_headerlogo_width" type="text" name="pdflink_headerlogo_width" value="{$pdflink_headerlogo_width|safetext}" />
+                        <div class="z-informationmsg z-formnote">{gt text='The PDF link is based on <a href="http://www.tcpdf.org">TCPDF</a>. The News module ships with a subset of available fonts. If you wish to expand the font options, you will need to download the package and transfer fonts to the appropriate folder within the News module. Additionally, you would need to override the News_Controller_User::displaypdf() method to change the fonts used.'}</div>
                     </div>
                 </div>
             </fieldset>

@@ -802,10 +802,6 @@ class News_Controller_User extends Zikula_Controller
             unset($sid);
         }
 
-        // Include the TCPDF class from the configured path
-        include_once $modvars['pdflink_tcpdfpath'];
-        include_once $modvars['pdflink_tcpdflang'];
-
         // Get the news story
         if (isset($sid)) {
             $item = ModUtil::apiFunc('News', 'user', 'get',
@@ -857,6 +853,22 @@ class News_Controller_User extends Zikula_Controller
         // Store output in variable
         $articlehtml = $this->view->fetch('user/articlepdf.tpl');
 
+        // Include and configure the TCPDF class
+        define('K_TCPDF_EXTERNAL_CONFIG', true);
+        $classfile = DataUtil::formatForOS('modules/News/lib/vendor/tcpdf/tcpdf.php');
+        include_once $classfile;
+        $lang = ZLanguage::getInstance();
+        $langcode = $lang->getLanguageCodeLegacy();
+        $langfile = DataUtil::formatForOS("modules/News/lib/vendor/tcpdf/config/lang/{$langcode}.php");
+        if (file_exists($langfile)) {
+            include_once $langfile;
+        } else {
+            // default to english
+            include_once DataUtil::formatForOS('modules/News/lib/vendor/tcpdf/config/lang/eng.php');
+        }
+        $configfile = DataUtil::formatForOS('modules/News/lib/vendor/tcpdf_news_config.php');
+        require_once $configfile;
+
         // create new PDF document
         $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -874,11 +886,7 @@ class News_Controller_User extends Zikula_Controller
           $modvars['pdflink_headerlogo_width'],
           $this->__f('Article %1$s by %2$s', array($info['title'], $info['contributor'])),
           $sitename . ' :: ' . $this->__('News publisher')); */
-        $pdf->SetHeaderData(
-                $modvars['pdflink_headerlogo'],
-                $modvars['pdflink_headerlogo_width'],
-                '',
-                $sitename . ' :: ' . $info['cattitle'] . ' :: ' . $info['topicname']);
+        $pdf->SetHeaderData('tcpdf_logo.jpg', '30', '', $sitename . ' :: ' . $info['cattitle'] . ' :: ' . $info['topicname']);
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));

@@ -1,0 +1,40 @@
+This file contains a list of vendor libraries distributed with News
+-------------------------------------------------------------------
+
+PHP LIBRARIES
+-------------
+tcpdf 5_9_034
+    Vendor website: http://www.tcpdf.org/
+    Downloaded from: https://sourceforge.net/projects/tcpdf/files/
+    License: GPL v3
+    Location in News: modules/News/lib/vendor/tcpdf
+    Patch details:
+        Removed the following subdirectories
+            /cache
+            /examples
+        Removed all files from /fonts except
+            courier.php
+            helvetica.php
+            helveticab.php
+            helveticabi.php
+            helveticai.php
+            README.TXT
+            symbol.php
+            times.php
+            timesb.php
+            timesbi.php
+            timesi.php
+            zapfdingbats.php
+        Removed all files from /images except
+            _blank.png
+            alpha.png
+            tcpdf_logo.jpg
+            tcpdf_signature.png
+
+phpthumb 3.0.066
+    Vendor website: http://phpthumb.gxdlabs.com https://github.com/masterexploder/PHPThumb
+    Downloaded from: http://phpthumb.gxdlabs.com/download.php
+    License: MIT
+    Location in News: modules/News/lib/vendor/phpthumb
+    Patch details:
+        Removed /examples subdirectory

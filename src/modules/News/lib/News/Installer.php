@@ -58,10 +58,6 @@ class News_Installer extends Zikula_Installer
 
         // pdf link for an article
         $this->setVar('pdflink', false);
-        $this->setVar('pdflink_tcpdfpath', 'config/classes/tcpdf/tcpdf.php');
-        $this->setVar('pdflink_tcpdflang', 'config/classes/tcpdf/config/lang/eng.php');
-        $this->setVar('pdflink_headerlogo', 'tcpdf_logo.jpg');
-        $this->setVar('pdflink_headerlogo_width', '30');
 
         // picture uploading
         $this->setVar('picupload_enabled', false);
@@ -316,6 +312,10 @@ class News_Installer extends Zikula_Installer
                 }
             case '3.0.0':
                 HookUtil::registerHookSubscriberBundles($this->version);
+                $this->delVar('pdflink_tcpdfpath');
+                $this->delVar('pdflink_tcpdflang');
+                $this->delVar('pdflink_headerlogo');
+                $this->delVar('pdflink_headerlogo_width');
             case '3.0.1':
                 // future plans
         }
