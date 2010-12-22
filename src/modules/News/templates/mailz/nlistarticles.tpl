@@ -5,5 +5,5 @@
     {else}
     <li>{$article.title|safehtml} ({gt text='by %1$s on %2$s' tag1=$article.contributor tag2=$article.from|dateformat:'datebrief'})</li>
     {/if}
-    {/section}
+    {/foreach}
 </ul>
