@@ -886,7 +886,7 @@ class News_Controller_User extends Zikula_Controller
           $modvars['pdflink_headerlogo_width'],
           $this->__f('Article %1$s by %2$s', array($info['title'], $info['contributor'])),
           $sitename . ' :: ' . $this->__('News publisher')); */
-        $pdf->SetHeaderData('tcpdf_logo.jpg', '30', '', $sitename . ' :: ' . $info['cattitle'] . ' :: ' . $info['topicname']);
+        $pdf->SetHeaderData($modvars['pdflink_headerlogo'], $modvars['pdflink_headerlogo_width'], '', $sitename . ' :: ' . $info['cattitle'] . ' :: ' . $info['topicname']);
         // set header and footer fonts
         $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
         $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
