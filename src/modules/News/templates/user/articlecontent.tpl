@@ -10,7 +10,7 @@
 {if $smarty.foreach.categorylinks.last neq true}<span class="text_separator"> | </span>{/if}
 {/foreach}
 </span>
-<h3 class="news_title">{$info.catandtitle}</h3>
+<h3 class="news_title">{$info.catandtitle|safehtml}</h3>
 
 {nocache}
 <div id="news_editlinks">{articleadminlinks sid=$info.sid}</div>
@@ -28,13 +28,13 @@
 <div id="news_body" class="news_body">
     {if $picupload_enabled AND $info.pictures gt 0}
     <div class="news_photo news_thumbs" style="float:{$picupload_article_float}">
-        <a href="{$picupload_uploaddir}/pic_sid{$info.sid}-0-norm.jpg" rel="imageviewer[sid{$info.sid}]">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb2.jpg" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title}" /></a>
+        <a href="{$picupload_uploaddir}/pic_sid{$info.sid}-0-norm.jpg" rel="imageviewer[sid{$info.sid}]">{*<span></span>*}<img src="{$picupload_uploaddir}/pic_sid{$info.sid}-0-thumb2.jpg" alt="{gt text='Picture %s for %s' tag1='0' tag2=$info.title|safehtml}" /></a>
     </div>
     {/if}
     <div class="news_hometext">
-        {$preformat.hometext}
+        {$preformat.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}
     </div>
-    {$preformat.bodytext}
+    {$preformat.bodytext|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}
 
     <p class="news_footer">
         {$preformat.print}
@@ -57,7 +57,7 @@
 </div>
 
 {if $preformat.notes neq ''}
-<span id="news_notes" class="news_meta">{$preformat.notes}</span>
+<span id="news_notes" class="news_meta">{$preformat.notes|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}</span>
 {/if}
 
 {* the next code is to display the pager *}

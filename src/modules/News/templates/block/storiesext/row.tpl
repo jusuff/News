@@ -12,12 +12,12 @@
 {if $disphometext}
 <div class="storiesext_hometext">
     {if $hometextwrapped}
-    {$hometext|truncatehtml:$maxhometextlength:''|safehtml}
+    {$hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|truncatehtml:$maxhometextlength:''|safehtml}
     {if $readperm}<a href="{modurl modname='News' func='display' sid=$sid}">{/if}
     {$hometextwraptxt|safehtml}
     {if $readperm}</a>{/if}
 {else}
-    {$hometext|safehtml}
+    {$hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}
 {/if}
 </div>
 {/if}

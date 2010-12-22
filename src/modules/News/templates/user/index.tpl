@@ -1,5 +1,5 @@
 <div class="news_index">
-    <h3 class="news_title">{$preformat.title}</h3>
+    <h3 class="news_title">{$preformat.title|safehtml}</h3>
     <span class="news_meta z-sub">{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$info.contributor tag2=$info.from|dateformat:'datetimebrief'}</span>
 
     <div class="news_body">
@@ -12,11 +12,11 @@
             {/if}
         </div>
         {/if}
-        {$preformat.hometext|safehtml}
+        {$preformat.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}
     </div>
 
     {if $preformat.notes neq ''}
-    <p class="news_meta">{$preformat.notes}</p>
+    <p class="news_meta">{$preformat.notes|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}</p>
     {/if}
 
     <p class="news_footer">

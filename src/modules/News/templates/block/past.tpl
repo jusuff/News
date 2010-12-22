@@ -3,7 +3,7 @@
 <ul>
     {foreach from=$news item='article'}
     <li>
-        {$article.preformat.title}
+        {$article.preformat.title|safehtml}
         {if isset($article.info.commentcount)}&nbsp;({$article.info.commentcount}){/if}
     </li>
     {/foreach}

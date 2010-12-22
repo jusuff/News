@@ -1,13 +1,11 @@
-<h3 class="news_title">{$preview.title}</h3>
+<h3 class="news_title">{$preview.title|safehtml}</h3>
 
 <div id="news_body" class="news_body">
-    {* $preview.hometext|modcallhooks:'News' *}
-    {$preview.hometext}
+    {$preview.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}
     <hr />
-    {* $preview.bodytext|modcallhooks:'News' *}
-    {$preview.bodytext}
+    {$preview.bodytext|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}
 </div>
 
 {if $preview.notes neq ''}
-<span id="news_notes" class="news_meta">{$preview.notes}</span>
+<span id="news_notes" class="news_meta">{$preview.notes|notifyfilters:'news.hook.articlesfilter.ui.filter'|safehtml}</span>
 {/if}

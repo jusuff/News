@@ -7,7 +7,7 @@
 {/if}
 
 {if $enabledescriptionvar}
-{pagesetvar name='description' value=$info.hometext|strip_tags|trim|truncate:$descriptionvarchars}
+{pagesetvar name='description' value=$info.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|strip_tags|trim|truncate:$descriptionvarchars}
 {/if}
 
 <script type="text/javascript">
