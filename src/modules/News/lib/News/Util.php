@@ -31,22 +31,11 @@ class News_Util {
         // Validate the input
         $validationerror = false;
         if ($story['action'] != 0 && empty($story['title'])) {
-            $validationerror = $controller->__f('Error! You did not enter a %s.', $controller->__('title'));
+            $validationerror .= $controller->__f('Error! You did not enter a %s.', $controller->__('title')) . "<br />";
         }
         // both text fields can't be empty
         if ($story['action'] != 0 && empty($story['hometext']) && empty($story['bodytext'])) {
-            $validationerror = $controller->__f('Error! You did not enter the minimum necessary %s.', $controller->__('article content'));
-        }
-        // validate hook data
-        $sid = isset($story['sid']) ? $story['sid'] : null;
-        $eventargs = array(
-            'id' => $sid,
-            'caller' => 'News',
-            'controller' => $controller);
-        $event = new Zikula_Event('news.hook.articles.validate.edit', $story, $eventargs, new Zikula_Collection_HookValidationProviders());
-        $validators = EventUtil::notify($event)->getData();
-        if ($validators->hasErrors()) {
-            $validationerror = $controller->__('Error! You did not enter hooked data correctly.');
+            $validationerror .= $controller->__f('Error! You did not enter the minimum necessary %s.', $controller->__('article content')) . "<br />";
         }
 
         return $validationerror;
