@@ -731,6 +731,8 @@ class News_Controller_Admin extends Zikula_Controller
         $modvars['enableajaxedit'] = (bool) FormUtil::getPassedValue('enableajaxedit', false, 'POST');
         $modvars['enablemorearticlesincat'] = (bool) FormUtil::getPassedValue('enablemorearticlesincat', false, 'POST');
         $modvars['morearticlesincat'] = (int) FormUtil::getPassedValue('morearticlesincat', 0, 'POST');
+        $modvars['enabledescriptionvar'] = (bool) FormUtil::getPassedValue('enabledescriptionvar', false, 'POST');
+        $modvars['descriptionvarchars'] = (int) FormUtil::getPassedValue('descriptionvarchars', 250, 'POST');
         $modvars['enablecategorybasedpermissions'] = (bool) FormUtil::getPassedValue('enablecategorybasedpermissions', false, 'POST');
 
         $modvars['notifyonpending'] = (bool) FormUtil::getPassedValue('notifyonpending', false, 'POST');
