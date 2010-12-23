@@ -94,7 +94,7 @@
                     <div class="z-formrow">
                         <label for="news_descriptionvarchars">{gt text='How many characters of the index page teaser text should be shown in the description'}</label>
                         <input id="news_descriptionvarchars" type="text" name="descriptionvarchars" value="{$descriptionvarchars|safetext}" />
-                        <div class="z-informationmsg z-formnote">This is temporarily disabled. {* gt text="Notice: Check your theme templates and you probably have to adapt <em>meta name=\"description\" content=\"%s\"</em> to get the correct meta text in the header. When you don't want the long string also in the title of the page you have to adapt the titleplugin call to <em>%s</em>" tag1=$smarty.ldelim|cat:"pnpagegetvar name='description'"|cat:$smarty.rdelim|safetext tag2="<title>"|cat:$smarty.ldelim|cat:"title noslogan=1"|cat:$smarty.rdelim|cat:"</title>"|safetext *}</div>
+                        <div class="z-informationmsg z-formnote">{gt text="Notice: Check your theme templates and you may have to adapt <code>&lt;meta name=\"description\" content=\"%s\" /&gt;</code> to get the correct meta text in the header." tag1=$smarty.ldelim|cat:"\$metatags.description"|cat:$smarty.rdelim|safehtml}</div>
                     </div>
                 </div>
                 <div class="z-formrow">
