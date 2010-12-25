@@ -768,21 +768,27 @@ class News_Controller_Admin extends Zikula_Controller
         // create picture upload folder if needed
         if ($modvars['picupload_enabled']) {
             if ($createfolder && !empty($modvars['picupload_uploaddir'])) {
-                if (is_dir($modvars['picupload_uploaddir'])) {
-                    LogUtil::registerError($this->__f('Warning! The image upload directory at [%s] already exists. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                if ($modvars['picupload_uploaddir'][0] == '/') {
+                    LogUtil::registerError($this->__f("Warning! The image upload directory at [%s] appears to be 'above' the DOCUMENT_ROOT. Please choose a path relative to the webserver (e.g. images/news_picupload).", $modvars['picupload_uploaddir']));
                 } else {
-                    // Try to create the specified directory
-                    if (FileUtil::mkdirs($modvars['picupload_uploaddir'], 0777)) {
-                        // write a htaccess file in the image upload directory
-                        $htaccessContent = FileUtil::readFile('modules' . DIRECTORY_SEPARATOR . 'News' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'htaccess');
-
-                        if (FileUtil::writeFile($modvars['picupload_uploaddir'] . DIRECTORY_SEPARATOR . '.htaccess', $htaccessContent)) {
-                            LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s] and wrote an .htaccess file there for security. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
-                        } else {
-                            LogUtil::registerStatus($this__f('News publisher created the image upload directory successfully at [%s], but could not write the .htaccess file there. Make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                    if (is_dir($modvars['picupload_uploaddir'])) {
+                        if (!is_writable($modvars['picupload_uploaddir'])) {
+                            LogUtil::registerError($this->__f('Warning! The image upload directory at [%s] exists but is not writable by the webserver.', $modvars['picupload_uploaddir']));
                         }
                     } else {
-                        LogUtil::registerStatus($this->__f('Warning! News publisher could not create the specified image upload directory [%s]. Try to create it yourself and make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                        // Try to create the specified directory
+                        if (FileUtil::mkdirs($modvars['picupload_uploaddir'], 0777)) {
+                            // write a htaccess file in the image upload directory
+                            $htaccessContent = FileUtil::readFile('modules' . DIRECTORY_SEPARATOR . 'News' . DIRECTORY_SEPARATOR . 'docs' . DIRECTORY_SEPARATOR . 'htaccess');
+
+                            if (FileUtil::writeFile($modvars['picupload_uploaddir'] . DIRECTORY_SEPARATOR . '.htaccess', $htaccessContent)) {
+                                LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s] and wrote an .htaccess file there for security.', $modvars['picupload_uploaddir']));
+                            } else {
+                                LogUtil::registerStatus($this__f('News publisher created the image upload directory successfully at [%s], but could not write the .htaccess file there.', $modvars['picupload_uploaddir']));
+                            }
+                        } else {
+                            LogUtil::registerStatus($this->__f('Warning! News publisher could not create the specified image upload directory [%s]. Try to create it yourself and make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
+                        }
                     }
                 }
             }
@@ -808,5 +814,4 @@ class News_Controller_Admin extends Zikula_Controller
 
         return System::redirect(ModUtil::url('News', 'admin', 'main'));
     }
-
 }

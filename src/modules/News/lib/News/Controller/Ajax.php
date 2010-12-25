@@ -483,18 +483,22 @@ class News_Controller_Ajax extends Zikula_Controller
         $folder = FormUtil::getPassedValue('folder', null, 'POST');
         $enabled = false;
         if (!empty($folder)) {
-            if (is_dir($folder)) {
-                if (is_writable($folder)) {
-                    $output = '<img src="images/icons/extrasmall/ok.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified folder [%s] does exist and is writable.', $folder));
-                } else {
-                    $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified folder [%s] does exist, but is not writable. Make sure that this folder is accessible via the web and writable by the webserver.', $folder));
-                }
+            if ($folder[0] == '/') {
+                $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__("Specified path appears to be 'above' the DOCUMENT_ROOT. Please choose a path relative to the webserver (e.g. images/news_picupload)."));
             } else {
-                $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified folder [%s] does not exist yet. News pubisher will create this folder if you check the field below.', $folder));
-                $enabled = true;
+                if (is_dir($folder)) {
+                    if (is_writable($folder)) {
+                        $output = '<img src="images/icons/extrasmall/ok.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified path [%s] does exist and is writable.', $folder));
+                    } else {
+                        $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified path [%s] does exist, but is not writable. Make sure that this path is writable by the webserver.', $folder));
+                    }
+                } else {
+                    $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__f('Specified path [%s] does not exist yet. News pubisher will create this path if you check the field below.', $folder));
+                    $enabled = true;
+                }
             }
         } else {
-            $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__('Specified folder is an empty string, please fill in a folder (e.g. images/news_picupload).'));
+            $output = '<img src="images/icons/extrasmall/cancel.gif" width="16" height="16" />' . ' ' . DataUtil::formatForDisplayHTML($this->__('Specified path is an empty string, please fill in a path (e.g. images/news_picupload).'));
         }
         $response = array(
             'result' => $output,
