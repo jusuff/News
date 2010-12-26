@@ -251,7 +251,7 @@ class News_Controller_User extends Zikula_Controller
 
         // Notable by its absence there is no security check here
 
-        if (!isset($item['sid'])) {
+        if (!isset($item['sid']) || empty($item['sid'])) {
             // Create the news story
             $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
             if ($sid != false) {
