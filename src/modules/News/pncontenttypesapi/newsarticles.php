@@ -239,10 +239,9 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                     }
                 }
                 // Get the optional commentcount if EZComments is available
-                // TODO
-//            if ($this->dispcomments && ModUtil::available('EZComments') && ModUtil::isHooked('EZComments', 'News')) {
-//                $items[$k]['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $items[$k]['sid'], 'status' => 0));
-//            }
+                if ($this->dispcomments && ModUtil::available('EZComments')) {
+                    $items[$k]['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $items[$k]['sid'], 'status' => 0));
+                }
                 // Optional display of the hometext (frontpage teaser)
                 if ($this->disphometext) {
                     if ($this->maxhometextlength > 0 && strlen(strip_tags($items[$k]['hometext'])) > (int) $this->maxhometextlength) {

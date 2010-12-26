@@ -325,7 +325,7 @@ height:50px;
                 }
             }
             // Check for EZComments
-            if ($vars['dispcomments'] && ModUtil::available('EZComments') && HookUtil::hasProvider('hookhandler.ezcomments.ui.view')) {
+            if ($vars['dispcomments'] && ModUtil::available('EZComments')) {
                 $item['comments'] = ModUtil::apiFunc('EZComments', 'user', 'countitems', array('mod' => 'News', 'objectid' => $item['sid'], 'status' => 0));
             }
             if ($vars['disphometext']) {
