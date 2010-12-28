@@ -56,6 +56,7 @@ class News_Controller_User extends Zikula_Controller
         // to submission these values will be null but do need to be set
         if (empty($item)) {
             $item = array();
+            $item['sid'] = '';
             $item['__CATEGORIES__'] = array();
             $item['__ATTRIBUTES__'] = array();
             $item['title'] = '';
@@ -83,7 +84,8 @@ class News_Controller_User extends Zikula_Controller
                         'hometextcontenttype' => $item['hometextcontenttype'],
                         'bodytext' => $item['bodytext'],
                         'bodytextcontenttype' => $item['bodytextcontenttype'],
-                        'notes' => $item['notes']));
+                        'notes' => $item['notes'],
+                        'sid' => $item['sid']));
         }
 
         // Create output object
@@ -177,7 +179,8 @@ class News_Controller_User extends Zikula_Controller
             'to' => isset($story['to']) ? $story['to'] : null,
             'unlimited' => isset($story['unlimited']) && $story['unlimited'] ? true : false,
             'weight' => isset($story['weight']) ? $story['weight'] : 0,
-            'action' => isset($story['action']) ? $story['action'] : 0);
+            'action' => isset($story['action']) ? $story['action'] : 0,
+            'sid' => isset($story['sid']) ? $story['sid'] : null);
 
         // convert user times to server times (TZ compensation) refs #181
         //  can't do the below because values are YYYY-MM-DD HH:MM:SS and DateUtil value is in seconds.
@@ -211,7 +214,7 @@ class News_Controller_User extends Zikula_Controller
         // Validate the input
         $validationerror = News_Util::validateArticle($this, $item);
         // check hooked modules for validation
-        $sid = $item['sid'] ? $item['sid'] : null;
+        $sid = isset($item['sid']) ? $item['sid'] : null;
         $hookvalidators = $this->notifyHooks('news.hook.articles.validate.edit', $item, $sid, array(), new Zikula_Collection_HookValidationProviders())->getData();
         if ($hookvalidators->hasErrors()) {
             $validationerror .= $this->__('Error! Hooked content does not validate.') . "<br />";
@@ -247,23 +250,34 @@ class News_Controller_User extends Zikula_Controller
         }
 
         // Notable by its absence there is no security check here
-        // Create the news story
-        $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
-        if ($sid != false) {
-            // Success
-            LogUtil::registerStatus($this->__('Done! Created new article.'));
 
-            // Let any hooks know that we have created a new item
-            $this->notifyHooks('news.hook.articles.process.edit', $item, $sid);
+        if (!isset($item['sid']) || empty($item['sid'])) {
+            // Create the news story
+            $sid = ModUtil::apiFunc('News', 'user', 'create', $item);
+            if ($sid != false) {
+                // Success
+                LogUtil::registerStatus($this->__('Done! Created new article.'));
 
-            $this->notify($item, $modvars); // send notification email
-            if (isset($files) && $modvars['picupload_enabled']) {
-                $resized = News_ImageUtil::resizeImages($sid, $files, $modvars); // resize and move the uploaded pics
-                if ($item['action'] == 6) {
-                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $item['pictures'], array($resized, $item['pictures'])));
-                } else {
-                    LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $item['pictures'], array($resized, $item['pictures'])));
+                // Let any hooks know that we have created a new item
+                $this->notifyHooks('news.hook.articles.process.edit', $item, $sid);
+
+                $this->notify($item, $modvars); // send notification email
+                if (isset($files) && $modvars['picupload_enabled']) {
+                    $resized = News_ImageUtil::resizeImages($sid, $files, $modvars); // resize and move the uploaded pics
+                    if ($item['action'] == 6) {
+                        LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $item['pictures'], array($resized, $item['pictures'])));
+                    } else {
+                        LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $item['pictures'], array($resized, $item['pictures'])));
+                    }
                 }
+            }
+        } else {
+            // update the draft
+            $result = ModUtil::apiFunc('News', 'admin', 'update', $item);
+            if ($result) {
+                LogUtil::registerStatus($this->__('Story Updated.'));
+            } else {
+                LogUtil::registerStatus($this->__('Unable to update story.'));
             }
         }
         return System::redirect(ModUtil::url('News', $referertype, 'view'));
@@ -721,7 +735,8 @@ class News_Controller_User extends Zikula_Controller
         $this->view->assign('preview', array('title' => $title,
             'hometext' => $hometext,
             'bodytext' => $bodytext,
-            'notes' => $notes));
+            'notes' => $notes,
+            'sid' => $sid));
 
         return $this->view->fetch('user/preview.tpl');
     }

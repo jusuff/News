@@ -226,7 +226,7 @@
                 </div>
                 <div class="z-formrow">
                     <label for="news_sid">{gt text='Article ID'}</label>
-                    <input id="news_sid" readonly="readonly" name="story[sid]" size="5" value="" />
+                    <input id="news_sid" readonly="readonly" name="story[sid]" size="5" value="{$sid}" />
                 </div>
             </div>
         </fieldset>
@@ -306,8 +306,14 @@
             <button id="news_button_submit" class="z-btgreen" type="submit" name="story[action]" value="1" title="{gt text='Submit this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article'} {gt text='Submit'}</button>
             {else}
             <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish' __title='Publish this article' }<span id="news_button_text_publish"> {gt text='Publish'}</span></button>
-            <span id="news_button_savedraft_nonajax"><button id="news_button_draft_nonajax" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'} {gt text='Save as draft'}</button></span>
-            <span id="news_button_savedraft_ajax" class="hidelink"><a id="news_button_draft" href="javascript:void(0);" onclick="savedraft();">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft'  __title='Save this article as draft'}<span id="news_button_text_draft"> {gt text='Save as draft'}</span></a></span>
+            <span id="news_button_savedraft_nonajax">
+                <button id="news_button_draft_nonajax" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'} {gt text='Save as draft'}</button>
+            </span>
+            <span id="news_button_savedraft_ajax" class="hidelink">
+                <a id="news_button_draft" href="javascript:void(0);" onclick="savedraft();">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft'  __title='Save this article as draft'}
+                    <span id="news_button_text_draft"> {gt text='Save as draft'}</span>
+                </a>
+            </span>
             <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'} {gt text='Pending'}</button>
             {/if}
             <button id="news_button_preview" type="submit" name="story[action]" value="0" title="{gt text='Preview this article'}">{img src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview' __title='Preview this article'} {gt text='Preview'}</button>

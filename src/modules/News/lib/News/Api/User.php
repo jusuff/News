@@ -536,7 +536,7 @@ class News_Api_User extends Zikula_Api
         unset($info['format_type']);
 
         // Check for comments
-        if (ModUtil::available('EZComments') && HookUtil::hasProvider('hookhandler.ezcomments.ui.view') && $info['disallowcomments'] == 0) {
+        if (ModUtil::available('EZComments') && $info['disallowcomments'] == 0) {
             $info['commentcount'] = ModUtil::apiFunc('EZComments', 'user', 'countitems',
                     array('mod' => 'News',
                         'objectid' => $info['sid'],
@@ -559,7 +559,7 @@ class News_Api_User extends Zikula_Api
         $shorturlstype = System::getVar('shorturlstype');
 
         // Allowed to comment?
-        if (ModUtil::available('EZComments') &&  HookUtil::hasProvider('hookhandler.ezcomments.ui.view') && $info['disallowcomments'] == 0) {
+        if (ModUtil::available('EZComments') && $info['disallowcomments'] == 0) {
             if ($shorturls && $shorturlstype == 0) {
                 $comment = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'display', array('sid' => $info['sid'], 'from' => $info['from'], 'urltitle' => $info['urltitle'], '__CATEGORIES__' => $info['categories']), null, 'comments'));
             } else {
@@ -676,7 +676,7 @@ class News_Api_User extends Zikula_Api
 
         $comment = '';
         $commentlink = '';
-        if (ModUtil::available('EZComments') && HookUtil::hasProvider('hookhandler.ezcomments.ui.view') && $info['disallowcomments'] == 0) {
+        if (ModUtil::available('EZComments') && $info['disallowcomments'] == 0) {
             // Work out how to say 'comment(s)(?)' correctly
             $comment = ($info['commentcount'] == 0) ? $this->__('Comments?') : $this->_fn('%s comment', '%s comments', $info['commentcount'], $info['commentcount']);
 

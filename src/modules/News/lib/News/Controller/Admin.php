@@ -136,7 +136,8 @@ class News_Controller_Admin extends Zikula_Controller
                                 'hometextcontenttype' => $item['hometextcontenttype'],
                                 'bodytext' => $item['bodytext'],
                                 'bodytextcontenttype' => $item['bodytextcontenttype'],
-                                'notes' => $item['notes']));
+                                'notes' => $item['notes'],
+                                'sid' => $item['sid']));
         }
 
         // Get the module configuration vars

@@ -377,7 +377,7 @@ class News_Controller_Ajax extends Zikula_Controller
                                 'tonolimit' => isset($story['tonolimit']) ? $story['tonolimit'] : null,
                                 'to' => $story['to'],
                                 'weight' => $story['weight'],
-                                'pictures' => $story['pictures']))) {
+                                'pictures' => isset($story['pictures']) ? $story['pictures'] : 0))) {
 
                 $output = DataUtil::formatForDisplayHTML($this->__('Error! Could not save your changes.'));
             } else {

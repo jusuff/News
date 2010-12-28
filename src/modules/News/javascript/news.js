@@ -46,6 +46,7 @@ function news_init_check()
     if ($('news_multicategory_filter')) {
         news_filter_init(); 
     }
+    news_isdraft();
     // activate the title field for a new article
     if ($('news_title') && $F('news_title') == '') {
         $('news_title').focus();
@@ -340,7 +341,7 @@ function savedraft()
         });
 }
 
-function savedraft_update(req) 
+function savedraft_update(req)
 {
     if(!req.isSuccess()) {
         Zikula.showajaxerror(req.getMessage());
@@ -361,10 +362,20 @@ function savedraft_update(req)
     // make preview button "active" again
     $('news_button_preview').setStyle({color: '#565656'});
     $('news_button_preview').setOpacity(1.0);
-    $('news_button_preview').disabled = false;    
+    $('news_button_preview').disabled = false;
     $('news_sid').value = data.sid;
 //    pnsetselectoption('news_published_status',4);
 //    $('news_published_status').selectedIndex = 4;
+    return;
+}
+
+function news_isdraft()
+{
+    var sid = $F('news_sid');
+    if (sid != '') {
+        draftsaved = true;
+        $('news_button_text_draft').update(string_updatedraft);
+    }
     return;
 }
 

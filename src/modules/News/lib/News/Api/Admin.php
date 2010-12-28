@@ -98,7 +98,7 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$args['sid']}", ACCESS_EDIT)) {
+        if (!$this->_isSubmittor($item) && !SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$args['sid']}", ACCESS_EDIT)) {
             return LogUtil::registerPermissionError();
         }
 
@@ -261,5 +261,14 @@ class News_Api_Admin extends Zikula_Api
         }
 
         return $links;
+    }
+
+    private function _isSubmittor($item) {
+        $submittor = $item['cr_uid'];
+        $currentUser = SessionUtil::getVar('uid');
+        if (($submittor == $currentUser) && ($item['published_status'] <> 0)) {
+            return true;
+        }
+        return false;
     }
 }
