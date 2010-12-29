@@ -1,5 +1,3 @@
-﻿<!--[*  $Id: $  *]-->
-
 /* Based upon http://www.queness.com/post/152/simple-jquery-image-slide-show-with-semi-transparent-caption 
    Adjusted to prototype.js, E.Spaan, Jul 10 */
 
