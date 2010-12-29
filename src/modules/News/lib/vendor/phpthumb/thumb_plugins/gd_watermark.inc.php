@@ -1,4 +1,4 @@
-﻿class GdWatermarkLib
+class GdWatermarkLib
 {
 /**
 * Instance of GdThumb passed to this class

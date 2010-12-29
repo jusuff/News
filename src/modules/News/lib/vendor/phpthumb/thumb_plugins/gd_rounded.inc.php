@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 //Based on http://911-need-code-help.blogspot.com/2009/05/generate-images-with-round-corners-on.html
 //(Comments in spanish, sorry!)
 
