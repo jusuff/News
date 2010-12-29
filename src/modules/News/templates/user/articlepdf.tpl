@@ -1,4 +1,4 @@
-﻿<span class="news_category">{$preformat.category}</span>
+<span class="news_category">{$preformat.category}</span>
 <h3 class="news_title">{$info.catandtitle|safehtml}</h3>
 <p class="news_meta z-sub">{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$info.contributor tag2=$info.from|dateformat:'datetimebrief'}</p>
 {if $links.searchtopic neq '' AND $info.topicimage neq ''}
