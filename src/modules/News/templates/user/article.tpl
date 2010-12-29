@@ -1,13 +1,13 @@
 {* For ajax modify and image uploading *}
-{if $picupload_enabled}
+{if $modvars.News.picupload_enabled}
 {ajaxheader imageviewer="true"}
-{* if $enableajaxedit}
+{* if $modvars.News.enableajaxedit}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if *}
 {/if}
 
-{if $enabledescriptionvar}
-{setmetatag name='description' value=$info.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|strip_tags|trim|truncate:$descriptionvarchars}
+{if $modvars.News.enabledescriptionvar}
+{setmetatag name='description' value=$info.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|strip_tags|trim|truncate:$modvars.News.descriptionvarchars}
 {/if}
 
 <script type="text/javascript">
@@ -24,7 +24,7 @@
 </div>
 <div id="news_modify">&nbsp;</div>
 
-{if !empty($morearticlesincat)}
+{if !empty($modvars.News.morearticlesincat)}
 <div id="news_morearticlesincat">
 <h4>{gt text='More articles in category '}
 {foreach name='categorynames' from=$preformat.categorynames item='categoryname'}

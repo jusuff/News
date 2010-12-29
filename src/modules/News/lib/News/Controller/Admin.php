@@ -174,9 +174,6 @@ class News_Controller_Admin extends Zikula_Controller
         // Assign the default languagecode
         $this->view->assign('lang', ZLanguage::getLanguageCode());
 
-        // Pass the module configuration to the template
-        $this->view->assign($modvars);
-
         // Assign the item to the template
         $this->view->assign('item', $item);
 
@@ -560,13 +557,11 @@ class News_Controller_Admin extends Zikula_Controller
             $newsitems[] = $item;
         }
 
-        // Assign the items and modvars to the template
+        // Assign the items to the template
         $this->view->assign('newsitems', $newsitems);
-        $this->view->assign($modvars);
 
         // Assign the default and selected language
         $this->view->assign('lang', ZLanguage::getLanguageCode());
-        $this->view->assign('language', $language);
 
         // Assign the current status filter and the possible ones
         $this->view->assign('news_status', $news_status);
@@ -576,8 +571,6 @@ class News_Controller_Admin extends Zikula_Controller
             'sid' => $this->__('Article ID'),
             'weight' => $this->__('Article weight')));
 
-        //$this->view->assign('monthyear', $monthyear);
-        //$this->view->assign('newsmonths', $newsmonths);
         // Assign the categories information if enabled
         if ($modvars['enablecategorization']) {
             $this->view->assign('catregistry', $catregistry);
@@ -684,7 +677,6 @@ class News_Controller_Admin extends Zikula_Controller
         $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
 
         // assign the module variables
-        $this->view->assign($this->getVars());
         $this->view->assign('properties', $properties);
         $this->view->assign('property', $propertyIndex);
 

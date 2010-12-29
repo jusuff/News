@@ -106,8 +106,6 @@ class News_Controller_User extends Zikula_Controller
             }
         }
 
-        $this->view->assign($modvars);
-
         // Assign the default languagecode
         $this->view->assign('lang', ZLanguage::getLanguageCode());
 
@@ -373,9 +371,6 @@ class News_Controller_User extends Zikula_Controller
         // assign various useful template variables
         $this->view->assign('startnum', $startnum);
         $this->view->assign('lang', $lang);
-        $this->view->assign($modvars);
-        $this->view->assign('shorturls', System::getVar('shorturls'));
-        $this->view->assign('shorturlstype', System::getVar('shorturlstype'));
 
         // assign the root category
         $this->view->assign('category', $cat);
@@ -580,7 +575,6 @@ class News_Controller_User extends Zikula_Controller
             'page' => $page));
 
         $modvars = $this->getVars();
-        $this->view->assign($modvars);
         $this->view->assign('lang', ZLanguage::getLanguageCode());
 
         // get more articletitles in the categories of this article
@@ -879,10 +873,6 @@ class News_Controller_User extends Zikula_Controller
         $this->view->assign(array('info' => $info,
             'links' => $links,
             'preformat' => $preformat));
-
-        $this->view->assign('enablecategorization', $modvars['enablecategorization']);
-        $this->view->assign('catimagepath', $modvars['catimagepath']);
-        $this->view->assign('pdflink', $modvars['pdflink']);
 
         // Store output in variable
         $articlehtml = $this->view->fetch('user/articlepdf.tpl');

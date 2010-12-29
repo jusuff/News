@@ -1,6 +1,6 @@
 {ajaxheader modname='News' filename='news.js' effects=true dragdrop=true noscriptaculous=true}
 {pageaddvar name='javascript' value='modules/News/javascript/sizecheck.js'}
-{if $enableattribution}
+{if $modvars.News.enableattribution}
 {pageaddvar name="javascript" value="javascript/helpers/Zikula.itemlist.js"}
 {/if}
 {pageaddvar name='javascript' value='modules/News/javascript/prototype-base-extensions.js'}
@@ -8,7 +8,7 @@
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker.js'}
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker-locale.js'}
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
-{if $picupload_enabled AND $accesspicupload AND $picupload_maxpictures gt 1}
+{if $modvars.News.picupload_enabled AND $modvars.News.accesspicupload AND $modvars.News.picupload_maxpictures gt 1}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if}
 
@@ -28,7 +28,7 @@
     var string_updatedraft = "{{gt text='Update draft'}}";
     var string_savingdraft = "{{gt text='Saving draft...'}}";
     var string_emptytitle = "{{gt text='<strong>Title is empty, draft not saved!</strong>'}}";
-    {{if $enableattribution}}
+    {{if $modvars.News.enableattribution}}
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
         itemlist_news_attributes = new Zikula.itemlist('news_attributes');
@@ -43,9 +43,9 @@
 
 <h3>{$templatetitle}</h3>
 
-{if $accesspicupload AND $picupload_enabled}
+{if $modvars.News.accesspicupload AND $modvars.News.picupload_enabled}
 <form id="news_user_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="MAX_FILE_SIZE" value="{$picupload_maxfilesize|safetext}" />
+    <input type="hidden" name="MAX_FILE_SIZE" value="{$modvars.News.picupload_maxfilesize|safetext}" />
 {else}
 <form id="news_user_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="application/x-www-form-urlencoded">
 {/if}
@@ -80,7 +80,7 @@
             </div>
             {/if}
 
-            {if $enablecategorization}
+            {if $modvars.News.enablecategorization}
             <div class="z-formrow">
                 <label>{gt text='Category'}</label>
                 {gt text='Choose category' assign='lblDef'}
@@ -96,7 +96,7 @@
             {if $modvars.ZConfig.multilingual}
             <div class="z-formrow">
                 <label for="news_language">{gt text='Language'}</label>
-                {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
+                {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$modvars.ZConfig.language_i18n|default:''}
             </div>
             {/if}
         </fieldset>
@@ -152,20 +152,20 @@
             {/if}
         </fieldset>
         
-        {if $picupload_enabled AND $accesspicupload}
+        {if $modvars.News.picupload_enabled AND $modvars.News.accesspicupload}
         <fieldset>
             <legend>{gt text='Pictures'}</legend>
-			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
-            <input type="hidden" name="MAX_FILE_SIZE" value="{$picupload_maxfilesize}" />
-            {if $picupload_maxpictures eq 1}
+			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$modvars.News.picupload_maxfilesize/1000`"}</label>
+            <input type="hidden" name="MAX_FILE_SIZE" value="{$modvars.News.picupload_maxfilesize}" />
+            {if $modvars.News.picupload_maxpictures eq 1}
 			<input id="news_files_element" name="news_files[0]" type="file">
             {else}
 			<input id="news_files_element" name="news_files" type="file"><br>
-            <span class="z-sub">{gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$picupload_maxpictures}</span>
+            <span class="z-sub">{gt text='(max files %s, first picture is used as thumbnail in the index teaser page for this article.)' tag1=$modvars.News.picupload_maxpictures}</span>
             <div id="news_files_list"></div>
             <script type="text/javascript">
                 // <![CDATA[
-                var multi_selector = new MultiSelector(document.getElementById('news_files_list'), {{$picupload_maxpictures}} );
+                var multi_selector = new MultiSelector(document.getElementById('news_files_list'), {{$modvars.News.picupload_maxpictures}} );
                 multi_selector.addElement( document.getElementById( 'news_files_element' ));
                 // ]]>
             </script>
@@ -233,7 +233,7 @@
             // ]]>
         </script>
 
-        {if $enableattribution}
+        {if $modvars.News.enableattribution}
         <fieldset>
             <legend><a id="news_attributes_collapse" href="javascript:void(0);"><span id="news_attributes_showhide">{gt text='Show'}</span> {gt text='Article attributes'}</a></legend>
             <div id="news_attributes_details">

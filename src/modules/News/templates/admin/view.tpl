@@ -15,7 +15,7 @@
         {/foreach}
     </p>
 
-    {if $enablecategorization && $numproperties > 0}
+    {if $modvars.News.enablecategorization && $numproperties > 0}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset id="news_multicategory_filter">
             <legend>{gt text="Filter"}</legend>
@@ -44,7 +44,7 @@
             {if $modvars.ZConfig.multilingual}
             &nbsp;
             <label for="news_language">{gt text='Language'}</label>
-            {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
+            {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$modvars.ZConfig.language_i18n|default:''}
             {/if}
             {/nocache}
             &nbsp;
@@ -65,7 +65,7 @@
         <div id="news_multicategory_filter">
             <label for="news_language">{gt text='Language'}</label>
             {nocache}
-            {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$language|default:''}
+            {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$modvars.ZConfig.language_i18n|default:''}
             {/nocache}
             <label for="news_status">{gt text='Status'}</label>
             {html_options name='news_status' id='news_status' options=$itemstatus selected=$status}
@@ -81,10 +81,10 @@
                 <th>{gt text='ID'}</th>
                 <th>{gt text='Title'}</th>
                 <th>{gt text='Contributor'}</th>
-                {if $enablecategorization}
+                {if $modvars.News.enablecategorization}
                 <th>{gt text='Category'}</th>
                 {/if}
-                {if $picupload_enabled}
+                {if $modvars.News.picupload_enabled}
                 <th>{gt text='Pictures'}</th>
                 {/if}
                 <th>{gt text='Index page<br />listing / Weight'}</th>
@@ -102,12 +102,12 @@
                     {if $newsitem.published_status eq 4}<strong><em> - {gt text='Draft'}</em></strong>{/if}
                 </td>
                 <td>{$newsitem.contributor|safetext}</td>
-                {if $enablecategorization}
+                {if $modvars.News.enablecategorization}
                 <td class="news_categorieslist">
                     {assignedcategorieslist item=$newsitem}
                 </td>
                 {/if}
-                {if $picupload_enabled}
+                {if $modvars.News.picupload_enabled}
                 <td>
                     {$newsitem.pictures|safetext}
                 </td>
@@ -133,7 +133,7 @@
                 </td>
             </tr>
             {foreachelse}
-            <tr class="z-datatableempty"><td colspan="{if $enablecategorization}7{else}6{/if}">{gt text='No articles currently in database.'}</td></tr>
+            <tr class="z-datatableempty"><td colspan="{if $modvars.News.enablecategorization}7{else}6{/if}">{gt text='No articles currently in database.'}</td></tr>
             {/foreach}
         </tbody>
     </table>

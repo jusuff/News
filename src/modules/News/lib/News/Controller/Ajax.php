@@ -58,7 +58,6 @@ class News_Controller_Ajax extends Zikula_Controller
         $this->view->setCaching(false);
 
         $modvars = ModUtil::getVar('News');
-        $this->view->assign($modvars);
 
         if ($modvars['enablecategorization']) {
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
