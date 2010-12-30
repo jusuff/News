@@ -97,7 +97,8 @@
             <tr class="{cycle values='z-odd,z-even'}">
                 <td>{$newsitem.sid|safetext}</td>
                 <td>
-                    {$newsitem.title|strip_tags|safetext}
+                    {include file='admin/publisheddata.tpl' assign='publisheddata'}
+                    <span title='{$publisheddata}' class='z-icon-es-info tooltips'></span>{$newsitem.title|strip_tags|safetext}
                     {if $newsitem.published_status eq 2}<strong><em> - {gt text='Pending Review'}</em></strong>{/if}
                     {if $newsitem.published_status eq 4}<strong><em> - {gt text='Draft'}</em></strong>{/if}
                 </td>
