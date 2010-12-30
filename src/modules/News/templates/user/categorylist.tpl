@@ -54,9 +54,9 @@
                 <span class="z-sub">
                     {nocache}
                     {if $category.category.news_totalarticlecount gt 0}
-                        {if $category.category.news_articlecount gt 0}{gt text='%s article.' plural='%s articles.' count=$category.category.news_articlecount tag1=$category.category.news_articlecount}{/if}
+                        {if $category.category.news_articlecount gt 0}{gt text='%s article' plural='%s articles' count=$category.category.news_articlecount tag1=$category.category.news_articlecount}{/if}
                         {if $category.category.news_totalarticlecount gt $category.category.news_articlecount}{$category.category.news_totalarticlecount} {gt text='Total'}{/if}
-                        {if $category.category.news_yourarticlecount gt 0}{gt text='%s contributed by you.' tag1=$category.category.news_yourarticlecount}{/if}
+                        {if $category.category.news_yourarticlecount gt 0}{gt text='%s contributed by you' tag1=$category.category.news_yourarticlecount}{/if}
                     {else}
                         {gt text='Currently no articles.'}
                     {/if}
@@ -97,9 +97,9 @@
                         <span class="z-sub">
                             {nocache}
                             {if $subcat.category.news_totalarticlecount gt 0}
-                                {if $subcat.category.news_articlecount gt 0}{gt text='%s article.' plural='%s articles.' count=$subcat.category.news_articlecount tag1=$subcat.category.news_articlecount}{/if}
+                                {if $subcat.category.news_articlecount gt 0}{gt text='%s article' plural='%s articles' count=$subcat.category.news_articlecount tag1=$subcat.category.news_articlecount}{/if}
                                 {if $subcat.category.news_totalarticlecount gt $subcat.category.news_articlecount}| {$subcat.category.news_totalarticlecount} {gt text='Total'}{/if}
-                                {if $subcat.category.news_yourarticlecount gt 0}| {gt text='%s contributed by you.' tag1=$subcat.category.news_yourarticlecount}{/if}
+                                {if $subcat.category.news_yourarticlecount gt 0}| {gt text='%s contributed by you' tag1=$subcat.category.news_yourarticlecount}{/if}
                             {else}
                                 {gt text='Currently no articles.'}
                             {/if}

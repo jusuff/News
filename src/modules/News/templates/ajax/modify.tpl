@@ -71,7 +71,7 @@
             <div class="z-formrow">
                 <label for="news_hometext"><strong>{gt text='Index page teaser text' domain='module_news'}</strong></label>
                 <textarea id="news_hometext" class="z-form-text" name="story[hometext]" cols="40" rows="10">{$hometext|safetext}</textarea>
-                <span id="news_hometext_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)' domain='module_news'}</span>
+                <span id="news_hometext_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='4,294,967,295' domain='module_news'}</span>
             </div>
 
             {if $formattedcontent eq 0}
@@ -87,7 +87,7 @@
             <div class="z-formrow">
                 <label for="news_bodytext"><strong>{gt text='Article body text' domain='module_news'}</strong></label>
                 <textarea id="news_bodytext" class="z-form-text" name="story[bodytext]" cols="40" rows="10">{$bodytext|safetext}</textarea>
-                <span id="news_bodytext_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)' domain='module_news'}</span>
+                <span id="news_bodytext_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='4,294,967,295' domain='module_news'}</span>
             </div>
 
             {if $formattedcontent eq 0}
@@ -104,7 +104,7 @@
                 <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><span id="news_notes_showhide">{gt text='Show' domain='module_news'}</span> {gt text='Footnote' domain='module_news'}</a></label>
                 <p id="news_notes_details">
                     <textarea id="news_notes" class="z-form-text" name="story[notes]" cols="40" rows="10">{$notes|safetext}</textarea>
-                    <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)' domain='module_news'}</span>
+                    <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='65,536' domain='module_news'}</span>
                 </p>
             </div>
         </fieldset>

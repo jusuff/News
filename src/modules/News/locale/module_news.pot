@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zikula 1.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-30 16:25+0000\n"
+"POT-Creation-Date: 2010-12-30 17:50+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -531,18 +531,18 @@ msgstr ""
 #: lib/News/Controller/User.php:266
 #, php-format
 msgid ""
-"%s out of %s picture was uploaded and resized. Article now has draft status, "
-"since not all pictures were uploaded."
+"%1$s out of %2$s picture was uploaded and resized. Article now has draft "
+"status, since not all pictures were uploaded."
 msgid_plural ""
-"%s out of %s pictures were uploaded and resized. Article now has draft "
+"%1$s out of %2$s pictures were uploaded and resized. Article now has draft "
 "status, since not all pictures were uploaded."
 msgstr[0] ""
 msgstr[1] ""
 
 #: lib/News/Controller/User.php:268
 #, php-format
-msgid "%s out of %s picture was uploaded and resized."
-msgid_plural "%s out of %s pictures were uploaded and resized."
+msgid "%1$s out of %2$s picture was uploaded and resized."
+msgid_plural "%1$s out of %2$s pictures were uploaded and resized."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -569,7 +569,7 @@ msgstr ""
 
 #: lib/News/Controller/User.php:568
 #, php-format
-msgid " :: page %s"
+msgid "page %s"
 msgstr ""
 
 #: lib/News/Controller/User.php:648
@@ -659,7 +659,7 @@ msgid "Article date/time"
 msgstr ""
 
 #: lib/News/Controller/Admin.php:571 templates/admin/create.tpl:226
-#: templates/admin/modifyconfig.tpl:51 templates/admin/modifyconfig.tpl:268
+#: templates/admin/modifyconfig.tpl:51 templates/admin/modifyconfig.tpl:269
 msgid "Article ID"
 msgstr ""
 
@@ -930,7 +930,8 @@ msgstr ""
 #: templates/user/create.tpl:113 templates/user/create.tpl:147
 #: templates/ajax/modify.tpl:74 templates/ajax/modify.tpl:90
 #: templates/ajax/modify.tpl:107
-msgid "(Limit: 65,536 characters)"
+#, php-format
+msgid "(Limit: %s characters)"
 msgstr ""
 
 #: templates/admin/create.tpl:127 templates/admin/modify.tpl:121
@@ -1080,7 +1081,7 @@ msgid "Preview"
 msgstr ""
 
 #: templates/admin/create.tpl:315 templates/admin/modify.tpl:340
-#: templates/admin/delete.tpl:18 templates/admin/modifyconfig.tpl:279
+#: templates/admin/delete.tpl:18 templates/admin/modifyconfig.tpl:280
 #: templates/user/create.tpl:294 templates/ajax/modify.tpl:256
 msgid "Cancel"
 msgstr ""
@@ -1129,10 +1130,6 @@ msgstr ""
 
 #: templates/admin/modify.tpl:312
 msgid "Approve and publish this article"
-msgstr ""
-
-#: templates/admin/modify.tpl:312
-msgid "Approve and Publish"
 msgstr ""
 
 #: templates/admin/modify.tpl:312
@@ -1374,55 +1371,54 @@ msgid ""
 "description"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:97
+#: templates/admin/modifyconfig.tpl:98
 #, php-format
 msgid ""
-"Notice: Check your theme templates and you may have to adapt <code>&lt;meta "
-"name=\"description\" content=\"%s\" /&gt;</code> to get the correct meta "
-"text in the header."
+"Notice: Check your theme templates and you may have to adapt %s to get the "
+"correct meta text in the header."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:101
+#: templates/admin/modifyconfig.tpl:102
 msgid "Notify moderators when a new pending article is submitted for review"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:106
+#: templates/admin/modifyconfig.tpl:107
 msgid ""
 "Whenever a new article is submitted as Pending Review, the admin or a list "
 "of E-mail addresses can be informed of this event with a notification E-mail."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:107
+#: templates/admin/modifyconfig.tpl:108
 msgid "From name (leave empty for sitename)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:111
+#: templates/admin/modifyconfig.tpl:112
 msgid "From address (leave empty for admin E-mail address)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:115
+#: templates/admin/modifyconfig.tpl:116
 msgid "To name (leave empty for sitename)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:119
+#: templates/admin/modifyconfig.tpl:120
 msgid ""
 "To address (comma seperated list of E-Mail addresses, leave empty for admin "
 "E-mail address)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:123
+#: templates/admin/modifyconfig.tpl:124
 msgid "E-mail subject"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:127
+#: templates/admin/modifyconfig.tpl:128
 msgid "Send E-mail as HTML "
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:132
+#: templates/admin/modifyconfig.tpl:133
 msgid "Display a PDF link for the articles in the index page"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:137
+#: templates/admin/modifyconfig.tpl:138
 msgid ""
 "The PDF link is based on <a href=\"http://www.tcpdf.org\">TCPDF</a>. The "
 "News module ships with a subset of available fonts. If you wish to expand "
@@ -1432,29 +1428,29 @@ msgid ""
 "fonts used."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:140
+#: templates/admin/modifyconfig.tpl:141
 msgid "TCPDF Header logo image (absolute path or relative to tcpdf/images)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:142
+#: templates/admin/modifyconfig.tpl:143
 msgid ""
 "Default Header logo is defined by TCPDF and in PathToTCPDF/images folder. "
 "tcpdf_logo.jpg has a width of 30"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:145
+#: templates/admin/modifyconfig.tpl:146
 msgid "TCPDF header logo width in mm"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:152
+#: templates/admin/modifyconfig.tpl:153
 msgid "Picture uploading"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:154
+#: templates/admin/modifyconfig.tpl:155
 msgid "Allow article picture(s) uploading"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:156
+#: templates/admin/modifyconfig.tpl:157
 msgid ""
 "Notice: Enabling picture uploading has a small security risk, since the "
 "upload folder needs to have write permission for the webserver. Make sure "
@@ -1464,148 +1460,148 @@ msgid ""
 "picture upload folder. This restricts access to images only."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:160
+#: templates/admin/modifyconfig.tpl:161
 msgid "Allowed picture extension"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:164
+#: templates/admin/modifyconfig.tpl:165
 msgid "Image float on the index page"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:166 templates/admin/modifyconfig.tpl:174
+#: templates/admin/modifyconfig.tpl:167 templates/admin/modifyconfig.tpl:175
 msgid "Left - image floats to the left and text wraps around it"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:167 templates/admin/modifyconfig.tpl:175
+#: templates/admin/modifyconfig.tpl:168 templates/admin/modifyconfig.tpl:176
 msgid "Right - image floats to the right and text wraps around it"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:168 templates/admin/modifyconfig.tpl:176
+#: templates/admin/modifyconfig.tpl:169 templates/admin/modifyconfig.tpl:177
 msgid "None - text is not wrapped around the image"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:172
+#: templates/admin/modifyconfig.tpl:173
 msgid "Image float on the article display page"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:180
+#: templates/admin/modifyconfig.tpl:181
 msgid "How many pictures are allowed"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:184
+#: templates/admin/modifyconfig.tpl:185
 msgid "Maximum file size of the pictures (in Bytes)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:188
+#: templates/admin/modifyconfig.tpl:189
 msgid "What thumbnail sizing to use"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:190
+#: templates/admin/modifyconfig.tpl:191
 msgid "Best fit (keeps aspect ratio)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:191
+#: templates/admin/modifyconfig.tpl:192
 msgid "Fixed size (scale and crop)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:195
+#: templates/admin/modifyconfig.tpl:196
 msgid "Maximum width of the full size pictures (in pixels)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:199
+#: templates/admin/modifyconfig.tpl:200
 msgid "Maximum height of the full size pictures (in pixels)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:203
+#: templates/admin/modifyconfig.tpl:204
 msgid "Maximum width of the thumbnails (in pixels)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:207
+#: templates/admin/modifyconfig.tpl:208
 msgid "Maximum height of the thumbnails (in pixels)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:211
+#: templates/admin/modifyconfig.tpl:212
 msgid ""
 "Maximum width of the thumbnail in the article display intro text (in pixels)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:215
+#: templates/admin/modifyconfig.tpl:216
 msgid ""
 "Maximum height of the thumbnail in the article display intro text (in pixels)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:219
+#: templates/admin/modifyconfig.tpl:220
 msgid "Directory where the images are uploaded"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:224
+#: templates/admin/modifyconfig.tpl:225
 msgid "Create the specified upload directory"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:232
+#: templates/admin/modifyconfig.tpl:233
 msgid "Permalinks"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:233
+#: templates/admin/modifyconfig.tpl:234
 msgid ""
 "You can select a pre-defined permalink format, or define your custom format."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:236
+#: templates/admin/modifyconfig.tpl:237
 msgid "Format based on date and name"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:239
+#: templates/admin/modifyconfig.tpl:240
 msgid "your-article-title"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:243
+#: templates/admin/modifyconfig.tpl:244
 msgid "Numeric format"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:250
+#: templates/admin/modifyconfig.tpl:251
 msgid "Custom format"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:257
+#: templates/admin/modifyconfig.tpl:258
 msgid "Custom format definition"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:259
+#: templates/admin/modifyconfig.tpl:260
 msgid ""
 "Notice: A custom format definition must contain at least either '%articleid"
 "%' or '%articletitle%', in order to be able to identify the article."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:261
+#: templates/admin/modifyconfig.tpl:262
 msgid "Acceptable values for use in custom format definition:"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:263
+#: templates/admin/modifyconfig.tpl:264
 msgid "Year of publication (including century numerals)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:264
+#: templates/admin/modifyconfig.tpl:265
 msgid "Month of publication, as a number (ergo 1 to 12)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:265
+#: templates/admin/modifyconfig.tpl:266
 msgid "Month of publication as a name (ergo January to December)"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:266
+#: templates/admin/modifyconfig.tpl:267
 msgid "Day"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:267
+#: templates/admin/modifyconfig.tpl:268
 msgid "Article title"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:269
+#: templates/admin/modifyconfig.tpl:270
 msgid "Article category"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:278 templates/ajax/modify.tpl:251
+#: templates/admin/modifyconfig.tpl:279 templates/ajax/modify.tpl:251
 msgid "Save"
 msgstr ""
 
@@ -1615,7 +1611,7 @@ msgstr ""
 #: templates/printer/index.tpl:11 templates/printer/article.tpl:21
 #: templates/printer/article.tpl:33 templates/atom/index.tpl:10
 #, php-format
-msgid "Picture %s for %s"
+msgid "Picture %1$s for %2$s"
 msgstr ""
 
 #: templates/user/articlecontent.tpl:48 templates/printer/article.tpl:30
@@ -1631,6 +1627,7 @@ msgid "Contract all"
 msgstr ""
 
 #: templates/user/archives.tpl:24 templates/user/categorylist.tpl:16
+#: templates/user/categorylist.tpl:57 templates/user/categorylist.tpl:100
 #, php-format
 msgid "%s article"
 msgid_plural "%s articles"
@@ -1667,20 +1664,13 @@ msgstr ""
 msgid "Edit this category"
 msgstr ""
 
-#: templates/user/categorylist.tpl:57 templates/user/categorylist.tpl:100
-#, php-format
-msgid "%s article."
-msgid_plural "%s articles."
-msgstr[0] ""
-msgstr[1] ""
-
 #: templates/user/categorylist.tpl:58 templates/user/categorylist.tpl:101
 msgid "Total"
 msgstr ""
 
 #: templates/user/categorylist.tpl:59 templates/user/categorylist.tpl:102
 #, php-format
-msgid "%s contributed by you."
+msgid "%s contributed by you"
 msgstr ""
 
 #: templates/user/categorylist.tpl:61 templates/user/categorylist.tpl:104

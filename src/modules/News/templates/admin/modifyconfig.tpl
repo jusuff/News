@@ -94,7 +94,8 @@
                     <div class="z-formrow">
                         <label for="news_descriptionvarchars">{gt text='How many characters of the index page teaser text should be shown in the description'}</label>
                         <input id="news_descriptionvarchars" type="text" name="descriptionvarchars" value="{$modvars.News.descriptionvarchars|safetext}" />
-                        <div class="z-informationmsg z-formnote">{gt text="Notice: Check your theme templates and you may have to adapt <code>&lt;meta name=\"description\" content=\"%s\" /&gt;</code> to get the correct meta text in the header." tag1=$smarty.ldelim|cat:"\$metatags.description"|cat:$smarty.rdelim|safehtml}</div>
+                        {assign var=meta_sample value='<code>&lt;meta name="description" content="'|cat:$smarty.ldelim|cat:"\$metatags.description"|cat:$smarty.rdelim|cat:'" /&gt;</code>'}
+                        <div class="z-informationmsg z-formnote">{gt text="Notice: Check your theme templates and you may have to adapt %s to get the correct meta text in the header." tag1=$meta_sample}</div>
                     </div>
                 </div>
                 <div class="z-formrow">

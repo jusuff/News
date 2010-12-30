@@ -115,7 +115,7 @@
                 <div class="z-formrow">
                     <label for="news_hometext"><strong>{gt text='Index page teaser text'}</strong></label>
                     <textarea id="news_hometext" name="story[hometext]" cols="40" rows="10">{$item.hometext|safetext}</textarea>
-                    <span id="news_hometext_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)'}</span>
+                    <span id="news_hometext_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='4,294,967,295'}</span>
                 </div>
 
                 {if $formattedcontent eq 0}
@@ -131,7 +131,7 @@
                 <div class="z-formrow">
                     <label for="news_bodytext"><strong>{gt text='Article body text'}</strong></label>
                     <textarea id="news_bodytext" name="story[bodytext]" cols="40" rows="10">{$item.bodytext|safetext}</textarea>
-                    <span id="news_bodytext_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)'}</span>
+                    <span id="news_bodytext_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='4,294,967,295'}</span>
                 </div>
 
                 {if $formattedcontent eq 0}
@@ -148,7 +148,7 @@
                     <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><span id="news_notes_showhide">{gt text='Show'}</span> {gt text='Footnote'}</a></label>
                     <p id="news_notes_details">
                         <textarea id="news_notes" name="story[notes]" cols="40" rows="10">{$item.notes|safetext}</textarea>
-                        <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)'}</span>
+                        <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='65,536'}</span>
                     </p>
                 </div>
             </fieldset>
@@ -156,7 +156,7 @@
             {if $modvars.News.picupload_enabled}
             <fieldset>
                 <legend>{gt text='Pictures'}</legend>
-                <label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$picupload_maxfilesize/1000`"}</label>
+                <label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1=`$modvars.News.picupload_maxfilesize/1000`}</label>
                 {if $modvars.News.picupload_maxpictures eq 1}
                 <input id="news_files_element" name="news_files[0]" type="file">
                 {else}
@@ -314,7 +314,7 @@
 
             <div class="z-buttonrow z-buttons z-center">
                 {if $item.published_status eq 2}
-                <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Approve and publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Approve and Publish'  __title='Approve and publish this article' }{gt text='Approve and'} <span id="news_button_text_publish"> {gt text='Publish'}</span></button>
+                <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Approve and publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Approve and publish this article'  __title='Approve and publish this article' }{gt text='Approve and'} <span id="news_button_text_publish"> {gt text='Publish'}</span></button>
                 {elseif $item.published_status eq 0}
                 <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Update this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Update'  __title='Update this article' } {gt text='Update'}</button>
                 {else}

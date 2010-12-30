@@ -263,9 +263,9 @@ class News_Controller_User extends Zikula_Controller
                 if (isset($files) && $modvars['picupload_enabled']) {
                     $resized = News_ImageUtil::resizeImages($sid, $files, $modvars); // resize and move the uploaded pics
                     if ($item['action'] == 6) {
-                        LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%s out of %s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $item['pictures'], array($resized, $item['pictures'])));
+                        LogUtil::registerStatus($this->_fn('%1$s out of %2$s picture was uploaded and resized. Article now has draft status, since not all pictures were uploaded.', '%1$s out of %2$s pictures were uploaded and resized. Article now has draft status, since not all pictures were uploaded.', $item['pictures'], array($resized, $item['pictures'])));
                     } else {
-                        LogUtil::registerStatus($this->_fn('%s out of %s picture was uploaded and resized.', '%s out of %s pictures were uploaded and resized.', $item['pictures'], array($resized, $item['pictures'])));
+                        LogUtil::registerStatus($this->_fn('%1$s out of %2$s picture was uploaded and resized.', '%1$s out of %2$s pictures were uploaded and resized.', $item['pictures'], array($resized, $item['pictures'])));
                     }
                 }
             }
@@ -565,7 +565,7 @@ class News_Controller_User extends Zikula_Controller
         if ($numpages <= 1) {
             PageUtil::setVar('title', $info['title']);
         } else {
-            PageUtil::setVar('title', $info['title'] . $this->__f(' :: page %s', $page));
+            PageUtil::setVar('title', $info['title'] . ' :: ' . $this->__f('page %s', $page));
         }
 
         // Assign the story info arrays

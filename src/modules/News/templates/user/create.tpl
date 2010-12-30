@@ -112,7 +112,7 @@
             <div class="z-formrow">
                 <label for="news_hometext"><strong>{gt text='Index page teaser text'}</strong></label>
                 <textarea id="news_hometext" name="story[hometext]" cols="40" rows="10">{$hometext|safetext}</textarea>
-                <span id="news_hometext_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)'}</span>
+                <span id="news_hometext_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='4,294,967,295'}</span>
             </div>
 
             {if $formattedcontent eq 0}
@@ -128,7 +128,7 @@
             <div class="z-formrow">
                 <label for="news_bodytext"><strong>{gt text='Article body text'}</strong></label>
                 <textarea id="news_bodytext" name="story[bodytext]" cols="40" rows="10">{$bodytext|safetext}</textarea>
-                <span id="news_bodytext_remaining" class="z-formnote z-sub">{gt text='#{chars} characters out of 65,536'}</span>
+                <span id="news_bodytext_remaining" class="z-formnote z-sub">{gt text='#{chars} characters out of 4,294,967,295'}</span>
             </div>
 
             {if $formattedcontent eq 0}
@@ -146,7 +146,7 @@
                 <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><span id="news_notes_showhide">{gt text='Show'}</span> {gt text='Footnote'}</a></label>
                 <p id="news_notes_details">
                     <textarea id="news_notes" name="story[notes]" cols="40" rows="10">{$notes|safetext}</textarea>
-                    <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: 65,536 characters)'}</span>
+                    <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='65,536'}</span>
                 </p>
             </div>
             {/if}
