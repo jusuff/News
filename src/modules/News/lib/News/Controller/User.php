@@ -594,14 +594,13 @@ class News_Controller_User extends Zikula_Controller
                     $catFilter[$property] = $info['categories'][$property]['id'];
                 }
                 // get matching news articles
-                // TODO exclude current article, query does not work yet :-(
                 $morearticlesincat = ModUtil::apiFunc('News', 'user', 'getall',
                                 array('numitems' => $morearticlesincat,
                                     'status' => 0,
                                     'filterbydate' => true,
                                     'category' => $catFilter,
                                     'catregistry' => $catregistry,
-                                    'query' => array('sid', '!=', $sid)));
+                                    'query' => array(0 => array('sid', '!=', $sid))));
                 $this->view->assign('morearticlesincat', $morearticlesincat);
             }
         }
