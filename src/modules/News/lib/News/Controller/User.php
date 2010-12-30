@@ -600,7 +600,7 @@ class News_Controller_User extends Zikula_Controller
                                     'filterbydate' => true,
                                     'category' => $catFilter,
                                     'catregistry' => $catregistry,
-                                    'query' => array(0 => array('sid', '!=', $sid))));
+                                    'query' => array(array('sid', '!=', $sid))));
                 $this->view->assign('morearticlesincat', $morearticlesincat);
             }
         }

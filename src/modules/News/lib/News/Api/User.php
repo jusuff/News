@@ -54,91 +54,10 @@ class News_Api_User extends Zikula_Api
             return $items;
         }
 
-        $args['catFilter'] = array();
-        if (isset($args['category']) && !empty($args['category'])){
-            if (is_array($args['category'])) {
-                $args['catFilter'] = $args['category'];
-            } elseif (isset($args['property'])) {
-                $property = $args['property'];
-                $args['catFilter'][$property] = $args['category'];
-            }
-            $args['catFilter']['__META__'] = array('module' => 'News');
-            // set catfilter operator  if specified
-            if (isset($args['catoperator']) && in_array(strtolower($args['catoperator']), array('and', 'or'))) {
-                $args['catFilter']['__META__']['operator'] = strtoupper($args['catoperator']);
-            }
-        }
+        $where = $this->generateWhere($args);
 
-        // populate an array with each part of the where clause and then implode the array if there is a need.
-        // credit to Jorg Napp for this technique - markwest
         $tables = DBUtil::getTables();
         $news_column = $tables['news_column'];
-        $queryargs = array();
-
-        if (System::getVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
-            $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR $news_column[language] = '')";
-        } elseif (!empty($args['language'])) {
-            $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
-        }
-
-        if (isset($args['status'])) {
-            $queryargs[] = "$news_column[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
-        }
-
-        if (isset($args['hideonindex'])) {
-            $queryargs[] = "$news_column[hideonindex] = '" . DataUtil::formatForStore($args['hideonindex']) . "'";
-        }
-
-        // Check for specific date interval
-        if (isset($args['from']) || isset($args['to'])) {
-            // Both defined
-            if (isset($args['from']) && isset($args['to'])) {
-                $from = DataUtil::formatForStore($args['from']);
-                $to   = DataUtil::formatForStore($args['to']);
-                $queryargs[] = "($news_column[from] >= '$from' AND $news_column[from] < '$to')";
-                // Only 'from' is defined
-            } elseif (isset($args['from'])) {
-                $date = DataUtil::formatForStore($args['from']);
-                $queryargs[] = "($news_column[from] >= '$date' AND ($news_column[to] IS NULL OR $news_column[to] >= '$date'))";
-                // Only 'to' is defined
-            } elseif (isset($args['to'])) {
-                $date = DataUtil::formatForStore($args['to']);
-                $queryargs[] = "($news_column[from] < '$date')";
-            }
-            // or can filter with the current date
-        } elseif ($args['filterbydate']) {
-            $date = DateUtil::getDatetime();
-            $queryargs[] = "('$date' >= $news_column[from] AND ($news_column[to] IS NULL OR '$date' <= $news_column[to]))";
-        }
-
-        if (isset($args['tdate'])) {
-            $queryargs[] = "$news_column[from] LIKE '%{$args['tdate']}%'";
-        }
-
-        if (isset($args['query']) && is_array($args['query'])) {
-            // query array with rows like {'field', 'op', 'value'}
-            $allowedoperators = array('>', '>=', '=', '<', '<=', 'LIKE', '!=', '<>');
-            foreach ($args['query'] as $row) {
-                if (is_array($row) && count($row) == 3) {
-                    // validate fields and operators
-                    list($field, $op, $value) = $row;
-                    if (isset($news_column[$field]) && in_array($op, $allowedoperators)) {
-                        $queryargs[] = "$news_column[$field] $op '".DataUtil::formatForStore($value)."'";
-                    }
-                }
-            }
-        }
-
-        // check for a specific author
-        if (isset($args['uid']) && is_numeric($args['uid'])) {
-            $queryargs[] = "{$news_column['cr_uid']} = '" . DataUtil::formatForStore($args['uid']) . "'";
-        }
-
-        $where = '';
-        if (count($queryargs) > 0) {
-            $where = implode(' AND ', $queryargs);
-        }
-
         $orderby = '';
         // Handle the sort order, if nothing requested use admin setting
         if (!isset($args['order'])) {
@@ -176,7 +95,7 @@ class News_Api_User extends Zikula_Api
         }
 
         $permChecker = new News_ResultChecker($this->getVar('enablecategorization'), $this->getVar('enablecategorybasedpermissions'));
-        $objArray = DBUtil::selectObjectArrayFilter('news', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $args['catFilter']);
+        $objArray = DBUtil::selectObjectArrayFilter('news', $where, $orderby, $args['startnum'] - 1, $args['numitems'], '', $permChecker, $this->getCatFilter($args));
 
         // Check for an error with the database code, and if so set an appropriate
         // error message and return
@@ -322,88 +241,10 @@ class News_Api_User extends Zikula_Api
             $args['language'] = '';
         }
 
-        $args['catFilter'] = array();
-        if (isset($args['category']) && !empty($args['category'])){
-            if (is_array($args['category'])) {
-                $args['catFilter'] = $args['category'];
-            } elseif (isset($args['property'])) {
-                $property = $args['property'];
-                $args['catFilter'][$property] = $args['category'];
-            }
-            $args['catFilter']['__META__'] = array('module' => 'News');
-        }
+        $where = $this->generateWhere($args);
+        $where = !empty($where) ? ' WHERE ' . $where : '';
 
-        // Get optional arguments a build the where conditional
-        // Credit to Jorg Napp for this superb technique.
-        $tables = DBUtil::getTables();
-        $news_column = $tables['news_column'];
-        $queryargs = array();
-
-        if (System::getVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
-            $queryargs[] = "($news_column[language] = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR $news_column[language] = '')";
-        } elseif (!empty($args['language'])) {
-            $queryargs[] = "$news_column[language] = '" . DataUtil::formatForStore($args['language']) . "'";
-        }
-
-        if (isset($args['status'])) {
-            $queryargs[] = "$news_column[published_status] = '" . DataUtil::formatForStore($args['status']) . "'";
-        }
-
-        if (isset($args['hideonindex'])) {
-            $queryargs[] = "$news_column[hideonindex] = '" . DataUtil::formatForStore($args['hideonindex']) . "'";
-        }
-
-        // Check for specific date interval
-        if (isset($args['from']) || isset($args['to'])) {
-            // Both defined
-            if (isset($args['from']) && isset($args['to'])) {
-                $from = DataUtil::formatForStore($args['from']);
-                $to   = DataUtil::formatForStore($args['to']);
-                $queryargs[] = "($news_column[from] >= '$from' AND $news_column[from] < '$to')";
-                // Only 'from' is defined
-            } elseif (isset($args['from'])) {
-                $date = DataUtil::formatForStore($args['from']);
-                $queryargs[] = "($news_column[from] >= '$date' AND ($news_column[to] IS NULL OR $news_column[to] >= '$date'))";
-                // Only 'to' is defined
-            } elseif (isset($args['to'])) {
-                $date = DataUtil::formatForStore($args['to']);
-                $queryargs[] = "($news_column[from] < '$date')";
-            }
-            // or can filter with the current date
-        } elseif (isset($args['filterbydate'])) {
-            $date = DateUtil::getDatetime();
-            $queryargs[] = "('$date' >= $news_column[from] AND ($news_column[to] IS NULL OR '$date' <= $news_column[to]))";
-        }
-
-        if (isset($args['tdate'])) {
-            $queryargs[] = "$news_column[from] LIKE '%{$args['tdate']}%'";
-        }
-
-        if (isset($args['query']) && is_array($args['query'])) {
-            // query array with rows like {'field', 'op', 'value'}
-            $allowedoperators = array('>', '>=', '=', '<', '<=', 'LIKE', '!=', '<>');
-            foreach ($args['query'] as $row) {
-                if (is_array($row) && count($row) == 3) {
-                    // validate fields and operators
-                    extract($row);
-                    if (isset($news_column[$field]) && in_array($op, $allowedoperators)) {
-                        $queryargs[] = "$news_column[$field] $op '".DataUtil::formatForStore($value)."'";
-                    }
-                }
-            }
-        }
-
-        // check for a specific author
-        if (isset($args['uid']) && is_int($args['uid'])) {
-            $queryargs[] = "{$news_column['cr_uid']} = '" . DataUtil::formatForStore($args['uid']) . "'";
-        }
-
-        $where = '';
-        if (count($queryargs) > 0) {
-            $where = ' WHERE ' . implode(' AND ', $queryargs);
-        }
-
-        return DBUtil::selectObjectCount('news', $where, 'sid', false, $args['catFilter']);
+        return DBUtil::selectObjectCount('news', $where, 'sid', false, $this->getCatFilter($args));
     }
 
     /**
@@ -1138,6 +979,109 @@ class News_Api_User extends Zikula_Api
         }
         
         return $links;
+    }
+
+    /**
+     * populate an array with each part of the where clause and then implode the array if there is a need.
+     *
+     * @param array $args
+     * @param boolean $prependWhere
+     * @return string
+     */
+    protected function generateWhere($args) {
+        $tables = DBUtil::getTables();
+        $news_column = $tables['news_column'];
+        $queryargs = array();
+
+        if (System::getVar('multilingual') == 1 && !$args['ignoreml'] && empty($args['language'])) {
+            $queryargs[] = "({$news_column['language']} = '" . DataUtil::formatForStore(ZLanguage::getLanguageCode()) . "' OR {$news_column['language']} = '')";
+        } elseif (!empty($args['language'])) {
+            $queryargs[] = "{$news_column['language']} = '" . DataUtil::formatForStore($args['language']) . "'";
+        }
+
+        if (isset($args['status'])) {
+            $queryargs[] = "{$news_column['published_status']} = '" . DataUtil::formatForStore($args['status']) . "'";
+        }
+
+        if (isset($args['hideonindex'])) {
+            $queryargs[] = "{$news_column['hideonindex']} = '" . DataUtil::formatForStore($args['hideonindex']) . "'";
+        }
+
+        // Check for specific date interval
+        if (isset($args['from']) || isset($args['to'])) {
+            // Both defined
+            if (isset($args['from']) && isset($args['to'])) {
+                $from = DataUtil::formatForStore($args['from']);
+                $to   = DataUtil::formatForStore($args['to']);
+                $queryargs[] = "({$news_column['from']} >= '$from' AND {$news_column['from']} < '$to')";
+                // Only 'from' is defined
+            } elseif (isset($args['from'])) {
+                $date = DataUtil::formatForStore($args['from']);
+                $queryargs[] = "({$news_column['from']} >= '$date' AND ({$news_column['to']} IS NULL OR {$news_column['to']} >= '$date'))";
+                // Only 'to' is defined
+            } elseif (isset($args['to'])) {
+                $date = DataUtil::formatForStore($args['to']);
+                $queryargs[] = "({$news_column['from']} < '$date')";
+            }
+            // or can filter with the current date
+        } elseif (isset($args['filterbydate'])) {
+            $date = DateUtil::getDatetime();
+            $queryargs[] = "('$date' >= {$news_column['from']} AND ({$news_column['to']} IS NULL OR '$date' <= {$news_column['to']}))";
+        }
+
+        if (isset($args['tdate'])) {
+            $queryargs[] = "{$news_column['from']} LIKE '%{$args['tdate']}%'";
+        }
+
+        if (isset($args['query']) && is_array($args['query'])) {
+            // query array with rows like {'field', 'op', 'value'}
+            $allowedoperators = array('>', '>=', '=', '<', '<=', 'LIKE', '!=', '<>');
+            foreach ($args['query'] as $row) {
+                if (is_array($row) && count($row) == 3) {
+                    // validate fields and operators
+                    list($field, $op, $value) = $row;
+                    if (isset($news_column[$field]) && in_array($op, $allowedoperators)) {
+                        $queryargs[] = "$news_column[$field] $op '".DataUtil::formatForStore($value)."'";
+                    }
+                }
+            }
+        }
+
+        // check for a specific author
+        if (isset($args['uid']) && is_numeric($args['uid'])) {
+            $queryargs[] = "{$news_column['cr_uid']} = '" . DataUtil::formatForStore($args['uid']) . "'";
+        }
+
+        $where = '';
+        if (count($queryargs) > 0) {
+            $where = implode(' AND ', $queryargs);
+        }
+
+        return $where;
+    }
+
+    /**
+     * create Category Filter
+     * 
+     * @param array $args
+     * @return array
+     */
+    protected function getCatFilter($args) {
+        $catFilter = array();
+        if (isset($args['category']) && !empty($args['category'])){
+            if (is_array($args['category'])) {
+                $catFilter = $args['category'];
+            } elseif (isset($args['property'])) {
+                $property = $args['property'];
+                $catFilter[$property] = $args['category'];
+            }
+            $catFilter['__META__'] = array('module' => 'News');
+            // set catfilter operator  if specified
+            if (isset($args['catoperator']) && in_array(strtolower($args['catoperator']), array('and', 'or'))) {
+                $catFilter['__META__']['operator'] = strtoupper($args['catoperator']);
+            }
+        }
+        return $catFilter;
     }
 }
 
