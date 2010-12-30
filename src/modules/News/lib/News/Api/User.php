@@ -960,7 +960,7 @@ class News_Api_User extends Zikula_Api
         // identify the correct parameter to identify the news article
         if ($func == 'display' || $func == 'displaypdf') {
             // check the permalink structure and obtain any missing vars
-            $permalinkkeys = array_flip(explode('/', ModUtil::getVar('News', 'permalinkformat')));
+            $permalinkkeys = array_flip(explode('/', $this->getVar('permalinkformat')));
             // get rid of unused vars
             $args['vars'] = array_slice($args['vars'], $nextvar);
 
@@ -1025,7 +1025,7 @@ class News_Api_User extends Zikula_Api
                 $args['args']['sid'] = $args['args']['objectid'];
             }
             // check the permalink structure and obtain any missing vars
-            $permalinkformat = ModUtil::getVar('News', 'permalinkformat');
+            $permalinkformat = $this->getVar('permalinkformat');
             if (isset($args['args']['from']) && isset($args['args']['urltitle'])) {
                 $date = getdate(strtotime($args['args']['from']));
                 $in = array('%category%', '%articleid%', '%articletitle%', '%year%', '%monthnum%', '%monthname%', '%day%');
@@ -1106,7 +1106,7 @@ class News_Api_User extends Zikula_Api
                         'text' => '',
                         'class' => 'z-icon-es-rss'); // class defined in News module style.css
             }
-            if (ModUtil::getVar('News', 'enablecategorization')) {
+            if ($this->getVar('enablecategorization')) {
                 if ($func <> "categorylist") {
                     $links[] = array('url'  => ModUtil::url('News', 'user', 'categorylist'),
                             'text' =>  $this->__('News categories'),

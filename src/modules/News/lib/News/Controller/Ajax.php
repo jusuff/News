@@ -57,7 +57,7 @@ class News_Controller_Ajax extends Zikula_Controller
 
         $this->view->setCaching(false);
 
-        $modvars = ModUtil::getVar('News');
+        $modvars = $this->getVars();
 
         if ($modvars['enablecategorization']) {
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -127,7 +127,7 @@ class News_Controller_Ajax extends Zikula_Controller
             case 'update':
                 // Update the story, security check inside of the API func
 
-                $modvars = ModUtil::getVar('News');
+                $modvars = $this->getVars();
                     // TODO: See Admin Controller on usage of News_ImageUtil:: to accomplish the code that has been commented out below...
 
                 /*            // delete and add images (credit msshams)

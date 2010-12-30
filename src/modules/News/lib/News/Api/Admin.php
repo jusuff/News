@@ -44,7 +44,7 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // delete News images
-        $modvars = ModUtil::getVar('News');
+        $modvars = $this->getVars();
         if ($modvars['picupload_enabled'] && $item['pictures'] > 0) {
             News_ImageUtil::deleteImagesBySID($modvars['picupload_uploaddir'], $item['sid'], $item['pictures']);
         }
@@ -178,7 +178,7 @@ class News_Api_Admin extends Zikula_Api
         }
 
         // disable categorization to do this (if enabled)
-        $catenabled = ModUtil::getVar('News', 'enablecategorization');
+        $catenabled = $this->getVar('enablecategorization');
         if ($catenabled) {
             ModUtil::setVar('News', 'enablecategorization', false);
             ModUtil::dbInfoLoad('News', 'News', true);

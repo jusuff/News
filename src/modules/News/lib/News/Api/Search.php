@@ -65,7 +65,7 @@ class News_Api_Search extends Zikula_Api
 
         ModUtil::loadApi('News', 'user');
 
-        $permChecker = new News_ResultChecker(ModUtil::getVar('News', 'enablecategorization'), ModUtil::getVar('News', 'enablecategorybasedpermissions'));
+        $permChecker = new News_ResultChecker($this->getVar('enablecategorization'), $this->getVar('enablecategorybasedpermissions'));
         $articles = DBUtil::selectObjectArrayFilter('news', $where, null, null, null, '', $permChecker, null);
 
         foreach ($articles as $article)

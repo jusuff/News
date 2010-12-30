@@ -141,7 +141,7 @@ class News_Controller_Admin extends Zikula_Controller
         }
 
         // Get the module configuration vars
-        $modvars = ModUtil::getVar('News');
+        $modvars = $this->getVars();
 
         if ($modvars['enablecategorization']) {
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -266,7 +266,7 @@ class News_Controller_Admin extends Zikula_Controller
             $story['approver'] = SessionUtil::getVar('uid');
         }
 
-        $modvars = ModUtil::getVar('News');
+        $modvars = $this->getVars();
 
         // Handle Images
         if ($modvars['picupload_enabled']) {
@@ -673,7 +673,7 @@ class News_Controller_Admin extends Zikula_Controller
 
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
         $properties = array_keys($catregistry);
-        $propertyName = ModUtil::getVar('News', 'topicproperty');
+        $propertyName = $this->getVar('topicproperty');
         $propertyIndex = empty($propertyName) ? 0 : array_search($propertyName, $properties);
 
         // assign the module variables
