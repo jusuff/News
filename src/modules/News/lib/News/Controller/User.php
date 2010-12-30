@@ -277,6 +277,11 @@ class News_Controller_User extends Zikula_Controller
             } else {
                 LogUtil::registerStatus($this->__('Unable to update story.'));
             }
+            // release pagelock
+            if (ModUtil::available('PageLock')) {
+                ModUtil::apiFunc('PageLock', 'user', 'releaseLock',
+                    array('lockName' => "Newsnews{$item['sid']}"));
+            }
         }
         return System::redirect(ModUtil::url('News', $referertype, 'view'));
     }
