@@ -13,6 +13,12 @@ CHANGELOG
         * refactor of Ajax to 1.3 standards
     Now including TCPDF library with News module. PDFs from News stories simply a config setting.
     Moved all image handling to ImageUtil lib
+    Integrated Printer/RSS/Atom templates into main module distro with new method for display
+    Removed BOM character from all files
+    Added index image to RSS/Atom feeds
+    Added publication data to tooltip in admin view
+    Added pagelock functionality when PageLock module is active
+    Improved translatable strings
 
 
 #### 2.6.2 (22 Aug 2010)
