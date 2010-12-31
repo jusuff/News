@@ -8,7 +8,7 @@
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker.js'}
 {pageaddvar name='javascript' value='modules/News/javascript/datepicker-locale.js'}
 {pageaddvar name='stylesheet' value='modules/News/style/datepicker.css'}
-{if $modvars.News.picupload_enabled AND $modvars.News.accesspicupload AND $modvars.News.picupload_maxpictures gt 1}
+{if $modvars.News.picupload_enabled AND $accesspicupload AND $modvars.News.picupload_maxpictures gt 1}
 {pageaddvar name='javascript' value='modules/News/javascript/multifile.js'}
 {/if}
 
@@ -44,7 +44,7 @@
 
 <h3>{$templatetitle}</h3>
 
-{if $modvars.News.accesspicupload AND $modvars.News.picupload_enabled}
+{if $accesspicupload AND $modvars.News.picupload_enabled}
 <form id="news_user_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="multipart/form-data">
     <input type="hidden" name="MAX_FILE_SIZE" value="{$modvars.News.picupload_maxfilesize|safetext}" />
 {else}
@@ -153,7 +153,7 @@
             {/if}
         </fieldset>
         
-        {if $modvars.News.picupload_enabled AND $modvars.News.accesspicupload}
+        {if $modvars.News.picupload_enabled AND $accesspicupload}
         <fieldset>
             <legend>{gt text='Pictures'}</legend>
 			<label for="news_files_element">{gt text='Select a picture (max. %s kB per picture)' tag1="`$modvars.News.picupload_maxfilesize/1000`"}</label>
