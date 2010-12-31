@@ -24,7 +24,7 @@
 </div>
 <div id="news_modify">&nbsp;</div>
 
-{if $modvars.News.enablemorearticlesincat}
+{if $modvars.News.enablemorearticlesincat AND $morearticlesincat > 0}
 <div id="news_morearticlesincat">
 <h4>{gt text='More articles in category '}
 {foreach name='categorynames' from=$preformat.categorynames item='categoryname'}

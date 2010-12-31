@@ -585,7 +585,7 @@ class News_Controller_User extends Zikula_Controller
         // get more articletitles in the categories of this article
         if ($modvars['enablecategorization'] && $modvars['enablemorearticlesincat']) {
             // check how many articles to display
-            if ($modvars['morearticlesincat'] > 0) {
+            if ($modvars['morearticlesincat'] > 0 && !empty($info['categories'])) {
                 $morearticlesincat = $modvars['morearticlesincat'];
             } elseif ($modvars['morearticlesincat'] == 0 && array_key_exists('morearticlesincat', $info['attributes'])) {
                 $morearticlesincat = $info['attributes']['morearticlesincat'];
@@ -606,9 +606,11 @@ class News_Controller_User extends Zikula_Controller
                                     'category' => $catFilter,
                                     'catregistry' => $catregistry,
                                     'query' => array(array('sid', '!=', $sid))));
-                $this->view->assign('morearticlesincat', $morearticlesincat);
             }
+        } else {
+            $morearticlesincat = 0;
         }
+        $this->view->assign('morearticlesincat', $morearticlesincat);
 
         // Now lets assign the informatation to create a pager for the review
         $this->view->assign('pager', array('numitems' => $numpages,
