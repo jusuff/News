@@ -22,10 +22,6 @@ sizecheckinit =  function()
                          Event.observe($('news_bodytext'), 'keyup', updatebodytext, false);
                          updatebodytext();
                      } 
-                     if($('news_notes_remaining') && $('news_notes')) {
-                         Event.observe($('news_notes'), 'keyup', updatenotes, false);
-                         updatenotes();
-                     } 
                  }
 
 /**
@@ -50,10 +46,5 @@ function updatehometext()
 function updatebodytext()
 {
     Element.update($('news_bodytext_remaining'), template.evaluate({chars: $('news_bodytext').value.length}));
-}
-
-function updatenotes()
-{
-    Element.update($('news_notes_remaining'), template.evaluate({chars: $('news_notes').value.length}));
 }
 

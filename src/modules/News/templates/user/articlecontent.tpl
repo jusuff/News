@@ -1,6 +1,7 @@
+{assign value='#'|cat:$smarty.ldelim|cat:'chars'|cat:$smarty.rdelim var='charstr'}
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = "{{gt text='#{chars} characters out of 65,536'}}";
+    var bytesused = "{{gt text='%s characters out of 4,294,967,295' tag1=$charstr}}";
     // ]]>
 </script>
 

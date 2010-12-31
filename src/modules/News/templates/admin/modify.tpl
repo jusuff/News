@@ -19,9 +19,10 @@
 
 {include file='admin/menu.tpl'}
 
+{assign value='#'|cat:$smarty.ldelim|cat:'chars'|cat:$smarty.rdelim var='charstr'}
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = "{{gt text='#{chars} characters out of 65,536'}}";
+    var bytesused = "{{gt text='%s characters out of 4,294,967,295' tag1=$charstr}}";
     var string_show = "{{gt text='Show'}}";
     var string_hide = "{{gt text='Hide'}}";
     var string_publish = "{{gt text='Publish'}}";
@@ -148,7 +149,7 @@
                     <label for="news_notes"><a id="news_notes_collapse" href="javascript:void(0);"><span id="news_notes_showhide">{gt text='Show'}</span> {gt text='Footnote'}</a></label>
                     <p id="news_notes_details">
                         <textarea id="news_notes" name="story[notes]" cols="40" rows="10">{$item.notes|safetext}</textarea>
-                        <span id="news_notes_remaining" class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='65,536'}</span>
+                        <span class="z-formnote z-sub">{gt text='(Limit: %s characters)' tag1='65,536'}</span>
                     </p>
                 </div>
             </fieldset>
