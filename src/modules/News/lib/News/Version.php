@@ -24,6 +24,7 @@ class News_Version extends Zikula_Version
         $meta['version'] = '3.0.1';
         //! this defines the module's url
         $meta['url'] = $this->__('news');
+        $meta['core_min'] = '1.3.0'; // requires minimum 1.3.0 or later
         $meta['capabilities'] = array(HookUtil::SUBSCRIBER_CAPABLE => array('enabled' => true));
         $meta['securityschema'] = array('News::' => 'Contributor ID::Article ID',
                 'News:pictureupload:' => '::',
