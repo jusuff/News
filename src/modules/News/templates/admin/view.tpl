@@ -75,7 +75,7 @@
     </form>
     {/if}
 
-    <form class="z-form" id="news_bulkaction" name="news_bulkaction" action="{modurl modname=News type=admin func=processbulkaction}" method="post">
+    <form class="z-form" id="news_bulkaction" action="{modurl modname=News type=admin func=processbulkaction}" method="post">
         <div>
             <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
             <table id="news_admintable" class="z-datatable">
@@ -165,7 +165,7 @@
                 $('bulkaction').observe('change', function(event){
                     var conf = confirm('Are you sure?');
                     if (conf) {
-                        document.news_bulkaction.submit();
+                        document.forms["news_bulkaction"].submit();
                     }
                 });
             </script>
