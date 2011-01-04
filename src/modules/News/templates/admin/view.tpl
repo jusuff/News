@@ -144,7 +144,7 @@
                 </tbody>
             </table>
             <p id='news_bulkaction_control'>
-                {img modname='core' set='icons/extrasmall' src='2uparrow.gif' __alt='doubleuparrow'}<a href="#" id="select_all">{gt text="Check all"}</a> / <a href="#" id="deselect_all">{gt text="Uncheck all"}</a>
+                {img modname='core' set='icons/extrasmall' src='2uparrow.gif' __alt='doubleuparrow'}<a href="javascript:void(0);" id="select_all">{gt text="Check all"}</a> / <a href="javascript:void(0);" id="deselect_all">{gt text="Uncheck all"}</a>
                 <select id='bulkaction' name='bulkaction'>
                     <option value='0' selected='selected'>{gt text='With selected:'}</option>
                     <option value='1'>{gt text='Delete'}</option>
@@ -164,6 +164,8 @@
                 });
                 $('bulkaction').observe('change', function(event){
                     var conf = confirm('Are you sure?');
+                    // TODO Add action and articlelist to the 'are you sure' question ...
+                    // TODO move JS to news.js
                     if (conf) {
                         document.news_bulkaction.submit();
                     }
