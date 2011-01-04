@@ -163,3 +163,16 @@ div.news_index {
     background: url("../../../images/feeds/feed-icon-12x12.png") no-repeat scroll 0 50% transparent;
     padding: 2px 0 2px 20px;
 }
+
+#news_bulkaction_control {
+    padding: 0 10px;
+    margin: 0 0 1em;
+}
+
+#news_bulkaction_control img {
+    margin: 0 1em 0 0;
+}
+
+#news_bulkaction_control select {
+    margin-left: 2em;
+}
