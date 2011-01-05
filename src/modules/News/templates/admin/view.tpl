@@ -163,11 +163,23 @@
                     e.stop()
                 });
                 $('bulkaction').observe('change', function(event){
-                    var conf = confirm('Are you sure?');
-                    // TODO Add action and articlelist to the 'are you sure' question ...
-                    // TODO move JS to news.js
-                    if (conf) {
-                        document.forms["news_bulkaction"].submit();
+                    var values=$$('input:checked[type=checkbox][name=articles\[\]]').pluck('value');
+                    values.sort(function(a,b){return a - b});
+                    var valuescount=values.length;
+                    var action=$('bulkaction').value;
+                    if (action>0) {
+                        var actionmap=new Array(5);
+                        actionmap[0]=null;
+                        actionmap[1]=Zikula.__('delete','module_News');
+                        actionmap[2]=Zikula.__('archive','module_News');
+                        actionmap[3]=Zikula.__('publish','module_News');
+                        actionmap[4]=Zikula.__('reject','module_News');
+                        var actionword=actionmap[action];
+                        var conf=confirm(Zikula._fn('Are you sure you want to %s the following article: ','Are you sure you want to %s the following articles: ',valuescount,[actionword],'module_News') + values);
+                        // TODO move JS to news.js - why? CH
+                        if (conf) {
+                            document.forms["news_bulkaction"].submit();
+                        }
                     }
                 });
             </script>
