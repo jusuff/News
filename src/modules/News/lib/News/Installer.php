@@ -75,7 +75,7 @@ class News_Installer extends Zikula_Installer
         $this->setVar('picupload_thumbmaxheight', '150');
         $this->setVar('picupload_thumb2maxwidth', '200');
         $this->setVar('picupload_thumb2maxheight', '200');
-        $this->setVar('picupload_uploaddir', '');
+        $this->setVar('picupload_uploaddir', 'images/news_picupload');
 
         // create the default data for the News module
         $this->_defaultdata();
@@ -290,7 +290,7 @@ class News_Installer extends Zikula_Installer
                 $this->setVar('picupload_thumbmaxheight', '150');
                 $this->setVar('picupload_thumb2maxwidth', '200');
                 $this->setVar('picupload_thumb2maxheight', '200');
-                $this->setVar('picupload_uploaddir', '');
+                $this->setVar('picupload_uploaddir', 'images/news_picupload');
                 // add new category parameter
                 $this->setVar('enablecategorybasedpermissions', true); 
                 
