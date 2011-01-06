@@ -1,4 +1,4 @@
-{ajaxheader modname='News' filename='news.js' ui=true}
+{ajaxheader modname='News' filename='news_admin.js' ui=true}
 {gt text='News articles list' assign='templatetitle'}
 
 {include file='admin/menu.tpl'}
@@ -75,7 +75,7 @@
     </form>
     {/if}
 
-    <form class="z-form" id="news_bulkaction" action="{modurl modname=News type=admin func=processbulkaction}" method="post">
+    <form class="z-form" id="news_bulkaction_form" action="{modurl modname=News type=admin func=processbulkaction}" method="post">
         <div>
             <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
             <table id="news_admintable" class="z-datatable">
@@ -99,7 +99,7 @@
                 <tbody>
                     {foreach from=$newsitems item='newsitem'}
                     <tr class="{cycle values='z-odd,z-even'}">
-                        <td><input type="checkbox" name="articles[]" value="{$newsitem.sid}" class="news_checkbox" /></td>
+                        <td><input type="checkbox" name="news_selected_articles[]" value="{$newsitem.sid}" class="news_checkbox" /></td>
                         <td>{$newsitem.sid|safetext}</td>
                         <td>
                             {include file='admin/publisheddata.tpl' assign='publisheddata'}
@@ -144,8 +144,8 @@
                 </tbody>
             </table>
             <p id='news_bulkaction_control'>
-                {img modname='core' set='icons/extrasmall' src='2uparrow.gif' __alt='doubleuparrow'}<a href="javascript:void(0);" id="select_all">{gt text="Check all"}</a> / <a href="javascript:void(0);" id="deselect_all">{gt text="Uncheck all"}</a>
-                <select id='bulkaction' name='bulkaction'>
+                {img modname='core' set='icons/extrasmall' src='2uparrow.gif' __alt='doubleuparrow'}<a href="javascript:void(0);" id="news_select_all">{gt text="Check all"}</a> / <a href="javascript:void(0);" id="news_deselect_all">{gt text="Uncheck all"}</a>
+                <select id='news_bulkaction_select' name='news_bulkaction_select'>
                     <option value='0' selected='selected'>{gt text='With selected:'}</option>
                     <option value='1'>{gt text='Delete'}</option>
                     <option value='2'>{gt text='Archive'}</option>
@@ -153,49 +153,6 @@
                     <option value='4'>{gt text='Reject'}</option>
                 </select>
             </p>
-            <script type="text/javascript">
-                // TODO Move to news.js - or how about news_admin.js ??
-                $('select_all').observe('click', function(e){
-                    Zikula.toggleInput('news_bulkaction', true);
-                    e.stop()
-                });
-                $('deselect_all').observe('click', function(e){
-                    Zikula.toggleInput('news_bulkaction', false);
-                    e.stop()
-                });
-                $('bulkaction').observe('change', function(event){
-                    var values=$$('input:checked[type=checkbox][name=articles\[\]]').pluck('value');
-                    values.sort(function(a,b){return a - b});
-                    var valuescount=values.length;
-                    var action=$('bulkaction').value;
-                    var actionmap=new Array(5);
-                    actionmap[0]=null;
-                    actionmap[1]=Zikula.__('delete','module_News');
-                    actionmap[2]=Zikula.__('archive','module_News');
-                    actionmap[3]=Zikula.__('publish','module_News');
-                    actionmap[4]=Zikula.__('reject','module_News');
-                    var actionword=actionmap[action];
-                    if ((action>0) && (valuescount>0)) {
-                        var options = {overlayOpacity:0.7,modal:true,draggable:false};
-                        var conf=Zikula.UI.Confirm(
-                            Zikula._fn('Are you sure you want to %s the following article',
-                                'Are you sure you want to %s the following articles',
-                                valuescount,
-                                ['<strong>'+actionword+'</strong>'],
-                                'module_News')+': '+values,
-                            Zikula.__('Confirm Bulk Action','module_News'),
-                            function(res){if(res) $('news_bulkaction').submit()},
-                            options
-                        );
-                    } else {
-                        $('bulkaction').value=0;
-                        Zikula.UI.Alert(
-                            Zikula.__f('Please select at least one article to %s.',actionword,'module_News'),
-                            Zikula.__('Bulk Action Error','module_News')
-                        )
-                    }
-                });
-            </script>
         </div>
     </form>
 
@@ -214,5 +171,7 @@
 </div>
 
 <script type="text/javascript">
+// <![CDATA[
     Zikula.UI.Tooltips($$('.tooltips'));
+// ]]>
 </script>

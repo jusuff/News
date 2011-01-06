@@ -831,14 +831,14 @@ class News_Controller_Admin extends Zikula_Controller
      */
     public function processbulkaction() {
         // everything here is temporary
-        $articles = FormUtil::getPassedValue('articles', array(), 'POST');
-        $bulkaction = FormUtil::getPassedValue('bulkaction', 0, 'POST');
+        $articles = FormUtil::getPassedValue('news_selected_articles', array(), 'POST');
+        $bulkaction = FormUtil::getPassedValue('news_bulkaction_select', 0, 'POST');
         $actionmap = array(1 => __('Delete'),
             2 => __('Archive'),
             3 => __('Publish'),
             4 => __('Reject'));
         $articlelist = implode(', ', $articles);
         LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %s; Articles: %s', array($actionmap[$bulkaction], $articlelist)));
-        return System::redirect(ModUtil::url('News', 'admin', 'main'));
+        return System::redirect(ModUtil::url('News', 'Admin', 'main'));
     }
 }

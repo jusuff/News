@@ -43,9 +43,6 @@ function news_init_check()
     if ($('news_attributes_collapse')) {
         news_attributes_init();
     }
-    if ($('news_multicategory_filter')) {
-        news_filter_init(); 
-    }
     news_isdraft();
     // activate the title field for a new article
     if ($('news_title') && $F('news_title') == '') {
@@ -399,23 +396,6 @@ function news_title_init()
     // not the correct location but for reference later on:
     //new PeriodicalExecuter(savedraft, 30);
 }
-
-function news_filter_init()
-{
-    $('news_property').observe('change', news_property_onchange);
-    news_property_onchange();
-    $('news_multicategory_filter').show();
-}
-
-function news_property_onchange()
-{
-    $$('div#news_category_selectors select').each(function(select){
-        select.hide();
-    });
-    var id = "news_"+$('news_property').value+"_category";
-    $(id).show();
-}
-
 
 function news_expiration_init()
 {
