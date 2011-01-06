@@ -39,11 +39,11 @@ function news_admin_selectall_init()
 {
     $('news_select_all').observe('click', function(e){
         Zikula.toggleInput('news_bulkaction_form', true);
-        e.stop()
+        e.stop();
     });
     $('news_deselect_all').observe('click', function(e){
         Zikula.toggleInput('news_bulkaction_form', false);
-        e.stop()
+        e.stop();
     });
 }
 
@@ -73,7 +73,7 @@ function news_admin_bulkaction_init()
                 Zikula.__('Confirm Bulk Action','module_News'),
                 function(res){
                     if(res) {
-                        $('news_bulkaction_form').submit()
+                        $('news_bulkaction_form').submit();
                     } else {
                         // action cancelled
                         $('news_bulkaction_select').selectedIndex=0;
@@ -86,7 +86,7 @@ function news_admin_bulkaction_init()
             Zikula.UI.Alert(
                 Zikula.__f('Please select at least one article to %s.',actionword,'module_News'),
                 Zikula.__('Bulk action error','module_News')
-            )
+            );
         }
     });
 }

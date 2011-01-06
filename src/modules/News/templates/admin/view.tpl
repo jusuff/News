@@ -1,7 +1,11 @@
 {ajaxheader modname='News' filename='news_admin.js' ui=true}
 {gt text='News articles list' assign='templatetitle'}
 
-{include file='admin/menu.tpl'}
+{admincategorymenu}
+<div class="z-adminbox">
+    <h1>{$modinfo.displayname}</h1>
+    {modulelinks modname='News' type='admin'}
+</div>
 
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='windowlist.gif' set='icons/large' alt=$templatetitle}</div>

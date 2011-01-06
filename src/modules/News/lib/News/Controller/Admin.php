@@ -830,15 +830,29 @@ class News_Controller_Admin extends Zikula_Controller
      * @return bool true
      */
     public function processbulkaction() {
+        // Security check
+        if (!SecurityUtil::checkPermission('News::', '::', ACCESS_DELETE)) {
+            return LogUtil::registerPermissionError();
+        }
+
+        // Confirm authorisation code
+        if (!SecurityUtil::confirmAuthKey()) {
+            return LogUtil::registerAuthidError(ModUtil::url('News', 'Admin', 'view'));
+        }
+
         // everything here is temporary
         $articles = FormUtil::getPassedValue('news_selected_articles', array(), 'POST');
-        $bulkaction = FormUtil::getPassedValue('news_bulkaction_select', 0, 'POST');
-        $actionmap = array(1 => __('Delete'),
-            2 => __('Archive'),
-            3 => __('Publish'),
-            4 => __('Reject'));
-        $articlelist = implode(', ', $articles);
-        LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %s; Articles: %s', array($actionmap[$bulkaction], $articlelist)));
-        return System::redirect(ModUtil::url('News', 'Admin', 'main'));
+        $bulkaction = (int)FormUtil::getPassedValue('news_bulkaction_select', 0, 'POST');
+        if ($bulkaction >= 1 && $bulkaction <= 4) {
+            $actionmap = array(1 => __('Delete'),
+                2 => __('Archive'),
+                3 => __('Publish'),
+                4 => __('Reject'));
+            $articlelist = implode(', ', $articles);
+            LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %1$s; Articles: %2$s', array($actionmap[$bulkaction], $articlelist)));
+        } else {
+            LogUtil::registerError($this->__('Error! Wrong bulk action.'));
+        }
+        return System::redirect(ModUtil::url('News', 'admin', 'view'));
     }
 }
