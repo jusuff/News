@@ -154,6 +154,7 @@
                 </select>
             </p>
             <script type="text/javascript">
+                // TODO Move to news.js - or how about news_admin.js ??
                 $('select_all').observe('click', function(e){
                     Zikula.toggleInput('news_bulkaction', true);
                     e.stop()
@@ -167,19 +168,31 @@
                     values.sort(function(a,b){return a - b});
                     var valuescount=values.length;
                     var action=$('bulkaction').value;
-                    if (action>0) {
-                        var actionmap=new Array(5);
-                        actionmap[0]=null;
-                        actionmap[1]=Zikula.__('delete','module_News');
-                        actionmap[2]=Zikula.__('archive','module_News');
-                        actionmap[3]=Zikula.__('publish','module_News');
-                        actionmap[4]=Zikula.__('reject','module_News');
-                        var actionword=actionmap[action];
-                        var conf=confirm(Zikula._fn('Are you sure you want to %s the following article: ','Are you sure you want to %s the following articles: ',valuescount,[actionword],'module_News') + values);
-                        // TODO move JS to news.js - why? CH
-                        if (conf) {
-                            document.forms["news_bulkaction"].submit();
-                        }
+                    var actionmap=new Array(5);
+                    actionmap[0]=null;
+                    actionmap[1]=Zikula.__('delete','module_News');
+                    actionmap[2]=Zikula.__('archive','module_News');
+                    actionmap[3]=Zikula.__('publish','module_News');
+                    actionmap[4]=Zikula.__('reject','module_News');
+                    var actionword=actionmap[action];
+                    if ((action>0) && (valuescount>0)) {
+                        var options = {overlayOpacity:0.7,modal:true,draggable:false};
+                        var conf=Zikula.UI.Confirm(
+                            Zikula._fn('Are you sure you want to %s the following article',
+                                'Are you sure you want to %s the following articles',
+                                valuescount,
+                                ['<strong>'+actionword+'</strong>'],
+                                'module_News')+': '+values,
+                            Zikula.__('Confirm Bulk Action','module_News'),
+                            function(res){if(res) $('news_bulkaction').submit()},
+                            options
+                        );
+                    } else {
+                        $('bulkaction').value=0;
+                        Zikula.UI.Alert(
+                            Zikula.__f('Please select at least one article to %s.',actionword,'module_News'),
+                            Zikula.__('Bulk Action Error','module_News')
+                        )
                     }
                 });
             </script>
