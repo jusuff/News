@@ -1,4 +1,4 @@
-{ajaxheader modname='News' filename='news_storiesextblock_modify.js' effects=true nobehaviour=true noscriptaculous=true}
+{ajaxheader modname='News' filename='news_storiesextblock_modify.js' effects=true}
 
 <fieldset>
     <legend>{gt text='General settings'}</legend>

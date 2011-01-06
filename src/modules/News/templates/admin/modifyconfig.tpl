@@ -1,4 +1,4 @@
-{ajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true nobehaviour=true noscriptaculous=true}
+{ajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true}
 
 {include file='admin/menu.tpl'}
 

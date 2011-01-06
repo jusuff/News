@@ -1,4 +1,4 @@
-{ajaxheader modname='News' filename='news.js' nobehaviour=true noscriptaculous=true ui=true}
+{ajaxheader modname='News' filename='news.js' ui=true}
 {gt text='News articles list' assign='templatetitle'}
 
 {include file='admin/menu.tpl'}

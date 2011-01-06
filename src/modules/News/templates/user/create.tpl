@@ -1,4 +1,4 @@
-{ajaxheader modname='News' filename='news.js' effects=true dragdrop=true noscriptaculous=true}
+{ajaxheader modname='News' filename='news.js' effects=true dragdrop=true}
 {pageaddvar name='javascript' value='modules/News/javascript/sizecheck.js'}
 {if $modvars.News.enableattribution}
 {pageaddvar name="javascript" value="javascript/helpers/Zikula.itemlist.js"}
