@@ -1,5 +1,9 @@
 {gt text='Delete news article' assign='templatetitle'}
-{include file='admin/menu.tpl'}
+{admincategorymenu}
+<div class="z-adminbox">
+    <h1>{$modinfo.displayname}</h1>
+    {modulelinks modname='News' type='admin'}
+</div>
 
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='editdelete.gif' set='icons/large' alt=$templatetitle}</div>

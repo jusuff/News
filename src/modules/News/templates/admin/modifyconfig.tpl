@@ -1,6 +1,10 @@
 {ajaxheader modname='News' filename='news_admin_modifyconfig.js' effects=true}
 
-{include file='admin/menu.tpl'}
+{admincategorymenu}
+<div class="z-adminbox">
+    <h1>{$modinfo.displayname}</h1>
+    {modulelinks modname='News' type='admin'}
+</div>
 
 <div class="z-admincontainer">
     <div class="z-adminpageicon">{img modname='core' src='configure.gif' set='icons/large' __alt='Settings'}</div>

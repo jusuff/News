@@ -1,7 +1,7 @@
-{assign value='#'|cat:$smarty.ldelim|cat:'chars'|cat:$smarty.rdelim var='charstr'}
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = "{{gt text='%s characters out of 4,294,967,295' tag1=$charstr}}";
+    var charstr='#{chars}';
+    var bytesused = Zikula.__f('%s characters out of 4,294,967,295',charstr,'module_News');
     // ]]>
 </script>
 

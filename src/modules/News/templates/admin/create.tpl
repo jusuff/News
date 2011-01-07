@@ -13,22 +13,26 @@
 {/if}
 
 {gt text='Create new article' assign='templatetitle'}
-{include file='admin/menu.tpl'}
+{admincategorymenu}
+<div class="z-adminbox">
+    <h1>{$modinfo.displayname}</h1>
+    {modulelinks modname='News' type='admin'}
+</div>
 
-{assign value='#'|cat:$smarty.ldelim|cat:'chars'|cat:$smarty.rdelim var='charstr'}
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = "{{gt text='%s characters out of 4,294,967,295' tag1=$charstr}}";
-    var string_show = "{{gt text='Show'}}";
-    var string_hide = "{{gt text='Hide'}}";
-    var string_publish = "{{gt text='Publish'}}";
-    var string_schedule = "{{gt text='Schedule'}}";
-    var string_saveasdraft = "{{gt text='Save as draft'}}";
-    var string_updatedraft = "{{gt text='Update draft'}}";
-    var string_savingdraft = "{{gt text='Saving draft...'}}";
-    var string_emptytitle = "{{gt text='<strong>Title is empty, draft not saved!</strong>'}}";
-    var string_remove = "{{gt text='Remove'}}";
-    var string_picture = "{{gt text='Picture'}}";
+    var charstr='#{chars}';
+    var bytesused = Zikula.__f('%s characters out of 4,294,967,295',charstr,'module_News');
+    var string_show = Zikula.__f('Show','module_News');
+    var string_hide = Zikula.__f('Hide','module_News');
+    var string_publish = Zikula.__f('Publish','module_News');
+    var string_schedule = Zikula.__f('Schedule','module_News');
+    var string_saveasdraft = Zikula.__f('Save as draft','module_News');
+    var string_updatedraft = Zikula.__f('Update draft','module_News');
+    var string_savingdraft = Zikula.__f('Saving draft...','module_News');
+    var string_emptytitle = '<strong>'+Zikula.__f('Title is empty, draft not saved!','module_News')+'</strong>';
+    var string_remove = Zikula.__f('Remove','module_News');
+    var string_picture = Zikula.__f('Picture','module_News');
     {{if $modvars.News.enableattribution}}
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
@@ -117,7 +121,7 @@
                 {if $formattedcontent eq 0}
                 <div class="z-warningmsg">{gt text='Permitted HTML tags'}: {news_allowedhtml}</div>
                 {/if}
-                <div class="z-informationmsg" style='margin-bottom:0 !important;'><span class="z-mandatorysym">*</span> {gt text='You must enter either <b>teaser text</b> or <b>body text</b>.'}</div>
+                <div class="z-informationmsg" style='margin-bottom:0 !important;'><span class="z-mandatorysym">*</span> {gt text='You must enter either <strong>teaser text</strong> or <strong>body text</strong>.'}</div>
             </div>
             <div class="z-formrow">
                 <label for="news_hometext"><strong>{gt text='Index page teaser text'}</strong></label>

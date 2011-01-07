@@ -12,8 +12,8 @@
 
 <script type="text/javascript">
 // <![CDATA[
-  var string_show = "{{gt text='Show'}}";
-  var string_hide = "{{gt text='Hide'}}";
+  var string_show = Zikula.__f('Show','module_News');
+  var string_hide = Zikula.__f('Hide','module_News');
 // ]]>
 </script>
 {nocache}{include file='user/menu.tpl'}{/nocache}

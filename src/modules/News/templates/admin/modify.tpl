@@ -17,19 +17,23 @@
 {* Add editing / deleting of own (draft) articles *}
 {checkpermission component='News::' instance="$item.cr_uid::$item.sid" level='ACCESS_DELETE' assign='mayDelete'}
 
-{include file='admin/menu.tpl'}
+{admincategorymenu}
+<div class="z-adminbox">
+    <h1>{$modinfo.displayname}</h1>
+    {modulelinks modname='News' type='admin'}
+</div>
 
-{assign value='#'|cat:$smarty.ldelim|cat:'chars'|cat:$smarty.rdelim var='charstr'}
 <script type="text/javascript">
     // <![CDATA[
-    var bytesused = "{{gt text='%s characters out of 4,294,967,295' tag1=$charstr}}";
-    var string_show = "{{gt text='Show'}}";
-    var string_hide = "{{gt text='Hide'}}";
-    var string_publish = "{{gt text='Publish'}}";
-    var string_schedule = "{{gt text='Schedule'}}";
-    var string_saveasdraft = "{{gt text='Save as draft'}}";
-    var string_updatedraft = "{{gt text='Update draft'}}";
-    var string_savingdraft = "{{gt text='Saving draft...'}}";
+    var charstr='#{chars}';
+    var bytesused = Zikula.__f('%s characters out of 4,294,967,295',charstr,'module_News');
+    var string_show = Zikula.__f('Show','module_News');
+    var string_hide = Zikula.__f('Hide','module_News');
+    var string_publish = Zikula.__f('Publish','module_News');
+    var string_schedule = Zikula.__f('Schedule','module_News');
+    var string_saveasdraft = Zikula.__f('Save as draft','module_News');
+    var string_updatedraft = Zikula.__f('Update draft','module_News');
+    var string_savingdraft = Zikula.__f('Saving draft...','module_News');
     {{if $modvars.News.enableattribution}}
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
