@@ -66,7 +66,7 @@
                 {if $formattedcontent eq 0}
                 <div class="z-warningmsg">{gt text='Permitted HTML tags' domain='module_news'}: {news_allowedhtml}</div>
                 {/if}
-                <div class="z-informationmsg" style='margin-bottom:0 !important;'><span class="z-mandatorysym">*</span> {gt text='You must enter either <b>teaser text</b> or <b>body text</b>.' domain='module_news'}</div>
+                <div class="z-informationmsg" style='margin-bottom:0 !important;'><span class="z-mandatorysym">*</span> {gt text='You must enter either <strong>teaser text</strong> or <strong>body text</strong>.' domain='module_news'}</div>
             </div>
             <div class="z-formrow">
                 <label for="news_hometext"><strong>{gt text='Index page teaser text' domain='module_news'}</strong></label>

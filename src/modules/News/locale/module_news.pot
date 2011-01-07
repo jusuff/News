@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Zikula 1.2.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-07 02:44+0000\n"
+"POT-Creation-Date: 2011-01-07 21:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -878,7 +878,9 @@ msgstr ""
 
 #: templates/admin/create.tpl:122 templates/admin/modify.tpl:116
 #: templates/user/create.tpl:111 templates/ajax/modify.tpl:69
-msgid "You must enter either <b>teaser text</b> or <b>body text</b>."
+msgid ""
+"You must enter either <strong>teaser text</strong> or <strong>body text</"
+"strong>."
 msgstr ""
 
 #: templates/admin/create.tpl:125 templates/admin/modify.tpl:119
