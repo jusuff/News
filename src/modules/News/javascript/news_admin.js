@@ -55,32 +55,38 @@ function news_admin_bulkaction_init()
         values.sort(function(a,b){return a - b});
         var valuescount=values.length;
         var action=$F('news_bulkaction_select');
-        var actionmap=new Array(5);
+        var actionmap=new Array(6);
         actionmap[0]=null;
         actionmap[1]=Zikula.__('delete','module_News');
         actionmap[2]=Zikula.__('archive','module_News');
         actionmap[3]=Zikula.__('publish','module_News');
         actionmap[4]=Zikula.__('reject','module_News');
+        actionmap[5]=Zikula.__('change categories for','module_News');
         var actionword=actionmap[action];
         if ((action>0) && (valuescount>0)) {
             var options = {overlayOpacity:0.7,modal:true,draggable:false};
-            var conf=Zikula.UI.Confirm(
-                Zikula._fn('Are you sure you want to %s the following article',
-                    'Are you sure you want to %s the following articles',
-                    valuescount,
-                    ['<strong>'+actionword+'</strong>'],
-                    'module_News')+': '+values,
-                Zikula.__('Confirm Bulk Action','module_News'),
-                function(res){
-                    if(res) {
-                        $('news_bulkaction_form').submit();
-                    } else {
-                        // action cancelled
-                        $('news_bulkaction_select').selectedIndex=0;
-                    }
-                },
-                options
-            );
+            if (action!=5) {
+                var conf=Zikula.UI.Confirm(
+                    Zikula._fn('Are you sure you want to %s the following article',
+                        'Are you sure you want to %s the following articles',
+                        valuescount,
+                        ['<strong>'+actionword+'</strong>'],
+                        'module_News')+': '+values,
+                    Zikula.__('Confirm Bulk Action','module_News'),
+                    function(res){
+                        if(res) {
+                            $('news_bulkaction_form').submit();
+                        } else {
+                            // action cancelled
+                            $('news_bulkaction_select').selectedIndex=0;
+                        }
+                    },
+                    options
+                );
+            } else {
+                // change categories
+                var conf = new Zikula.UI.FormDialog($('news_changeCategoriesForm'));
+            }
         } else {
             $('news_bulkaction_select').selectedIndex=0;
             Zikula.UI.Alert(

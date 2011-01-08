@@ -19,18 +19,7 @@
 
 <script type="text/javascript">
     // <![CDATA[
-    var charstr='#{chars}';
-    var bytesused = Zikula.__f('%s characters out of 4,294,967,295',charstr,'module_News');
-    var string_show = Zikula.__f('Show','module_News');
-    var string_hide = Zikula.__f('Hide','module_News');
-    var string_publish = Zikula.__f('Publish','module_News');
-    var string_schedule = Zikula.__f('Schedule','module_News');
-    var string_saveasdraft = Zikula.__f('Save as draft','module_News');
-    var string_updatedraft = Zikula.__f('Update draft','module_News');
-    var string_savingdraft = Zikula.__f('Saving draft...','module_News');
-    var string_emptytitle = '<strong>'+Zikula.__f('Title is empty, draft not saved!','module_News')+'</strong>';
-    var string_remove = Zikula.__f('Remove','module_News');
-    var string_picture = Zikula.__f('Picture','module_News');
+    var bytesused = Zikula.__f('%s characters out of 4,294,967,295','#{chars}','module_News');
     {{if $modvars.News.enableattribution}}
     var itemlist_news_attributes = null;
     Event.observe(window, 'load', function() {
