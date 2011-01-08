@@ -65,7 +65,17 @@ function news_admin_bulkaction_init()
         var actionword=actionmap[action];
         if ((action>0) && (valuescount>0)) {
             var options = {overlayOpacity:0.7,modal:true,draggable:false};
+            executeform = function(data){
+                if(data) {
+                    $('news_bulkaction_categorydata').update(Object.toJSON(data));
+                    $('news_bulkaction_form').submit();
+                } else {
+                    // action cancelled
+                    $('news_bulkaction_select').selectedIndex=0;
+                }
+            }
             if (action!=5) {
+                // standard bulk actions
                 var conf=Zikula.UI.Confirm(
                     Zikula._fn('Are you sure you want to %s the following article',
                         'Are you sure you want to %s the following articles',
@@ -73,21 +83,19 @@ function news_admin_bulkaction_init()
                         ['<strong>'+actionword+'</strong>'],
                         'module_News')+': '+values,
                     Zikula.__('Confirm Bulk Action','module_News'),
-                    function(res){
-                        if(res) {
-                            $('news_bulkaction_form').submit();
-                        } else {
-                            // action cancelled
-                            $('news_bulkaction_select').selectedIndex=0;
-                        }
-                    },
+                    executeform,
                     options
                 );
             } else {
                 // change categories
-                var conf = new Zikula.UI.FormDialog($('news_changeCategoriesForm'));
+                var formdialog = new Zikula.UI.FormDialog(
+                    $('news_changeCategoriesForm'),
+                    executeform
+                );
+                formdialog.open();
             }
         } else {
+            // no articles selected
             $('news_bulkaction_select').selectedIndex=0;
             Zikula.UI.Alert(
                 Zikula.__f('Please select at least one article to %s.',actionword,'module_News'),

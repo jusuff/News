@@ -297,6 +297,7 @@ class News_Controller_Admin extends Zikula_Controller
         // Update the story
         if (ModUtil::apiFunc('News', 'admin', 'update', array(
                     'sid' => $story['sid'],
+                    'cr_uid' => $story['cr_uid'],
                     'title' => $story['title'],
                     'urltitle' => $story['urltitle'],
                     '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
@@ -843,13 +844,17 @@ class News_Controller_Admin extends Zikula_Controller
         // everything here is temporary
         $articles = FormUtil::getPassedValue('news_selected_articles', array(), 'POST');
         $bulkaction = (int)FormUtil::getPassedValue('news_bulkaction_select', 0, 'POST');
-        if ($bulkaction >= 1 && $bulkaction <= 4) {
+        $cat_data = FormUtil::getPassedValue('news_bulkaction_categorydata', '', 'POST');
+
+        if ($bulkaction >= 1 && $bulkaction <= 5) {
             $actionmap = array(1 => __('Delete'),
                 2 => __('Archive'),
                 3 => __('Publish'),
-                4 => __('Reject'));
+                4 => __('Reject'),
+                5 => __('Change categories'));
             $articlelist = implode(', ', $articles);
             LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %1$s; Articles: %2$s', array($actionmap[$bulkaction], $articlelist)));
+            LogUtil::registerStatus($this->__('cat_data') . ': [' . $cat_data . "]");
         } else {
             LogUtil::registerError($this->__('Error! Wrong bulk action.'));
         }

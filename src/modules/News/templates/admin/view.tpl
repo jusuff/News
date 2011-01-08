@@ -155,8 +155,10 @@
                     <option value='2'>{gt text='Archive'}</option>
                     <option value='3'>{gt text='Publish'}</option>
                     <option value='4'>{gt text='Reject'}</option>
+                    <option value='5'>{gt text='Change categories'}</option>
                 </select>
             </p>
+            <input type='hidden' name='news_bulkaction_categorydata' id='news_bulkaction_categorydata' value=''>
         </div>
     </form>
 
@@ -173,7 +175,24 @@
 
     {pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='startnum'}
 </div>
-
+<!-- This form below appears as a formdialog when a bulk action of 'change categories' is selected -->
+<div id='news_changeCategoriesForm' style='display: none;'>
+    <form class='z-form' method='post' action="#" enctype="application/x-www-form-urlencoded">
+        <div>
+            <fieldset>
+                <legend>{gt text='Select a Category'}</legend>
+                <div class="z-formrow">
+                    <input type="checkbox" name="mycheck" value="19" id='mycheck' />
+                    <label for="mycheck">Check this</label>
+                </div>
+                <div class="z-formrow">
+                    <label for="mytest">Type Something</label>
+                    <input type="text" value="255" size="5" name="mytest" id="mytest" />
+                </div>
+            </fieldset>
+        </div>
+    </form>
+</div>
 <script type="text/javascript">
 // <![CDATA[
     Zikula.UI.Tooltips($$('.tooltips'));
