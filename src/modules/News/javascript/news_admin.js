@@ -67,7 +67,7 @@ function news_admin_bulkaction_init()
             var options = {overlayOpacity:0.7,modal:true,draggable:false};
             executeform = function(data){
                 if(data) {
-                    $('news_bulkaction_categorydata').update(Object.toJSON(data));
+                    $('news_bulkaction_categorydata').setValue(Object.toJSON(data));
                     $('news_bulkaction_form').submit();
                 } else {
                     // action cancelled
@@ -90,7 +90,8 @@ function news_admin_bulkaction_init()
                 // change categories
                 var formdialog = new Zikula.UI.FormDialog(
                     $('news_changeCategoriesForm'),
-                    executeform
+                    executeform,
+                    options
                 );
                 formdialog.open();
             }
