@@ -490,7 +490,6 @@ function news_attributes_click()
     switchdisplaystate('news_attributes_details');
 }
 
-
 function news_notes_init()
 {
     $('news_notes_collapse').observe('click', news_notes_click);

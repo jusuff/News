@@ -860,4 +860,9 @@ class News_Controller_Admin extends Zikula_Controller
         }
         return System::redirect(ModUtil::url('News', 'admin', 'view'));
     }
+
+    public function selectuser () {
+        $this->view->display('admin/userselector.tpl');
+        return true;
+    }
 }

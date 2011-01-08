@@ -1,7 +1,6 @@
 <script type="text/javascript">
     // <![CDATA[
-    var charstr='#{chars}';
-    var bytesused = Zikula.__f('%s characters out of 4,294,967,295',charstr,'module_News');
+    var bytesused = Zikula.__f('%s characters out of 4,294,967,295','#{chars}','module_News');
     // ]]>
 </script>
 

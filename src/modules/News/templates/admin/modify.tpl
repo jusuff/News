@@ -294,7 +294,11 @@
                 <div id="news_meta_details">
                     <ul>
                         {usergetvar name='uname' uid=$item.cr_uid assign='username'}
-                        <li>{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$username tag2=$item.cr_date|dateformat}</li>
+                        <li>{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$username tag2=$item.cr_date|dateformat} <a id="news_cr_uid_edit" href="{modurl modname='News' type='admin' func='selectuser'}">{img modname='core' set='icons/extrasmall' src='xedit.gif' __title='Edit' __alt='Edit'}</a></li>
+                        <input type="hidden" id="news_cr_uid" name="story[cr_uid]" value="{$item.cr_uid}" />
+                        <script type="text/javascript">
+                            var userselectwindow = new Zikula.UI.FormDialog($('news_cr_uid_edit'));
+                        </script>
                         {usergetvar name='uname' uid=$item.lu_uid assign='username'}
                         <li>{gt text='Last edited'} {gt text='by %1$s on %2$s' tag1=$username tag2=$item.lu_date|dateformat}</li>
                         {if $item.published_status eq 0}
