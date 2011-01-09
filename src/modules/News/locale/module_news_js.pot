@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Zikula 1.x\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-01-09 19:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: javascript/news_admin.js:60
+msgid "delete"
+msgstr ""
+
+#: javascript/news_admin.js:61
+msgid "archive"
+msgstr ""
+
+#: javascript/news_admin.js:62
+msgid "publish"
+msgstr ""
+
+#: javascript/news_admin.js:63
+msgid "reject"
+msgstr ""
+
+#: javascript/news_admin.js:64
+msgid "change categories for"
+msgstr ""
+
+#: javascript/news_admin.js:80
+#, php-format
+msgid "Are you sure you want to %s the following article"
+msgid_plural "Are you sure you want to %s the following articles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: javascript/news_admin.js:85
+msgid "Confirm Bulk Action"
+msgstr ""
+
+#: javascript/news_admin.js:102
+#, php-format
+msgid "Please select at least one article to %s."
+msgstr ""
+
+#: javascript/news_admin.js:103
+msgid "Bulk action error"
+msgstr ""
+
+#: javascript/news.js:312
+msgid "Title is empty, draft not saved!"
+msgstr ""
+
+#: javascript/news.js:330 javascript/news.js:331
+msgid "Saving draft..."
+msgstr ""
+
+#: javascript/news.js:351 javascript/news.js:374
+msgid "Update draft"
+msgstr ""
+
+#: javascript/news.js:407 javascript/news.js:419 javascript/news.js:445
+msgid "Schedule"
+msgstr ""
+
+#: javascript/news.js:417
+msgid "Publish"
+msgstr ""
+
+#: javascript/news.js:437 javascript/news.js:454 javascript/news.js:474
+#: javascript/news.js:484 javascript/news.js:499 javascript/news.js:508
+msgid "Show"
+msgstr ""
+
+#: javascript/news.js:442 javascript/news.js:458 javascript/news.js:471
+#: javascript/news.js:488 javascript/news.js:511
+msgid "Hide"
+msgstr ""
