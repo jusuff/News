@@ -53,7 +53,7 @@
     {/if}
         <div>
             <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
-            <input type="hidden" name="story[sid]" value="{$item.sid|safetext}" />
+            <input type="hidden" name="story[sid]" id='news_sid' value="{$item.sid|safetext}" />
             <input type="hidden" name="story[approver]" value="{$item.approver|safetext}" />
             <input type="hidden" name="story[pictures]" value="{$item.pictures|safetext}" />
             {if $formattedcontent eq 1}
@@ -294,10 +294,11 @@
                 <div id="news_meta_details">
                     <ul>
                         {usergetvar name='uname' uid=$item.cr_uid assign='username'}
-                        <li>{gt text='Contributed'} {gt text='by %1$s on %2$s' tag1=$username tag2=$item.cr_date|dateformat} <a id="news_cr_uid_edit" href="{modurl modname='News' type='admin' func='selectuser'}">{img modname='core' set='icons/extrasmall' src='xedit.gif' __title='Edit' __alt='Edit'}</a></li>
+                        <li>{gt text='Contributed by'} <span id='news_contributor'>{$item.contributor}</span> {gt text='on'} {$item.cr_date|dateformat} <a id="news_cr_uid_edit" href="{modurl modname='News' type='admin' func='selectuser' id=$item.cr_uid}">{img modname='core' set='icons/extrasmall' src='xedit.gif' __title='Edit' __alt='Edit'}</a></li>
                         <input type="hidden" id="news_cr_uid" name="story[cr_uid]" value="{$item.cr_uid}" />
                         <script type="text/javascript">
-                            var userselectwindow = new Zikula.UI.FormDialog($('news_cr_uid_edit'));
+                            var options = {overlayOpacity:0.7,modal:true,draggable:false,resizable:false,initMaxHeight:220,title:Zikula.__('Article Author','module_News')};
+                            var userselectwindow = new Zikula.UI.FormDialog($('news_cr_uid_edit'),executeuserselectform,options);
                         </script>
                         {usergetvar name='uname' uid=$item.lu_uid assign='username'}
                         <li>{gt text='Last edited'} {gt text='by %1$s on %2$s' tag1=$username tag2=$item.lu_date|dateformat}</li>

@@ -298,6 +298,7 @@ class News_Controller_Admin extends Zikula_Controller
         if (ModUtil::apiFunc('News', 'admin', 'update', array(
                     'sid' => $story['sid'],
                     'cr_uid' => $story['cr_uid'],
+                    'contributor' => UserUtil::getVar('uname', $story['cr_uid'], $item['contributor']),
                     'title' => $story['title'],
                     'urltitle' => $story['urltitle'],
                     '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
@@ -861,7 +862,15 @@ class News_Controller_Admin extends Zikula_Controller
         return System::redirect(ModUtil::url('News', 'admin', 'view'));
     }
 
-    public function selectuser () {
+    /**
+     * Function to display a user selector form. This is used as a 'popup' window
+     * from the Article Modify template. Using JS, the content of the form is
+     * dumped back into the modify template.
+     * 
+     * @return boolean
+     */
+    public function selectuser() {
+        $this->view->assign('id', FormUtil::getPassedValue('id', 2, 'GET'));
         $this->view->display('admin/userselector.tpl');
         return true;
     }

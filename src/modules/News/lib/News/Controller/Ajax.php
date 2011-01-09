@@ -527,4 +527,38 @@ class News_Controller_Ajax extends Zikula_Controller
             'enabled' => $enabled);
         return new Zikula_Response_Ajax($response);
     }
+
+    /**
+     * update the story author
+     */
+    function updateauthor()
+    {
+        $uid = FormUtil::getPassedValue('uid', null, 'POST');
+        $sid = FormUtil::getPassedValue('sid', null, 'POST');
+        $dest = FormUtil::getPassedValue('dest', 'form', 'POST');
+
+        if (!SecurityUtil::confirmAuthKey()) {
+            LogUtil::registerPermissionError(null,true);
+            throw new Zikula_Exception_Forbidden();
+        }
+        // Security check
+        if (!SecurityUtil::checkPermission('News::', "::", ACCESS_ADMIN)) {
+            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorization.')));
+        }
+
+        if (!isset($uid) || !isset($sid)) {
+            return false;
+        }
+        $cont = UserUtil::getVar('uname', $uid);
+        $obj = array('sid' => $sid,
+            'cr_uid' => $uid,
+            'contributor' => $cont);
+        if ($res = DBUtil::updateObject($obj, 'news', '', 'sid')) {
+            return new Zikula_Response_Ajax(array('uid' => $uid,
+                'cont' => $cont,
+                'dest' => $dest));
+        } else {
+            return false;
+        }
+    }
 }

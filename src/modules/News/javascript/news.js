@@ -43,7 +43,9 @@ function news_init_check()
     if ($('news_attributes_collapse')) {
         news_attributes_init();
     }
-    news_isdraft();
+    if ($('news_button_text_draft')) {
+        news_isdraft();
+    }
     // activate the title field for a new article
     if ($('news_title') && $F('news_title') == '') {
         $('news_title').focus();
@@ -534,4 +536,40 @@ function news_meta_click()
         $('news_meta_collapse').addClassName('z-toggle-link-open');
     }
     switchdisplaystate('news_meta_details');
+}
+
+function executeuserselectform(data)
+{
+    if(data) {
+        //alert(Object.toJSON(data));
+        var pars = "uid="     + data.userselector
+                   + "&sid="  + $F('news_sid')
+                   + "&dest=" + data.destination;
+        new Zikula.Ajax.Request(
+            "ajax.php?module=News&func=updateauthor",
+            {
+                method: 'post',
+                parameters: pars,
+                authid: 'newsauthid',
+                onComplete: executeuserselectform_response
+            });
+    }
+}
+
+function executeuserselectform_response(req)
+{
+    if (!req.isSuccess()) {
+        showinfo();
+        Zikula.showajaxerror(req.getMessage());
+        return;
+    }
+
+    var data = req.getData();
+    if (data.dest == 'list') {
+        $('news_user_modifyform').submit();
+    } else {
+        $('news_cr_uid').setValue(data.uid);
+        $('news_contributor').update(data.cont); // not a form element
+        $('news_cr_uid_edit').insert({after: new Element('img', {src: 'images/icons/extrasmall/button_ok.gif'})} + ' ' + Zikula.__('Author updated'));
+    }
 }
