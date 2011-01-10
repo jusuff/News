@@ -182,12 +182,11 @@
             <fieldset>
                 <legend>{gt text='Select a Category'}</legend>
                 <div class="z-formrow">
-                    <input type="checkbox" name="mycheck" value="19" id='mycheck' />
-                    <label for="mycheck">Check this</label>
-                </div>
-                <div class="z-formrow">
-                    <label for="mytest">Type Something</label>
-                    <input type="text" value="255" size="5" name="mytest" id="mytest" />
+                    <label>{gt text='Category'}</label>
+                    {gt text='Choose category' assign='lblDef'}
+                    {foreach from=$catregistry key='property' item='category'}
+                    <div class="z-formnote">{selector_category category=$category name="cat[$property]" field='id' defaultValue='0' editLink=false defaultText=$lblDef}</div>
+                    {/foreach}
                 </div>
             </fieldset>
         </div>
