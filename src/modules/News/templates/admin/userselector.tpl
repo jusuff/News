@@ -1,6 +1,8 @@
 <div id='news_userselector'>
     <form class='z-form' method='post' id='news_userselector_form' action="#" enctype="application/x-www-form-urlencoded">
-        <fieldset>
+    {* general use authid *}
+    <input type="hidden" id="newsauthid" name="authid" value="{insert name="generateauthkey" module="News"}" />
+    <fieldset>
             <legend>{gt text='Article Author'}</legend>
             <div class="z-formrow">
                 <label for="userselector">{gt text='Select a new article author:'}</label>
