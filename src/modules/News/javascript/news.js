@@ -550,7 +550,7 @@ function executeuserselectform(data)
             {
                 method: 'post',
                 parameters: pars,
-                authid: 'newsauthid',
+                //authid: 'newsauthid',
                 onComplete: executeuserselectform_response
             });
     }
@@ -563,14 +563,15 @@ function executeuserselectform_response(req)
         Zikula.showajaxerror(req.getMessage());
         return;
     }
-
     var data = req.getData();
-    if (data.dest == 'list') {
-        $('news_user_modifyform').submit();
-    } else {
+    if (data) {
         $('news_cr_uid_edit').hide();
         $('news_cr_uid').setValue(data.uid);
         $('news_contributor').update(data.cont); // not a form element
         $('news_cr_uid_edit').insert({after: ' ' + Zikula.__('Author updated')}).insert({after: new Element('img', {src: 'images/icons/extrasmall/button_ok.gif'})});
+        if (data.dest == 'list') {
+            $('news_user_modifyform').insert({bottom: new Element('input', {type: 'hidden', name: 'story[action]', value: '2'})});
+            $('news_user_modifyform').submit();
+        }
     }
 }
