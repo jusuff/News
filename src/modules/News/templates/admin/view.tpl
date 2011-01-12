@@ -158,19 +158,21 @@
                     <option value='5'>{gt text='Change categories'}</option>
                 </select>
             </p>
-            <input type='hidden' name='news_bulkaction_categorydata' id='news_bulkaction_categorydata' value=''>
+            <input type='hidden' name='news_bulkaction_categorydata' id='news_bulkaction_categorydata' value='' />
         </div>
     </form>
 
     <form class="z-form" action="{modurl modname='News' type='admin' func='modify'}" method="post">
-        <fieldset>
-            <label for="directsid">{gt text='Access a past article via its ID'}:</label>
-            <input type="text" id="directsid" name="sid" value="" size="5" maxlength="8" />
-            <span class="z-nowrap z-buttons">
-                <input class="z-bt-small" name="submit" type="submit" value="{gt text='Go retrieve'}" />
-                <input class="z-bt-small" name="reset" type="reset" value="{gt text='Reset'}" />
-            </span>
-        </fieldset>
+        <div>
+            <fieldset>
+                <label for="directsid">{gt text='Access a past article via its ID'}:</label>
+                <input type="text" id="directsid" name="sid" value="" size="5" maxlength="8" />
+                <span class="z-nowrap z-buttons">
+                    <input class="z-bt-small" name="submit" type="submit" value="{gt text='Go retrieve'}" />
+                    <input class="z-bt-small" name="reset" type="reset" value="{gt text='Reset'}" />
+                </span>
+            </fieldset>
+        </div>
     </form>
 
     {pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='startnum'}

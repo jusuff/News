@@ -5,7 +5,7 @@
     <fieldset>
             <legend>{gt text='Article Author'}</legend>
             <div class="z-formrow">
-                <label for="userselector">{gt text='Select a new article author:'}</label>
+                <label for="userselector">{gt text='Select a new article author'}</label>
                 {selector_user selectedValue=$id id='userselector' name='userselector'}
             </div>
             <div class="z-formrow">
