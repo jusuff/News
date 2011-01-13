@@ -541,7 +541,6 @@ function news_meta_click()
 function executeuserselectform(data)
 {
     if(data) {
-        //alert(Object.toJSON(data));
         var pars = "uid="     + data.userselector
                    + "&sid="  + $F('news_sid')
                    + "&dest=" + data.destination;
@@ -550,7 +549,7 @@ function executeuserselectform(data)
             {
                 method: 'post',
                 parameters: pars,
-                //authid: 'newsauthid',
+                authid: 'newsauthid',
                 onComplete: executeuserselectform_response
             });
     }

@@ -537,10 +537,10 @@ class News_Controller_Ajax extends Zikula_Controller
         $sid = FormUtil::getPassedValue('sid', null, 'POST');
         $dest = FormUtil::getPassedValue('dest', 'form', 'POST');
 
-//        if (!SecurityUtil::confirmAuthKey()) {
-//            LogUtil::registerPermissionError(null,true);
-//            throw new Zikula_Exception_Forbidden();
-//        }
+        if (!SecurityUtil::confirmAuthKey()) {
+            LogUtil::registerPermissionError(null,true);
+            throw new Zikula_Exception_Forbidden();
+        }
         // Security check
         if (!SecurityUtil::checkPermission('News::', "::", ACCESS_ADMIN)) {
             AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorization.')));

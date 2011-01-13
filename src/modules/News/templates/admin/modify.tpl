@@ -52,7 +52,7 @@
     <form id="news_user_modifyform" class="z-form" action="{modurl modname='News' type='admin' func='update'}" method="post" enctype="application/x-www-form-urlencoded">
     {/if}
         <div>
-            <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
+            <input type="hidden" name="authid" id="newsauthid" value="{insert name='generateauthkey' module='News'}" />
             <input type="hidden" name="story[sid]" id='news_sid' value="{$item.sid|safetext}" />
             <input type="hidden" name="story[approver]" value="{$item.approver|safetext}" />
             <input type="hidden" name="story[pictures]" value="{$item.pictures|safetext}" />
