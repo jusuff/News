@@ -44,11 +44,6 @@ class News_Version extends Zikula_Version
         $bundle->addType('process.delete', 'news.hook.articles.process.delete');
         $this->registerHookSubscriberBundle($bundle);
 
-        $bundle = new Zikula_Version_HookSubscriberBundle('modulehook_area.news.config', $this->__('News Module Config Hooks'));
-        $bundle->addType('ui.edit', 'news.hook.config.ui.edit');
-        $bundle->addType('process.edit', 'news.hook.config.process.edit');
-        $this->registerHookSubscriberBundle($bundle);
-
         $bundle = new Zikula_Version_HookSubscriberBundle('modulehook_area.news.articlesfilter', $this->__('News Display Hooks'));
         $bundle->addType('ui.filter', 'news.hook.articlesfilter.ui.filter');
         $this->registerHookSubscriberBundle($bundle);

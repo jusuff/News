@@ -793,7 +793,7 @@ class News_Controller_Admin extends Zikula_Controller
                             if (FileUtil::writeFile($modvars['picupload_uploaddir'] . DIRECTORY_SEPARATOR . '.htaccess', $htaccessContent)) {
                                 LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s] and wrote an .htaccess file there for security.', $modvars['picupload_uploaddir']));
                             } else {
-                                LogUtil::registerStatus($this__f('News publisher created the image upload directory successfully at [%s], but could not write the .htaccess file there.', $modvars['picupload_uploaddir']));
+                                LogUtil::registerStatus($this->__f('News publisher created the image upload directory successfully at [%s], but could not write the .htaccess file there.', $modvars['picupload_uploaddir']));
                             }
                         } else {
                             LogUtil::registerStatus($this->__f('Warning! News publisher could not create the specified image upload directory [%s]. Try to create it yourself and make sure that this folder is accessible via the web and writable by the webserver.', $modvars['picupload_uploaddir']));
@@ -816,8 +816,6 @@ class News_Controller_Admin extends Zikula_Controller
 
         $this->setVars($modvars);
 
-        // Let any other modules know that the modules configuration has been updated
-        $this->notifyHooks('news.hook.config.process.edit', null, null);
         // the module configuration has been updated successfuly
         LogUtil::registerStatus($this->__('Done! Saved module settings.'));
 
