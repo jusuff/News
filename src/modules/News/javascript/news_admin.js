@@ -63,6 +63,11 @@ function news_admin_bulkaction_init()
         actionmap[4]=Zikula.__('reject','module_News');
         actionmap[5]=Zikula.__('change categories for','module_News');
         var actionword=actionmap[action];
+        if (actionword=='delete') {
+            var deletemessage='<br /><br /><strong class="z-warningmsg">'+Zikula.__('You cannot undo this operation!','module_News')+'</strong>';
+        } else {
+            var deletemessage='';
+        }
         if ((action>0) && (valuescount>0)) {
             var options = {modal:true,draggable:false};
             executeform = function(data){
@@ -81,7 +86,7 @@ function news_admin_bulkaction_init()
                         'Are you sure you want to %s the following articles',
                         valuescount,
                         ['<strong>'+actionword+'</strong>'],
-                        'module_News')+': '+values,
+                        'module_News')+': '+values+deletemessage,
                     Zikula.__('Confirm Bulk Action','module_News'),
                     executeform,
                     options

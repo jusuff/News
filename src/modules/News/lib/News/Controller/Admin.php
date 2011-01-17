@@ -840,12 +840,9 @@ class News_Controller_Admin extends Zikula_Controller
             return LogUtil::registerAuthidError(ModUtil::url('News', 'Admin', 'view'));
         }
 
-        // everything here is temporary
         $articles = FormUtil::getPassedValue('news_selected_articles', array(), 'POST');
         $bulkaction = (int)FormUtil::getPassedValue('news_bulkaction_select', 0, 'POST');
         $cat_data = FormUtil::getPassedValue('news_bulkaction_categorydata', '', 'POST');
-        $cat_info = json_decode($cat_data, true);
-        $cat_info = 'php array: ' . implode(", ", $cat_info);
 
         if ($bulkaction >= 1 && $bulkaction <= 5) {
             $actionmap = array(1 => __('Delete'),
@@ -853,9 +850,46 @@ class News_Controller_Admin extends Zikula_Controller
                 3 => __('Publish'),
                 4 => __('Reject'),
                 5 => __('Change categories'));
-            $articlelist = implode(', ', $articles);
-            LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %1$s; Articles: %2$s', array($actionmap[$bulkaction], $articlelist)));
-            LogUtil::registerStatus($this->__('cat_data') . ': [' . $cat_info . "]");
+            $updateresult = array(
+                'successful' => array(),
+                'failed' => array());
+            
+            switch ($bulkaction) {
+                case 1: // delete
+                    foreach ($articles as $article) {
+                        if (DBUtil::deleteObjectByID('news', $article, 'sid')) {
+                            $updateresult['successful'][] = $article;
+                        } else {
+                            $updateresult['failed'][] = $article;
+                        }
+                    }
+                    break;
+                case 5: // change categories
+                    $cat_info = json_decode($cat_data, true);
+                    $cat_info = 'php array: ' . implode(", ", $cat_info);
+                    LogUtil::registerStatus($this->__('cat_data') . ': [' . $cat_info . "]");
+                    break;
+                default: // archive, publish or reject
+                    $statusmap = array(
+                        2 => 3, // archive
+                        3 => 0, // publish
+                        4 => 1  // reject
+                    );
+                    foreach ($articles as $article) {
+                        $obj = array(
+                            'sid' => $article,
+                            'published_status' => $statusmap[$bulkaction]
+                        );
+                        if (DBUtil::updateObject($obj, 'news', '', 'sid')) {
+                            $updateresult['successful'][] = $article;
+                        } else {
+                            $updateresult['failed'][] = $article;
+                        }
+                    }
+            }
+            $updateresult['successful']['list'] = implode(', ', $updateresult['successful']);
+            $updateresult['failed']['list'] = implode(', ', $updateresult['failed']);
+            LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %1$s.<br />Success with articles: %2$s<br />Failed with articles: %3$s', array($actionmap[$bulkaction], $updateresult['successful']['list'], $updateresult['failed']['list'])));
         } else {
             LogUtil::registerError($this->__('Error! Wrong bulk action.'));
         }
