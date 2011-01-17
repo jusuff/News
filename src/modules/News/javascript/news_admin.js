@@ -64,7 +64,7 @@ function news_admin_bulkaction_init()
         actionmap[5]=Zikula.__('change categories for','module_News');
         var actionword=actionmap[action];
         if ((action>0) && (valuescount>0)) {
-            var options = {overlayOpacity:0.7,modal:true,draggable:false};
+            var options = {modal:true,draggable:false};
             executeform = function(data){
                 if(data) {
                     $('news_bulkaction_categorydata').setValue(Object.toJSON(data));

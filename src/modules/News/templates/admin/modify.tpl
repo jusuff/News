@@ -298,7 +298,7 @@
                             {gt text='Contributed by'} <span id='news_contributor'>{$item.contributor}</span> {gt text='on'} {$item.cr_date|dateformat} <a id="news_cr_uid_edit" href="{modurl modname='News' type='admin' func='selectuser' id=$item.cr_uid}">{img modname='core' set='icons/extrasmall' src='xedit.gif' __title='Edit' __alt='Edit'}</a>
                             <input type="hidden" id="news_cr_uid" name="story[cr_uid]" value="{$item.cr_uid}" />
                             <script type="text/javascript">
-                                var options = {overlayOpacity:0.7,modal:true,draggable:false,resizable:false,initMaxHeight:220,title:Zikula.__('Article Author','module_News')};
+                                var options = {modal:true,draggable:false,resizable:false,initMaxHeight:220,title:Zikula.__('Article Author','module_News')};
                                 var userselectwindow = new Zikula.UI.FormDialog($('news_cr_uid_edit'),executeuserselectform,options);
                             </script>
                         </li>
