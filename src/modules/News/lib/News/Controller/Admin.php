@@ -263,7 +263,7 @@ class News_Controller_Admin extends Zikula_Controller
             }
             // back to the referer form
             SessionUtil::setVar('newsitem', $story);
-            return System::redirect(ModUtil::url('News', 'admin', 'modify'));
+            return $this->redirect(ModUtil::url('News', 'admin', 'modify'));
         } else {
             // As we're not previewing the item let's remove it from the session
             SessionUtil::delVar('newsitem');
@@ -333,7 +333,7 @@ class News_Controller_Admin extends Zikula_Controller
         }
 
         $this->view->clear_cache();
-        return System::redirect(ModUtil::url('News', 'admin', 'view'));
+        return $this->redirect(ModUtil::url('News', 'admin', 'view'));
     }
 
     /**
@@ -396,7 +396,7 @@ class News_Controller_Admin extends Zikula_Controller
             $this->notifyHooks('news.hook.articles.process.delete', $item, $sid);
         }
 
-        return System::redirect(ModUtil::url('News', 'admin', 'view'));
+        return $this->redirect(ModUtil::url('News', 'admin', 'view'));
     }
 
     /**
@@ -428,7 +428,7 @@ class News_Controller_Admin extends Zikula_Controller
             } else {
                 LogUtil::registerError($this->__('Error! Could not purge permalinks.'));
             }
-            return System::redirect(strpos(System::serverGetVar('HTTP_REFERER'), 'purge') ? ModUtil::url('News', 'admin', 'view') : System::serverGetVar('HTTP_REFERER'));
+            return $this->redirect(strpos(System::serverGetVar('HTTP_REFERER'), 'purge') ? ModUtil::url('News', 'admin', 'view') : System::serverGetVar('HTTP_REFERER'));
         }
 
         if ($clear) {
@@ -819,7 +819,7 @@ class News_Controller_Admin extends Zikula_Controller
         // the module configuration has been updated successfuly
         LogUtil::registerStatus($this->__('Done! Saved module settings.'));
 
-        return System::redirect(ModUtil::url('News', 'admin', 'main'));
+        return $this->redirect(ModUtil::url('News', 'admin', 'main'));
     }
 
     /**
@@ -893,7 +893,7 @@ class News_Controller_Admin extends Zikula_Controller
         } else {
             LogUtil::registerError($this->__('Error! Wrong bulk action.'));
         }
-        return System::redirect(ModUtil::url('News', 'admin', 'view'));
+        return $this->redirect(ModUtil::url('News', 'admin', 'view'));
     }
 
     /**

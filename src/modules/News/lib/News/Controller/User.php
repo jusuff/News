@@ -227,7 +227,7 @@ class News_Controller_User extends Zikula_Controller
             }
             // back to the referer form
             SessionUtil::setVar('newsitem', $item);
-            return System::redirect(ModUtil::url('News', $referertype, 'newitem'));
+            return $this->redirect(ModUtil::url('News', $referertype, 'newitem'));
         } else {
             // Confirm authorisation code.
             if (!SecurityUtil::confirmAuthKey()) {
@@ -283,7 +283,7 @@ class News_Controller_User extends Zikula_Controller
                     array('lockName' => "Newsnews{$item['sid']}"));
             }
         }
-        return System::redirect(ModUtil::url('News', $referertype, 'view'));
+        return $this->redirect(ModUtil::url('News', $referertype, 'view'));
     }
 
     /**
@@ -644,7 +644,7 @@ class News_Controller_User extends Zikula_Controller
         if (!empty($year) || !empty($month)) {
             if ((empty($year) || empty($month)) ||
                     ($year > (int) $currentdate[0] || ($year == (int) $currentdate[0] && $month > (int) $currentdate[1]))) {
-                System::redirect(ModUtil::url('News', 'user', 'archives'));
+                $this->redirect(ModUtil::url('News', 'user', 'archives'));
             } elseif ($year == (int) $currentdate[0] && $month == (int) $currentdate[1]) {
                 $day = (int) $currentdate[2];
             }
