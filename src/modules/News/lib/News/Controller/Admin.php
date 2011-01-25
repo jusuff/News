@@ -865,9 +865,17 @@ class News_Controller_Admin extends Zikula_Controller
                     }
                     break;
                 case 5: // change categories
-                    $cat_info = json_decode($cat_data, true);
-                    $cat_info = 'php array: ' . implode(", ", $cat_info);
-                    LogUtil::registerStatus($this->__('cat_data') . ': [' . $cat_info . "]");
+                    $obj = array();
+                    $obj['__CATEGORIES__'] = json_decode($cat_data, true);
+                    unset ($obj['__CATEGORIES__']['submit']);
+                    foreach ($articles as $article) {
+                        $obj['sid'] = $article;
+                        if (DBUtil::updateObject($obj, 'news', '', 'sid')) {
+                            $updateresult['successful'][] = $article;
+                        } else {
+                            $updateresult['failed'][] = $article;
+                        }
+                    }
                     break;
                 default: // archive, publish or reject
                     $statusmap = array(
@@ -889,7 +897,13 @@ class News_Controller_Admin extends Zikula_Controller
             }
             $updateresult['successful']['list'] = implode(', ', $updateresult['successful']);
             $updateresult['failed']['list'] = implode(', ', $updateresult['failed']);
-            LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %1$s.<br />Success with articles: %2$s<br />Failed with articles: %3$s', array($actionmap[$bulkaction], $updateresult['successful']['list'], $updateresult['failed']['list'])));
+            LogUtil::registerStatus($this->__f('Processed Bulk Action. Action: %s.', $actionmap[$bulkaction]));
+            if (!empty($updateresult['successful']['list'])) {
+                LogUtil::registerStatus($this->__f('Success with articles: %s', $updateresult['successful']['list']));
+            }
+            if (!empty($updateresult['failed']['list'])) {
+                LogUtil::registerError($this->__f('Failed with articles: %s', $updateresult['failed']['list']));
+            }
         } else {
             LogUtil::registerError($this->__('Error! Wrong bulk action.'));
         }

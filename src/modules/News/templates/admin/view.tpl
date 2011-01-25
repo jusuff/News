@@ -187,7 +187,7 @@
                     <label>{gt text='Category'}</label>
                     {gt text='Choose category' assign='lblDef'}
                     {foreach from=$catregistry key='property' item='category'}
-                    <div class="z-formnote">{selector_category category=$category name="cat[$property]" field='id' defaultValue='0' editLink=false defaultText=$lblDef}</div>
+                    <div class="z-formnote">{selector_category category=$category name=$property field='id' defaultValue='0' editLink=false defaultText=$lblDef}</div>
                     {/foreach}
                 </div>
             </fieldset>
