@@ -10,12 +10,6 @@
 {setmetatag name='description' value=$info.hometext|notifyfilters:'news.hook.articlesfilter.ui.filter'|strip_tags|trim|truncate:$modvars.News.descriptionvarchars}
 {/if}
 
-<script type="text/javascript">
-// <![CDATA[
-  var string_show = Zikula.__f('Show','module_News');
-  var string_hide = Zikula.__f('Hide','module_News');
-// ]]>
-</script>
 {nocache}{include file='user/menu.tpl'}{/nocache}
 {insert name='getstatusmsg'}
 
