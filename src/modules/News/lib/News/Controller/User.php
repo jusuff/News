@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Zikula Application Framework
  *
@@ -11,6 +10,7 @@
  * @package    Content_Management
  * @subpackage News
  */
+
 class News_Controller_User extends Zikula_Controller
 {
 
@@ -1040,17 +1040,7 @@ class News_Controller_User extends Zikula_Controller
             if ($html) {
                 $body = $this->__f('<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2$s for review on website %3$s.<br />Index page teaser text of the article:<br /><hr />%4$s<hr /><br /><br />Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the <em>Pending Review</em> article(s).<br /><br />Regards,<br />%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
             } else {
-                $body = $this->__f('
-A News Publisher article \'%1$s\' has been submitted by %2$s for review on website %3$s.
-Index page teaser text of the article:
---------
-%4$s
---------
-
-Go to the <a href="%5$s">news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).
-
-Regards,
-%6$s', array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
+                $body = $this->__f("A News Publisher article '%1\$s' has been submitted by %2\$s for review on website %3\$s.\nIndex page teaser text of the article:\n--------\n%4\$s\n--------\n\nGo to the <a href='%5\$s'>news publisher admin</a> pages to review and publish the \'Pending Review\' article(s).\n\nRegards,\n%6\$s\n", array($item['title'], $contributor, $sitename, $item['hometext'], ModUtil::url('News', 'admin', 'view', array('news_status' => 2), null, null, true), $sitename));
             }
             $sent = ModUtil::apiFunc('Mailer', 'user', 'sendmessage', array('toname' => $toname,
                         'toaddress' => $toaddress,

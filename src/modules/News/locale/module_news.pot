@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Zikula 1.x\n"
+"Project-Id-Version: Zikula component\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-09 19:15+0000\n"
+"POT-Creation-Date: 2011-01-30 10:05-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,61 +25,61 @@ msgstr ""
 msgid "Error! No needle ID provided."
 msgstr ""
 
-#: templates/plugins/function.articleadminlinks.php:86
-#: templates/plugins/function.articleadminlinks.php:88
-#: lib/News/Controller/Admin.php:547 templates/admin/create.tpl:70
-#: templates/admin/modify.tpl:292 templates/user/categorylist.tpl:45
-#: templates/user/categorylist.tpl:88
-msgid "Edit"
-msgstr ""
-
-#: templates/plugins/function.articleadminlinks.php:90
-#: lib/News/Controller/Admin.php:555 lib/News/Controller/Admin.php:851
-#: templates/admin/create.tpl:261 templates/admin/create.tpl:281
-#: templates/admin/modify.tpl:258 templates/admin/modify.tpl:278
-#: templates/admin/modify.tpl:343 templates/admin/view.tpl:154
-#: templates/admin/delete.tpl:21 templates/user/create.tpl:245
-#: templates/user/create.tpl:265 templates/ajax/modify.tpl:214
-#: templates/ajax/modify.tpl:234 templates/ajax/modify.tpl:254
-msgid "Delete"
-msgstr ""
-
 #: templates/plugins/modifier.news_getstatustext.php:27
 msgid "Unknown status"
 msgstr ""
 
 #: templates/plugins/modifier.news_getstatustext.php:32
-#: pncontenttypesapi/newsarticles.php:366 lib/News/Api/Admin.php:235
-#: lib/News/Controller/Admin.php:503 lib/News/Controller/Admin.php:612
+#: pncontenttypesapi/newsarticles.php:366 lib/News/Controller/Admin.php:503
+#: lib/News/Controller/Admin.php:612 lib/News/Api/Admin.php:235
 #: templates/block/storiesext/modify.tpl:35
 msgid "Published"
 msgstr ""
 
 #: templates/plugins/modifier.news_getstatustext.php:36
-#: pncontenttypesapi/newsarticles.php:367 lib/News/Api/Admin.php:237
-#: lib/News/Controller/Admin.php:504 lib/News/Controller/Admin.php:658
+#: pncontenttypesapi/newsarticles.php:367 lib/News/Controller/Admin.php:504
+#: lib/News/Controller/Admin.php:658 lib/News/Api/Admin.php:237
 msgid "Rejected"
 msgstr ""
 
 #: templates/plugins/modifier.news_getstatustext.php:40
-#: pncontenttypesapi/newsarticles.php:368 lib/News/Api/Admin.php:239
-#: lib/News/Controller/Admin.php:505 lib/News/Controller/Admin.php:631
+#: pncontenttypesapi/newsarticles.php:368 lib/News/Controller/Admin.php:505
+#: lib/News/Controller/Admin.php:631 lib/News/Api/Admin.php:239
 #: templates/admin/view.tpl:111
 msgid "Pending Review"
 msgstr ""
 
 #: templates/plugins/modifier.news_getstatustext.php:44
-#: pncontenttypesapi/newsarticles.php:369 lib/News/Api/Admin.php:241
-#: lib/News/Controller/Admin.php:506 lib/News/Controller/Admin.php:649
+#: pncontenttypesapi/newsarticles.php:369 lib/News/Controller/Admin.php:506
+#: lib/News/Controller/Admin.php:649 lib/News/Api/Admin.php:241
 #: templates/block/storiesext/modify.tpl:36
 msgid "Archived"
 msgstr ""
 
 #: templates/plugins/modifier.news_getstatustext.php:48
-#: lib/News/Api/Admin.php:243 lib/News/Controller/Admin.php:507
-#: lib/News/Controller/Admin.php:640 templates/admin/view.tpl:112
+#: lib/News/Controller/Admin.php:507 lib/News/Controller/Admin.php:640
+#: lib/News/Api/Admin.php:243 templates/admin/view.tpl:112
 #: templates/block/storiesext/modify.tpl:37
 msgid "Draft"
+msgstr ""
+
+#: templates/plugins/function.articleadminlinks.php:86
+#: templates/plugins/function.articleadminlinks.php:88
+#: lib/News/Controller/Admin.php:547 templates/admin/create.tpl:70
+#: templates/admin/modify.tpl:293 templates/user/categorylist.tpl:45
+#: templates/user/categorylist.tpl:88
+msgid "Edit"
+msgstr ""
+
+#: templates/plugins/function.articleadminlinks.php:90
+#: lib/News/Controller/Admin.php:555 lib/News/Controller/Admin.php:848
+#: templates/admin/delete.tpl:21 templates/admin/create.tpl:261
+#: templates/admin/create.tpl:281 templates/admin/modify.tpl:258
+#: templates/admin/modify.tpl:278 templates/admin/modify.tpl:342
+#: templates/admin/view.tpl:154 templates/user/create.tpl:245
+#: templates/user/create.tpl:265 templates/ajax/modify.tpl:214
+#: templates/ajax/modify.tpl:234 templates/ajax/modify.tpl:254
+msgid "Delete"
 msgstr ""
 
 #: templates/plugins/modifier.dateformatHuman.php:53
@@ -165,21 +165,18 @@ msgstr ""
 msgid "Read more..."
 msgstr ""
 
-#: pncontenttypesapi/newsarticles.php:360
+#: pncontenttypesapi/newsarticles.php:360 templates/block/stories_modify.tpl:4
 #: templates/block/storiesext/modify.tpl:8
-#: templates/block/stories_modify.tpl:4
 msgid "Show all news articles"
 msgstr ""
 
-#: pncontenttypesapi/newsarticles.php:361
+#: pncontenttypesapi/newsarticles.php:361 templates/block/stories_modify.tpl:5
 #: templates/block/storiesext/modify.tpl:9
-#: templates/block/stories_modify.tpl:5
 msgid "Show only articles set for index page listing"
 msgstr ""
 
-#: pncontenttypesapi/newsarticles.php:362
+#: pncontenttypesapi/newsarticles.php:362 templates/block/stories_modify.tpl:6
 #: templates/block/storiesext/modify.tpl:10
-#: templates/block/stories_modify.tpl:6
 msgid "Show only articles not set for index page listing"
 msgstr ""
 
@@ -194,8 +191,8 @@ msgid "Number of pageviews"
 msgstr ""
 
 #: pncontenttypesapi/newsarticles.php:376 lib/News/Controller/Admin.php:588
-#: templates/admin/create.tpl:185 templates/admin/modify.tpl:187
-#: templates/admin/modifyconfig.tpl:57 templates/user/create.tpl:175
+#: templates/admin/modifyconfig.tpl:57 templates/admin/create.tpl:185
+#: templates/admin/modify.tpl:187 templates/user/create.tpl:175
 #: templates/block/storiesext/modify.tpl:45 templates/ajax/modify.tpl:143
 msgid "Article weight"
 msgstr ""
@@ -205,22 +202,343 @@ msgstr ""
 msgid "Random"
 msgstr ""
 
-#: lib/News/Util.php:34
-msgid "title"
+#: lib/News/Controller/Admin.php:85 lib/News/Controller/Admin.php:240
+#: lib/News/Controller/Admin.php:366 lib/News/Controller/Ajax.php:32
+#: lib/News/Controller/Ajax.php:122 lib/News/Controller/Ajax.php:240
+#: lib/News/Controller/Ajax.php:368 lib/News/Controller/Ajax.php:431
+#: lib/News/Controller/User.php:537 lib/News/Controller/User.php:856
+#: lib/News/Api/Admin.php:34 lib/News/Api/Admin.php:97
+msgid "Error! No such article found."
 msgstr ""
 
-#: lib/News/Util.php:34
+#: lib/News/Controller/Admin.php:323 lib/News/Controller/Ajax.php:311
+msgid "Done! Saved your changes."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:393 lib/News/Controller/Ajax.php:321
+msgid "Done! Deleted article."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:427
+msgid "Done! Purged permalinks."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:429
+msgid "Error! Could not purge permalinks."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:502 lib/News/Controller/Admin.php:664
+#: lib/News/Api/Admin.php:233 templates/admin/view.tpl:27
+#: templates/block/storiesext/modify.tpl:21
+msgid "All"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:508 lib/News/Controller/Admin.php:622
+#: lib/News/Api/Admin.php:245
+msgid "Scheduled"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:532 lib/News/Controller/Admin.php:536
+msgid "View"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:543
+msgid "Review"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:563
+msgid "Unknown"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:567 templates/admin/modifyconfig.tpl:71
+#: templates/block/storiesext/modify.tpl:121
+#: templates/block/storiesext/modify.tpl:144
+msgid "Yes"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:569 templates/admin/modifyconfig.tpl:72
+#: templates/block/storiesext/modify.tpl:122
+#: templates/block/storiesext/modify.tpl:145
+msgid "No"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:586 templates/admin/modifyconfig.tpl:56
+msgid "Article date/time"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:587 templates/admin/modifyconfig.tpl:55
+#: templates/admin/modifyconfig.tpl:273 templates/admin/create.tpl:220
+msgid "Article ID"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:781
 #, php-format
-msgid "Error! You did not enter a %s."
+msgid ""
+"Warning! The image upload directory at [%s] appears to be 'above' the "
+"DOCUMENT_ROOT. Please choose a path relative to the webserver (e.g. images/"
+"news_picupload)."
 msgstr ""
 
-#: lib/News/Util.php:38
-msgid "article content"
-msgstr ""
-
-#: lib/News/Util.php:38
+#: lib/News/Controller/Admin.php:785
 #, php-format
-msgid "Error! You did not enter the minimum necessary %s."
+msgid ""
+"Warning! The image upload directory at [%s] exists but is not writable by "
+"the webserver."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:794
+#, php-format
+msgid ""
+"News publisher created the image upload directory successfully at [%s] and "
+"wrote an .htaccess file there for security."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:796
+#, php-format
+msgid ""
+"News publisher created the image upload directory successfully at [%s], but "
+"could not write the .htaccess file there."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:799
+#, php-format
+msgid ""
+"Warning! News publisher could not create the specified image upload "
+"directory [%s]. Try to create it yourself and make sure that this folder is "
+"accessible via the web and writable by the webserver."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:820
+msgid "Done! Saved module settings."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:849 templates/admin/modify.tpl:335
+#: templates/admin/view.tpl:155
+msgid "Archive"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:850 templates/admin/create.tpl:297
+#: templates/admin/modify.tpl:316 templates/admin/modify.tpl:320
+#: templates/admin/view.tpl:156 templates/user/create.tpl:281
+msgid "Publish"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:851 templates/admin/modify.tpl:338
+#: templates/admin/view.tpl:157
+msgid "Reject"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:852 templates/admin/view.tpl:158
+msgid "Change categories"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:900
+#, php-format
+msgid "Processed Bulk Action. Action: %s."
+msgstr ""
+
+#: lib/News/Controller/Admin.php:902
+#, php-format
+msgid "Success with articles: %s"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:905
+#, php-format
+msgid "Failed with articles: %s"
+msgstr ""
+
+#: lib/News/Controller/Admin.php:908
+msgid "Error! Wrong bulk action."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:37 lib/News/Controller/Ajax.php:299
+#: lib/News/Controller/Ajax.php:372
+msgid "Sorry! You do not have authorisation for this page."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:292 lib/News/Controller/Ajax.php:306
+#: lib/News/Controller/Ajax.php:395 lib/News/Controller/Ajax.php:446
+#: lib/News/Api/Admin.php:156 lib/News/Api/User.php:683
+msgid "Error! Could not save your changes."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:323 lib/News/Api/Admin.php:43
+msgid "Error! Could not delete article."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:397
+#, php-format
+msgid "Draft updated at %s"
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:434
+#, php-format
+msgid "Draft saved at %s"
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:508
+msgid ""
+"Specified path appears to be 'above' the DOCUMENT_ROOT. Please choose a path "
+"relative to the webserver (e.g. images/news_picupload)."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:512
+#, php-format
+msgid "Specified path [%s] does exist and is writable."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:514
+#, php-format
+msgid ""
+"Specified path [%s] does exist, but is not writable. Make sure that this "
+"path is writable by the webserver."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:517
+#, php-format
+msgid ""
+"Specified path [%s] does not exist yet. News pubisher will create this path "
+"if you check the field below."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:522
+msgid ""
+"Specified path is an empty string, please fill in a path (e.g. images/"
+"news_picupload)."
+msgstr ""
+
+#: lib/News/Controller/Ajax.php:546
+msgid "Sorry! You do not have authorization."
+msgstr ""
+
+#: lib/News/Controller/User.php:218
+msgid "Error! Hooked content does not validate."
+msgstr ""
+
+#: lib/News/Controller/User.php:257
+msgid "Done! Created new article."
+msgstr ""
+
+#: lib/News/Controller/User.php:266
+#, php-format
+msgid ""
+"%1$s out of %2$s picture was uploaded and resized. Article now has draft "
+"status, since not all pictures were uploaded."
+msgid_plural ""
+"%1$s out of %2$s pictures were uploaded and resized. Article now has draft "
+"status, since not all pictures were uploaded."
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/News/Controller/User.php:268
+#, php-format
+msgid "%1$s out of %2$s picture was uploaded and resized."
+msgid_plural "%1$s out of %2$s pictures were uploaded and resized."
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/News/Controller/User.php:276
+msgid "Story Updated."
+msgstr ""
+
+#: lib/News/Controller/User.php:278
+msgid "Unable to update story."
+msgstr ""
+
+#: lib/News/Controller/User.php:353
+msgid "Error! Invalid category passed."
+msgstr ""
+
+#: lib/News/Controller/User.php:370
+#, php-format
+msgid "No articles currently published under the '%s' category."
+msgstr ""
+
+#: lib/News/Controller/User.php:372
+msgid "No articles currently published."
+msgstr ""
+
+#: lib/News/Controller/User.php:573
+#, php-format
+msgid "page %s"
+msgstr ""
+
+#: lib/News/Controller/User.php:654
+msgid ""
+"January February March April May June July August September October November "
+"December"
+msgstr ""
+
+#: lib/News/Controller/User.php:1041
+#, php-format
+msgid ""
+"<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2"
+"$s for review on website %3$s.<br />Index page teaser text of the article:"
+"<br /><hr />%4$s<hr /><br /><br />Go to the <a href=\"%5$s\">news publisher "
+"admin</a> pages to review and publish the <em>Pending Review</em> article(s)."
+"<br /><br />Regards,<br />%6$s"
+msgstr ""
+
+#: lib/News/Controller/User.php:1043
+#, php-format
+msgid ""
+"A News Publisher article '%1$s' has been submitted by %2$s for review on "
+"website %3$s.\n"
+"Index page teaser text of the article:\n"
+"--------\n"
+"%4$s\n"
+"--------\n"
+"\n"
+"Go to the <a href='%5$s'>news publisher admin</a> pages to review and "
+"publish the \\'Pending Review\\' article(s).\n"
+"\n"
+"Regards,\n"
+"%6$s\n"
+msgstr ""
+
+#: lib/News/Controller/User.php:1053
+msgid "Done! E-mail about new pending article is sent."
+msgstr ""
+
+#: lib/News/Controller/User.php:1056
+msgid "Warning! E-mail about new pending article could not be sent."
+msgstr ""
+
+#: lib/News/Block/Storiesext.php:71
+msgid "Extended article titles"
+msgstr ""
+
+#: lib/News/Block/Storiesext.php:72
+msgid "Display article titles with extended options"
+msgstr ""
+
+#: lib/News/Block/Storiesext.php:258
+msgid "No articles."
+msgstr ""
+
+#: lib/News/Block/Stories.php:35
+msgid "Article titles"
+msgstr ""
+
+#: lib/News/Block/Stories.php:36
+msgid "Display article titles"
+msgstr ""
+
+#: lib/News/Block/Big.php:35
+msgid "Most-read article"
+msgstr ""
+
+#: lib/News/Block/Big.php:36 lib/News/Block/Big.php:91
+msgid "Today's most-read article"
+msgstr ""
+
+#. ! default past block title
+#: lib/News/Block/Past.php:36 lib/News/Block/Past.php:124
+msgid "Past articles"
+msgstr ""
+
+#: lib/News/Block/Past.php:37
+msgid "Display past articles"
 msgstr ""
 
 #: lib/News/ImageUtil.php:114
@@ -243,159 +561,6 @@ msgid ""
 "Warning! Picture %s is not uploaded, since the file extension is now allowed "
 "(only %s is allowed)."
 msgstr ""
-
-#: lib/News/Api/User.php:103 lib/News/Api/Search.php:83
-msgid "Error! Could not load any articles."
-msgstr ""
-
-#: lib/News/Api/User.php:143
-msgid "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
-msgstr ""
-
-#: lib/News/Api/User.php:504
-#, php-format
-msgid "%s bytes more"
-msgstr ""
-
-#: lib/News/Api/User.php:510
-msgid "Print"
-msgstr ""
-
-#: lib/News/Api/User.php:510 lib/News/Api/User.php:511
-msgid "Printer-friendly page"
-msgstr ""
-
-#: lib/News/Api/User.php:522
-msgid "Comments?"
-msgstr ""
-
-#: lib/News/Api/User.php:522 templates/contenttype/newsarticles_view.html:29
-#: templates/block/storiesext/row.tpl:9
-#, php-format
-msgid "%s comment"
-msgid_plural "%s comments"
-msgstr[0] ""
-msgstr[1] ""
-
-#: lib/News/Api/User.php:526
-#, php-format
-msgid "%1$s about %2$s"
-msgstr ""
-
-#: lib/News/Api/User.php:533
-#, php-format
-msgid "Footnote: %s"
-msgstr ""
-
-#: lib/News/Api/User.php:676
-msgid "Error! Could not create new article."
-msgstr ""
-
-#: lib/News/Api/User.php:683 lib/News/Api/Admin.php:156
-#: lib/News/Controller/Ajax.php:292 lib/News/Controller/Ajax.php:306
-#: lib/News/Controller/Ajax.php:395 lib/News/Controller/Ajax.php:446
-msgid "Error! Could not save your changes."
-msgstr ""
-
-#: lib/News/Api/User.php:943 lib/News/Api/Admin.php:229
-#: templates/admin/view.tpl:2
-msgid "News articles list"
-msgstr ""
-
-#: lib/News/Api/User.php:953 templates/user/categorylist.tpl:6
-msgid "News categories"
-msgstr ""
-
-#: lib/News/Api/User.php:958 templates/user/archives.tpl:10
-#: templates/user/archives.tpl:13
-msgid "News archive"
-msgstr ""
-
-#: lib/News/Api/User.php:965 lib/News/Api/Account.php:35
-#: templates/user/create.tpl:15
-#: templates/contenttype/newsarticles_view.html:68
-msgid "Submit an article"
-msgstr ""
-
-#: lib/News/Api/User.php:972
-#, php-format
-msgid "%s pending article"
-msgid_plural "%s pending articles"
-msgstr[0] ""
-msgstr[1] ""
-
-#: lib/News/Api/User.php:976
-msgid "Admin"
-msgstr ""
-
-#: lib/News/Api/Admin.php:34 lib/News/Api/Admin.php:97
-#: lib/News/Controller/User.php:537 lib/News/Controller/User.php:856
-#: lib/News/Controller/Admin.php:85 lib/News/Controller/Admin.php:240
-#: lib/News/Controller/Admin.php:366 lib/News/Controller/Ajax.php:32
-#: lib/News/Controller/Ajax.php:122 lib/News/Controller/Ajax.php:240
-#: lib/News/Controller/Ajax.php:368 lib/News/Controller/Ajax.php:431
-msgid "Error! No such article found."
-msgstr ""
-
-#: lib/News/Api/Admin.php:43 lib/News/Controller/Ajax.php:323
-msgid "Error! Could not delete article."
-msgstr ""
-
-#: lib/News/Api/Admin.php:233 lib/News/Controller/Admin.php:502
-#: lib/News/Controller/Admin.php:664 templates/admin/view.tpl:27
-#: templates/block/storiesext/modify.tpl:21
-msgid "All"
-msgstr ""
-
-#: lib/News/Api/Admin.php:245 lib/News/Controller/Admin.php:508
-#: lib/News/Controller/Admin.php:622
-msgid "Scheduled"
-msgstr ""
-
-#: lib/News/Api/Admin.php:250 templates/admin/create.tpl:15
-#: templates/contenttype/newsarticles_view.html:14
-msgid "Create new article"
-msgstr ""
-
-#: lib/News/Api/Admin.php:255
-msgid "Purge permalinks"
-msgstr ""
-
-#: lib/News/Api/Admin.php:259 templates/admin/modifyconfig.tpl:10
-#: templates/admin/modifyconfig.tpl:12
-msgid "Settings"
-msgstr ""
-
-#: lib/News/Api/Mailz.php:29
-msgid "News publisher articles list"
-msgstr ""
-
-#: lib/News/Api/Mailz.php:30
-msgid ""
-"Show a list of News publisher articles published since the last newsletter."
-msgstr ""
-
-#: lib/News/Api/Mailz.php:65 templates/admin/modify.tpl:292
-#: templates/admin/modify.tpl:302 templates/user/articlecontent.tpl:22
-#: templates/user/archives.tpl:69 templates/user/index.tpl:3
-#: templates/user/article.tpl:35 templates/user/articlepdf.tpl:3
-#: templates/printer/index.tpl:3 templates/printer/article.tpl:12
-#: templates/printer/article.tpl:56 templates/mailz/listarticles.tpl:4
-#: templates/mailz/listarticles.tpl:6
-#, php-format
-msgid "by %1$s on %2$s"
-msgstr ""
-
-#: lib/News/Api/Mailz.php:74
-#, php-format
-msgid "No News publisher articles since last newsletter on %s."
-msgstr ""
-
-#: lib/News/Handlers.php:17
-msgid "News article"
-msgid_plural "News articles"
-msgstr[0] ""
-msgstr[1] ""
 
 #: lib/News/Installer.php:30
 msgid ""
@@ -521,260 +686,126 @@ msgstr ""
 msgid "Display and manage topics"
 msgstr ""
 
-#: lib/News/Controller/User.php:218
-msgid "Error! Hooked content does not validate."
-msgstr ""
-
-#: lib/News/Controller/User.php:257
-msgid "Done! Created new article."
-msgstr ""
-
-#: lib/News/Controller/User.php:266
-#, php-format
-msgid ""
-"%1$s out of %2$s picture was uploaded and resized. Article now has draft "
-"status, since not all pictures were uploaded."
-msgid_plural ""
-"%1$s out of %2$s pictures were uploaded and resized. Article now has draft "
-"status, since not all pictures were uploaded."
+#: lib/News/Handlers.php:17
+msgid "News article"
+msgid_plural "News articles"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/News/Controller/User.php:268
+#: lib/News/Api/Admin.php:229 lib/News/Api/User.php:943
+#: templates/admin/view.tpl:2
+msgid "News articles list"
+msgstr ""
+
+#: lib/News/Api/Admin.php:250 templates/admin/create.tpl:15
+#: templates/contenttype/newsarticles_view.html:14
+msgid "Create new article"
+msgstr ""
+
+#: lib/News/Api/Admin.php:255
+msgid "Purge permalinks"
+msgstr ""
+
+#: lib/News/Api/Admin.php:259 templates/admin/modifyconfig.tpl:10
+#: templates/admin/modifyconfig.tpl:12
+msgid "Settings"
+msgstr ""
+
+#: lib/News/Api/Search.php:83 lib/News/Api/User.php:103
+msgid "Error! Could not load any articles."
+msgstr ""
+
+#: lib/News/Api/Account.php:35 lib/News/Api/User.php:965
+#: templates/user/create.tpl:15
+#: templates/contenttype/newsarticles_view.html:68
+msgid "Submit an article"
+msgstr ""
+
+#: lib/News/Api/Mailz.php:29
+msgid "News publisher articles list"
+msgstr ""
+
+#: lib/News/Api/Mailz.php:30
+msgid ""
+"Show a list of News publisher articles published since the last newsletter."
+msgstr ""
+
+#: lib/News/Api/Mailz.php:65 templates/admin/modify.tpl:301
+#: templates/user/index.tpl:3 templates/user/archives.tpl:69
+#: templates/user/articlecontent.tpl:22 templates/user/article.tpl:29
+#: templates/user/articlepdf.tpl:3 templates/printer/index.tpl:3
+#: templates/printer/article.tpl:12 templates/printer/article.tpl:56
+#: templates/mailz/listarticles.tpl:4 templates/mailz/listarticles.tpl:6
 #, php-format
-msgid "%1$s out of %2$s picture was uploaded and resized."
-msgid_plural "%1$s out of %2$s pictures were uploaded and resized."
+msgid "by %1$s on %2$s"
+msgstr ""
+
+#: lib/News/Api/Mailz.php:74
+#, php-format
+msgid "No News publisher articles since last newsletter on %s."
+msgstr ""
+
+#: lib/News/Api/User.php:143
+msgid "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+msgstr ""
+
+#: lib/News/Api/User.php:504
+#, php-format
+msgid "%s bytes more"
+msgstr ""
+
+#: lib/News/Api/User.php:510
+msgid "Print"
+msgstr ""
+
+#: lib/News/Api/User.php:510 lib/News/Api/User.php:511
+msgid "Printer-friendly page"
+msgstr ""
+
+#: lib/News/Api/User.php:522
+msgid "Comments?"
+msgstr ""
+
+#: lib/News/Api/User.php:522 templates/block/storiesext/row.tpl:9
+#: templates/contenttype/newsarticles_view.html:29
+#, php-format
+msgid "%s comment"
+msgid_plural "%s comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: lib/News/Controller/User.php:276
-msgid "Story Updated."
-msgstr ""
-
-#: lib/News/Controller/User.php:278
-msgid "Unable to update story."
-msgstr ""
-
-#: lib/News/Controller/User.php:353
-msgid "Error! Invalid category passed."
-msgstr ""
-
-#: lib/News/Controller/User.php:370
+#: lib/News/Api/User.php:526
 #, php-format
-msgid "No articles currently published under the '%s' category."
+msgid "%1$s about %2$s"
 msgstr ""
 
-#: lib/News/Controller/User.php:372
-msgid "No articles currently published."
-msgstr ""
-
-#: lib/News/Controller/User.php:573
+#: lib/News/Api/User.php:533
 #, php-format
-msgid "page %s"
+msgid "Footnote: %s"
 msgstr ""
 
-#: lib/News/Controller/User.php:654
-msgid ""
-"January February March April May June July August September October November "
-"December"
+#: lib/News/Api/User.php:676
+msgid "Error! Could not create new article."
 msgstr ""
 
-#: lib/News/Controller/User.php:1041
+#: lib/News/Api/User.php:953 templates/user/categorylist.tpl:6
+msgid "News categories"
+msgstr ""
+
+#: lib/News/Api/User.php:958 templates/user/archives.tpl:10
+#: templates/user/archives.tpl:13
+msgid "News archive"
+msgstr ""
+
+#: lib/News/Api/User.php:972
 #, php-format
-msgid ""
-"<br />A News Publisher article <strong>%1$s</strong> has been submitted by %2"
-"$s for review on website %3$s.<br />Index page teaser text of the article:"
-"<br /><hr />%4$s<hr /><br /><br />Go to the <a href=\"%5$s\">news publisher "
-"admin</a> pages to review and publish the <em>Pending Review</em> article(s)."
-"<br /><br />Regards,<br />%6$s"
-msgstr ""
+msgid "%s pending article"
+msgid_plural "%s pending articles"
+msgstr[0] ""
+msgstr[1] ""
 
-#: lib/News/Controller/User.php:1043
-#, php-format
-msgid ""
-"\n"
-"A News Publisher article '%1$s' has been submitted by %2$s for review on "
-"website %3$s.\n"
-"Index page teaser text of the article:\n"
-"--------\n"
-"%4$s\n"
-"--------\n"
-"\n"
-"Go to the <a href=\"%5$s\">news publisher admin</a> pages to review and "
-"publish the 'Pending Review' article(s).\n"
-"\n"
-"Regards,\n"
-"%6$s"
-msgstr ""
-
-#: lib/News/Controller/User.php:1063
-msgid "Done! E-mail about new pending article is sent."
-msgstr ""
-
-#: lib/News/Controller/User.php:1066
-msgid "Warning! E-mail about new pending article could not be sent."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:323 lib/News/Controller/Ajax.php:311
-msgid "Done! Saved your changes."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:393 lib/News/Controller/Ajax.php:321
-msgid "Done! Deleted article."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:427
-msgid "Done! Purged permalinks."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:429
-msgid "Error! Could not purge permalinks."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:532 lib/News/Controller/Admin.php:536
-msgid "View"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:543
-msgid "Review"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:563
-msgid "Unknown"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:567 templates/admin/modifyconfig.tpl:71
-#: templates/block/storiesext/modify.tpl:121
-#: templates/block/storiesext/modify.tpl:144
-msgid "Yes"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:569 templates/admin/modifyconfig.tpl:72
-#: templates/block/storiesext/modify.tpl:122
-#: templates/block/storiesext/modify.tpl:145
-msgid "No"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:586 templates/admin/modifyconfig.tpl:56
-msgid "Article date/time"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:587 templates/admin/create.tpl:220
-#: templates/admin/modifyconfig.tpl:55 templates/admin/modifyconfig.tpl:273
-msgid "Article ID"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:781
-#, php-format
-msgid ""
-"Warning! The image upload directory at [%s] appears to be 'above' the "
-"DOCUMENT_ROOT. Please choose a path relative to the webserver (e.g. images/"
-"news_picupload)."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:785
-#, php-format
-msgid ""
-"Warning! The image upload directory at [%s] exists but is not writable by "
-"the webserver."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:794
-#, php-format
-msgid ""
-"News publisher created the image upload directory successfully at [%s] and "
-"wrote an .htaccess file there for security."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:799
-#, php-format
-msgid ""
-"Warning! News publisher could not create the specified image upload "
-"directory [%s]. Try to create it yourself and make sure that this folder is "
-"accessible via the web and writable by the webserver."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:822
-msgid "Done! Saved module settings."
-msgstr ""
-
-#: lib/News/Controller/Admin.php:852 templates/admin/modify.tpl:336
-#: templates/admin/view.tpl:155
-msgid "Archive"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:853 templates/admin/create.tpl:297
-#: templates/admin/modify.tpl:317 templates/admin/modify.tpl:321
-#: templates/admin/view.tpl:156 templates/user/create.tpl:281
-msgid "Publish"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:854 templates/admin/modify.tpl:339
-#: templates/admin/view.tpl:157
-msgid "Reject"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:855 templates/admin/view.tpl:158
-msgid "Change categories"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:857
-#, php-format
-msgid "Processed Bulk Action. Action: %1$s; Articles: %2$s"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:858
-msgid "cat_data"
-msgstr ""
-
-#: lib/News/Controller/Admin.php:860
-msgid "Error! Wrong bulk action."
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:37 lib/News/Controller/Ajax.php:299
-#: lib/News/Controller/Ajax.php:372
-msgid "Sorry! You do not have authorisation for this page."
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:397
-#, php-format
-msgid "Draft updated at %s"
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:434
-#, php-format
-msgid "Draft saved at %s"
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:508
-msgid ""
-"Specified path appears to be 'above' the DOCUMENT_ROOT. Please choose a path "
-"relative to the webserver (e.g. images/news_picupload)."
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:512
-#, php-format
-msgid "Specified path [%s] does exist and is writable."
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:514
-#, php-format
-msgid ""
-"Specified path [%s] does exist, but is not writable. Make sure that this "
-"path is writable by the webserver."
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:517
-#, php-format
-msgid ""
-"Specified path [%s] does not exist yet. News pubisher will create this path "
-"if you check the field below."
-msgstr ""
-
-#: lib/News/Controller/Ajax.php:522
-msgid ""
-"Specified path is an empty string, please fill in a path (e.g. images/"
-"news_picupload)."
+#: lib/News/Api/User.php:976
+msgid "Admin"
 msgstr ""
 
 #. ! this defines the module's url
@@ -787,507 +818,54 @@ msgid "News Articles Hooks"
 msgstr ""
 
 #: lib/News/Version.php:47
-msgid "News Module Config Hooks"
-msgstr ""
-
-#: lib/News/Version.php:52
 msgid "News Display Hooks"
 msgstr ""
 
-#. ! default past block title
-#: lib/News/Block/Past.php:36 lib/News/Block/Past.php:124
-msgid "Past articles"
+#: lib/News/Util.php:34
+msgid "title"
 msgstr ""
 
-#: lib/News/Block/Past.php:37
-msgid "Display past articles"
-msgstr ""
-
-#: lib/News/Block/Stories.php:35
-msgid "Article titles"
-msgstr ""
-
-#: lib/News/Block/Stories.php:36
-msgid "Display article titles"
-msgstr ""
-
-#: lib/News/Block/Storiesext.php:71
-msgid "Extended article titles"
-msgstr ""
-
-#: lib/News/Block/Storiesext.php:72
-msgid "Display article titles with extended options"
-msgstr ""
-
-#: lib/News/Block/Storiesext.php:258
-msgid "No articles."
-msgstr ""
-
-#: lib/News/Block/Big.php:35
-msgid "Most-read article"
-msgstr ""
-
-#: lib/News/Block/Big.php:36 lib/News/Block/Big.php:91
-msgid "Today's most-read article"
-msgstr ""
-
-#: templates/admin/create.tpl:61 templates/admin/modify.tpl:63
-#: templates/admin/view.tpl:90 templates/user/create.tpl:58
-#: templates/user/archives.tpl:50 templates/ajax/modify.tpl:24
-msgid "Title"
-msgstr ""
-
-#: templates/admin/create.tpl:64 templates/admin/modify.tpl:66
-#: templates/user/create.tpl:61 templates/ajax/modify.tpl:27
-msgid "Title text"
-msgstr ""
-
-#: templates/admin/create.tpl:69
-msgid "Permalink"
-msgstr ""
-
-#: templates/admin/create.tpl:75 templates/admin/modify.tpl:71
-#: templates/user/create.tpl:67 templates/ajax/modify.tpl:32
-msgid "Permalink URL"
-msgstr ""
-
-#: templates/admin/create.tpl:77 templates/admin/modify.tpl:73
-#: templates/user/create.tpl:69 templates/ajax/modify.tpl:34
-msgid "(Generated automatically if left blank)"
-msgstr ""
-
-#: templates/admin/create.tpl:82 templates/admin/modify.tpl:78
-#: templates/admin/view.tpl:26 templates/admin/view.tpl:93
-#: templates/user/create.tpl:75 templates/user/archives.tpl:52
-#: templates/block/slideshow_modify.tpl:3
-#: templates/block/stories_modify.tpl:12 templates/ajax/modify.tpl:39
-msgid "Category"
-msgstr ""
-
-#: templates/admin/create.tpl:83 templates/admin/modify.tpl:79
-#: templates/user/create.tpl:76 templates/block/slideshow_modify.tpl:5
-#: templates/block/stories_modify.tpl:14 templates/ajax/modify.tpl:40
-msgid "Choose category"
-msgstr ""
-
-#: templates/admin/create.tpl:95 templates/admin/view.tpl:50
-#: templates/admin/view.tpl:70 templates/user/create.tpl:88
-msgid "Language"
-msgstr ""
-
-#: templates/admin/create.tpl:106 templates/admin/modify.tpl:103
-#: templates/user/create.tpl:95 templates/ajax/modify.tpl:64
-msgid "Article"
-msgstr ""
-
-#: templates/admin/create.tpl:109 templates/admin/modify.tpl:106
-#: templates/user/create.tpl:98 templates/ajax/modify.tpl:67
-msgid "Permitted HTML tags"
-msgstr ""
-
-#: templates/admin/create.tpl:111 templates/admin/modify.tpl:108
-#: templates/user/create.tpl:100 templates/ajax/modify.tpl:69
-msgid ""
-"You must enter either <strong>teaser text</strong> or <strong>body text</"
-"strong>."
-msgstr ""
-
-#: templates/admin/create.tpl:114 templates/admin/modify.tpl:111
-#: templates/user/create.tpl:103 templates/ajax/modify.tpl:72
-msgid "Index page teaser text"
-msgstr ""
-
-#: templates/admin/create.tpl:116 templates/admin/create.tpl:132
-#: templates/admin/create.tpl:150 templates/admin/modify.tpl:113
-#: templates/admin/modify.tpl:129 templates/admin/modify.tpl:146
-#: templates/user/create.tpl:105 templates/user/create.tpl:139
-#: templates/ajax/modify.tpl:74 templates/ajax/modify.tpl:90
-#: templates/ajax/modify.tpl:107
+#: lib/News/Util.php:34
 #, php-format
-msgid "(Limit: %s characters)"
+msgid "Error! You did not enter a %s."
 msgstr ""
 
-#: templates/admin/create.tpl:121 templates/admin/modify.tpl:118
-#: templates/user/create.tpl:110 templates/ajax/modify.tpl:79
-msgid "Index page teaser format"
+#: lib/News/Util.php:38
+msgid "article content"
 msgstr ""
 
-#: templates/admin/create.tpl:123 templates/admin/create.tpl:139
-#: templates/admin/modify.tpl:120 templates/admin/modify.tpl:136
-#: templates/user/create.tpl:112 templates/user/create.tpl:128
-#: templates/ajax/modify.tpl:81 templates/ajax/modify.tpl:97
-msgid "Plain text"
-msgstr ""
-
-#: templates/admin/create.tpl:124 templates/admin/create.tpl:140
-#: templates/admin/modify.tpl:121 templates/admin/modify.tpl:137
-#: templates/user/create.tpl:113 templates/user/create.tpl:129
-#: templates/ajax/modify.tpl:82 templates/ajax/modify.tpl:98
-msgid "Text formatted with mark-up language"
-msgstr ""
-
-#: templates/admin/create.tpl:130 templates/admin/modify.tpl:127
-#: templates/user/create.tpl:119 templates/ajax/modify.tpl:88
-msgid "Article body text"
-msgstr ""
-
-#: templates/admin/create.tpl:137 templates/admin/modify.tpl:134
-#: templates/user/create.tpl:126 templates/ajax/modify.tpl:95
-msgid "Article body format"
-msgstr ""
-
-#: templates/admin/create.tpl:147 templates/admin/create.tpl:178
-#: templates/admin/create.tpl:241 templates/admin/modify.tpl:143
-#: templates/admin/modify.tpl:180 templates/admin/modify.tpl:238
-#: templates/user/create.tpl:136 templates/user/create.tpl:168
-#: templates/user/create.tpl:225 templates/ajax/modify.tpl:104
-#: templates/ajax/modify.tpl:136 templates/ajax/modify.tpl:194
-msgid "Show"
-msgstr ""
-
-#: templates/admin/create.tpl:147 templates/admin/modify.tpl:143
-#: templates/user/create.tpl:136 templates/ajax/modify.tpl:104
-msgid "Footnote"
-msgstr ""
-
-#: templates/admin/create.tpl:158 templates/admin/modify.tpl:153
-#: templates/admin/view.tpl:96 templates/user/create.tpl:147
-#: templates/ajax/modify.tpl:114
-msgid "Pictures"
-msgstr ""
-
-#: templates/admin/create.tpl:159 templates/admin/modify.tpl:154
-#: templates/user/create.tpl:148
+#: lib/News/Util.php:38
 #, php-format
-msgid "Select a picture (max. %s kB per picture)"
+msgid "Error! You did not enter the minimum necessary %s."
 msgstr ""
 
-#: templates/admin/create.tpl:164 templates/admin/modify.tpl:159
-#: templates/user/create.tpl:154 templates/ajax/modify.tpl:116
+#: templates/rss/index.tpl:6 templates/user/index.tpl:9
+#: templates/user/index.tpl:11 templates/user/articlecontent.tpl:31
+#: templates/user/articlecontent.tpl:52 templates/printer/index.tpl:9
+#: templates/printer/index.tpl:11 templates/printer/article.tpl:21
+#: templates/printer/article.tpl:33 templates/atom/index.tpl:10
 #, php-format
-msgid ""
-"(max files %s, first picture is used as thumbnail in the index teaser page "
-"for this article.)"
-msgstr ""
-
-#: templates/admin/create.tpl:178 templates/admin/modify.tpl:180
-#: templates/user/create.tpl:168 templates/ajax/modify.tpl:136
-msgid "Publishing options"
-msgstr ""
-
-#: templates/admin/create.tpl:181 templates/admin/modify.tpl:183
-#: templates/user/create.tpl:171 templates/ajax/modify.tpl:139
-msgid "Publish on news index page"
-msgstr ""
-
-#: templates/admin/create.tpl:191 templates/admin/modify.tpl:193
-#: templates/user/create.tpl:181 templates/ajax/modify.tpl:149
-msgid "No time limit"
-msgstr ""
-
-#: templates/admin/create.tpl:197 templates/admin/modify.tpl:199
-#: templates/user/create.tpl:186 templates/ajax/modify.tpl:155
-msgid "Start date"
-msgstr ""
-
-#: templates/admin/create.tpl:203 templates/admin/modify.tpl:205
-#: templates/user/create.tpl:192 templates/ajax/modify.tpl:161
-msgid "No end date"
-msgstr ""
-
-#: templates/admin/create.tpl:208 templates/admin/modify.tpl:210
-#: templates/user/create.tpl:197 templates/ajax/modify.tpl:166
-msgid "End date"
-msgstr ""
-
-#: templates/admin/create.tpl:216 templates/admin/modify.tpl:218
-#: templates/user/create.tpl:205 templates/ajax/modify.tpl:174
-msgid "Allow comments on this article"
-msgstr ""
-
-#: templates/admin/create.tpl:241 templates/admin/modify.tpl:238
-#: templates/user/create.tpl:225 templates/ajax/modify.tpl:194
-msgid "Article attributes"
-msgstr ""
-
-#: templates/admin/create.tpl:245 templates/admin/modify.tpl:242
-#: templates/user/create.tpl:229 templates/ajax/modify.tpl:198
-msgid "Create new attribute"
-msgstr ""
-
-#: templates/admin/create.tpl:261 templates/admin/create.tpl:281
-#: templates/admin/modify.tpl:258 templates/admin/modify.tpl:278
-#: templates/user/create.tpl:245 templates/user/create.tpl:265
-#: templates/ajax/modify.tpl:214 templates/ajax/modify.tpl:234
-msgid "Delete this attribute"
-msgstr ""
-
-#: templates/admin/create.tpl:295 templates/admin/modify.tpl:325
-#: templates/user/create.tpl:279
-msgid "Submit this article"
-msgstr ""
-
-#: templates/admin/create.tpl:295 templates/admin/modify.tpl:325
-#: templates/user/create.tpl:279
-msgid "Submit"
-msgstr ""
-
-#: templates/admin/create.tpl:297 templates/admin/modify.tpl:321
-#: templates/user/create.tpl:281
-msgid "Publish this article"
-msgstr ""
-
-#: templates/admin/create.tpl:299 templates/admin/create.tpl:302
-#: templates/admin/modify.tpl:330 templates/user/create.tpl:282
-msgid "Save this article as draft"
-msgstr ""
-
-#: templates/admin/create.tpl:299 templates/admin/create.tpl:302
-#: templates/admin/create.tpl:303 templates/admin/modify.tpl:330
-#: templates/user/create.tpl:282
-msgid "Save as draft"
-msgstr ""
-
-#: templates/admin/create.tpl:306 templates/admin/modify.tpl:333
-#: templates/user/create.tpl:283 templates/ajax/modify.tpl:252
-msgid "Mark this article as pending"
-msgstr ""
-
-#: templates/admin/create.tpl:306 templates/admin/modify.tpl:333
-#: templates/admin/publisheddata.tpl:7 templates/user/create.tpl:283
-msgid "Pending"
-msgstr ""
-
-#: templates/admin/create.tpl:308 templates/admin/modify.tpl:323
-#: templates/user/create.tpl:285
-msgid "Preview this article"
-msgstr ""
-
-#: templates/admin/create.tpl:308 templates/admin/modify.tpl:323
-#: templates/user/create.tpl:285
-msgid "Preview"
-msgstr ""
-
-#: templates/admin/create.tpl:309 templates/admin/modify.tpl:345
-#: templates/admin/delete.tpl:22 templates/admin/modifyconfig.tpl:284
-#: templates/user/create.tpl:286 templates/ajax/modify.tpl:256
-msgid "Cancel"
-msgstr ""
-
-#: templates/admin/modify.tpl:15 templates/ajax/modify.tpl:3
-msgid "Edit news article"
-msgstr ""
-
-#: templates/admin/modify.tpl:96 templates/ajax/modify.tpl:57
-msgid "Language(s) for which article should be displayed"
-msgstr ""
-
-#: templates/admin/modify.tpl:172 templates/ajax/modify.tpl:128
-msgid "Delete this picture"
-msgstr ""
-
-#: templates/admin/modify.tpl:288
-msgid "Meta data"
-msgstr ""
-
-#: templates/admin/modify.tpl:292 templates/user/articlecontent.tpl:22
-#: templates/user/archives.tpl:55 templates/user/index.tpl:3
-#: templates/user/articlepdf.tpl:3 templates/printer/index.tpl:3
-#: templates/printer/article.tpl:12
-msgid "Contributed"
-msgstr ""
-
-#: templates/admin/modify.tpl:302
-msgid "Last edited"
-msgstr ""
-
-#: templates/admin/modify.tpl:305
-#, php-format
-msgid "Approved by %s"
-msgstr ""
-
-#: templates/admin/modify.tpl:307
-#, php-format
-msgid "Status %s"
-msgstr ""
-
-#: templates/admin/modify.tpl:308
-#, php-format
-msgid "Article ID: %s"
-msgstr ""
-
-#: templates/admin/modify.tpl:317
-msgid "Approve and publish this article"
-msgstr ""
-
-#: templates/admin/modify.tpl:317
-msgid "Approve and"
-msgstr ""
-
-#: templates/admin/modify.tpl:319
-msgid "Update this article"
-msgstr ""
-
-#: templates/admin/modify.tpl:319
-msgid "Update"
-msgstr ""
-
-#: templates/admin/modify.tpl:328
-msgid "Update draft"
-msgstr ""
-
-#: templates/admin/modify.tpl:336
-msgid "Archive this article"
-msgstr ""
-
-#: templates/admin/modify.tpl:339
-msgid "Reject this article"
-msgstr ""
-
-#: templates/admin/modify.tpl:343 templates/ajax/modify.tpl:254
-msgid "Delete this article"
+msgid "Picture %1$s for %2$s"
 msgstr ""
 
 #: templates/admin/userselector.tpl:4
 msgid "Article Author"
 msgstr ""
 
-#: templates/admin/userselector.tpl:7
-msgid "Select a new article author:"
+#: templates/admin/userselector.tpl:6
+msgid "Select a new article author"
 msgstr ""
 
-#: templates/admin/publisheddata.tpl:1
-#, php-format
-msgid "Publication Data for #%s:"
+#: templates/admin/userselector.tpl:10
+msgid "Save and return to"
 msgstr ""
 
-#: templates/admin/publisheddata.tpl:3
-msgid "Article unpublished"
+#: templates/admin/userselector.tpl:13
+msgid "Modify form"
 msgstr ""
 
-#: templates/admin/publisheddata.tpl:5
-msgid "forever"
-msgstr ""
-
-#: templates/admin/publisheddata.tpl:7
-msgid "Approved/Rejected By"
-msgstr ""
-
-#: templates/admin/publisheddata.tpl:8
-msgid "Created By"
-msgstr ""
-
-#: templates/admin/publisheddata.tpl:8 templates/admin/publisheddata.tpl:9
-msgid "On"
-msgstr ""
-
-#: templates/admin/publisheddata.tpl:9
-msgid "Last Updated By"
-msgstr ""
-
-#: templates/admin/publisheddata.tpl:10
-msgid "Publish From"
-msgstr ""
-
-#: templates/admin/publisheddata.tpl:10
-msgid "To"
-msgstr ""
-
-#: templates/admin/view.tpl:25 templates/admin/view.tpl:62
-msgid "Filter"
-msgstr ""
-
-#: templates/admin/view.tpl:55 templates/admin/view.tpl:74
-#: templates/contenttype/newsarticles_edit.html:32
-#: templates/block/storiesext/modify.tpl:33
-msgid "Status"
-msgstr ""
-
-#: templates/admin/view.tpl:58 templates/contenttype/newsarticles_edit.html:43
-#: templates/block/storiesext/modify.tpl:41
-msgid "Order articles by"
-msgstr ""
-
-#: templates/admin/view.tpl:63
-msgid "Clear"
-msgstr ""
-
-#: templates/admin/view.tpl:76
-msgid "Apply filter"
-msgstr ""
-
-#: templates/admin/view.tpl:77 templates/admin/view.tpl:171
-msgid "Reset"
-msgstr ""
-
-#: templates/admin/view.tpl:89
-msgid "ID"
-msgstr ""
-
-#: templates/admin/view.tpl:91
-msgid "Contributor"
-msgstr ""
-
-#: templates/admin/view.tpl:98
-msgid "Index page<br />listing / Weight"
-msgstr ""
-
-#: templates/admin/view.tpl:99
-msgid "Date"
-msgstr ""
-
-#: templates/admin/view.tpl:100
-msgid "Actions"
-msgstr ""
-
-#: templates/admin/view.tpl:128
-#, php-format
-msgid "Last edited %s"
-msgstr ""
-
-#: templates/admin/view.tpl:130
-msgid "Scheduled for"
-msgstr ""
-
-#: templates/admin/view.tpl:132
-#, php-format
-msgid "until %s"
-msgstr ""
-
-#: templates/admin/view.tpl:135
-msgid "No comments allowed."
-msgstr ""
-
-#: templates/admin/view.tpl:146
-msgid "No articles currently in database."
-msgstr ""
-
-#: templates/admin/view.tpl:151
-msgid "doubleuparrow"
-msgstr ""
-
-#: templates/admin/view.tpl:151
-msgid "Check all"
-msgstr ""
-
-#: templates/admin/view.tpl:151
-msgid "Uncheck all"
-msgstr ""
-
-#: templates/admin/view.tpl:153
-msgid "With selected:"
-msgstr ""
-
-#: templates/admin/view.tpl:167
-msgid "Access a past article via its ID"
-msgstr ""
-
-#: templates/admin/view.tpl:170
-msgid "Go retrieve"
-msgstr ""
-
-#: templates/admin/view.tpl:183
-msgid "Select a Category"
+#: templates/admin/userselector.tpl:15
+msgid "Article list"
 msgstr ""
 
 #: templates/admin/delete.tpl:1
@@ -1302,6 +880,12 @@ msgstr ""
 msgid "Confirmation prompt"
 msgstr ""
 
+#: templates/admin/delete.tpl:22 templates/admin/modifyconfig.tpl:282
+#: templates/admin/create.tpl:309 templates/admin/modify.tpl:344
+#: templates/user/create.tpl:286 templates/ajax/modify.tpl:256
+msgid "Cancel"
+msgstr ""
+
 #: templates/admin/modifyconfig.tpl:13
 msgid ""
 "Notice: Your theme could be using template overrides for the News publisher "
@@ -1311,9 +895,8 @@ msgid ""
 "publisher templates (in modules/News/templates/...)."
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:19
+#: templates/admin/modifyconfig.tpl:19 templates/block/storiesext/modify.tpl:4
 #: templates/contenttype/newsarticles_edit.html:2
-#: templates/block/storiesext/modify.tpl:4
 msgid "General settings"
 msgstr ""
 
@@ -1650,59 +1233,468 @@ msgstr ""
 msgid "Article category"
 msgstr ""
 
-#: templates/admin/modifyconfig.tpl:283 templates/ajax/modify.tpl:251
+#: templates/admin/modifyconfig.tpl:281 templates/ajax/modify.tpl:251
 msgid "Save"
 msgstr ""
 
-#: templates/user/create.tpl:121
-msgid "#{chars"
+#: templates/admin/create.tpl:61 templates/admin/modify.tpl:63
+#: templates/admin/view.tpl:90 templates/user/archives.tpl:50
+#: templates/user/create.tpl:58 templates/ajax/modify.tpl:24
+msgid "Title"
 msgstr ""
 
-#: templates/user/articlecontent.tpl:31 templates/user/articlecontent.tpl:52
-#: templates/user/index.tpl:9 templates/user/index.tpl:11
-#: templates/rss/index.tpl:6 templates/printer/index.tpl:9
-#: templates/printer/index.tpl:11 templates/printer/article.tpl:21
-#: templates/printer/article.tpl:33 templates/atom/index.tpl:10
+#: templates/admin/create.tpl:64 templates/admin/modify.tpl:66
+#: templates/user/create.tpl:61 templates/ajax/modify.tpl:27
+msgid "Title text"
+msgstr ""
+
+#: templates/admin/create.tpl:69
+msgid "Permalink"
+msgstr ""
+
+#: templates/admin/create.tpl:75 templates/admin/modify.tpl:71
+#: templates/user/create.tpl:67 templates/ajax/modify.tpl:32
+msgid "Permalink URL"
+msgstr ""
+
+#: templates/admin/create.tpl:77 templates/admin/modify.tpl:73
+#: templates/user/create.tpl:69 templates/ajax/modify.tpl:34
+msgid "(Generated automatically if left blank)"
+msgstr ""
+
+#: templates/admin/create.tpl:82 templates/admin/modify.tpl:78
+#: templates/admin/view.tpl:26 templates/admin/view.tpl:93
+#: templates/admin/view.tpl:187 templates/user/archives.tpl:52
+#: templates/user/create.tpl:75 templates/block/stories_modify.tpl:12
+#: templates/block/slideshow_modify.tpl:3 templates/ajax/modify.tpl:39
+msgid "Category"
+msgstr ""
+
+#: templates/admin/create.tpl:83 templates/admin/modify.tpl:79
+#: templates/admin/view.tpl:188 templates/user/create.tpl:76
+#: templates/block/stories_modify.tpl:14
+#: templates/block/slideshow_modify.tpl:5 templates/ajax/modify.tpl:40
+msgid "Choose category"
+msgstr ""
+
+#: templates/admin/create.tpl:95 templates/admin/view.tpl:50
+#: templates/admin/view.tpl:70 templates/user/create.tpl:88
+msgid "Language"
+msgstr ""
+
+#: templates/admin/create.tpl:106 templates/admin/modify.tpl:103
+#: templates/user/create.tpl:95 templates/ajax/modify.tpl:64
+msgid "Article"
+msgstr ""
+
+#: templates/admin/create.tpl:109 templates/admin/modify.tpl:106
+#: templates/user/create.tpl:98 templates/ajax/modify.tpl:67
+msgid "Permitted HTML tags"
+msgstr ""
+
+#: templates/admin/create.tpl:111 templates/admin/modify.tpl:108
+#: templates/user/create.tpl:100 templates/ajax/modify.tpl:69
+msgid ""
+"You must enter either <strong>teaser text</strong> or <strong>body text</"
+"strong>."
+msgstr ""
+
+#: templates/admin/create.tpl:114 templates/admin/modify.tpl:111
+#: templates/user/create.tpl:103 templates/ajax/modify.tpl:72
+msgid "Index page teaser text"
+msgstr ""
+
+#: templates/admin/create.tpl:116 templates/admin/create.tpl:132
+#: templates/admin/create.tpl:150 templates/admin/modify.tpl:113
+#: templates/admin/modify.tpl:129 templates/admin/modify.tpl:146
+#: templates/user/create.tpl:105 templates/user/create.tpl:139
+#: templates/ajax/modify.tpl:74 templates/ajax/modify.tpl:90
+#: templates/ajax/modify.tpl:107
 #, php-format
-msgid "Picture %1$s for %2$s"
+msgid "(Limit: %s characters)"
 msgstr ""
 
-#: templates/user/articlecontent.tpl:48 templates/printer/article.tpl:30
-msgid "Picture gallery"
+#: templates/admin/create.tpl:121 templates/admin/modify.tpl:118
+#: templates/user/create.tpl:110 templates/ajax/modify.tpl:79
+msgid "Index page teaser format"
 msgstr ""
 
-#: templates/user/archives.tpl:14
-msgid "Expand all"
+#: templates/admin/create.tpl:123 templates/admin/create.tpl:139
+#: templates/admin/modify.tpl:120 templates/admin/modify.tpl:136
+#: templates/user/create.tpl:112 templates/user/create.tpl:128
+#: templates/ajax/modify.tpl:81 templates/ajax/modify.tpl:97
+msgid "Plain text"
 msgstr ""
 
-#: templates/user/archives.tpl:14
-msgid "Contract all"
+#: templates/admin/create.tpl:124 templates/admin/create.tpl:140
+#: templates/admin/modify.tpl:121 templates/admin/modify.tpl:137
+#: templates/user/create.tpl:113 templates/user/create.tpl:129
+#: templates/ajax/modify.tpl:82 templates/ajax/modify.tpl:98
+msgid "Text formatted with mark-up language"
 msgstr ""
 
-#: templates/user/archives.tpl:24 templates/user/categorylist.tpl:16
-#: templates/user/categorylist.tpl:57 templates/user/categorylist.tpl:100
+#: templates/admin/create.tpl:130 templates/admin/modify.tpl:127
+#: templates/user/create.tpl:119 templates/ajax/modify.tpl:88
+msgid "Article body text"
+msgstr ""
+
+#: templates/admin/create.tpl:137 templates/admin/modify.tpl:134
+#: templates/user/create.tpl:126 templates/ajax/modify.tpl:95
+msgid "Article body format"
+msgstr ""
+
+#: templates/admin/create.tpl:147 templates/admin/create.tpl:178
+#: templates/admin/create.tpl:241 templates/admin/modify.tpl:143
+#: templates/admin/modify.tpl:180 templates/admin/modify.tpl:238
+#: templates/user/create.tpl:136 templates/user/create.tpl:168
+#: templates/user/create.tpl:225 templates/ajax/modify.tpl:104
+#: templates/ajax/modify.tpl:136 templates/ajax/modify.tpl:194
+msgid "Show"
+msgstr ""
+
+#: templates/admin/create.tpl:147 templates/admin/modify.tpl:143
+#: templates/user/create.tpl:136 templates/ajax/modify.tpl:104
+msgid "Footnote"
+msgstr ""
+
+#: templates/admin/create.tpl:158 templates/admin/modify.tpl:153
+#: templates/admin/view.tpl:96 templates/user/create.tpl:147
+#: templates/ajax/modify.tpl:114
+msgid "Pictures"
+msgstr ""
+
+#: templates/admin/create.tpl:159 templates/admin/modify.tpl:154
+#: templates/user/create.tpl:148
+#, php-format
+msgid "Select a picture (max. %s kB per picture)"
+msgstr ""
+
+#: templates/admin/create.tpl:164 templates/admin/modify.tpl:159
+#: templates/user/create.tpl:154 templates/ajax/modify.tpl:116
+#, php-format
+msgid ""
+"(max files %s, first picture is used as thumbnail in the index teaser page "
+"for this article.)"
+msgstr ""
+
+#: templates/admin/create.tpl:178 templates/admin/modify.tpl:180
+#: templates/user/create.tpl:168 templates/ajax/modify.tpl:136
+msgid "Publishing options"
+msgstr ""
+
+#: templates/admin/create.tpl:181 templates/admin/modify.tpl:183
+#: templates/user/create.tpl:171 templates/ajax/modify.tpl:139
+msgid "Publish on news index page"
+msgstr ""
+
+#: templates/admin/create.tpl:191 templates/admin/modify.tpl:193
+#: templates/user/create.tpl:181 templates/ajax/modify.tpl:149
+msgid "No time limit"
+msgstr ""
+
+#: templates/admin/create.tpl:197 templates/admin/modify.tpl:199
+#: templates/user/create.tpl:186 templates/ajax/modify.tpl:155
+msgid "Start date"
+msgstr ""
+
+#: templates/admin/create.tpl:203 templates/admin/modify.tpl:205
+#: templates/user/create.tpl:192 templates/ajax/modify.tpl:161
+msgid "No end date"
+msgstr ""
+
+#: templates/admin/create.tpl:208 templates/admin/modify.tpl:210
+#: templates/user/create.tpl:197 templates/ajax/modify.tpl:166
+msgid "End date"
+msgstr ""
+
+#: templates/admin/create.tpl:216 templates/admin/modify.tpl:218
+#: templates/user/create.tpl:205 templates/ajax/modify.tpl:174
+msgid "Allow comments on this article"
+msgstr ""
+
+#: templates/admin/create.tpl:241 templates/admin/modify.tpl:238
+#: templates/user/create.tpl:225 templates/ajax/modify.tpl:194
+msgid "Article attributes"
+msgstr ""
+
+#: templates/admin/create.tpl:245 templates/admin/modify.tpl:242
+#: templates/user/create.tpl:229 templates/ajax/modify.tpl:198
+msgid "Create new attribute"
+msgstr ""
+
+#: templates/admin/create.tpl:261 templates/admin/create.tpl:281
+#: templates/admin/modify.tpl:258 templates/admin/modify.tpl:278
+#: templates/user/create.tpl:245 templates/user/create.tpl:265
+#: templates/ajax/modify.tpl:214 templates/ajax/modify.tpl:234
+msgid "Delete this attribute"
+msgstr ""
+
+#: templates/admin/create.tpl:295 templates/admin/modify.tpl:324
+#: templates/user/create.tpl:279
+msgid "Submit this article"
+msgstr ""
+
+#: templates/admin/create.tpl:295 templates/admin/modify.tpl:324
+#: templates/user/create.tpl:279
+msgid "Submit"
+msgstr ""
+
+#: templates/admin/create.tpl:297 templates/admin/modify.tpl:320
+#: templates/user/create.tpl:281
+msgid "Publish this article"
+msgstr ""
+
+#: templates/admin/create.tpl:299 templates/admin/create.tpl:302
+#: templates/admin/modify.tpl:329 templates/user/create.tpl:282
+msgid "Save this article as draft"
+msgstr ""
+
+#: templates/admin/create.tpl:299 templates/admin/create.tpl:302
+#: templates/admin/create.tpl:303 templates/admin/modify.tpl:329
+#: templates/user/create.tpl:282
+msgid "Save as draft"
+msgstr ""
+
+#: templates/admin/create.tpl:306 templates/admin/modify.tpl:332
+#: templates/user/create.tpl:283 templates/ajax/modify.tpl:252
+msgid "Mark this article as pending"
+msgstr ""
+
+#: templates/admin/create.tpl:306 templates/admin/publisheddata.tpl:7
+#: templates/admin/modify.tpl:332 templates/user/create.tpl:283
+msgid "Pending"
+msgstr ""
+
+#: templates/admin/create.tpl:308 templates/admin/modify.tpl:322
+#: templates/user/create.tpl:285
+msgid "Preview this article"
+msgstr ""
+
+#: templates/admin/create.tpl:308 templates/admin/modify.tpl:322
+#: templates/user/create.tpl:285
+msgid "Preview"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:1
+#, php-format
+msgid "Publication Data for #%s:"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:3
+msgid "Article unpublished"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:5
+msgid "forever"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:7
+msgid "Approved/Rejected By"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:8
+msgid "Created By"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:8 templates/admin/publisheddata.tpl:9
+msgid "On"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:9
+msgid "Last Updated By"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:10
+msgid "Publish From"
+msgstr ""
+
+#: templates/admin/publisheddata.tpl:10
+msgid "To"
+msgstr ""
+
+#: templates/admin/modify.tpl:15 templates/ajax/modify.tpl:3
+msgid "Edit news article"
+msgstr ""
+
+#: templates/admin/modify.tpl:96 templates/ajax/modify.tpl:57
+msgid "Language(s) for which article should be displayed"
+msgstr ""
+
+#: templates/admin/modify.tpl:172 templates/ajax/modify.tpl:128
+msgid "Delete this picture"
+msgstr ""
+
+#: templates/admin/modify.tpl:288
+msgid "Meta data"
+msgstr ""
+
+#: templates/admin/modify.tpl:293
+msgid "Contributed by"
+msgstr ""
+
+#: templates/admin/modify.tpl:293
+msgid "on"
+msgstr ""
+
+#: templates/admin/modify.tpl:301
+msgid "Last edited"
+msgstr ""
+
+#: templates/admin/modify.tpl:304
+#, php-format
+msgid "Approved by %s"
+msgstr ""
+
+#: templates/admin/modify.tpl:306
+#, php-format
+msgid "Status %s"
+msgstr ""
+
+#: templates/admin/modify.tpl:307
+#, php-format
+msgid "Article ID: %s"
+msgstr ""
+
+#: templates/admin/modify.tpl:316
+msgid "Approve and publish this article"
+msgstr ""
+
+#: templates/admin/modify.tpl:316
+msgid "Approve and"
+msgstr ""
+
+#: templates/admin/modify.tpl:318
+msgid "Update this article"
+msgstr ""
+
+#: templates/admin/modify.tpl:318
+msgid "Update"
+msgstr ""
+
+#: templates/admin/modify.tpl:327
+msgid "Update draft"
+msgstr ""
+
+#: templates/admin/modify.tpl:335
+msgid "Archive this article"
+msgstr ""
+
+#: templates/admin/modify.tpl:338
+msgid "Reject this article"
+msgstr ""
+
+#: templates/admin/modify.tpl:342 templates/ajax/modify.tpl:254
+msgid "Delete this article"
+msgstr ""
+
+#: templates/admin/view.tpl:25 templates/admin/view.tpl:62
+msgid "Filter"
+msgstr ""
+
+#: templates/admin/view.tpl:55 templates/admin/view.tpl:74
+#: templates/block/storiesext/modify.tpl:33
+#: templates/contenttype/newsarticles_edit.html:32
+msgid "Status"
+msgstr ""
+
+#: templates/admin/view.tpl:58 templates/block/storiesext/modify.tpl:41
+#: templates/contenttype/newsarticles_edit.html:43
+msgid "Order articles by"
+msgstr ""
+
+#: templates/admin/view.tpl:63
+msgid "Clear"
+msgstr ""
+
+#: templates/admin/view.tpl:76
+msgid "Apply filter"
+msgstr ""
+
+#: templates/admin/view.tpl:77 templates/admin/view.tpl:172
+msgid "Reset"
+msgstr ""
+
+#: templates/admin/view.tpl:89
+msgid "ID"
+msgstr ""
+
+#: templates/admin/view.tpl:91
+msgid "Contributor"
+msgstr ""
+
+#: templates/admin/view.tpl:98
+msgid "Index page<br />listing / Weight"
+msgstr ""
+
+#: templates/admin/view.tpl:99
+msgid "Date"
+msgstr ""
+
+#: templates/admin/view.tpl:100
+msgid "Actions"
+msgstr ""
+
+#: templates/admin/view.tpl:128
+#, php-format
+msgid "Last edited %s"
+msgstr ""
+
+#: templates/admin/view.tpl:130
+msgid "Scheduled for"
+msgstr ""
+
+#: templates/admin/view.tpl:132
+#, php-format
+msgid "until %s"
+msgstr ""
+
+#: templates/admin/view.tpl:135
+msgid "No comments allowed."
+msgstr ""
+
+#: templates/admin/view.tpl:146
+msgid "No articles currently in database."
+msgstr ""
+
+#: templates/admin/view.tpl:151
+msgid "doubleuparrow"
+msgstr ""
+
+#: templates/admin/view.tpl:151
+msgid "Check all"
+msgstr ""
+
+#: templates/admin/view.tpl:151
+msgid "Uncheck all"
+msgstr ""
+
+#: templates/admin/view.tpl:153
+msgid "With selected:"
+msgstr ""
+
+#: templates/admin/view.tpl:168
+msgid "Access a past article via its ID"
+msgstr ""
+
+#: templates/admin/view.tpl:171
+msgid "Go retrieve"
+msgstr ""
+
+#: templates/admin/view.tpl:185
+msgid "Select a Category"
+msgstr ""
+
+#: templates/search/options.tpl:3
+msgid "News articles"
+msgstr ""
+
+#: templates/user/categorylist.tpl:16 templates/user/categorylist.tpl:57
+#: templates/user/categorylist.tpl:100 templates/user/archives.tpl:24
 #, php-format
 msgid "%s article"
 msgid_plural "%s articles"
 msgstr[0] ""
 msgstr[1] ""
-
-#: templates/user/archives.tpl:42
-#, php-format
-msgid "News archive for %1$s, %2$s"
-msgstr ""
-
-#: templates/user/archives.tpl:54
-msgid "Pageviews"
-msgstr ""
-
-#: templates/user/index.tpl:24 templates/printer/index.tpl:24
-msgid "Filed under:"
-msgstr ""
-
-#: templates/user/article.tpl:29 templates/printer/article.tpl:50
-msgid "More articles in category "
-msgstr ""
 
 #: templates/user/categorylist.tpl:18
 msgid "Currently no articles"
@@ -1730,191 +1722,85 @@ msgstr ""
 msgid "Currently no articles."
 msgstr ""
 
-#: templates/contenttype/newsarticles_view.html:22
+#: templates/user/index.tpl:3 templates/user/archives.tpl:55
+#: templates/user/articlecontent.tpl:22 templates/user/articlepdf.tpl:3
+#: templates/printer/index.tpl:3 templates/printer/article.tpl:12
+msgid "Contributed"
+msgstr ""
+
+#: templates/user/index.tpl:24 templates/printer/index.tpl:24
+msgid "Filed under:"
+msgstr ""
+
+#: templates/user/archives.tpl:14
+msgid "Expand all"
+msgstr ""
+
+#: templates/user/archives.tpl:14
+msgid "Contract all"
+msgstr ""
+
+#: templates/user/archives.tpl:42
 #, php-format
-msgid "Contributed by %s"
+msgid "News archive for %1$s, %2$s"
 msgstr ""
 
-#: templates/contenttype/newsarticles_view.html:23
-#: templates/block/storiesext/row.tpl:7
-#, php-format
-msgid "on %s"
+#: templates/user/archives.tpl:54
+msgid "Pageviews"
 msgstr ""
 
-#: templates/contenttype/newsarticles_view.html:26
-#: templates/block/storiesext/row.tpl:8
-#, php-format
-msgid "%s pageview"
-msgid_plural "%s pageviews"
-msgstr[0] ""
-msgstr[1] ""
-
-#: templates/contenttype/newsarticles_view.html:63
-msgid "No articles published recently."
+#: templates/user/articlecontent.tpl:48 templates/printer/article.tpl:30
+msgid "Picture gallery"
 msgstr ""
 
-#: templates/contenttype/newsarticles_edit.html:4
-msgid "Widget title"
+#: templates/user/article.tpl:23 templates/printer/article.tpl:50
+msgid "More articles in category "
 msgstr ""
 
-#: templates/contenttype/newsarticles_edit.html:11
-#: templates/block/storiesext/modify.tpl:15
-msgid "Choose categories"
+#: templates/user/create.tpl:121
+msgid "#{chars"
 msgstr ""
 
-#: templates/contenttype/newsarticles_edit.html:17
+#: templates/block/stories_modify.tpl:2
+msgid "Scope of news article listing"
+msgstr ""
+
+#: templates/block/stories_modify.tpl:23
+#: templates/block/slideshow_modify.tpl:15
+msgid "Maximum number of articles to display"
+msgstr ""
+
+#: templates/block/big.tpl:1
+msgid "Today's most-read article is:"
+msgstr ""
+
+#: templates/block/slideshow_modify.tpl:13
 msgid ""
-"(An empty category selection will show articles from all available "
-"categories)"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:22
-msgid "Display"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:27
-msgid "Number of articles"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:37
-msgid "Limit of backward reach"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:39
-#: templates/block/storiesext/modify.tpl:52
-msgid "(Number of days; 0 for no limit)"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:48
-msgid "Maximum displayed length of title"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:50
-#: templates/contenttype/newsarticles_edit.html:138
-#: templates/block/storiesext/modify.tpl:57
-#: templates/block/storiesext/modify.tpl:130
-msgid "(Number of characters; 0 for no limit)"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:54
-#: templates/block/storiesext/modify.tpl:60
-msgid "Suffix appended to truncated title"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:58
-msgid "Information settings"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:61
-msgid "Display contributor's name"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:66
-msgid "Display article creation date"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:68
-msgid "(Only shown when contributor's name is also enabled)"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:72
-#: templates/block/storiesext/modify.tpl:95
-msgid "Date format"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:74
-msgid ""
-"Refer to the <a href=\"http://www.php.net/manual/function.strftime.php"
-"\">'strftime' description</a> in the PHP documentation."
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:78
-msgid "Display number of pageviews"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:85
-msgid "Display number of comments"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:91
-msgid "Separator character for article information"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:96
-msgid "Display 'Submit an article' link"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:100
-msgid "Article settings"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:103
-msgid "Display an icon to highlight recent article titles"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:109
-#: templates/block/storiesext/modify.tpl:150
-msgid "Number of days during which article is considered recent"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:114
-#: templates/block/storiesext/modify.tpl:154
-msgid "Image set for 'New' image"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:116
-#: templates/contenttype/newsarticles_edit.html:122
-msgid "(Used by 'img' plug-in)"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:120
-#: templates/block/storiesext/modify.tpl:159
-msgid "File name of 'New' image from image set"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:126
-#: templates/block/storiesext/modify.tpl:117
-msgid "Index page teaser settings"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:129
-msgid "Display article's index page teaser text"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:131
-#: templates/block/storiesext/modify.tpl:126
-msgid ""
-"Notice: When truncating the index page teaser text, incomplete HTML mark-up "
-"elements will be completed by the 'truncatehtml' plug-in."
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:136
-msgid "Maximum displayed length of index page teaser text"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:142
-msgid "Suffix appended to truncated index page teaser text"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:147
-msgid "Specify a custom template"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:149
-msgid "Custom output template"
-msgstr ""
-
-#: templates/contenttype/newsarticles_edit.html:151
-msgid ""
-"(Default template 'newsarticles_view.html' is used if this box is left blank)"
+"Notice: the news publisher slideshow block is developed for the case where "
+"every article has pictures that were uploaded with the picture upload "
+"functionality. Furthermore it only works fine if the sizing is set to "
+"\"fixed size (scale and crop)\", since that will give fixed size images and "
+"thumbnails."
 msgstr ""
 
 #: templates/block/past_modify.tpl:2 templates/block/storiesext/modify.tpl:29
 msgid "Maximum number of news articles to display"
 msgstr ""
 
+#: templates/block/storiesext/witheditblock.tpl:9
+#: templates/block/storiesext/scrollfade.tpl:24
+#: templates/block/storiesext/scrollmarquee.tpl:24
+#: templates/block/storiesext/scrollpause.tpl:24
+msgid "Edit this block"
+msgstr ""
+
 #: templates/block/storiesext/modify.tpl:6
 msgid "Articles to list"
+msgstr ""
+
+#: templates/block/storiesext/modify.tpl:15
+#: templates/contenttype/newsarticles_edit.html:11
+msgid "Choose categories"
 msgstr ""
 
 #: templates/block/storiesext/modify.tpl:15
@@ -1929,8 +1815,25 @@ msgstr ""
 msgid "Maximum age of articles"
 msgstr ""
 
+#: templates/block/storiesext/modify.tpl:52
+#: templates/contenttype/newsarticles_edit.html:39
+msgid "(Number of days; 0 for no limit)"
+msgstr ""
+
 #: templates/block/storiesext/modify.tpl:55
 msgid "Maximum length of titles"
+msgstr ""
+
+#: templates/block/storiesext/modify.tpl:57
+#: templates/block/storiesext/modify.tpl:130
+#: templates/contenttype/newsarticles_edit.html:50
+#: templates/contenttype/newsarticles_edit.html:138
+msgid "(Number of characters; 0 for no limit)"
+msgstr ""
+
+#: templates/block/storiesext/modify.tpl:60
+#: templates/contenttype/newsarticles_edit.html:54
+msgid "Suffix appended to truncated title"
 msgstr ""
 
 #: templates/block/storiesext/modify.tpl:64
@@ -1977,6 +1880,11 @@ msgstr ""
 msgid "Show article creation date"
 msgstr ""
 
+#: templates/block/storiesext/modify.tpl:95
+#: templates/contenttype/newsarticles_edit.html:72
+msgid "Date format"
+msgstr ""
+
 #: templates/block/storiesext/modify.tpl:97
 msgid "Click here to read 'strftime' description in PHP documentation"
 msgstr ""
@@ -1993,8 +1901,20 @@ msgstr ""
 msgid "Separator character for additional information"
 msgstr ""
 
+#: templates/block/storiesext/modify.tpl:117
+#: templates/contenttype/newsarticles_edit.html:126
+msgid "Index page teaser settings"
+msgstr ""
+
 #: templates/block/storiesext/modify.tpl:119
 msgid "Display article's index page teaser"
+msgstr ""
+
+#: templates/block/storiesext/modify.tpl:126
+#: templates/contenttype/newsarticles_edit.html:131
+msgid ""
+"Notice: When truncating the index page teaser text, incomplete HTML mark-up "
+"elements will be completed by the 'truncatehtml' plug-in."
 msgstr ""
 
 #: templates/block/storiesext/modify.tpl:128
@@ -2013,9 +1933,24 @@ msgstr ""
 msgid "Display image for recent article titles"
 msgstr ""
 
+#: templates/block/storiesext/modify.tpl:150
+#: templates/contenttype/newsarticles_edit.html:109
+msgid "Number of days during which article is considered recent"
+msgstr ""
+
+#: templates/block/storiesext/modify.tpl:154
+#: templates/contenttype/newsarticles_edit.html:114
+msgid "Image set for 'New' image"
+msgstr ""
+
 #: templates/block/storiesext/modify.tpl:156
 #: templates/block/storiesext/modify.tpl:161
 msgid "(Used by 'pnimg' plug-in)"
+msgstr ""
+
+#: templates/block/storiesext/modify.tpl:159
+#: templates/contenttype/newsarticles_edit.html:120
+msgid "File name of 'New' image from image set"
 msgstr ""
 
 #: templates/block/storiesext/modify.tpl:167
@@ -2074,13 +2009,6 @@ msgstr ""
 msgid "(Number from 1 to 10)"
 msgstr ""
 
-#: templates/block/storiesext/scrollmarquee.tpl:24
-#: templates/block/storiesext/scrollpause.tpl:24
-#: templates/block/storiesext/scrollfade.tpl:24
-#: templates/block/storiesext/witheditblock.tpl:9
-msgid "Edit this block"
-msgstr ""
-
 #: templates/block/storiesext/row.tpl:2
 msgid "New"
 msgstr ""
@@ -2090,26 +2018,129 @@ msgstr ""
 msgid "by %s"
 msgstr ""
 
-#: templates/block/slideshow_modify.tpl:13
+#: templates/block/storiesext/row.tpl:7
+#: templates/contenttype/newsarticles_view.html:23
+#, php-format
+msgid "on %s"
+msgstr ""
+
+#: templates/block/storiesext/row.tpl:8
+#: templates/contenttype/newsarticles_view.html:26
+#, php-format
+msgid "%s pageview"
+msgid_plural "%s pageviews"
+msgstr[0] ""
+msgstr[1] ""
+
+#: templates/contenttype/newsarticles_view.html:22
+#, php-format
+msgid "Contributed by %s"
+msgstr ""
+
+#: templates/contenttype/newsarticles_view.html:63
+msgid "No articles published recently."
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:4
+msgid "Widget title"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:17
 msgid ""
-"Notice: the news publisher slideshow block is developed for the case where "
-"every article has pictures that were uploaded with the picture upload "
-"functionality. Furthermore it only works fine if the sizing is set to "
-"\"fixed size (scale and crop)\", since that will give fixed size images and "
-"thumbnails."
+"(An empty category selection will show articles from all available "
+"categories)"
 msgstr ""
 
-#: templates/block/slideshow_modify.tpl:15
-#: templates/block/stories_modify.tpl:23
-msgid "Maximum number of articles to display"
+#: templates/contenttype/newsarticles_edit.html:22
+msgid "Display"
 msgstr ""
 
-#: templates/block/big.tpl:1
-msgid "Today's most-read article is:"
+#: templates/contenttype/newsarticles_edit.html:27
+msgid "Number of articles"
 msgstr ""
 
-#: templates/block/stories_modify.tpl:2
-msgid "Scope of news article listing"
+#: templates/contenttype/newsarticles_edit.html:37
+msgid "Limit of backward reach"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:48
+msgid "Maximum displayed length of title"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:58
+msgid "Information settings"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:61
+msgid "Display contributor's name"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:66
+msgid "Display article creation date"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:68
+msgid "(Only shown when contributor's name is also enabled)"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:74
+msgid ""
+"Refer to the <a href=\"http://www.php.net/manual/function.strftime.php"
+"\">'strftime' description</a> in the PHP documentation."
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:78
+msgid "Display number of pageviews"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:85
+msgid "Display number of comments"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:91
+msgid "Separator character for article information"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:96
+msgid "Display 'Submit an article' link"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:100
+msgid "Article settings"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:103
+msgid "Display an icon to highlight recent article titles"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:116
+#: templates/contenttype/newsarticles_edit.html:122
+msgid "(Used by 'img' plug-in)"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:129
+msgid "Display article's index page teaser text"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:136
+msgid "Maximum displayed length of index page teaser text"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:142
+msgid "Suffix appended to truncated index page teaser text"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:147
+msgid "Specify a custom template"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:149
+msgid "Custom output template"
+msgstr ""
+
+#: templates/contenttype/newsarticles_edit.html:151
+msgid ""
+"(Default template 'newsarticles_view.html' is used if this box is left blank)"
 msgstr ""
 
 #: templates/ajax/modify.tpl:115
@@ -2122,8 +2153,4 @@ msgstr ""
 
 #: templates/ajax/modify.tpl:252
 msgid "Mark as pending"
-msgstr ""
-
-#: templates/search/options.tpl:3
-msgid "News articles"
 msgstr ""
