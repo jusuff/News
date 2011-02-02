@@ -367,6 +367,7 @@ class News_Installer extends Zikula_Installer
         $shorturlsep = System::getVar('shorturlsseparator');
         $now = DateUtil::getDatetime();
         $uname = UserUtil::getVar('uname');
+        $uid = UserUtil::getVar('uid');
         // set creation date and from to the time set in autonews
         $article = array('title'   => $this->__('News introduction article'),
                 'urltitle'         => $this->__('news_introduction_article'),
@@ -374,7 +375,7 @@ class News_Installer extends Zikula_Installer
                 'bodytext'         => __f('<h3>More about the News module</h3><p>You are now reading the body text of the article (starting as from the \'More about the News module\' title above). Both the article teaser and the article body can contain URL links, images, mark-up (HTML tags and, if you have the additional necessary add-ons installed, other mark-up languages such as BBCode) You can learn more about the News module by reading the <a href="http://code.zikula.org/news/wiki#Documentation">News Wiki Documentation</a>.</p><h3>Some more details</h3><p><img src="modules/News/images/admin.gif" width="48" height="48" class="z-floatleft" alt="News publisher admin image"/>To control what HTML tags can be included in an article to format and enhance it, the site administrator should set the desired tags to enabled status by visiting the <a href="index.php?module=SecurityCenter&type=admin&func=allowedhtml">Security centre</a>. With the News module, you can take advantage of Zikula\'s permissions system to control who gets what access to which parts of the News module. A moderator group can be created, containing registered site users who can add, edit and delete articles. This is just a simple example: the Zikula permissions system is sufficiently flexible to let you implement practically any organisation you want.</p><p>You can edit or delete this introductory article by clicking on the link beside the article title, or you can visit to the <a href="index.php?module=%s&type=admin&func=view">News admin pages</a>.</p>', $this->__('News')),
                 'counter'          => 0,
                 'contributor'      => $uname,
-                'approver'         => $uname,
+                'approver'         => $uid,
                 'notes'            => '',
                 'hideonindex'      => 0,
                 'language'         => '',
