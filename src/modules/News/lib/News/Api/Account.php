@@ -30,7 +30,7 @@ class News_Api_Account extends Zikula_Api
 
         // Create an array of links to return
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_COMMENT)) {
-            $items[] = array('url'     => ModUtil::url('News', 'user', 'new'),
+            $items[] = array('url'     => ModUtil::url('News', 'user', 'newitem'),
                     'module'  => 'News',
                     'title'   => $this->__('Submit an article'),
                     'icon'    => 'news_add.gif');
