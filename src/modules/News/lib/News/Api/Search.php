@@ -92,7 +92,7 @@ class News_Api_Search extends Zikula_Api
      */
     public function search_check($args)
     {
-        $datarow = $args['datarow'];
+        $datarow = &$args['datarow'];
         $articleId = $datarow['extra'];
         $datarow['url'] = ModUtil::url('News', 'user', 'display', array('sid' => $articleId));
 
