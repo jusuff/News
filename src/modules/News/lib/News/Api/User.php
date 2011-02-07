@@ -80,7 +80,7 @@ class News_Api_User extends Zikula_Api
 
         // if ordering is used also set the order direction, ascending/descending
         if (!empty($order)) {
-            if (isset($args['orderdir']) && in_array(strtoupper($args['orderdir'], array('ASC', 'DESC')))) {
+            if (isset($args['orderdir']) && in_array(strtoupper($args['orderdir']), array('ASC', 'DESC'))) {
                 $orderby = $news_column[$order].' '.strtoupper($args['orderdir']);
             } else {
                 $orderby = $news_column[$order].' DESC';
@@ -1024,7 +1024,7 @@ class News_Api_User extends Zikula_Api
                 $queryargs[] = "({$news_column['from']} < '$date')";
             }
             // or can filter with the current date
-        } elseif (isset($args['filterbydate'])) {
+        } elseif ((isset($args['filterbydate'])) && ($args['filterbydate'])) {
             $date = DateUtil::getDatetime();
             $queryargs[] = "('$date' >= {$news_column['from']} AND ({$news_column['to']} IS NULL OR '$date' <= {$news_column['to']}))";
         }

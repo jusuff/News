@@ -21,8 +21,11 @@
 
     {if $modvars.News.enablecategorization && $numproperties > 0}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
-        <fieldset id="news_multicategory_filter">
-            <legend>{gt text="Filter"}</legend>
+        <fieldset id="news_multicategory_filter"{if $filter_active} class='filteractive'{/if}>
+            <legend>{gt text="Filter"} ({if $filter_active}{gt text='Active'}{else}{gt text='Inactive'}{/if} :: {gt text='Articles listed: %s' tag1=$total_articles})</legend>
+            <label for="news_status">{gt text='Status'}</label>
+            {html_options name='news_status' id='news_status' options=$itemstatus selected=$news_status}
+            &nbsp;
             <label for="news_property">{gt text='Category'}</label>
             {gt text='All' assign='lblDef'}
             {nocache}
@@ -51,16 +54,10 @@
             {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$modvars.ZConfig.language_i18n|default:''}
             {/if}
             {/nocache}
-            &nbsp;
-            <label for="news_status">{gt text='Status'}</label>
-            {html_options name='news_status' id='news_status' options=$itemstatus selected=$news_status}
-            &nbsp;
-            <label for="order">{gt text='Order articles by'}</label>
-            {html_options name='order' id='order' options=$orderoptions selected=$order}
             &nbsp;&nbsp;
             <span class="z-nowrap z-buttons">
-                <input class="z-bt-small" name="submit" type="submit" value="{gt text='Filter'}" />
-                <input class="z-bt-small" name="clear" type="submit" value="{gt text='Clear'}" />
+                <input class='z-bt-filter' name="submit" type="submit" value="{gt text='Filter'}" />
+                <a href="{modurl modname="News" type='admin' func='view'}" title="{gt text="Clear"}">{img modname=core src="button_cancel.gif" set="icons/extrasmall" __alt="Clear" __title="Clear"} {gt text="Clear Filter"}</a>
             </span>
         </fieldset>
     </form>
@@ -86,7 +83,7 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>{gt text='ID'}</th>
+                        <th><a class='{$sort.class.sid}' href='{$sort.url.sid|safetext}'>{gt text='ID'}</a></th>
                         <th>{gt text='Title'}</th>
                         <th>{gt text='Contributor'}</th>
                         {if $modvars.News.enablecategorization}
@@ -95,8 +92,8 @@
                         {if $modvars.News.picupload_enabled}
                         <th>{gt text='Pictures'}</th>
                         {/if}
-                        <th>{gt text='Index page<br />listing / Weight'}</th>
-                        <th>{gt text='Date'}</th>
+                        <th>{gt text='Index page<br />listing'} / <a class='{$sort.class.weight}' href='{$sort.url.weight|safetext}'>{gt text='Weight'}</a></th>
+                        <th><a class='{$sort.class.from}' href='{$sort.url.from|safetext}'>{gt text='Date'}</a></th>
                         <th>{gt text='Actions'}</th>
                     </tr>
                 </thead>
@@ -175,7 +172,7 @@
         </div>
     </form>
 
-    {pager rowcount=$pager.numitems limit=$pager.itemsperpage posvar='startnum'}
+    {pager rowcount=$total_articles limit=$modvars.News.itemsperpage posvar='startnum'}
 </div>
 <!-- This form below appears as a formdialog when a bulk action of 'change categories' is selected -->
 <div id='news_changeCategoriesForm' style='display: none;'>

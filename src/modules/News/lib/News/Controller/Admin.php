@@ -411,16 +411,44 @@ class News_Controller_Admin extends Zikula_Controller
         if (!SecurityUtil::checkPermission('News::', '::', ACCESS_EDIT)) {
             return LogUtil::registerPermissionError();
         }
+        // initialize sort array - used to display sort classes and urls
+        $sort = array();
+        $fields = array('sid', 'weight', 'from'); // possible sort fields
+        foreach ($fields as $field) {
+            $sort['class'][$field] = 'z-order-unsorted'; // default values
+        }
 
         $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GET');
         $news_status = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
         $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
         $property = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'GETPOST');
         $category = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'GETPOST');
-        $clear = FormUtil::getPassedValue('clear', false, 'POST');
         $purge = FormUtil::getPassedValue('purge', false, 'GET');
         $order = FormUtil::getPassedValue('order', isset($args['order']) ? $args['order'] : 'from', 'GETPOST');
+        $original_sdir = FormUtil::getPassedValue('sdir', isset($args['sdir']) ? $args['sdir'] : 1, 'GETPOST');
         //$monthyear   = FormUtil::getPassedValue('monthyear', isset($args['monthyear']) ? $args['monthyear'] : null, 'POST');
+        $sdir = $original_sdir ? 0 : 1; //if true change to false, if false change to true
+        // change class for selected 'orderby' field to asc/desc
+        if ($sdir == 0) {
+            $sort['class'][$order] = 'z-order-desc';
+            $orderdir = 'DESC';
+        }
+        if ($sdir == 1) {
+            $sort['class'][$order] = 'z-order-asc';
+            $orderdir = 'ASC';
+        }
+        // complete initialization of sort array, adding urls
+        foreach ($fields as $field) {
+            $sort['url'][$field] = ModUtil::url('News', 'admin', 'view', array(
+                'news_status' => $news_status,
+                'language' => $language,
+                //'filtercats_serialized' => serialize($filtercats),
+                'order' => $field,
+                'sdir' => $sdir));
+        }
+        $this->view->assign('sort', $sort);
+
+        $this->view->assign('filter_active', (empty($language) && empty($news_status) && empty($property) && empty($category)) ? false : true);
 
         if ($purge) {
             if (ModUtil::apiFunc('News', 'admin', 'purgepermalinks')) {
@@ -429,14 +457,6 @@ class News_Controller_Admin extends Zikula_Controller
                 LogUtil::registerError($this->__('Error! Could not purge permalinks.'));
             }
             return $this->redirect(strpos(System::serverGetVar('HTTP_REFERER'), 'purge') ? ModUtil::url('News', 'admin', 'view') : System::serverGetVar('HTTP_REFERER'));
-        }
-
-        if ($clear) {
-            // reset the filter
-            $property = null;
-            $category = null;
-            $news_status = null;
-            $order = 'from';
         }
 
         // clean the session preview data
@@ -483,19 +503,21 @@ class News_Controller_Admin extends Zikula_Controller
             }
         }
 
-        // Get all news story
-        $items = ModUtil::apiFunc('News', 'user', 'getall',
-                        array('startnum' => $startnum,
+        // Get all news stories
+        $getallargs = array('startnum' => $startnum,
                             'status' => $status,
                             'numitems' => $modvars['itemsperpage'],
                             'ignoreml' => ($multilingual ? false : true),
                             'language' => $language,
                             'order' => isset($order) ? $order : 'from',
+                            'orderdir' => isset($orderdir) ? $orderdir : 'DESC',
                             'from' => isset($from) ? $from : null,
                             'to' => isset($to) ? $to : null,
                             'filterbydate' => false,
                             'category' => isset($catFilter) ? $catFilter : null,
-                            'catregistry' => isset($catregistry) ? $catregistry : null));
+                            'catregistry' => isset($catregistry) ? $catregistry : null);
+        $items = ModUtil::apiFunc('News', 'user', 'getall', $getallargs);
+        $total_articles = ModUtil::apiFunc('News', 'user', 'countitems', $getallargs);
 
         // Set the possible status for later use
         $itemstatus = array(
@@ -575,6 +597,7 @@ class News_Controller_Admin extends Zikula_Controller
 
         // Assign the items to the template
         $this->view->assign('newsitems', $newsitems);
+        $this->view->assign('total_articles', $total_articles);
 
         // Assign the default and selected language
         $this->view->assign('lang', ZLanguage::getLanguageCode());
@@ -583,9 +606,6 @@ class News_Controller_Admin extends Zikula_Controller
         $this->view->assign('news_status', $news_status);
         $this->view->assign('itemstatus', $itemstatus);
         $this->view->assign('order', $order);
-        $this->view->assign('orderoptions', array('from' => $this->__('Article date/time'),
-            'sid' => $this->__('Article ID'),
-            'weight' => $this->__('Article weight')));
 
         // Assign the categories information if enabled
         if ($modvars['enablecategorization']) {
@@ -596,79 +616,43 @@ class News_Controller_Admin extends Zikula_Controller
             $this->view->assign('category', $category);
         }
 
+        // create 'quicklinks' for navigation
         // Count the items for the selected status and category
         $statuslinks = array();
         // Counts with a tolerance of 3 seconds
         $now = DateUtil::getDatetime(time() + 3);
-
-        $statuslinks[] = array('count' => ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('category' => isset($catFilter) ? $catFilter : null,
-                        'status' => 0,
-                        'to' => $now)),
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_status' => 0,
-                        'news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('Published'));
-
-        $statuslinks[] = array('count' => ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('category' => isset($catFilter) ? $catFilter : null,
-                        'status' => 0,
-                        'from' => $now)),
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_status' => 5,
-                        'news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('Scheduled'));
-
-        $statuslinks[] = array('count' => ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('category' => isset($catFilter) ? $catFilter : null,
-                        'status' => 2)),
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_status' => 2,
-                        'news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('Pending Review'));
-
-        $statuslinks[] = array('count' => ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('category' => isset($catFilter) ? $catFilter : null,
-                        'status' => 4)),
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_status' => 4,
-                        'news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('Draft'));
-
-        $statuslinks[] = array('count' => ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('category' => isset($catFilter) ? $catFilter : null,
-                        'status' => 3)),
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_status' => 3,
-                        'news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('Archived'));
-
-        $statuslinks[] = array('count' => ModUtil::apiFunc('News', 'user', 'countitems',
-                    array('category' => isset($catFilter) ? $catFilter : null,
-                        'status' => 1)),
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_status' => 1,
-                        'news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('Rejected'));
-
-        $alllink = array('count' => $statuslinks[0]['count'] + $statuslinks[1]['count'] + $statuslinks[2]['count'] + $statuslinks[3]['count'] + $statuslinks[4]['count'] + $statuslinks[5]['count'],
-            'url' => ModUtil::url('News', 'admin', 'view',
-                    array('news_property' => $property,
-                        'news_' . $property . '_category' => isset($category) ? $category : null)),
-            'title' => $this->__('All'));
-
+        // arraymap for statustypes
+        $statustypes = array(
+            $this->__('Published') => array('status' => 0,
+                'news_status' => 0,
+                'to' => $now),
+            $this->__('Scheduled') => array('status' => 0,
+                'news_status' => 5,
+                'from' => $now),
+            $this->__('Pending Review') => array('status' => 2,
+                'news_status' => 2),
+            $this->__('Draft') => array('status' => 4,
+                'news_status' => 4),
+            $this->__('Archived') => array('status' => 3,
+                'news_status' => 3),
+            $this->__('Rejected') => array('status' => 1,
+                'news_status' => 1),
+        );
+        foreach ($statustypes as $k => $v) {
+            $linkargs = array('news_status' => $v['news_status']);
+            unset($v['news_status']);
+            $count = ModUtil::apiFunc('News', 'user', 'countitems', $v);
+            $statuslinks[] = array('count' => $count,
+                'url' => ModUtil::url('News', 'admin', 'view', $linkargs),
+                'title' => $k);
+        }
         $this->view->assign('statuslinks', $statuslinks);
-        $this->view->assign('alllink', $alllink);
 
-        // Assign the values for the smarty plugin to produce a pager
-        $this->view->assign('pager', array('numitems' => ModUtil::apiFunc('News', 'user', 'countitems', array('category' => isset($catFilter) ? $catFilter : null)),
-            'itemsperpage' => $modvars['itemsperpage']));
+        $total = ModUtil::apiFunc('News', 'user', 'countitems');
+        $alllink = array('count' => $total,
+            'url' => ModUtil::url('News', 'admin', 'view'),
+            'title' => $this->__('All'));
+        $this->view->assign('alllink', $alllink);
 
         // Return the output that has been generated by this function
         return $this->view->fetch('admin/view.tpl');
