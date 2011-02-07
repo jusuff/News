@@ -34,6 +34,7 @@ class News_Installer extends Zikula_Installer
         $this->setVar('storyhome', 10);
         $this->setVar('storyorder', 1); // publication datetime
         $this->setVar('itemsperpage', 25);
+        $this->setVar('itemsperadminpage', 15);
         $this->setVar('permalinkformat', '%year%/%monthnum%/%day%/%articletitle%');
         $this->setVar('enablecategorization', true);
         $this->setVar('refereronprint', 0);
@@ -316,6 +317,7 @@ class News_Installer extends Zikula_Installer
                 HookUtil::registerHookSubscriberBundles($this->version);
                 $this->delVar('pdflink_tcpdfpath');
                 $this->delVar('pdflink_tcpdflang');
+                $this->setVar('itemsperadminpage', 15);
             case '3.0.1':
                 // future plans
         }

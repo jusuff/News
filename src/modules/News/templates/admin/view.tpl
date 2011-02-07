@@ -172,7 +172,7 @@
         </div>
     </form>
 
-    {pager rowcount=$total_articles limit=$modvars.News.itemsperpage posvar='startnum'}
+    {pager rowcount=$total_articles limit=$modvars.News.itemsperadminpage posvar='startnum'}
 </div>
 <!-- This form below appears as a formdialog when a bulk action of 'change categories' is selected -->
 <div id='news_changeCategoriesForm' style='display: none;'>

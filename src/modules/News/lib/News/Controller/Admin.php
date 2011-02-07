@@ -506,7 +506,7 @@ class News_Controller_Admin extends Zikula_Controller
         // Get all news stories
         $getallargs = array('startnum' => $startnum,
                             'status' => $status,
-                            'numitems' => $modvars['itemsperpage'],
+                            'numitems' => $modvars['itemsperadminpage'],
                             'ignoreml' => ($multilingual ? false : true),
                             'language' => $language,
                             'order' => isset($order) ? $order : 'from',
@@ -712,6 +712,7 @@ class News_Controller_Admin extends Zikula_Controller
         }
         $modvars['refereronprint'] = $refereronprint;
         $modvars['itemsperpage'] = (int) FormUtil::getPassedValue('itemsperpage', 25, 'POST');
+        $modvars['itemsperadminpage'] = (int) FormUtil::getPassedValue('itemsperadminpage', 15, 'POST');
         $modvars['storyhome'] = (int) FormUtil::getPassedValue('storyhome', 10, 'POST');
         $modvars['storyorder'] = (int) FormUtil::getPassedValue('storyorder', 1, 'POST');
         $modvars['enablecategorization'] = (bool) FormUtil::getPassedValue('enablecategorization', false, 'POST');

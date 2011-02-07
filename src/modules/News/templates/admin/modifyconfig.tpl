@@ -66,6 +66,10 @@
                     <input id="news_itemsperpage" type="text" name="itemsperpage" size="3" value="{$modvars.News.itemsperpage|safetext}" />
                 </div>
                 <div class="z-formrow">
+                    <label for="news_itemsperadminpage">{gt text='Number of articles in admin list view'}</label>
+                    <input id="news_itemsperadminpage" type="text" name="itemsperadminpage" size="3" value="{$modvars.News.itemsperadminpage|safetext}" />
+                </div>
+                <div class="z-formrow">
                     <label for="news_refereronprint">{gt text='Check referer on printer-friendly pages'}</label>
                     <div id="news_refereronprint">
                         <input type="radio" id="refereronprintyes" name="refereronprint" value="1"{if $modvars.News.refereronprint eq 1} checked="checked"{/if} /> <label for="refereronprintyes">{gt text='Yes'}</label>
