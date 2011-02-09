@@ -12,13 +12,6 @@
 
     <h2>{$templatetitle}</h2>
 
-    <!-- p>
-        <a href="{* $alllink.url|safetext}">{$alllink.title} <span class="z-sub">({$alllink.count})</span></a>
-        {foreach from=$statuslinks item='statuslink'}
-        {if $statuslink.count gt 0}&nbsp;|&nbsp;<a href="{$statuslink.url|safetext}">{$statuslink.title} <span class="z-sub">({$statuslink.count})</span></a>{/if}
-        {/foreach *}
-    </p -->
-
     {if $modvars.News.enablecategorization && $numproperties > 0}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset id="news_multicategory_filter"{if $filter_active} class='filteractive'{/if}>
