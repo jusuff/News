@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Block_Big extends Zikula_Block
+class News_Block_Big extends Zikula_Controller_Block
 {
     /**
      * initialise block

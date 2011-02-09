@@ -47,7 +47,7 @@
  */
 
 
-class News_Block_Storiesext extends Zikula_Block
+class News_Block_Storiesext extends Zikula_Controller_Block
 {
     /**
      * initialise block
