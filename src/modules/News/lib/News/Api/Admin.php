@@ -222,6 +222,25 @@ class News_Api_Admin extends Zikula_Api
      */
     public function getlinks()
     {
+        // Counts with a tolerance of 3 seconds
+        $now = DateUtil::getDatetime(time() + 3);
+        // arraymap for statustypes
+        $statustypes = array(
+            'published' => array('status' => 0,
+                'to' => $now),
+            'scheduled' => array('status' => 0,
+                'from' => $now),
+            'pending' => array('status' => 2),
+            'draft' => array('status' => 4),
+            'archived' => array('status' => 3),
+            'rejected' => array('status' => 1),
+            'all' => array(),
+        );
+        $count = array();
+        foreach ($statustypes as $k => $v) {
+            $count[$k] = ModUtil::apiFunc('News', 'user', 'countitems', $v);
+        }
+
         $links = array();
 
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
@@ -230,19 +249,19 @@ class News_Api_Admin extends Zikula_Api
                     'class' => 'z-icon-es-list',
                     'links' => array(
                         array('url' => ModUtil::url('News', 'admin', 'view'),
-                            'text' => $this->__('All')),
+                            'text' => $this->__f('All (%s)', $count['all'])),
                         array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>0)),
-                            'text' => $this->__('Published')),
+                            'text' => $this->__f('Published (%s)', $count['published'])),
                         array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>1)),
-                            'text' => $this->__('Rejected')),
+                            'text' => $this->__f('Rejected (%s)', $count['rejected'])),
                         array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>2)),
-                            'text' => $this->__('Pending Review')),
+                            'text' => $this->__f('Pending Review (%s)', $count['pending'])),
                         array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>3)),
-                            'text' => $this->__('Archived')),
+                            'text' => $this->__f('Archived (%s)', $count['archived'])),
                         array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>4)),
-                            'text' => $this->__('Draft')),
+                            'text' => $this->__f('Draft (%s)', $count['draft'])),
                         array('url' => ModUtil::url('News', 'admin', 'view', array('news_status'=>5)),
-                            'text' => $this->__('Scheduled'))
+                            'text' => $this->__f('Scheduled (%s)', $count['scheduled']))
                     ));
         }
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_ADD)) {

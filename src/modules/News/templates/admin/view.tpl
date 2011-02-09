@@ -12,17 +12,18 @@
 
     <h2>{$templatetitle}</h2>
 
-    <p>
-        <a href="{$alllink.url|safetext}">{$alllink.title} <span class="z-sub">({$alllink.count})</span></a>
+    <!-- p>
+        <a href="{* $alllink.url|safetext}">{$alllink.title} <span class="z-sub">({$alllink.count})</span></a>
         {foreach from=$statuslinks item='statuslink'}
         {if $statuslink.count gt 0}&nbsp;|&nbsp;<a href="{$statuslink.url|safetext}">{$statuslink.title} <span class="z-sub">({$statuslink.count})</span></a>{/if}
-        {/foreach}
-    </p>
+        {/foreach *}
+    </p -->
 
     {if $modvars.News.enablecategorization && $numproperties > 0}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset id="news_multicategory_filter"{if $filter_active} class='filteractive'{/if}>
-            <legend>{gt text="Filter"} ({if $filter_active}{gt text='Active'}{else}{gt text='Inactive'}{/if} :: {gt text='Articles listed: %s' tag1=$total_articles})</legend>
+            {if $filter_active}{gt text='active' assign=filteractive}{else}{gt text='inactive" assign=filteractive}{/if}
+            <legend>{gt text='Filter %1$s, %2$s article listed' plural='Filter %1$s, %2$s articles listed' count=$total_articles tag1=$filteractive tag2=$total_articles}</legend>
             <label for="news_status">{gt text='Status'}</label>
             {html_options name='news_status' id='news_status' options=$itemstatus selected=$news_status}
             &nbsp;
@@ -57,7 +58,7 @@
             &nbsp;&nbsp;
             <span class="z-nowrap z-buttons">
                 <input class='z-bt-filter' name="submit" type="submit" value="{gt text='Filter'}" />
-                <a href="{modurl modname="News" type='admin' func='view'}" title="{gt text="Clear"}">{img modname=core src="button_cancel.gif" set="icons/extrasmall" __alt="Clear" __title="Clear"} {gt text="Clear Filter"}</a>
+                <a href="{modurl modname="News" type='admin' func='view'}" title="{gt text="Clear"}">{img modname=core src="button_cancel.gif" set="icons/extrasmall" __alt="Clear" __title="Clear"} {gt text="Clear"}</a>
             </span>
         </fieldset>
     </form>
