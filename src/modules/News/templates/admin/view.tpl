@@ -17,6 +17,9 @@
         <fieldset id="news_multicategory_filter"{if $filter_active} class='filteractive'{/if}>
             {if $filter_active}{gt text='active' assign=filteractive}{else}{gt text='inactive" assign=filteractive}{/if}
             <legend>{gt text='Filter %1$s, %2$s article listed' plural='Filter %1$s, %2$s articles listed' count=$total_articles tag1=$filteractive tag2=$total_articles}</legend>
+            <input type="hidden" name="startnum" value="{$startnum}" />
+            <input type="hidden" name="order" value="{$order}" />
+            <input type="hidden" name="sdir" value="{$sdir}" />
             <label for="news_status">{gt text='Status'}</label>
             {html_options name='news_status' id='news_status' options=$itemstatus selected=$news_status}
             &nbsp;

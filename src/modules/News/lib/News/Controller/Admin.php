@@ -418,14 +418,18 @@ class News_Controller_Admin extends Zikula_Controller
             $sort['class'][$field] = 'z-order-unsorted'; // default values
         }
 
-        $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GET');
+        $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GETPOST');
         $news_status = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
-        $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'POST');
+        $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'GETPOST');
         $property = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'GETPOST');
         $category = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'GETPOST');
         $purge = FormUtil::getPassedValue('purge', false, 'GET');
         $order = FormUtil::getPassedValue('order', isset($args['order']) ? $args['order'] : 'from', 'GETPOST');
         $original_sdir = FormUtil::getPassedValue('sdir', isset($args['sdir']) ? $args['sdir'] : 1, 'GETPOST');
+
+        $this->view->assign('startnum', $startnum);
+        $this->view->assign('order', $order);
+        $this->view->assign('sdir', $original_sdir);
 
         $sdir = $original_sdir ? 0 : 1; //if true change to false, if false change to true
         // change class for selected 'orderby' field to asc/desc
@@ -442,6 +446,8 @@ class News_Controller_Admin extends Zikula_Controller
             $sort['url'][$field] = ModUtil::url('News', 'admin', 'view', array(
                 'news_status' => $news_status,
                 'language' => $language,
+                'news_property' => $property,
+                "news_{$property}_category" => $category,
                 //'filtercats_serialized' => serialize($filtercats),
                 'order' => $field,
                 'sdir' => $sdir));
