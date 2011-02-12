@@ -1076,10 +1076,8 @@ class News_Api_User extends Zikula_Api
                 $catFilter[$property] = $args['category'];
             }
             $catFilter['__META__'] = array('module' => 'News');
-            // set catfilter operator  if specified
-            if (isset($args['catoperator']) && in_array(strtolower($args['catoperator']), array('and', 'or'))) {
-                $catFilter['__META__']['operator'] = strtoupper($args['catoperator']);
-            }
+        } elseif (isset($args['catfilter'])) {
+            $catFilter = $args['catfilter'];
         }
         return $catFilter;
     }

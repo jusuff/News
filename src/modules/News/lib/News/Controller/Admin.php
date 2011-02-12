@@ -421,8 +421,6 @@ class News_Controller_Admin extends Zikula_Controller
         $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GETPOST');
         $news_status = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
         $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'GETPOST');
-        $property = FormUtil::getPassedValue('news_property', isset($args['news_property']) ? $args['news_property'] : null, 'GETPOST');
-        $category = FormUtil::getPassedValue("news_{$property}_category", isset($args["news_{$property}_category"]) ? $args["news_{$property}_category"] : null, 'GETPOST');
         $purge = FormUtil::getPassedValue('purge', false, 'GET');
         $order = FormUtil::getPassedValue('order', isset($args['order']) ? $args['order'] : 'from', 'GETPOST');
         $original_sdir = FormUtil::getPassedValue('sdir', isset($args['sdir']) ? $args['sdir'] : 1, 'GETPOST');
@@ -441,20 +439,23 @@ class News_Controller_Admin extends Zikula_Controller
             $sort['class'][$order] = 'z-order-asc';
             $orderdir = 'ASC';
         }
+        $filtercats = FormUtil::getPassedValue('news', null, 'POST');
+        $filtercats_serialized = FormUtil::getPassedValue('filtercats_serialized', false, 'GET');
+        $filtercats = $filtercats_serialized ? unserialize($filtercats_serialized) : $filtercats;
+        $catsarray = News_Util::formatCategoryFilter($filtercats);
+
         // complete initialization of sort array, adding urls
         foreach ($fields as $field) {
             $sort['url'][$field] = ModUtil::url('News', 'admin', 'view', array(
                 'news_status' => $news_status,
                 'language' => $language,
-                'news_property' => $property,
-                "news_{$property}_category" => $category,
-                //'filtercats_serialized' => serialize($filtercats),
+                'filtercats_serialized' => serialize($filtercats),
                 'order' => $field,
                 'sdir' => $sdir));
         }
         $this->view->assign('sort', $sort);
 
-        $this->view->assign('filter_active', (empty($language) && !isset($news_status) && empty($property) && empty($category)) ? false : true);
+        $this->view->assign('filter_active', (empty($language) && !isset($news_status) && empty($filtercats)) ? false : true);
 
         if ($purge) {
             if (ModUtil::apiFunc('News', 'admin', 'purgepermalinks')) {
@@ -473,23 +474,7 @@ class News_Controller_Admin extends Zikula_Controller
 
         if ($modvars['enablecategorization']) {
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
-            $properties = array_keys($catregistry);
-
-            // Validate and build the category filter - mateo
-            if (!empty($property) && in_array($property, $properties) && !empty($category)) {
-                $catFilter = array($property => $category);
-            }
-
-            // Assign a default property - mateo
-            if (empty($property) || !in_array($property, $properties)) {
-                $property = $properties[0];
-            }
-
-            // plan ahead for ML features
-            $propArray = array();
-            foreach ($properties as $prop) {
-                $propArray[$prop] = $prop;
-            }
+            $this->view->assign('catregistry', $catregistry);
         }
 
         $multilingual = System::getVar('multilingual', false);
@@ -520,7 +505,8 @@ class News_Controller_Admin extends Zikula_Controller
                             'from' => isset($from) ? $from : null,
                             'to' => isset($to) ? $to : null,
                             'filterbydate' => false,
-                            'category' => isset($catFilter) ? $catFilter : null,
+                            'category' => null,
+                            'catfilter' => isset($catsarray) ? $catsarray : null,
                             'catregistry' => isset($catregistry) ? $catregistry : null);
         $items = ModUtil::apiFunc('News', 'user', 'getall', $getallargs);
         $total_articles = ModUtil::apiFunc('News', 'user', 'countitems', $getallargs);
@@ -599,15 +585,17 @@ class News_Controller_Admin extends Zikula_Controller
         $this->view->assign('itemstatus', $itemstatus);
         $this->view->assign('order', $order);
 
-        // Assign the categories information if enabled
-        if ($modvars['enablecategorization']) {
-            $this->view->assign('catregistry', $catregistry);
-            $this->view->assign('numproperties', count($propArray));
-            $this->view->assign('properties', $propArray);
-            $this->view->assign('property', $property);
-            $this->view->assign('category', $category);
+        $selectedcategories = array();
+        if (is_array($filtercats)) {
+            $catsarray = $filtercats['__CATEGORIES__'];
+            foreach ($catsarray as $propname => $propid) {
+                if ($propid > 0) {
+                    $selectedcategories[$propname] = $propid; // removes categories set to 'all'
+                }
+            }
         }
-
+        $this->view->assign('selectedcategories', $selectedcategories);
+        
         // Return the output that has been generated by this function
         return $this->view->fetch('admin/view.tpl');
     }

@@ -12,7 +12,7 @@
 
     <h2>{$templatetitle}</h2>
 
-    {if $modvars.News.enablecategorization && $numproperties > 0}
+    {if $modvars.News.enablecategorization}
     <form class="z-form" id="news_filter" action="{modurl modname='News' type='admin' func='view'}" method="post" enctype="application/x-www-form-urlencoded">
         <fieldset id="news_multicategory_filter"{if $filter_active} class='filteractive'{/if}>
             {if $filter_active}{gt text='active' assign=filteractive}{else}{gt text='inactive" assign=filteractive}{/if}
@@ -23,34 +23,16 @@
             <label for="news_status">{gt text='Status'}</label>
             {html_options name='news_status' id='news_status' options=$itemstatus selected=$news_status}
             &nbsp;
-            <label for="news_property">{gt text='Category'}</label>
-            {gt text='All' assign='lblDef'}
-            {nocache}
-            {if $numproperties gt 1}
-            {html_options id='news_property' name='news_property' options=$properties selected=$property}
-            {else}
-            <input type="hidden" id="news_property" name="news_property" value="{$property}" />
+            {if $modvars.News.enablecategorization}
+            <span id='categoryfilter'>{include file='admin/filtercats.tpl'}</span>
             {/if}
-            <div id="news_category_selectors">
-                {foreach from=$catregistry key='prop' item='cat'}
-                {assign var='propref' value=$prop|string_format:'news_%s_category'}
-                {if $property eq $prop}
-                {assign var='selectedValue' value=$category}
-                {else}
-                {assign var='selectedValue' value=0}
-                {/if}
-                <noscript>
-                    <div class="property_selector_noscript"><label for="{$propref}">{$prop}</label>:</div>
-                </noscript>
-                {selector_category category=$cat name=$propref selectedValue=$selectedValue allValue=0 allText=$lblDef editLink=false}
-                {/foreach}
-            </div>
             {if $modvars.ZConfig.multilingual}
             &nbsp;
             <label for="news_language">{gt text='Language'}</label>
+            {nocache}
             {html_select_languages id="news_language" name="story[language]" installed=1 all=1 selected=$modvars.ZConfig.language_i18n|default:''}
-            {/if}
             {/nocache}
+            {/if}
             &nbsp;&nbsp;
             <span class="z-nowrap z-buttons">
                 <input class='z-bt-filter' name="submit" type="submit" value="{gt text='Filter'}" />
