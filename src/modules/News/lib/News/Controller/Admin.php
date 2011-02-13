@@ -418,6 +418,8 @@ class News_Controller_Admin extends Zikula_Controller
             $sort['class'][$field] = 'z-order-unsorted'; // default values
         }
 
+        echo "<pre>"; print_r($_GET); echo "</pre>";
+
         $startnum = FormUtil::getPassedValue('startnum', isset($args['startnum']) ? $args['startnum'] : null, 'GETPOST');
         $news_status = FormUtil::getPassedValue('news_status', isset($args['news_status']) ? $args['news_status'] : null, 'GETPOST');
         $language = FormUtil::getPassedValue('language', isset($args['language']) ? $args['language'] : null, 'GETPOST');
@@ -439,7 +441,7 @@ class News_Controller_Admin extends Zikula_Controller
             $sort['class'][$order] = 'z-order-asc';
             $orderdir = 'ASC';
         }
-        $filtercats = FormUtil::getPassedValue('news', null, 'POST');
+        $filtercats = FormUtil::getPassedValue('news', null, 'GETPOST');
         $filtercats_serialized = FormUtil::getPassedValue('filtercats_serialized', false, 'GET');
         $filtercats = $filtercats_serialized ? unserialize($filtercats_serialized) : $filtercats;
         $catsarray = News_Util::formatCategoryFilter($filtercats);
