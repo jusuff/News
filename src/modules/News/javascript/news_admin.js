@@ -6,32 +6,12 @@ Event.observe(window, 'load', news_admin_init_check);
 
 function news_admin_init_check() 
 {
-    if ($('news_multicategory_filter')) {
-        news_admin_filter_init(); 
-    }
     if ($('news_select_all') && $('news_deselect_all')) {
         news_admin_selectall_init(); 
     }
     if ($('news_bulkaction_select')) {
         news_admin_bulkaction_init();
     }
-}
-
-function news_admin_filter_init()
-{
-    $('news_property').observe('change', news_admin_property_onchange);
-    news_admin_property_onchange();
-    $('news_multicategory_filter').show();
-}
-
-// Show the correct category selector for the chosen category property
-function news_admin_property_onchange()
-{
-    $$('div#news_category_selectors select').each(function(select){
-        select.hide();
-    });
-    var id = "news_"+$('news_property').value+"_category";
-    $(id).show();
 }
 
 // Initialize and process the (de)select all functions
