@@ -7,7 +7,7 @@
 </div>
 
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='configure.gif' set='icons/large' __alt='Settings'}</div>
+    <div class="z-adminpageicon">{img modname='core' src='configure.png' set='icons/large' __alt='Settings'}</div>
 
     <h2>{gt text='Settings'}</h2>
     <p class="z-warningmsg">{gt text='Notice: Your theme could be using template overrides for the News publisher module (in themes/YourThemeName/templates/modules/News/...). They might lack behind in functionality to the current default News publisher templates, please remove them or check them carefully against the default News publisher templates (in modules/News/templates/...).'}</p>
@@ -282,8 +282,8 @@
             {/if}
 
             <div class="z-formbuttons z-buttons">
-                {button src='button_ok.gif' set='icons/extrasmall' __alt='Save' __title='Save' __text='Save'}
-                <a href="{modurl modname='News' type='admin' func='view'}">{img modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel'  __title='Cancel'} {gt text='Cancel'}</a>
+                {button src='button_ok.png' set='icons/extrasmall' __alt='Save' __title='Save' __text='Save'}
+                <a href="{modurl modname='News' type='admin' func='view'}">{img modname='core' src='button_cancel.png' set='icons/extrasmall' __alt='Cancel'  __title='Cancel'} {gt text='Cancel'}</a>
             </div>
         </div>
     </form>

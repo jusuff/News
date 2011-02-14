@@ -36,7 +36,7 @@
     <div class="news_article news_preview">{$preview}</div>
     {/if}
 
-    <div class="z-adminpageicon">{img modname='core' src='filenew.gif' set='icons/large' alt=$templatetitle}</div>
+    <div class="z-adminpageicon">{img modname='core' src='filenew.png' set='icons/large' alt=$templatetitle}</div>
 
     <h2>{$templatetitle}</h2>
 
@@ -99,7 +99,7 @@
             </div>
             {/if}
             <div style="float:right" id="news_status_info">
-                <span id="news_saving_draft">{img modname='core' src='circle-ball-dark-antialiased.gif' set='ajax'}</span>
+                <span id="news_saving_draft">{img modname='core' src='circle-ball-dark-antialiased.png' set='ajax'}</span>
                 <span id="news_status_text" >statustext</span>
             </div>
         </fieldset>
@@ -247,7 +247,7 @@
             <div id="news_attributes_details">
                 <div class="z-formrow">
                     <div class="z-itemlist_newitemdiv">
-                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);">{img src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute'} {gt text='Create new attribute'}</a>
+                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);">{img src='insert_table_row.png' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute'} {gt text='Create new attribute'}</a>
                     </div>
                     <ul id="news_attributes" class="z-itemlist">
                         {if isset($__ATTRIBUTES__)}
@@ -263,7 +263,7 @@
                                 <input type="text" id="story_attributes_{$attrnum}_value" name="story[attributes][{$attrnum}][value]" size="25" maxlength="255" value="{$value}" />
                             </span>
                             <span class="z-itemcell z-w07">
-                                <button type="button" id="buttondelete_news_attributes_{$attrnum}" class="buttondelete">{img src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
+                                <button type="button" id="buttondelete_news_attributes_{$attrnum}" class="buttondelete">{img src='14_layer_deletelayer.png' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
                             </span>
                         </li>
                         {foreachelse}
@@ -283,7 +283,7 @@
                                 <input type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                             </span>
                             <span class="z-itemcell z-w07">
-                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete">{img src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
+                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete">{img src='14_layer_deletelayer.png' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
                             </span>
                         </li>
                     </ul>
@@ -297,21 +297,21 @@
 
         <div class="z-buttonrow z-buttons z-center">
             {if $accessadd neq 1}
-            <button id="news_button_submit" class="z-btgreen" type="submit" name="story[action]" value="1" title="{gt text='Submit this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article'} {gt text='Submit'}</button>
+            <button id="news_button_submit" class="z-btgreen" type="submit" name="story[action]" value="1" title="{gt text='Submit this article'}">{img src='button_ok.png' modname='core' set='icons/extrasmall' __alt='Submit' __title='Submit this article'} {gt text='Submit'}</button>
             {else}
-            <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Publish this article'}">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Publish' __title='Publish this article' }<span id="news_button_text_publish"> {gt text='Publish'}</span></button>
+            <button id="news_button_publish" class="z-btgreen" type="submit" name="story[action]" value="2" title="{gt text='Publish this article'}">{img src='button_ok.png' modname='core' set='icons/extrasmall' __alt='Publish' __title='Publish this article' }<span id="news_button_text_publish"> {gt text='Publish'}</span></button>
             <span id="news_button_savedraft_nonajax">
-                <button id="news_button_draft_nonajax" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'} {gt text='Save as draft'}</button>
+                <button id="news_button_draft_nonajax" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.png' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'} {gt text='Save as draft'}</button>
             </span>
             <span id="news_button_savedraft_ajax" class="hidelink">
-                <a id="news_button_draft" href="javascript:void(0);" onclick="savedraft();">{img src='edit.gif' modname='core' set='icons/extrasmall' __alt='Save as draft'  __title='Save this article as draft'}
+                <a id="news_button_draft" href="javascript:void(0);" onclick="savedraft();">{img src='edit.png' modname='core' set='icons/extrasmall' __alt='Save as draft'  __title='Save this article as draft'}
                     <span id="news_button_text_draft"> {gt text='Save as draft'}</span>
                 </a>
             </span>
-            <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='queue.gif' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'} {gt text='Pending'}</button>
+            <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='clock.png' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'} {gt text='Pending'}</button>
             {/if}
-            <button id="news_button_preview" type="submit" name="story[action]" value="0" title="{gt text='Preview this article'}">{img src='14_layer_visible.gif' modname='core' set='icons/extrasmall' __alt='Preview' __title='Preview this article'} {gt text='Preview'}</button>
-            <a id="news_button_cancel" href="{modurl modname='News' type='admin' func='view'}" class="z-btred">{img modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel'} {gt text='Cancel'}</a>
+            <button id="news_button_preview" type="submit" name="story[action]" value="0" title="{gt text='Preview this article'}">{img src='14_layer_visible.png' modname='core' set='icons/extrasmall' __alt='Preview' __title='Preview this article'} {gt text='Preview'}</button>
+            <a id="news_button_cancel" href="{modurl modname='News' type='admin' func='view'}" class="z-btred">{img modname='core' src='button_cancel.png' set='icons/extrasmall' __alt='Cancel' __title='Cancel'} {gt text='Cancel'}</a>
         </div>
     </div>
 </form>

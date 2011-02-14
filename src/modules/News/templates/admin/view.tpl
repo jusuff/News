@@ -8,7 +8,7 @@
 </div>
 
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='windowlist.gif' set='icons/large' alt=$templatetitle}</div>
+    <div class="z-adminpageicon">{img modname='core' src='windowlist.png' set='icons/large' alt=$templatetitle}</div>
 
     <h2>{$templatetitle}</h2>
 
@@ -36,7 +36,7 @@
             &nbsp;&nbsp;
             <span class="z-nowrap z-buttons">
                 <input class='z-bt-filter' name="submit" type="submit" value="{gt text='Filter'}" />
-                <a href="{modurl modname="News" type='admin' func='view'}" title="{gt text="Clear"}">{img modname=core src="button_cancel.gif" set="icons/extrasmall" __alt="Clear" __title="Clear"} {gt text="Clear"}</a>
+                <a href="{modurl modname="News" type='admin' func='view'}" title="{gt text="Clear"}">{img modname=core src="button_cancel.png" set="icons/extrasmall" __alt="Clear" __title="Clear"} {gt text="Clear"}</a>
             </span>
         </fieldset>
     </form>
@@ -124,7 +124,7 @@
                 </tbody>
             </table>
             <p id='news_bulkaction_control'>
-                {img modname='core' set='icons/extrasmall' src='2uparrow.gif' __alt='doubleuparrow'}<a href="javascript:void(0);" id="news_select_all">{gt text="Check all"}</a> / <a href="javascript:void(0);" id="news_deselect_all">{gt text="Uncheck all"}</a>
+                {img modname='core' set='icons/extrasmall' src='2uparrow.png' __alt='doubleuparrow'}<a href="javascript:void(0);" id="news_select_all">{gt text="Check all"}</a> / <a href="javascript:void(0);" id="news_deselect_all">{gt text="Uncheck all"}</a>
                 <select id='news_bulkaction_select' name='news_bulkaction_select'>
                     <option value='0' selected='selected'>{gt text='With selected:'}</option>
                     <option value='1'>{gt text='Delete'}</option>

@@ -162,7 +162,7 @@ class News_Block_Storiesext extends Zikula_Controller_Block
             $vars['newimagelimit'] = 3;
         }
         if (!isset($vars['newimageset'])) {
-            $vars['newimageset'] = 'global';
+            $vars['newimageset'] = 'news';
         }
         if (!isset($vars['newimagesrc'])) {
             $vars['newimagesrc'] = 'new_3day.gif';
@@ -459,7 +459,7 @@ height:50px;
             $vars['newimagelimit'] = 3;
         }
         if (!isset($vars['newimageset'])) {
-            $vars['newimageset'] = 'global';
+            $vars['newimageset'] = 'news';
         }
         if (!isset($vars['newimagesrc'])) {
             $vars['newimagesrc'] = 'new_3day.gif';

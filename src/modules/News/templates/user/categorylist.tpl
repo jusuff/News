@@ -42,7 +42,7 @@
                 {/if}
 
                 {if $authcatedit}
-                <a href="{modurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.category.id}">{img modname='core' set='icons/extrasmall' src='xedit.gif' __alt='Edit' __title='Edit this category'}</a>
+                <a href="{modurl modname='Categories' type='admin' func='edit' mode='edit' cid=$category.category.id}">{img modname='core' set='icons/extrasmall' src='xedit.png' __alt='Edit' __title='Edit this category'}</a>
                 {/if}
                 {if $shorturls and $shorturlstype eq 0}
                 <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$category.category.path|replace:$property.category.path:''}" title="{$categorydesc}">{$categoryname}</a>
@@ -85,7 +85,7 @@
                         {/if}
 
                         {if $authcatedit}
-                        <a href="{modurl modname='Categories' type='admin' func='edit' mode='edit' cid=$subcat.category.id}">{img modname='core' set='icons/extrasmall' src='xedit.gif' __alt='Edit' __title='Edit this category'}</a>
+                        <a href="{modurl modname='Categories' type='admin' func='edit' mode='edit' cid=$subcat.category.id}">{img modname='core' set='icons/extrasmall' src='xedit.png' __alt='Edit' __title='Edit this category'}</a>
                         {/if}
                         {if $shorturls and $shorturlstype eq 0}
                         <a href="{modurl modname='News' type='user' func='view' prop=$property.name cat=$subcat.category.path|replace:$property.category.path:''}" title="{$categorydesc}">{$categoryname}</a>

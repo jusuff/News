@@ -83,7 +83,7 @@ function smarty_function_articleadminlinks($params, &$smarty)
                 PageUtil::addVar('javascript', 'javascript/helpers/Zikula.itemlist.js');
             }
             PageUtil::addVar('stylesheet', 'modules/News/style/datepicker.css');
-            $articlelinks .= '<img id="news_loadnews" src="'.System::getBaseUrl().'images/ajax/circle-ball-dark-antialiased.gif" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
+            $articlelinks .= '<img id="news_loadnews" src="'.System::getBaseUrl().'images/ajax/circle-ball-dark-antialiased.png" alt="" /><span class="' . $params['class'] . '"> ' . $params['start'] . ' <a onclick="editnews(' . $params['sid'] . ',' . $params['page'] . ')" href="javascript:void(0);">' . __('Edit', $dom) . '</a> ' . $params['end'] . "</span>\n";
         } else {
             $articlelinks .= '<span class="' . $params['class'] . '"> ' . $params['start'] . ' <a href="' . DataUtil::formatForDisplayHTML(ModUtil::url('News', 'admin', 'modify', array('sid' => $params['sid']))) . '">' . __('Edit', $dom) . '</a>';
             if (SecurityUtil::checkPermission('News::', "$info[cr_uid]:$info[cattitle]:$info[sid]", ACCESS_DELETE)) {

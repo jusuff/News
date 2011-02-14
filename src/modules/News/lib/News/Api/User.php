@@ -507,8 +507,8 @@ class News_Api_User extends Zikula_Api
         // Allowed to read full article?
         if (SecurityUtil::checkPermission('News::', "{$info['cr_uid']}::{$info['sid']}", ACCESS_READ)) {
             $title = '<a href="'.$links['fullarticle'].'" title="'.$info['title'].'">'.$info['title'].'</a>';
-            $print = '<a class="news_printlink" href="'.$links['print'].'">'.$this->__('Print').' <img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
-            $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer1.gif" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
+            $print = '<a class="news_printlink" href="'.$links['print'].'">'.$this->__('Print').' <img src="images/icons/extrasmall/printer.png" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
+            $printicon = '<a class="news_printlink" href="'.$links['print'].'"><img src="images/icons/extrasmall/printer.png" height="16" width="16" alt="[P]" title="'.$this->__('Printer-friendly page').'" /></a>';
         } else {
             $title = $info['title'];
             $print = '';

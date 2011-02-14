@@ -528,22 +528,22 @@ class News_Controller_Admin extends Zikula_Controller
             $options = array();
             if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
                 $options[] = array('url' => ModUtil::url('News', 'user', 'display', array('sid' => $item['sid'], 'from' => $item['from'], 'urltitle' => $item['urltitle'])),
-                    'image' => '14_layer_visible.gif',
+                    'image' => '14_layer_visible.png',
                     'title' => $this->__('View'));
             } else {
                 $options[] = array('url' => ModUtil::url('News', 'user', 'display', array('sid' => $item['sid'])),
-                    'image' => '14_layer_visible.gif',
+                    'image' => '14_layer_visible.png',
                     'title' => $this->__('View'));
             }
 
             if (SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_EDIT)) {
                 if ($item['published_status'] == 2) {
                     $options[] = array('url' => ModUtil::url('News', 'admin', 'modify', array('sid' => $item['sid'])),
-                        'image' => 'editcut.gif',
+                        'image' => 'editcut.png',
                         'title' => $this->__('Review'));
                 } else {
                     $options[] = array('url' => ModUtil::url('News', 'admin', 'modify', array('sid' => $item['sid'])),
-                        'image' => 'xedit.gif',
+                        'image' => 'xedit.png',
                         'title' => $this->__('Edit'));
                 }
 
@@ -551,7 +551,7 @@ class News_Controller_Admin extends Zikula_Controller
                         (SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_DELETE))) ||
                         SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$item['sid']}", ACCESS_ADMIN)) {
                     $options[] = array('url' => ModUtil::url('News', 'admin', 'delete', array('sid' => $item['sid'])),
-                        'image' => '14_layer_deletelayer.gif',
+                        'image' => '14_layer_deletelayer.png',
                         'title' => $this->__('Delete'));
                 }
             }

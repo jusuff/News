@@ -198,7 +198,7 @@
             <div id="news_attributes_details">
                 <div class="z-formrow">
                     <div class="z-itemlist_newitemdiv">
-                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);">{img src='insert_table_row.gif' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute'} {gt text='Create new attribute'}</a>
+                        <a onclick="javascript:itemlist_news_attributes.appenditem();" href="javascript:void(0);">{img src='insert_table_row.png' modname='core' set='icons/extrasmall' alt='' __title='Create new attribute'} {gt text='Create new attribute'}</a>
                     </div>
                     <ul id="news_attributes" class="z-itemlist">
                         {if isset($__ATTRIBUTES__)}
@@ -214,7 +214,7 @@
                                 <input type="text" id="story_attributes_{$attrnum}_value" name="story[attributes][{$attrnum}][value]" size="25" maxlength="255" value="{$value}" />
                             </span>
                             <span class="z-itemcell z-w07">
-                                <button type="button" id="buttondelete_news_attributes_{$attrnum}" class="buttondelete">{img src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
+                                <button type="button" id="buttondelete_news_attributes_{$attrnum}" class="buttondelete">{img src='14_layer_deletelayer.png' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
                             </span>
                         </li>
                         {foreachelse}
@@ -234,7 +234,7 @@
                                 <input type="text" id="story_attributes_X_value" name="dummy[]" size="25" maxlength="255" value="" />
                             </span>
                             <span class="z-itemcell z-w07">
-                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete">{img src='14_layer_deletelayer.gif' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
+                                <button type="button" id="buttondelete_news_attributes_X" class="buttondelete">{img src='14_layer_deletelayer.png' modname='core' set='icons/extrasmall' __alt='Delete'  __title='Delete this attribute' }</button>
                             </span>
                         </li>
                     </ul>
@@ -251,13 +251,13 @@
         {notifydisplayhooks eventname='news.hook.articles.ui.edit' area='modulehook_area.news.articles' subject=$item id=$sid caller="News"}
 
         <div class="z-buttonrow z-buttons z-center">
-            <a href="javascript:void(0);" onclick="editnews_save('update');" class="z-btgreen">{img src='button_ok.gif' modname='core' set='icons/extrasmall' __alt='Save' __title='Save your changes' } {gt text='Save' domain='module_news'}</a>
-            <a href="javascript:void(0);" onclick="editnews_save('pending');">{img modname='core' src='queue.gif' set='icons/extrasmall' __alt='Mark as pending' __title='Mark this article as pending'} {gt text='Mark as pending' domain='module_news'}</a>
+            <a href="javascript:void(0);" onclick="editnews_save('update');" class="z-btgreen">{img src='button_ok.png' modname='core' set='icons/extrasmall' __alt='Save' __title='Save your changes' } {gt text='Save' domain='module_news'}</a>
+            <a href="javascript:void(0);" onclick="editnews_save('pending');">{img modname='core' src='queue.png' set='icons/extrasmall' __alt='Mark as pending' __title='Mark this article as pending'} {gt text='Mark as pending' domain='module_news'}</a>
             {if $mayDelete}
-            <a href="javascript:void(0);" onclick="editnews_save('delete');" class="z-btred">{img modname='core' src='editdelete.gif' set='icons/extrasmall' __alt='Delete' __title='Delete this article'} {gt text='Delete' domain='module_news'}</a>
+            <a href="javascript:void(0);" onclick="editnews_save('delete');" class="z-btred">{img modname='core' src='editdelete.png' set='icons/extrasmall' __alt='Delete' __title='Delete this article'} {gt text='Delete' domain='module_news'}</a>
             {/if}
-            <a href="javascript:void(0);" onclick="editnews_cancel();" class="z-btred">{img modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel' __title='Cancel'} {gt text='Cancel' domain='module_news'}</a>
-            &nbsp;<img id="news_savenews" src="{$baseurl}images/ajax/circle-ball-dark-antialiased.gif" alt="" />
+            <a href="javascript:void(0);" onclick="editnews_cancel();" class="z-btred">{img modname='core' src='button_cancel.png' set='icons/extrasmall' __alt='Cancel' __title='Cancel'} {gt text='Cancel' domain='module_news'}</a>
+            &nbsp;<img id="news_savenews" src="{$baseurl}images/ajax/circle-ball-dark-antialiased.png" alt="" />
         </div>
     </div>
 </form>

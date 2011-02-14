@@ -6,7 +6,7 @@
 </div>
 
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='editdelete.gif' set='icons/large' alt=$templatetitle}</div>
+    <div class="z-adminpageicon">{img modname='core' src='editdelete.png' set='icons/large' alt=$templatetitle}</div>
     <h2>{$templatetitle}</h2>
     <p class="z-warningmsg">{gt text='Do you really want to delete this news article?'}</p>
     {notifydisplayhooks eventname='news.hook.articles.ui.delete' area='modulehook_area.news.articles' subject=$item id=$sid caller="News"}
@@ -18,8 +18,8 @@
             <fieldset>
                 <legend>{gt text='Confirmation prompt'}</legend>
                 <div class="z-formbuttons z-buttons">
-                    {button class="z-btgreen" src=button_ok.gif set=icons/extrasmall __alt="Delete" __title="Delete" __text="Delete"}
-                    <a class="z-btred" href="{modurl modname='News' type='admin' func='view'}">{img modname='core' src='button_cancel.gif' set='icons/extrasmall' __alt='Cancel'  __title='Cancel'} {gt text="Cancel"}</a>
+                    {button class="z-btgreen" src=button_ok.png set=icons/extrasmall __alt="Delete" __title="Delete" __text="Delete"}
+                    <a class="z-btred" href="{modurl modname='News' type='admin' func='view'}">{img modname='core' src='button_cancel.png' set='icons/extrasmall' __alt='Cancel'  __title='Cancel'} {gt text="Cancel"}</a>
                 </div>
             </fieldset>
         </div>
