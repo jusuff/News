@@ -6,7 +6,7 @@
 </div>
 
 <div class="z-admincontainer">
-    <div class="z-adminpageicon">{img modname='core' src='editdelete.png' set='icons/large' alt=$templatetitle}</div>
+    <div class="z-adminpageicon">{icon type="delete" size="large"}</div>
     <h2>{$templatetitle}</h2>
     <p class="z-warningmsg">{gt text='Do you really want to delete this news article?'}</p>
     {notifydisplayhooks eventname='news.hook.articles.ui.delete' area='modulehook_area.news.articles' subject=$item id=$sid caller="News"}

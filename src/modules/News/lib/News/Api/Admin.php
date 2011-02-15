@@ -246,7 +246,7 @@ class News_Api_Admin extends Zikula_Api
         if (SecurityUtil::checkPermission('News::', '::', ACCESS_READ)) {
             $links[] = array('url'  => ModUtil::url('News', 'admin', 'view'),
                     'text' => $this->__('News articles list'),
-                    'class' => 'z-icon-es-list',
+                    'class' => 'z-icon-es-view',
                     'links' => array(
                         array('url' => ModUtil::url('News', 'admin', 'view'),
                             'text' => $this->__f('All (%s)', $count['all'])),

@@ -36,7 +36,7 @@
     <div class="news_article news_preview">{$preview}</div>
     {/if}
 
-    <div class="z-adminpageicon">{img modname='core' src='filenew.png' set='icons/large' alt=$templatetitle}</div>
+    <div class="z-adminpageicon">{icon type="new" size="large"}</div>
 
     <h2>{$templatetitle}</h2>
 

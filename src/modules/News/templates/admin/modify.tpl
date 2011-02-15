@@ -41,7 +41,7 @@
     <div class="news_article news_preview" style="background-image: url({img modname='News' src='bg_preview.png' retval='src'})">{$preview}</div>
     {/if}
 
-    <div class="z-adminpageicon">{img modname='core' src='edit.png' set='icons/large' alt=$templatetitle}</div>
+    <div class="z-adminpageicon">{icon type="edit" size="large"}</div>
 
     <h2>{$templatetitle}</h2>
 
