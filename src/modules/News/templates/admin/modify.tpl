@@ -334,7 +334,7 @@
                 <button id="news_button_draft" type="submit" name="story[action]" value="6" title="{gt text='Save this article as draft'}">{img src='edit.png' modname='core' set='icons/extrasmall' __alt='Save as draft' __title='Save this article as draft'} {gt text='Save as draft'}</button>
                 {/if}
                 {if $item.published_status neq 2}
-                <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='queue.png' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'} {gt text='Pending'}</button>
+                <button id="news_button_pending" type="submit" name="story[action]" value="4" title="{gt text='Mark this article as pending'}">{img src='clock.png' modname='core' set='icons/extrasmall' __alt='Pending' __title='Mark this article as pending'} {gt text='Pending'}</button>
                 {/if}
                 {if $item.published_status neq 3}
                 <button id="news_button_archive" type="submit" name="story[action]" value="5" title="{gt text='Archive this article'}">{img src='folder_yellow.png' modname='core' set='icons/extrasmall' __alt='Archive'  __title='Archive this article' } {gt text='Archive'}</button>

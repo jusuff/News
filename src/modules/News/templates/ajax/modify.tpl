@@ -252,12 +252,12 @@
 
         <div class="z-buttonrow z-buttons z-center">
             <a href="javascript:void(0);" onclick="editnews_save('update');" class="z-btgreen">{img src='button_ok.png' modname='core' set='icons/extrasmall' __alt='Save' __title='Save your changes' } {gt text='Save' domain='module_news'}</a>
-            <a href="javascript:void(0);" onclick="editnews_save('pending');">{img modname='core' src='queue.png' set='icons/extrasmall' __alt='Mark as pending' __title='Mark this article as pending'} {gt text='Mark as pending' domain='module_news'}</a>
+            <a href="javascript:void(0);" onclick="editnews_save('pending');">{img modname='core' src='clock.png' set='icons/extrasmall' __alt='Mark as pending' __title='Mark this article as pending'} {gt text='Mark as pending' domain='module_news'}</a>
             {if $mayDelete}
             <a href="javascript:void(0);" onclick="editnews_save('delete');" class="z-btred">{img modname='core' src='editdelete.png' set='icons/extrasmall' __alt='Delete' __title='Delete this article'} {gt text='Delete' domain='module_news'}</a>
             {/if}
             <a href="javascript:void(0);" onclick="editnews_cancel();" class="z-btred">{img modname='core' src='button_cancel.png' set='icons/extrasmall' __alt='Cancel' __title='Cancel'} {gt text='Cancel' domain='module_news'}</a>
-            &nbsp;<img id="news_savenews" src="{$baseurl}images/ajax/circle-ball-dark-antialiased.png" alt="" />
+            &nbsp;<img id="news_savenews" src="{$baseurl}images/ajax/circle-ball-dark-antialiased.gif" alt="" />
         </div>
     </div>
 </form>

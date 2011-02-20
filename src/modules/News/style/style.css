@@ -172,3 +172,9 @@ div.news_index {
 #news_bulkaction_control select {
     margin-left: 2em;
 }
+
+/**** Add styles that replicate core functions ****/
+.z-icon-es-archive {
+    background: url("../../../images/icons/extrasmall/folder_yellow.png") no-repeat scroll 0 50% transparent;
+    padding: 2px 0 2px 20px;
+}

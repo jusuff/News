@@ -99,7 +99,7 @@
             </div>
             {/if}
             <div style="float:right" id="news_status_info">
-                <span id="news_saving_draft">{img modname='core' src='circle-ball-dark-antialiased.png' set='ajax'}</span>
+                <span id="news_saving_draft">{img modname='core' src='circle-ball-dark-antialiased.gif' set='ajax'}</span>
                 <span id="news_status_text" >statustext</span>
             </div>
         </fieldset>

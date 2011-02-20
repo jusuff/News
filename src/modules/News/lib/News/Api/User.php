@@ -941,7 +941,7 @@ class News_Api_User extends Zikula_Api
             if ($func <> "main") {
                 $links[] = array('url' => ModUtil::url('News', 'user', 'main'),
                         'text' => $this->__('News articles list'),
-                        'class' => 'z-icon-es-list');
+                        'class' => 'z-icon-es-view');
             } else {
                 $links[] = array('url'  => ModUtil::url('News', 'user', 'main', array('theme' => 'RSS')),
                         'text' => '',
@@ -951,7 +951,7 @@ class News_Api_User extends Zikula_Api
                 if ($func <> "categorylist") {
                     $links[] = array('url'  => ModUtil::url('News', 'user', 'categorylist'),
                             'text' =>  $this->__('News categories'),
-                            'class' => 'z-icon-es-list');
+                            'class' => 'z-icon-es-view');
                 }
                 if ($func <> "archives") {
                     $links[] = array('url' => ModUtil::url('News', 'user', 'archives'),
