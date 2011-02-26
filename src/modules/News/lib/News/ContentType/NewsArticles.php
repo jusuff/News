@@ -15,59 +15,47 @@
 /**
  * Content plugin class for news articles
  */
-class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
+class News_ContentType_NewsArticles extends Content_ContentType
 {
 
     // indispensable vars
-    var $title;
-    var $categories;
-    var $status;
-    var $show;
-    var $limit;
-    var $order;
+    public $title;
+    public $categories;
+    public $status;
+    public $show;
+    public $limit;
+    public $order;
     // config flags
-    var $dayslimit;
-    var $maxtitlelength;
-    var $titlewraptext;
-    var $disphometext;
-    var $maxhometextlength;
-    var $hometextwraptext;
-    var $dispuname;
-    var $dispdate;
-    var $dateformat;
-    var $dispreads;
-    var $dispcomments;
-    var $dispsplitchar;
-    var $dispnewimage;
-    var $newimagelimit;
-    var $newimageset;
-    var $newimagesrc;
-    var $linktosubmit;
-    var $customtemplate;
+    public $dayslimit;
+    public $maxtitlelength;
+    public $titlewraptext;
+    public $disphometext;
+    public $maxhometextlength;
+    public $hometextwraptext;
+    public $dispuname;
+    public $dispdate;
+    public $dateformat;
+    public $dispreads;
+    public $dispcomments;
+    public $dispsplitchar;
+    public $dispnewimage;
+    public $newimagelimit;
+    public $newimageset;
+    public $newimagesrc;
+    public $linktosubmit;
+    public $customtemplate;
 
-    function getModule()
+    public function getTitle()
     {
-        return 'News';
+        return $this->__('Recent news articles');
     }
 
-    function getName()
+    public function getDescription()
     {
-        return 'newsarticles';
+        return $this->__('Displays a specific number of news articles from one or all categories available');
     }
 
-    function getTitle()
-    {
-        $dom = ZLanguage::getModuleDomain('News');
-        return __('Recent news articles', $dom);
-    }
-
-    function getDescription()
-    {
-        $dom = ZLanguage::getModuleDomain('News');
-        return __('Displays a specific number of news articles from one or all categories available', $dom);
-    }
-
-    function isTranslatable()
+    public function isTranslatable()
     {
         return false;
     }
@@ -75,7 +63,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     /**
      * Load the data into the object
      */
-    function loadData($data)
+    public function loadData($data)
     {
         // Get the registrered categories for the News module
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -118,7 +106,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     /**
      * Display the data to the containing Content page
      */
-    function display()
+    public function display()
     {
         // Parameters for category related items properties like topicimage
         $lang = ZLanguage::getLanguageCode();
@@ -179,7 +167,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
 
         // create the output object
-        $render = Zikula_View::getInstance('News', false);
+        $view = Zikula_View::getInstance('News', false);
 
         // UserUtil is not automatically loaded, so load it now if needed and set anonymous
         if ($this->dispuname) {
@@ -251,45 +239,40 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
                 $items[$k]['readperm'] = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
             }
             if ($this->dispuname || $this->dispdate || $this->dispreads || $this->dispcomments) {
-                $render->assign('dispinfo', true);
-                $render->assign('dispuname', $this->dispuname);
-                $render->assign('dispdate', $this->dispdate);
-                $render->assign('dispreads', $this->dispreads);
-                $render->assign('dispcomments', $this->dispcomments);
-                $render->assign('dispsplitchar', $this->dispsplitchar);
+                $view->assign('dispinfo', true);
+                $view->assign('dispuname', $this->dispuname);
+                $view->assign('dispdate', $this->dispdate);
+                $view->assign('dispreads', $this->dispreads);
+                $view->assign('dispcomments', $this->dispcomments);
+                $view->assign('dispsplitchar', $this->dispsplitchar);
             } else {
-                $render->assign('dispinfo', false);
+                $view->assign('dispinfo', false);
             }
             if ($this->dispnewimage) {
-                $render->assign('newimageset', $this->newimageset);
-                $render->assign('newimagesrc', $this->newimagesrc);
+                $view->assign('newimageset', $this->newimageset);
+                $view->assign('newimagesrc', $this->newimagesrc);
             }
             if ($this->disphometext) {
-                $render->assign('disphometext', $this->disphometext);
-                $render->assign('hometextwraptext', $this->hometextwraptext);
-                $render->assign('maxhometextlength', $this->maxhometextlength);
+                $view->assign('disphometext', $this->disphometext);
+                $view->assign('hometextwraptext', $this->hometextwraptext);
+                $view->assign('maxhometextlength', $this->maxhometextlength);
             }
-            $render->assign('titlewraptext', $this->titlewraptext);
+            $view->assign('titlewraptext', $this->titlewraptext);
         }
-        $render->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
-        $render->assign('linktosubmit', $this->linktosubmit);
-        $render->assign('stories', $items);
-        $render->assign('title', $this->title);
-        $render->assign('useshorturls', (System::getVar('shorturls') && System::getVar('shorturlstype') == 0));
-        if (!empty($this->customtemplate)) {
-            $template = $this->customtemplate;
-        } else {
-            $template = 'newsarticles_view.html';
-        }
-        return $render->fetch('contenttype/' . $template);
+        $view->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
+        $view->assign('linktosubmit', $this->linktosubmit);
+        $view->assign('stories', $items);
+        $view->assign('title', $this->title);
+        $view->assign('useshorturls', (System::getVar('shorturls') && System::getVar('shorturlstype') == 0));
+
+        return $view->fetch($this->getTemplate());
     }
 
     /**
      * In Content editing mode this shows the Content plugin contents
      */
-    function displayEditing()
+    public function displayEditing()
     {
-        $dom = ZLanguage::getModuleDomain('News');
         $properties = array_keys($this->categories);
         $lang = ZLanguage::getLanguageCode();
         // Construct the selected categories array
@@ -302,18 +285,17 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
         }
         $catname = implode(' | ', $catnames);
         $output = '<h4>' . DataUtil::formatForDisplayHTML($this->title) . '</h4>';
-        $output .= '<p>' . __f('News articles listed under the \'%s\' category', $catname, $dom) . '</p>';
+        $output .= '<p>' . $this->__f('News articles listed under the \'%s\' category', $catname) . '</p>';
         return $output;
     }
 
     /**
      * Load the intial data into the object
      */
-    function getDefaultData()
+    public function getDefaultData()
     {
-        $dom = ZLanguage::getModuleDomain('News');
-
-        return array('title' => '',
+        return array(
+	    'title' => '',
             'categories' => null,
             'status' => 0,
             'show' => 1,
@@ -324,7 +306,7 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
             'titlewraptext' => '...',
             'disphometext' => false,
             'maxhometextlength' => 300,
-            'hometextwraptext' => '[' . __('Read more...', $dom) . ']',
+            'hometextwraptext' => '[' . $this->__('Read more...') . ']',
             'dispuname' => true,
             'dispdate' => true,
             'dateformat' => '%x',
@@ -342,50 +324,48 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
     /**
      * Fill some variables before the editing of the plugin parameters
      */
-    function startEditing(&$render)
+    public function startEditing(&$view)
     {
-        $dom = ZLanguage::getModuleDomain('News');
-
         // Get the News categorization setting
         $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
         // Select categories only if enabled for the News module, otherwise selector will not be shown in modify template
         if ($enablecategorization) {
             // Get the registrered categories for the News module
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
-            $render->assign('catregistry', $catregistry);
+            $view->assign('catregistry', $catregistry);
         }
-        $render->assign('enablecategorization', $enablecategorization);
+        $view->assign('enablecategorization', $enablecategorization);
 
         $showoptions = array(
-            array('value' => 1, 'text' => __('Show all news articles', $dom)),
-            array('value' => 2, 'text' => __('Show only articles set for index page listing', $dom)),
-            array('value' => 3, 'text' => __('Show only articles not set for index page listing', $dom))
+            array('value' => 1, 'text' => $this->__('Show all news articles')),
+            array('value' => 2, 'text' => $this->__('Show only articles set for index page listing')),
+            array('value' => 3, 'text' => $this->__('Show only articles not set for index page listing'))
         );
 
         $statusoptions = array(
-            array('value' => 0, 'text' => __('Published', $dom)),
-            array('value' => 1, 'text' => __('Rejected', $dom)),
-            array('value' => 2, 'text' => __('Pending Review', $dom)),
-            array('value' => 3, 'text' => __('Archived', $dom)) /* ,
-                  array('value' => 4, 'text' => __('Draft', $dom)) */
+            array('value' => 0, 'text' => $this->__('Published')),
+            array('value' => 1, 'text' => $this->__('Rejected')),
+            array('value' => 2, 'text' => $this->__('Pending Review')),
+            array('value' => 3, 'text' => $this->__('Archived')) /* ,
+                  array('value' => 4, 'text' => $this->__('Draft')) */
         );
 
         $orderoptions = array(
-            array('value' => 0, 'text' => __('News publisher setting', $dom)),
-            array('value' => 1, 'text' => __('Number of pageviews', $dom)),
-            array('value' => 2, 'text' => __('Article weight', $dom)),
-            array('value' => 3, 'text' => __('Random', $dom))
+            array('value' => 0, 'text' => $this->__('News publisher setting')),
+            array('value' => 1, 'text' => $this->__('Number of pageviews')),
+            array('value' => 2, 'text' => $this->__('Article weight')),
+            array('value' => 3, 'text' => $this->__('Random'))
         );
 
-        $render->assign('showoptions', $showoptions);
-        $render->assign('statusoptions', $statusoptions);
-        $render->assign('orderoptions', $orderoptions);
+        $view->assign('showoptions', $showoptions);
+        $view->assign('statusoptions', $statusoptions);
+        $view->assign('orderoptions', $orderoptions);
     }
 
     /**
      * Optional checking of the entered data
      */
-    function isValid(&$data, &$message)
+    public function isValid(&$data, &$message)
     {
         /* $r = '/\?v=([-a-zA-Z0-9_]+)(&|$)/';
           if (preg_match($r, $data['url'], $matches))
@@ -393,17 +373,17 @@ class News_contenttypesapi_NewsArticlesPlugin extends contentTypeBase
           $this->videoId = $data['videoId'] = $matches[1];
           return true;
           }
-          $message = __('Invalid input', $dom);
+          $message = $this->__('Invalid input');
           return false; */
         return true;
     }
 
-}
-
-/**
- * Main function that instantiates the class
- */
-function News_contenttypesapi_NewsArticles($args)
-{
-    return new News_contenttypesapi_NewsArticlesPlugin($args['data']);
+    public function getTemplate()
+    {
+        if (!empty($this->customtemplate)) {
+            $template = 'contenttype/' . $this->customtemplate;
+        } else {
+            $template = 'contenttype/newsarticles_view.tpl';
+        }
+    }
 }

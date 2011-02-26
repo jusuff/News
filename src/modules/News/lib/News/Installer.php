@@ -318,6 +318,7 @@ class News_Installer extends Zikula_Installer
                 $this->delVar('pdflink_tcpdfpath');
                 $this->delVar('pdflink_tcpdflang');
                 $this->setVar('itemsperadminpage', 15);
+		Content_Installer::updateContentType('News');
             case '3.0.1':
                 // future plans
         }
@@ -701,5 +702,13 @@ class News_Installer extends Zikula_Installer
         $result->Close();
 
         return true;
+    }
+
+    protected function LegacyContentTypeMap()
+    {
+        $oldToNew = array(
+            'newsarticles' => 'NewsArticles'
+        );
+        return $oldToNew;
     }
 }
