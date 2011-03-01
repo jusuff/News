@@ -65,5 +65,5 @@
 
 {checkpermission component='News::' instance='::' level=ACCESS_COMMENT assign='submitauth'}
 {if $linktosubmit && $submitauth}
-<a href="{modurl modname='News' type='user' func='newitem'}">{img modname='core' set='icons/extrasmall' src='edit_add.png' __alt='Submit an article'}{gt text='Submit an article'}</a>
+<p><a href="{modurl modname='News' type='user' func='newitem'}">{img modname='core' set='icons/extrasmall' src='edit_add.png' __alt='Submit an article'}&nbsp;{gt text='Submit an article'}</a></p>
 {/if}

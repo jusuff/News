@@ -100,7 +100,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
         $this->newimageset = $data['newimageset'];
         $this->newimagesrc = $data['newimagesrc'];
         $this->linktosubmit = $data['linktosubmit'];
-        $this->customtemplate = $data['customtemplate'];
+        $this->customtemplate = !empty($data['customtemplate']) ? $data['customtemplate']: '';
     }
 
     /**
@@ -209,6 +209,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
                 // Optional new image if the difference in days from the publishing date and now < the specified limit
                 $items[$k]['dispnewimage'] = ($this->dispnewimage && DateUtil::getDatetimeDiff_AsField($items[$k]['from'], DateUtil::getDatetime(), 3) < (int) $this->newimagelimit);
                 // Wrap the title if needed
+                $items[$k]['titlewrapped'] = false;
                 if ((int) $this->maxtitlelength > 0 && strlen($items[$k]['title']) > (int) $this->maxtitlelength) {
                     // wrap the title
                     $items[$k]['title'] = substr($items[$k]['title'], 0, (int) $this->maxtitlelength);
@@ -252,14 +253,15 @@ class News_ContentType_NewsArticles extends Content_ContentType
                 $view->assign('newimageset', $this->newimageset);
                 $view->assign('newimagesrc', $this->newimagesrc);
             }
+            $view->assign('disphometext', $this->disphometext);
             if ($this->disphometext) {
-                $view->assign('disphometext', $this->disphometext);
                 $view->assign('hometextwraptext', $this->hometextwraptext);
                 $view->assign('maxhometextlength', $this->maxhometextlength);
             }
             $view->assign('titlewraptext', $this->titlewraptext);
         }
         $view->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
+        $view->assign('dateformat', $this->dateformat);
         $view->assign('linktosubmit', $this->linktosubmit);
         $view->assign('stories', $items);
         $view->assign('title', $this->title);
@@ -385,5 +387,6 @@ class News_ContentType_NewsArticles extends Content_ContentType
         } else {
             $template = 'contenttype/newsarticles_view.tpl';
         }
+        return $template;
     }
 }
