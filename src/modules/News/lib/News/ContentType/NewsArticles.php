@@ -223,7 +223,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
                     } else {
                         $user = UserUtil::getVars($items[$k]['cr_uid']);
                         $items[$k]['uname'] = $user['uname'];
-                        $items[$k]['aid_name'] = $user['name'];
+                        $items[$k]['aid_name'] = $user['uname'];
                     }
                 }
                 // Get the optional commentcount if EZComments is available
