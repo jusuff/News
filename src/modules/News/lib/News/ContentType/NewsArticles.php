@@ -63,7 +63,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
     /**
      * Load the data into the object
      */
-    public function loadData($data)
+    public function loadData(&$data)
     {
         // Get the registrered categories for the News module
         $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
@@ -81,7 +81,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
         $this->status = $data['status'];
         $this->show = $data['show'];
         $this->limit = $data['limit'];
-        $this->order = $data['order'];
+        $this->order = $data['orderoptions'];
         // config flags
         $this->dayslimit = $data['dayslimit'];
         $this->maxtitlelength = $data['maxtitlelength'];
@@ -93,7 +93,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
         $this->dispdate = $data['dispdate'];
         $this->dateformat = $data['dateformat'];
         $this->dispreads = $data['dispreads'];
-        $this->dispcomments = $data['dispcomments'];
+        $this->dispcomments = isset($data['dispcomments']) ? $data['dispcomments'] : false;
         $this->dispsplitchar = $data['dispsplitchar'];
         $this->dispnewimage = $data['dispnewimage'];
         $this->newimagelimit = $data['newimagelimit'];

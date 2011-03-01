@@ -41,7 +41,7 @@
 
 <div class="z-formrow">
     {formlabel for='orderoptions' __text='Order articles by'}
-    {formdropdownlist id='orderoptions' group='data' items=$orderoptions selectedValue=$data.order}
+    {formdropdownlist id='orderoptions' group='data' items=$orderoptions selectedValue=$data.orderoptions}
 </div>
 
 <div class="z-formrow">
