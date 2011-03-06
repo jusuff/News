@@ -24,7 +24,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
     public $status;
     public $show;
     public $limit;
-    public $order;
+    public $orderoptions;
     // config flags
     public $dayslimit;
     public $maxtitlelength;
@@ -81,7 +81,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
         $this->status = $data['status'];
         $this->show = $data['show'];
         $this->limit = $data['limit'];
-        $this->order = $data['orderoptions'];
+        $this->orderoptions = $data['orderoptions'];
         // config flags
         $this->dayslimit = $data['dayslimit'];
         $this->maxtitlelength = $data['maxtitlelength'];
@@ -166,9 +166,6 @@ class News_ContentType_NewsArticles extends Content_ContentType
         // call the News api and get the requested articles with the above arguments
         $items = ModUtil::apiFunc('News', 'user', 'getall', $apiargs);
 
-        // create the output object
-        $view = Zikula_View::getInstance('News', false);
-
         // UserUtil is not automatically loaded, so load it now if needed and set anonymous
         if ($this->dispuname) {
             $anonymous = System::getVar('anonymous');
@@ -190,7 +187,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
                     // set the topic description if exists
                     $items[$k]['topictext'] = isset($items[$k]['__CATEGORIES__'][$topicField]['display_desc'][$lang]) ? $items[$k]['__CATEGORIES__'][$topicField]['display_desc'][$lang] : '';
                     // set the path of the topic
-                    $items[$k]['topicpath'] = $items[$k]['__CATEGORIES__'][$topicField]['path_relative'];
+                    $items[$k]['topicpath'] = isset($items[$k]['__CATEGORIES__'][$topicField]['path_relative']) ? $items[$k]['__CATEGORIES__'][$topicField]['path_relative'] : '';
                     // set the url to search for this topic
                     if (System::getVar('shorturls') && System::getVar('shorturlstype') == 0) {
                         $items[$k]['topicsearchurl'] = DataUtil::formatForDisplay(ModUtil::url('News', 'user', 'view', array('prop' => $topicField, 'cat' => $items[$k]['topicpath'])));
@@ -240,34 +237,34 @@ class News_ContentType_NewsArticles extends Content_ContentType
                 $items[$k]['readperm'] = (SecurityUtil::checkPermission('News::', "$items[$k][cr_uid]::$items[$k][sid]", ACCESS_READ));
             }
             if ($this->dispuname || $this->dispdate || $this->dispreads || $this->dispcomments) {
-                $view->assign('dispinfo', true);
-                $view->assign('dispuname', $this->dispuname);
-                $view->assign('dispdate', $this->dispdate);
-                $view->assign('dispreads', $this->dispreads);
-                $view->assign('dispcomments', $this->dispcomments);
-                $view->assign('dispsplitchar', $this->dispsplitchar);
+                $this->view->assign('dispinfo', true);
+                $this->view->assign('dispuname', $this->dispuname);
+                $this->view->assign('dispdate', $this->dispdate);
+                $this->view->assign('dispreads', $this->dispreads);
+                $this->view->assign('dispcomments', $this->dispcomments);
+                $this->view->assign('dispsplitchar', $this->dispsplitchar);
             } else {
-                $view->assign('dispinfo', false);
+                $this->view->assign('dispinfo', false);
             }
             if ($this->dispnewimage) {
-                $view->assign('newimageset', $this->newimageset);
-                $view->assign('newimagesrc', $this->newimagesrc);
+                $this->view->assign('newimageset', $this->newimageset);
+                $this->view->assign('newimagesrc', $this->newimagesrc);
             }
-            $view->assign('disphometext', $this->disphometext);
+            $this->view->assign('disphometext', $this->disphometext);
             if ($this->disphometext) {
-                $view->assign('hometextwraptext', $this->hometextwraptext);
-                $view->assign('maxhometextlength', $this->maxhometextlength);
+                $this->view->assign('hometextwraptext', $this->hometextwraptext);
+                $this->view->assign('maxhometextlength', $this->maxhometextlength);
             }
-            $view->assign('titlewraptext', $this->titlewraptext);
+            $this->view->assign('titlewraptext', $this->titlewraptext);
         }
-        $view->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
-        $view->assign('dateformat', $this->dateformat);
-        $view->assign('linktosubmit', $this->linktosubmit);
-        $view->assign('stories', $items);
-        $view->assign('title', $this->title);
-        $view->assign('useshorturls', (System::getVar('shorturls') && System::getVar('shorturlstype') == 0));
+        $this->view->assign('catimagepath', ModUtil::getVar('News', 'catimagepath'));
+        $this->view->assign('dateformat', $this->dateformat);
+        $this->view->assign('linktosubmit', $this->linktosubmit);
+        $this->view->assign('stories', $items);
+        $this->view->assign('title', $this->title);
+        $this->view->assign('useshorturls', (System::getVar('shorturls') && System::getVar('shorturlstype') == 0));
 
-        return $view->fetch($this->getTemplate());
+        return $this->view->fetch($this->getTemplate());
     }
 
     /**
@@ -302,7 +299,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
             'status' => 0,
             'show' => 1,
             'limit' => 5,
-            'order' => 0,
+            'orderoptions' => 0,
             'dayslimit' => 0,
             'maxtitlelength' => 0,
             'titlewraptext' => '...',
@@ -326,7 +323,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
     /**
      * Fill some variables before the editing of the plugin parameters
      */
-    public function startEditing(&$view)
+    public function startEditing()
     {
         // Get the News categorization setting
         $enablecategorization = ModUtil::getVar('News', 'enablecategorization');
@@ -334,9 +331,9 @@ class News_ContentType_NewsArticles extends Content_ContentType
         if ($enablecategorization) {
             // Get the registrered categories for the News module
             $catregistry = CategoryRegistryUtil::getRegisteredModuleCategories('News', 'news');
-            $view->assign('catregistry', $catregistry);
+            $this->view->assign('catregistry', $catregistry);
         }
-        $view->assign('enablecategorization', $enablecategorization);
+        $this->view->assign('enablecategorization', $enablecategorization);
 
         $showoptions = array(
             array('value' => 1, 'text' => $this->__('Show all news articles')),
@@ -359,15 +356,15 @@ class News_ContentType_NewsArticles extends Content_ContentType
             array('value' => 3, 'text' => $this->__('Random'))
         );
 
-        $view->assign('showoptions', $showoptions);
-        $view->assign('statusoptions', $statusoptions);
-        $view->assign('orderoptions', $orderoptions);
+        $this->view->assign('showoptions', $showoptions);
+        $this->view->assign('statusoptions', $statusoptions);
+        $this->view->assign('orderoptions', $orderoptions);
     }
 
     /**
      * Optional checking of the entered data
      */
-    public function isValid(&$data, &$message)
+    public function isValid(&$data)
     {
         /* $r = '/\?v=([-a-zA-Z0-9_]+)(&|$)/';
           if (preg_match($r, $data['url'], $matches))
