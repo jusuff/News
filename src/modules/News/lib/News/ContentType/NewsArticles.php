@@ -128,7 +128,7 @@ class News_ContentType_NewsArticles extends Content_ContentType
         $apiargs['numitems'] = $this->limit; // Nr of articles to obtain
         $apiargs['status'] = (int) $this->status; // Published status
         // Handle the sorting order
-        switch ($this->order)
+        switch ($this->orderoptions)
         {
             case 2:
                 $apiargs['order'] = 'weight';
