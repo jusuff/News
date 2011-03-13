@@ -19,4 +19,8 @@ class News_Handlers {
         }
     }
 
+    public static function getTypes(Zikula_Event $event) {
+        $types = $event->getSubject();
+        $types->add('News_ContentType_NewsArticles');
+    }
 }

@@ -83,6 +83,7 @@ class News_Installer extends Zikula_Installer
 
         // register handlers
         EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
+        EventUtil::registerPersistentModuleHandler('News', 'module.content.getTypes', array('News_Handlers', 'getTypes'));
         HookUtil::registerHookSubscriberBundles($this->version);
 
         // Initialisation successful
@@ -309,17 +310,17 @@ class News_Installer extends Zikula_Installer
             case '2.6.2':
                 // register handlers
                 EventUtil::registerPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
+                EventUtil::registerPersistentModuleHandler('News', 'module.content.getTypes', array('News_Handlers', 'getTypes'));
                 // update the table
                 if (!DBUtil::changeTable('news')) {
                     return '2.6.2';
                 }
-            case '3.0.0':
                 HookUtil::registerHookSubscriberBundles($this->version);
                 $this->delVar('pdflink_tcpdfpath');
                 $this->delVar('pdflink_tcpdflang');
                 $this->setVar('itemsperadminpage', 15);
-		Content_Installer::updateContentType('News');
-            case '3.0.1':
+                Content_Installer::updateContentType('News');
+            case '3.0.0':
                 // future plans
         }
 
@@ -348,7 +349,7 @@ class News_Installer extends Zikula_Installer
         DBUtil::deleteWhere('categories_mapobj', "cmo_modname='News'");
 
         // unregister handlers
-        EventUtil::unregisterPersistentModuleHandler('News', 'get.pending_content', array('News_Handlers', 'pendingContent'));
+        EventUtil::unregisterPersistentModuleHandlers('News');
         HookUtil::unregisterHookSubscriberBundles($this->version);
 
         // Deletion successful
