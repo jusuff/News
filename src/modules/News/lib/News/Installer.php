@@ -319,7 +319,9 @@ class News_Installer extends Zikula_Installer
                 $this->delVar('pdflink_tcpdfpath');
                 $this->delVar('pdflink_tcpdflang');
                 $this->setVar('itemsperadminpage', 15);
-                Content_Installer::updateContentType('News');
+                if (ModUtil::available('Content')) {
+                    Content_Installer::updateContentType('News');
+                }
             case '3.0.0':
                 // future plans
         }
