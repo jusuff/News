@@ -707,7 +707,7 @@ class News_Installer extends Zikula_Installer
         return true;
     }
 
-    protected function LegacyContentTypeMap()
+    public function LegacyContentTypeMap()
     {
         $oldToNew = array(
             'newsarticles' => 'NewsArticles'
