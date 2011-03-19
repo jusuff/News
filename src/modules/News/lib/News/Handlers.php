@@ -5,8 +5,8 @@
  *
  * @author Craig Heydenburg
  */
-class News_Handlers {
-
+class News_Handlers 
+{
     public static function pendingContent(Zikula_Event $event)
     {
         $dom = ZLanguage::getModuleDomain('News');
