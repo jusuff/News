@@ -1,12 +1,13 @@
 <?php
 
 /**
- * post pending content to pending_content Event handler
+ * Event handlers for the News module
  *
  * @author Craig Heydenburg
  */
 class News_Handlers 
 {
+    // Post pending content to pending_content module Event handler
     public static function pendingContent(Zikula_Event $event)
     {
         $dom = ZLanguage::getModuleDomain('News');
@@ -19,6 +20,7 @@ class News_Handlers
         }
     }
 
+    // deliver Content plugin for displaying news articles
     public static function getTypes(Zikula_Event $event) {
         $types = $event->getSubject();
         $types->add('News_ContentType_NewsArticles');
