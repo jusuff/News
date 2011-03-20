@@ -11,7 +11,7 @@
  * @package    Content_Management
  * @subpackage News
  */
-class News_Controller_Ajax extends Zikula_Controller
+class News_Controller_Ajax extends Zikula_AbstractController
 {
     /**
      * modify a news entry (incl. delete) via ajax
@@ -500,7 +500,7 @@ class News_Controller_Ajax extends Zikula_Controller
 //            LogUtil::registerPermissionError(null,true);
 //            throw new Zikula_Exception_Forbidden();
 //        }
-        
+
         $folder = FormUtil::getPassedValue('folder', null, 'POST');
         $enabled = false;
         if (!empty($folder)) {

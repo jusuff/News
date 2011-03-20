@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Api_Admin extends Zikula_Api
+class News_Api_Admin extends Zikula_AbstractApi
 {
     /**
      * delete a News item

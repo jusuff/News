@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Block_Slideshow extends Zikula_Controller_Block
+class News_Block_Slideshow extends Zikula_Controller_AbstractBlock
 {
 /**
  * initialise block
@@ -95,9 +95,9 @@ public function display($blockinfo)
     $picupload_uploaddir = ModUtil::getVar('News', 'picupload_uploaddir');
     $picupload_maxpictures = ModUtil::getVar('News', 'picupload_maxpictures');
     $slideshowoutput = array();
-	$count = 0;
+    $count = 0;
     foreach ($items as $item) {
-		$count++;
+        $count++;
         if ($item['pictures'] > 0) {
             $this->view->assign('readperm', SecurityUtil::checkPermission('News::', "$item[cr_uid]::$item[sid]", ACCESS_READ));
             $this->view->assign('count', $count);

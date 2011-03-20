@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Installer extends Zikula_Installer
+class News_Installer extends Zikula_AbstractInstaller
 {
     /**
      * initialise the News module once
@@ -294,8 +294,8 @@ class News_Installer extends Zikula_Installer
                 $this->setVar('picupload_thumb2maxheight', '200');
                 $this->setVar('picupload_uploaddir', 'images/news_picupload');
                 // add new category parameter
-                $this->setVar('enablecategorybasedpermissions', true); 
-                
+                $this->setVar('enablecategorybasedpermissions', true);
+
                 // permalink format change story to article
                 $this->setVar('permalinkformat', str_replace(array('storytitle', 'storyid'), array('articletitle', 'articleid'), $this->getVar('permalinkformat')));
 

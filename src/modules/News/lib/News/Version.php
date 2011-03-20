@@ -13,7 +13,7 @@
  * @package    Content_Management
  * @subpackage News
  */
-class News_Version extends Zikula_Version
+class News_Version extends Zikula_AbstractVersion
 {
 
     public function getMetaData()

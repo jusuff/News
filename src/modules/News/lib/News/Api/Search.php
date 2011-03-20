@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Api_Search extends Zikula_Api
+class News_Api_Search extends Zikula_AbstractApi
 {
     /**
      * Search plugin info

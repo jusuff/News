@@ -11,7 +11,7 @@
  * @package    Content_Management
  * @subpackage News
  */
-class News_Api_Mailz extends Zikula_Api
+class News_Api_Mailz extends Zikula_AbstractApi
 {
     /*
      * get plugins with type / title

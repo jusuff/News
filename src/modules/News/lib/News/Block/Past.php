@@ -12,7 +12,7 @@
  * @subpackage News
  */
 
-class News_Block_Past extends Zikula_Controller_Block
+class News_Block_Past extends Zikula_Controller_AbstractBlock
 {
     /**
      * initialise block

@@ -47,7 +47,7 @@
  */
 
 
-class News_Block_Storiesext extends Zikula_Controller_Block
+class News_Block_Storiesext extends Zikula_Controller_AbstractBlock
 {
     /**
      * initialise block
@@ -185,7 +185,7 @@ voice-family: "\"}\"";
 voice-family:inherit;
 /* regular height */
 height:50px;
-} 
+}
 /* Opera browser */
 html>body %DIVID% {
 height:50px;
@@ -482,7 +482,7 @@ voice-family: "\"}\"";
 voice-family:inherit;
 /* regular height */
 height:50px;
-} 
+}
 /* Opera browser */
 html>body %DIVID% {
 height:50px;

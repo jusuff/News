@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Api_User extends Zikula_Api
+class News_Api_User extends Zikula_AbstractApi
 {
     /**
      * get all news items
@@ -746,7 +746,7 @@ class News_Api_User extends Zikula_Api
     }
 
     /**
-     * decode a short url 
+     * decode a short url
      */
     public function decodeurl($args)
     {
@@ -842,7 +842,7 @@ class News_Api_User extends Zikula_Api
 
         return true;
     }
-    
+
     /**
      * encode an url to News into a shorturl
      */
@@ -977,7 +977,7 @@ class News_Api_User extends Zikula_Api
                         'class' => 'z-icon-es-config');
             }
         }
-        
+
         return $links;
     }
 
@@ -1062,7 +1062,7 @@ class News_Api_User extends Zikula_Api
 
     /**
      * create Category Filter
-     * 
+     *
      * @param array $args
      * @return array
      */

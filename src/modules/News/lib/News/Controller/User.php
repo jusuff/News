@@ -11,7 +11,7 @@
  * @subpackage News
  */
 
-class News_Controller_User extends Zikula_Controller
+class News_Controller_User extends Zikula_AbstractController
 {
 
     /**
@@ -138,7 +138,7 @@ class News_Controller_User extends Zikula_Controller
 
     /**
      * This is a standard function that is called with the results of the
-     * form supplied by News_admin_newitem() or News_user_newitem to create 
+     * form supplied by News_admin_newitem() or News_user_newitem to create
      * a new item.
      *
      * @author Mark West
