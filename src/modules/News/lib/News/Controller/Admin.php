@@ -764,7 +764,7 @@ class News_Controller_Admin extends Zikula_AbstractController
 
         // Confirm authorisation code
         if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('News', 'Admin', 'view'));
+            return LogUtil::registerAuthidError(ModUtil::url('News', 'admin', 'view'));
         }
 
         $articles = FormUtil::getPassedValue('news_selected_articles', array(), 'POST');
