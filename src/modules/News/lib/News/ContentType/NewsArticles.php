@@ -15,7 +15,7 @@
 /**
  * Content plugin class for news articles
  */
-class News_ContentType_NewsArticles extends Content_ContentType
+class News_ContentType_NewsArticles extends Content_AbstractContentType
 {
 
     // indispensable vars
