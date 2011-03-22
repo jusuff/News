@@ -137,8 +137,6 @@ function news_picupload_writable()
     new Zikula.Ajax.Request(
         "ajax.php?module=News&func=checkpicuploadfolder",
         {
-            method: 'post',
-            // authid: 'newsauthid',
             parameters: pars,
             onComplete: news_picupload_writable_update
         });

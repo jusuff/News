@@ -47,7 +47,7 @@
     <form id="news_admin_newform" class="z-form" action="{modurl modname='News' type='user' func='create'}" method="post" enctype="application/x-www-form-urlencoded">
     {/if}
         <div>
-            <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
+            <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />
             {if $accessadd neq 1}
             <input type="hidden" name="story[hideonindex]" value="1" />
             <input type="hidden" name="story[notes]" value="" />

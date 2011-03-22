@@ -11,7 +11,7 @@
  * @package    Content_Management
  * @subpackage News
  */
-class News_Controller_Ajax extends Zikula_AbstractController
+class News_Controller_Ajax extends Zikula_Controller_AbstractAjax
 {
     /**
      * modify a news entry (incl. delete) via ajax
@@ -23,19 +23,19 @@ class News_Controller_Ajax extends Zikula_AbstractController
      */
     public function modify()
     {
-        $sid = FormUtil::getPassedValue('sid', null, 'POST');
-        $page = FormUtil::getPassedValue('page', 1, 'POST');
+        $this->checkAjaxToken();
+
+        $sid = $this->request->getPost()->get('sid');
+        $page =  $this->request->getPost()->get('page', 1);
 
         // Get the news article
         $item = ModUtil::apiFunc('News', 'User', 'get', array('sid' => $sid));
         if ($item == false) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Error! No such article found.')));
+             throw new Zikula_Exception_NotFound($this->__('Error! No such article found.'));
         }
 
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::$sid", ACCESS_EDIT)) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
-        }
+        $this->throwForbiddenUnless(SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::$sid", ACCESS_EDIT));
 
         // Get the format types. 'home' string is bits 0-1, 'body' is bits 2-3.
         $item['hometextcontenttype'] = ($item['format_type'] % 4);
@@ -55,6 +55,7 @@ class News_Controller_Ajax extends Zikula_AbstractController
             $item['tonolimit'] = 0;
         }
 
+        Zikula_Controller::configureView();
         $this->view->setCaching(false);
 
         $modvars = $this->getVars();
@@ -65,7 +66,7 @@ class News_Controller_Ajax extends Zikula_AbstractController
         }
 
         // Assign the item to the template
-        $this->view->assign('item', $item);
+        $this->view->assign($item);
 
         // Assign the current page
         $this->view->assign('page', $page);
@@ -112,19 +113,15 @@ class News_Controller_Ajax extends Zikula_AbstractController
      */
     public function update()
     {
-        $story = FormUtil::getPassedValue('story', null, 'POST');
-        $action = FormUtil::getPassedValue('action', null, 'POST');
-        $page = (int) FormUtil::getPassedValue('page', 1, 'POST');
+        $this->checkAjaxToken();
+        $story = $this->request->getPost()->get('story');
+        $action = $this->request->getPost()->get('action');
+        $page = (int) $this->request->getPost()->get('page', 1);
 
         // Get the current news article
         $item = ModUtil::apiFunc('News', 'User', 'get', array('sid' => $story['sid']));
         if ($item == false || !$action) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Error! No such article found.')));
-        }
-
-        if (!SecurityUtil::confirmAuthKey()) {
-            LogUtil::registerPermissionError(null,true);
-            throw new Zikula_Exception_Forbidden();
+            throw new Zikula_Exception_NotFound($this->__('Error! No such article found.'));
         }
 
         $output = $action;
@@ -213,15 +210,15 @@ class News_Controller_Ajax extends Zikula_AbstractController
 
                 if (ModUtil::apiFunc('News', 'admin', 'update',
                                 array('sid' => $story['sid'],
-                                    'title' => DataUtil::convertFromUTF8($story['title']),
-                                    'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
+                                    'title' => $story['title'],
+                                    'urltitle' => $story['urltitle'],
                                     '__CATEGORIES__' => $story['__CATEGORIES__'],
                                     'language' => isset($story['language']) ? $story['language'] : '',
-                                    'hometext' => DataUtil::convertFromUTF8($story['hometext']),
+                                    'hometext' => $story['hometext'],
                                     'hometextcontenttype' => $story['hometextcontenttype'],
-                                    'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
+                                    'bodytext' => $story['bodytext'],
                                     'bodytextcontenttype' => $story['bodytextcontenttype'],
-                                    'notes' => DataUtil::convertFromUTF8($story['notes']),
+                                    'notes' => $story['notes'],
                                     'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
                                     'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                                     'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
@@ -237,7 +234,7 @@ class News_Controller_Ajax extends Zikula_AbstractController
                     $item = ModUtil::apiFunc('News', 'User', 'get', array('sid' => $story['sid'], 'SQLcache' => false));
 
                     if ($item == false) {
-                        AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Error! No such article found.')));
+                        throw new Zikula_Exception_NotFound($this->__('Error! No such article found.'));
                     }
 
                     // Explode the news article into an array of seperate pages
@@ -262,6 +259,7 @@ class News_Controller_Ajax extends Zikula_AbstractController
                                     array('info' => $info,
                                         'links' => $links));
 
+                    Zikula_Controller::configureView();
                     $this->view->setCaching(false);
 
                     // Assign the story info arrays
@@ -295,9 +293,8 @@ class News_Controller_Ajax extends Zikula_AbstractController
 
             case 'pending':
                 // Security check
-                if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$story['sid']}", ACCESS_EDIT)) {
-                    AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
-                }
+                $this->throwForbiddenUnless(SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::{$story['sid']}", ACCESS_EDIT));
+
                 // set published_status to 2 to make the story a pending story
                 $object = array('published_status' => 2,
                     'sid' => $story['sid']);
@@ -350,9 +347,10 @@ class News_Controller_Ajax extends Zikula_AbstractController
      */
     public function savedraft()
     {
-        $title = FormUtil::getPassedValue('title', null, 'POST');
-        $sid = FormUtil::getPassedValue('sid', null, 'POST');
-        $story = FormUtil::getPassedValue('story', null, 'POST');
+        $this->checkAjaxToken();
+        $title = $this->request->getPost()->get('title');
+        $sid = $this->request->getPost()->get('sid');
+        $story = $this->request->getPost()->get('story');
 
         $output = $title;
         $slug = '';
@@ -365,24 +363,22 @@ class News_Controller_Ajax extends Zikula_AbstractController
             // Get the current news article
             $item = ModUtil::apiFunc('News', 'User', 'get', array('sid' => $sid));
             if ($item == false) {
-                AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__f('Error! No such article found.')));
+                throw new Zikula_Exception_NotFound($this->__('Error! No such article found.'));
             }
             // Security check
-            if (!SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::$sid", ACCESS_EDIT)) {
-                AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorisation for this page.')));
-            }
+            $this->throwForbiddenUnless(SecurityUtil::checkPermission('News::', "{$item['cr_uid']}::$sid", ACCESS_EDIT));
 
             if (!ModUtil::apiFunc('News', 'admin', 'update',
                             array('sid' => $sid,
-                                'title' => DataUtil::convertFromUTF8($story['title']),
-                                'urltitle' => DataUtil::convertFromUTF8($story['urltitle']),
+                                'title' => $story['title'],
+                                'urltitle' => $story['urltitle'],
                                 '__CATEGORIES__' => $story['__CATEGORIES__'],
                                 'language' => isset($story['language']) ? $story['language'] : '',
-                                'hometext' => DataUtil::convertFromUTF8($story['hometext']),
+                                'hometext' => $story['hometext'],
                                 'hometextcontenttype' => $story['hometextcontenttype'],
-                                'bodytext' => DataUtil::convertFromUTF8($story['bodytext']),
+                                'bodytext' => $story['bodytext'],
                                 'bodytextcontenttype' => $story['bodytextcontenttype'],
-                                'notes' => DataUtil::convertFromUTF8($story['notes']),
+                                'notes' => $story['notes'],
                                 'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
                                 'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                                 'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
@@ -408,14 +404,14 @@ class News_Controller_Ajax extends Zikula_AbstractController
         } else {
             // Create a first draft version of the story
             if ($sid = ModUtil::apiFunc('News', 'User', 'create',
-                            array('title' => DataUtil::convertFromUTF8($title),
+                            array('title' => $title,
                                 '__CATEGORIES__' => isset($story['__CATEGORIES__']) ? $story['__CATEGORIES__'] : null,
                                 'language' => isset($story['language']) ? $story['language'] : '',
-                                'hometext' => isset($story['hometext']) ? DataUtil::convertFromUTF8($story['hometext']) : '',
+                                'hometext' => isset($story['hometext']) ? $story['hometext'] : '',
                                 'hometextcontenttype' => isset($story['hometextcontenttype']) ? $story['hometextcontenttype'] : 0,
-                                'bodytext' => isset($story['bodytext']) ? DataUtil::convertFromUTF8($story['bodytext']) : '',
+                                'bodytext' => isset($story['bodytext']) ? $story['bodytext'] : '',
                                 'bodytextcontenttype' => isset($story['bodytextcontenttype']) ? $story['bodytextcontenttype'] : 0,
-                                'notes' => isset($story['notes']) ? DataUtil::convertFromUTF8($story['notes']) : '',
+                                'notes' => isset($story['notes']) ? $story['notes'] : '',
                                 'hideonindex' => isset($story['hideonindex']) ? $story['hideonindex'] : 1,
                                 'disallowcomments' => isset($story['disallowcomments']) ? $story['disallowcomments'] : 0,
                                 'unlimited' => isset($story['unlimited']) ? $story['unlimited'] : null,
@@ -428,7 +424,7 @@ class News_Controller_Ajax extends Zikula_AbstractController
                 // Success and now reload the news story
                 $item = ModUtil::apiFunc('News', 'User', 'get', array('sid' => $sid));
                 if ($item == false) {
-                    AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Error! No such article found.')));
+                    throw new Zikula_Exception_NotFound($this->__('Error! No such article found.'));
                 } else {
                     // Return the Draft creation date
                     $output = $this->__f('Draft saved at %s', DateUtil::getDatetime_Time($item['cr_date'], '%H:%M'));
@@ -470,7 +466,8 @@ class News_Controller_Ajax extends Zikula_AbstractController
      */
     public function updatepermalink()
     {
-        $title = FormUtil::getPassedValue('title', '');
+        $this->checkAjaxToken();
+        $title = $this->request->getPost()->get('title', '');
 
         // define the lowercase permalink, using the title as slug, if not present
 //    if (!isset($args['urltitle']) || empty($args['urltitle'])) {
@@ -491,17 +488,10 @@ class News_Controller_Ajax extends Zikula_AbstractController
      */
     function checkpicuploadfolder()
     {
-        if (!SecurityUtil::checkPermission('News::', '::', ACCESS_DELETE)) {
-            LogUtil::registerPermissionError(null,true);
-            throw new Zikula_Exception_Forbidden();
-        }
+        $this->checkAjaxToken();
+        $this->throwForbiddenUnless(SecurityUtil::checkPermission('News::', '::', ACCESS_DELETE));
 
-//        if (!SecurityUtil::confirmAuthKey()) {
-//            LogUtil::registerPermissionError(null,true);
-//            throw new Zikula_Exception_Forbidden();
-//        }
-
-        $folder = FormUtil::getPassedValue('folder', null, 'POST');
+        $folder = $this->request->getPost()->get('folder');
         $enabled = false;
         if (!empty($folder)) {
             if ($folder[0] == '/') {
@@ -533,18 +523,13 @@ class News_Controller_Ajax extends Zikula_AbstractController
      */
     function updateauthor()
     {
-        $uid = FormUtil::getPassedValue('uid', null, 'POST');
-        $sid = FormUtil::getPassedValue('sid', null, 'POST');
-        $dest = FormUtil::getPassedValue('dest', 'form', 'POST');
+        $this->checkAjaxToken();
+        $uid = $this->request->getPost()->get('uid');
+        $sid = $this->request->getPost()->get('sid');
+        $dest = $this->request->getPost()->get('dest', 'form');
 
-        if (!SecurityUtil::confirmAuthKey()) {
-            LogUtil::registerPermissionError(null,true);
-            throw new Zikula_Exception_Forbidden();
-        }
         // Security check
-        if (!SecurityUtil::checkPermission('News::', "::", ACCESS_ADMIN)) {
-            AjaxUtil::error(DataUtil::formatForDisplayHTML($this->__('Sorry! You do not have authorization.')));
-        }
+        $this->throwForbiddenUnless(SecurityUtil::checkPermission('News::', "::", ACCESS_ADMIN));
 
         if (!isset($uid) || !isset($sid)) {
             return false;

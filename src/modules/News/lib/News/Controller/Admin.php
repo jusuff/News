@@ -217,6 +217,7 @@ class News_Controller_Admin extends Zikula_AbstractController
      */
     public function update($args)
     {
+        $this->checkCsrfToken();
         $story = FormUtil::getPassedValue('story', isset($args['story']) ? $args['story'] : null, 'POST');
         $files = News_ImageUtil::reArrayFiles(FormUtil::getPassedValue('news_files', null, 'FILES'));
 
@@ -227,11 +228,6 @@ class News_Controller_Admin extends Zikula_AbstractController
         // Validate the essential parameters
         if (empty($story['sid'])) {
             return LogUtil::registerArgsError();
-        }
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('News', 'admin', 'view'));
         }
 
         // Get the unedited news article for the permissions check
@@ -383,9 +379,7 @@ class News_Controller_Admin extends Zikula_AbstractController
 
         // If we get here it means that the user has confirmed the action
         // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('News', 'admin', 'view'));
-        }
+        $this->checkCsrfToken();
 
         // Delete
         if (ModUtil::apiFunc('News', 'admin', 'delete', array('sid' => $sid))) {
@@ -635,14 +629,10 @@ class News_Controller_Admin extends Zikula_AbstractController
      */
     public function updateconfig()
     {
+        $this->checkCsrfToken();
         // Security check
         if (!SecurityUtil::checkPermission('News::', '::', ACCESS_ADMIN)) {
             return LogUtil::registerPermissionError();
-        }
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('News', 'admin', 'view'));
         }
 
         // Update module variables
@@ -756,15 +746,12 @@ class News_Controller_Admin extends Zikula_AbstractController
      * @param int 'bulkaction' the action to take
      * @return bool true
      */
-    public function processbulkaction() {
+    public function processbulkaction()
+    {
+        $this->checkCsrfToken();
         // Security check
         if (!SecurityUtil::checkPermission('News::', '::', ACCESS_DELETE)) {
             return LogUtil::registerPermissionError();
-        }
-
-        // Confirm authorisation code
-        if (!SecurityUtil::confirmAuthKey()) {
-            return LogUtil::registerAuthidError(ModUtil::url('News', 'admin', 'view'));
         }
 
         $articles = FormUtil::getPassedValue('news_selected_articles', array(), 'POST');

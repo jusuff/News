@@ -12,7 +12,7 @@
     {notifydisplayhooks eventname='news.hook.articles.ui.delete' area='modulehook_area.news.articles' subject=$item id=$sid caller="News"}
     <form class="z-form" action="{modurl modname='News' type='admin' func='delete'}" method="post" enctype="application/x-www-form-urlencoded">
         <div>
-            <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
+            <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />
             <input type="hidden" name="confirmation" value="1" />
             <input type="hidden" name="sid" value="{$sid|safetext}" />
             <fieldset>

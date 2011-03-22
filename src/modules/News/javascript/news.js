@@ -72,7 +72,6 @@ function editnews(sid, page)
         new Zikula.Ajax.Request(
             "ajax.php?module=News&func=modify",
             {
-                method: 'post',
                 parameters: pars,
                 onComplete: editnews_init
             });
@@ -144,10 +143,12 @@ function editnews_save(action)
         if (typeof Xinha != "undefined") {
             $('news_ajax_modifyform').onsubmit();
         }
+        var pars = $('news_ajax_modifyform').serialize(true);
+        pars.action = action;
         new Zikula.Ajax.Request(
-            'ajax.php?module=News&func=update&action='+ action +'&' + Form.serialize('news_ajax_modifyform'),
+            'ajax.php?module=News&func=update',
             {
-                method: 'post', 
+                parameters: pars,
                 onComplete: editnews_saveresponse
             });
     }
@@ -541,15 +542,15 @@ function news_meta_click()
 function executeuserselectform(data)
 {
     if(data) {
-        var pars = "uid="     + data.userselector
-                   + "&sid="  + $F('news_sid')
-                   + "&dest=" + data.destination;
+        var pars = {
+            uid: data.userselector,
+            sid: $F('news_sid'),
+            dest: data.destination
+        }
         new Zikula.Ajax.Request(
             "ajax.php?module=News&func=updateauthor",
             {
-                method: 'post',
                 parameters: pars,
-                authid: 'newsauthid',
                 onComplete: executeuserselectform_response
             });
     }

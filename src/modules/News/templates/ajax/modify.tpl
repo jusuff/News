@@ -10,7 +10,7 @@
 <form id="news_ajax_modifyform" class="z-form" action="{modurl modname='News' type='admin' func='update'}" onsubmit="return true;" method="post" enctype="application/x-www-form-urlencoded">
 {/if}
     <div >
-        <input type="hidden" name="authid" value="{insert name='generateauthkey' module='News'}" />
+        <input type="hidden" name="csrftoken" value="{insert name='csrftoken'}" />
         <input type="hidden" name="page" value="{$page|safetext}" />
         <input type="hidden" name="story[sid]" value="{$sid|safetext}" />
         <input type="hidden" name="story[published_status]" value="{$published_status|safetext}" />

@@ -230,9 +230,7 @@ class News_Controller_User extends Zikula_AbstractController
             return $this->redirect(ModUtil::url('News', $referertype, 'newitem'));
         } else {
             // Confirm authorisation code.
-            if (!SecurityUtil::confirmAuthKey()) {
-                return LogUtil::registerAuthidError(ModUtil::url('News', $referertype, 'view'));
-            }
+            $this->checkCsrfToken();
 
             // As we're not previewing the item let's remove it from the session
             SessionUtil::delVar('newsitem');
