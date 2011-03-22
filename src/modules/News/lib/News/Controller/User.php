@@ -213,7 +213,7 @@ class News_Controller_User extends Zikula_AbstractController
         $validationerror = News_Util::validateArticle($this, $item);
         // check hooked modules for validation
         $sid = isset($item['sid']) ? $item['sid'] : null;
-        $hookvalidators = $this->notifyHooks('news.hook.articles.validate.edit', $item, $sid, array(), new Zikula_Collection_HookValidationProviders())->getData();
+        $hookvalidators = $this->notifyHooks('news.hook.articles.validate.edit', $item, $sid, array(), new Zikula_Hook_ValidationProviders())->getData();
         if ($hookvalidators->hasErrors()) {
             $validationerror .= $this->__('Error! Hooked content does not validate.') . "<br />";
         }
